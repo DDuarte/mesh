@@ -1,0 +1,33 @@
+{
+  "name": "server",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Mesh project server application",
+  "main": "index.js",
+  "contributors": [
+    {
+      "name": "Diogo Santos",
+      "url": "https://bitbucket.org/nanner"
+    },
+    {
+      "name": "Duarte Duarte",
+      "url": "https://bitbucket.org/dduarte"
+    },
+    {
+      "name": "Miguel Marques",
+      "url": "https://bitbucket.org/migulorama"
+    },
+    {
+      "name": "Pedro Fernandes",
+      "url": "https://bitbucket.org/pedrorfernandes"
+    },
+    {
+      "name": "Ruben Cordeiro",
+      "url": "https://bitbucket.org/RubenCordeiro"
+    }
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "~6.8.1"
+  }
+}
