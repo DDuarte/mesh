@@ -6,24 +6,28 @@
   "main": "index.js",
   "contributors": [
     {
-      "name": "Diogo Santos",
-      "url": "https://bitbucket.org/nanner"
+        "name": "Diogo Santos",
+        "url": "https://bitbucket.org/nanner"
     },
     {
-      "name": "Duarte Duarte",
-      "url": "https://bitbucket.org/dduarte"
+        "name": "Duarte Duarte",
+        "url": "https://bitbucket.org/dduarte"
     },
     {
-      "name": "Miguel Marques",
-      "url": "https://bitbucket.org/migulorama"
+        "name": "Luís Cleto",
+        "url": "https://bitbucket.org/luiscleto"
     },
     {
-      "name": "Pedro Fernandes",
-      "url": "https://bitbucket.org/pedrorfernandes"
+        "name": "Miguel Marques",
+        "url": "https://bitbucket.org/migulorama"
     },
     {
-      "name": "Ruben Cordeiro",
-      "url": "https://bitbucket.org/RubenCordeiro"
+        "name": "Pedro Fernandes",
+        "url": "https://bitbucket.org/pedrorfernandes"
+    },
+    {
+        "name": "Ruben Cordeiro",
+        "url": "https://bitbucket.org/RubenCordeiro"
     }
   ],
   "license": "ISC",
