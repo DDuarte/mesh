@@ -117,6 +117,28 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            build_vendor_polymer: {
+                files: [
+                    {
+                        src: [ '<%= vendor_files.polymer %>' ],
+                        dest: '<%= build_dir %>/vendor/polymer',
+                        cwd: '.',
+                        expand: true,
+                        flatten: true
+                    }
+                ]
+            },
+            build_vendor_maps: {
+                files: [
+                    {
+                        src: [ '<%= vendor_files.maps %>' ],
+                        dest: '<%= build_dir %>',
+                        cwd: '.',
+                        expand: true,
+                        flatten: true
+                    }
+                ]
+            },
             build_appjs: {
                 files: [
                     {
@@ -471,6 +493,7 @@ module.exports = function (grunt) {
         vulcanize: {
             build: {
                 options: {
+                    inline: true
                     // Task-specific options go here.
                 },
                 files: {
@@ -510,9 +533,9 @@ module.exports = function (grunt) {
      */
     grunt.registerTask('build', [
         'clean', 'html2js', 'jshint', 'less:build',
-        'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-        'copy:build_appjs', 'copy:build_vendorjs', 'index:build', 'vulcanize:build', 'karmaconfig',
-        'karma:continuous'
+        'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets', 'copy:build_vendor_polymer', 'copy:build_vendor_maps',
+        'copy:build_appjs', 'copy:build_vendorjs', 'index:build', 'vulcanize:build'/*, 'karmaconfig',
+        'karma:continuous'*/
     ]);
 
     /**
