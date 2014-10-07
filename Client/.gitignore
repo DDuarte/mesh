@@ -1,8 +1,7 @@
-logs/*
-!.gitkeep
-node_modules/
-bower_components/
-coverage
-tmp
-.DS_Store
 .idea
+*.sw*
+*~
+build/
+bin/
+node_modules/
+vendor/

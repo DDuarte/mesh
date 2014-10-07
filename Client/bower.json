@@ -1,18 +1,16 @@
 {
-  "name": "angular-seed",
-  "description": "A starter project for AngularJS",
-  "version": "0.0.0",
-  "homepage": "https://github.com/angular/angular-seed",
-  "license": "MIT",
-  "private": true,
-  "dependencies": {
-    "angular": "1.2.x",
-    "angular-route": "1.2.x",
-    "angular-loader": "1.2.x",
-    "angular-mocks": "~1.2.x",
-    "angular-ui-router": "~0.2.11",
-    "platform": "Polymer/platform#~0.4.2",
-    "core-elements": "Polymer/core-elements#~0.4.2",
-    "paper-elements": "Polymer/paper-elements#~0.4.2"
-  }
+    "name": "meshApp",
+    "private": true,
+    "version": "0.0.1",
+    "devDependencies": {
+        "angular": "~1.2",
+        "angular-mocks": "~1.2",
+        "bootstrap": "~3.1",
+        "angular-bootstrap": "~0.10.0",
+        "angular-ui-router": "~0.2",
+        "polymer": "Polymer/polymer#~0.4.2",
+        "core-elements": "Polymer/core-elements#~0.4.2",
+        "paper-elements": "Polymer/paper-elements#~0.4.2"
+    },
+    "dependencies": {}
 }

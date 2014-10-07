@@ -1,289 +1,379 @@
-# angular-seed — the seed for AngularJS apps
+# [ngBoilerplate](http://joshdmiller.github.com/ng-boilerplate) [![Build Status](https://api.travis-ci.org/ngbp/ngbp.png?branch=v0.3.2-release)](https://travis-ci.org/ngbp/ngbp)
 
-This project is an application skeleton for a typical [AngularJS](http://angularjs.org/) web app.
-You can use it to quickly bootstrap your angular webapp projects and dev environment for these
-projects.
+An opinionated kickstarter for [AngularJS](http://angularjs.org) projects.
 
-The seed contains a sample AngularJS application and is preconfigured to install the Angular
-framework and a bunch of development and testing tools for instant web development gratification.
+***
 
-The seed app doesn't do much, just shows how to wire two controllers and views together.
+## Quick Start
 
+Install Node.js and then:
 
-## Getting Started
-
-To get you started you can simply clone the angular-seed repository and install the dependencies:
-
-### Prerequisites
-
-You need git to clone the angular-seed repository. You can get git from
-[http://git-scm.com/](http://git-scm.com/).
-
-We also use a number of node.js tools to initialize and test angular-seed. You must have node.js and
-its package manager (npm) installed.  You can get them from [http://nodejs.org/](http://nodejs.org/).
-
-### Clone angular-seed
-
-Clone the angular-seed repository using [git][git]:
-
-```
-git clone https://github.com/angular/angular-seed.git
-cd angular-seed
+```sh
+$ git clone git://github.com/joshdmiller/ng-boilerplate
+$ cd ng-boilerplate
+$ sudo npm -g install grunt-cli karma bower
+$ npm install
+$ bower install
+$ grunt watch
 ```
 
-### Install Dependencies
+Finally, open `file:///path/to/ng-boilerplate/build/index.html` in your browser.
 
-We have two kinds of dependencies in this project: tools and angular framework code.  The tools help
-us manage and test the application.
+Happy hacking!
 
-* We get the tools we depend upon via `npm`, the [node package manager][npm].
-* We get the angular code via `bower`, a [client-side code package manager][bower].
+## Purpose
 
-We have preconfigured `npm` to automatically run `bower` so we can simply do:
+`ngBoilerplate` is designed to make life easy by providing a basic framework
+with which to kickstart AngularJS projects. It contains a best-practice
+directory structure to ensure code reusability and maximum scalability.
+ngBoilerplate also comes prepackaged with the most popular design frameworks
+around: [Twitter Bootstrap](http://getbootstrap.com),
+[Angular UI](http://angular-ui.github.io),
+[Angular Bootstrap](http://angular-ui.github.io/bootstrap),
+[Font Awesome](http://fortawesome.github.com/Font-Awesome), and
+[LESS](http://lesscss.org). Lastly, it contains a sophisticated
+[Grunt](http://gruntjs.org)-based build system to ensure maximum productivity.
+All you have to do is clone it and start coding!
 
-```
-npm install
-```
+## Philosophy
 
-Behind the scenes this will also call `bower install`.  You should find that you have two new
-folders in your project.
+The principal goal of `ngBoilerplate` is to set projects up for long-term
+success.  So `ngBoilerplate` tries to follow best practices everywhere it can.
+These are:
 
-* `node_modules` - contains the npm packages for the tools we need
-* `app/bower_components` - contains the angular framework files
+- Properly orchestrated modules to encourage drag-and-drop component re-use.
+- Tests exist alongside the component they are testing with no separate `test`
+  directory required; the build process should be sophisticated enough to handle
+  this.
+- Speaking of which, the build system should work automagically, without
+  involvement from the developer. It should do what needs to be done, while
+  staying out of the way. Components should end up tested, linted, compiled,
+  and minified, ready for use in a production environment.
+- Integration with popular tools like Bower, Karma, and LESS.
+- *Encourages* test-driven development. It's the only way to code.
+- A directory structure that is cogent, meaningful to new team members, and
+  supporting of the above points.
+- Well-documented, to show new developers *why* things are set up the way they
+  are.
+- It should be responsive to evidence. Community feedback is therefore crucial
+  to the success of `ngBoilerplate`.
 
-*Note that the `bower_components` folder would normally be installed in the root folder but
-angular-seed changes this location through the `.bowerrc` file.  Putting it in the app folder makes
-it easier to serve the files by a webserver.*
+But `ngBoilerplate` is not an example of an AngularJS app: this is a
+kickstarter. If you're looking for an example of what a complete, non-trivial
+AngularJS app that does something real looks like, complete with a REST backend
+and authentication and authorization, then take a look at
+[`angular-app`](http://github.com/angular-app/angular-app), which does just
+that - and does it well.
 
-### Run the Application
+## Learn
 
-We have preconfigured the project with a simple development web server.  The simplest way to start
-this server is:
+### Overall Directory Structure
 
-```
-npm start
-```
-
-Now browse to the app at `http://localhost:8000/app/index.html`.
-
-
-
-## Directory Layout
-
-```
-app/                    --> all of the source files for the application
-  app.css               --> default stylesheet
-  components/           --> all app specific modules
-    version/              --> version related components
-      version.js                 --> version module declaration and basic "version" value service
-      version_test.js            --> "version" value service tests
-      version-directive.js       --> custom directive that returns the current app version
-      version-directive_test.js  --> version directive tests
-      interpolate-filter.js      --> custom interpolation filter
-      interpolate-filter_test.js --> interpolate filter tests
-  view1/                --> the view1 view template and logic
-    view1.html            --> the partial template
-    view1.js              --> the controller logic
-    view1_test.js         --> tests of the controller
-  view2/                --> the view2 view template and logic
-    view2.html            --> the partial template
-    view2.js              --> the controller logic
-    view2_test.js         --> tests of the controller
-  app.js                --> main application module
-  index.html            --> app layout file (the main html template file of the app)
-  index-async.html      --> just like index.html, but loads js files asynchronously
-karma.conf.js         --> config file for running unit tests with Karma
-e2e-tests/            --> end-to-end tests
-  protractor-conf.js    --> Protractor config file
-  scenarios.js          --> end-to-end scenarios to be run by Protractor
-```
-
-## Testing
-
-There are two kinds of tests in the angular-seed application: Unit tests and End to End tests.
-
-### Running Unit Tests
-
-The angular-seed app comes preconfigured with unit tests. These are written in
-[Jasmine][jasmine], which we run with the [Karma Test Runner][karma]. We provide a Karma
-configuration file to run them.
-
-* the configuration is found at `karma.conf.js`
-* the unit tests are found in next to the code they are testing and are named as `..._test.js`.
-
-The easiest way to run the unit tests is to use the supplied npm script:
+At a high level, the structure looks roughly like this:
 
 ```
-npm test
+ng-boilerplate/
+  |- grunt-tasks/
+  |- karma/
+  |- src/
+  |  |- app/
+  |  |  |- <app logic>
+  |  |- assets/
+  |  |  |- <static files>
+  |  |- common/
+  |  |  |- <reusable code>
+  |  |- less/
+  |  |  |- main.less
+  |- vendor/
+  |  |- angular-bootstrap/
+  |  |- bootstrap/
+  |  |- placeholders/
+  |- .bowerrc
+  |- bower.json
+  |- build.config.js
+  |- Gruntfile.js
+  |- module.prefix
+  |- module.suffix
+  |- package.json
 ```
 
-This script will start the Karma test runner to execute the unit tests. Moreover, Karma will sit and
-watch the source and test files for changes and then re-run the tests whenever any of them change.
-This is the recommended strategy; if your unit tests are being run every time you save a file then
-you receive instant feedback on any changes that break the expected code functionality.
+What follows is a brief description of each entry, but most directories contain
+their own `README.md` file with additional documentation, so browse around to
+learn more.
 
-You can also ask Karma to do a single run of the tests and then exit.  This is useful if you want to
-check that a particular version of the code is operating as expected.  The project contains a
-predefined script to do this:
+- `karma/` - test configuration.
+- `src/` - our application sources. [Read more &raquo;](src/README.md)
+- `vendor/` - third-party libraries. [Bower](http://bower.io) will install
+  packages here. Anything added to this directory will need to be manually added
+  to `build.config.js` and `karma/karma-unit.js` to be picked up by the build
+  system.
+- `.bowerrc` - the Bower configuration file. This tells Bower to install
+  components into the `vendor/` directory.
+- `bower.json` - this is our project configuration for Bower and it contains the
+  list of Bower dependencies we need.
+- `build.config.js` - our customizable build settings; see "The Build System"
+  below.
+- `Gruntfile.js` - our build script; see "The Build System" below.
+- `module.prefix` and `module.suffix` - our compiled application script is
+  wrapped in these, which by default are used to place the application inside a
+  self-executing anonymous function to ensure no clashes with other libraries.
+- `package.json` - metadata about the app, used by NPM and our build script. Our
+  NPM dependencies are listed here.
 
-```
-npm run test-single-run
-```
+### Detailed Installation
 
+This section provides a little more detailed understanding of what goes into
+getting `ngBoilerplate` up and running. Though `ngBoilerplate` is really simple
+to use, it might help to have an understanding of the tools involved here, like
+Node.js and Grunt and Bower. If you're completely new to highly organized,
+modern JavaScript development, take a few short minutes to read [this overview
+of the tools](tools.md) before continuing with this section.
 
-### End to end testing
+Okay, ready to go? Here it is:
 
-The angular-seed app comes with end-to-end tests, again written in [Jasmine][jasmine]. These tests
-are run with the [Protractor][protractor] End-to-End test runner.  It uses native events and has
-special features for Angular applications.
+`ngBoilerplate` uses [Grunt](http://gruntjs.org) as its build system, so
+[Node.js](http://nodejs.org) is required. Also, Grunt by default no longer comes
+with a command-line utility and Karma and Bower must end up in your global path
+for the build system to find it, so they must be installed independently. Once
+you have Node.js installed, you can simply use `npm` to make it all happen:
 
-* the configuration is found at `e2e-tests/protractor-conf.js`
-* the end-to-end tests are found in `e2e-tests/scenarios.js`
-
-Protractor simulates interaction with our web app and verifies that the application responds
-correctly. Therefore, our web server needs to be serving up the application, so that Protractor
-can interact with it.
-
-```
-npm start
-```
-
-In addition, since Protractor is built upon WebDriver we need to install this.  The angular-seed
-project comes with a predefined script to do this:
-
-```
-npm run update-webdriver
-```
-
-This will download and install the latest version of the stand-alone WebDriver tool.
-
-Once you have ensured that the development web server hosting our application is up and running
-and WebDriver is updated, you can run the end-to-end tests using the supplied npm script:
-
-```
-npm run protractor
+```sh
+$ npm -g install grunt-cli karma bower
 ```
 
-This script will execute the end-to-end tests against the application being hosted on the
-development server.
+If you're on Linux (like I am) then throw `sudo` in front of that command.  If
+you're on Windows, then you're on your own.
 
+Next, you can either clone this repository using Git, download it as a zip file
+from GitHub, or merge the branch into your existing repository. Assuming you're
+starting from scratch, simply clone this repository using git:
 
-## Updating Angular
-
-Previously we recommended that you merge in changes to angular-seed into your own fork of the project.
-Now that the angular framework library code and tools are acquired through package managers (npm and
-bower) you can use these tools instead to update the dependencies.
-
-You can update the tool dependencies by running:
-
-```
-npm update
+```sh
+$ git clone git://github.com/joshdmiller/ng-boilerplate my-project-name
+$ cd my-project-name
 ```
 
-This will find the latest versions that match the version ranges specified in the `package.json` file.
+And then install the remaining build dependencies locally:
 
-You can update the Angular dependencies by running:
-
-```
-bower update
+```sh
+$ npm install
 ```
 
-This will find the latest versions that match the version ranges specified in the `bower.json` file.
+This will read the `dependencies` (empty by default) and the `devDependencies`
+(which contains our build requirements) from `package.json` and install
+everything needed into a folder called `node_modules/`.
 
+There are many Bower packages used by `ngBoilerplate`, like Twitter Bootstrap
+and Angular UI, which are listed in `bower.js`. To install them into the
+`vendor/` directory, simply run:
 
-## Loading Angular Asynchronously
-
-The angular-seed project supports loading the framework and application scripts asynchronously.  The
-special `index-async.html` is designed to support this style of loading.  For it to work you must
-inject a piece of Angular JavaScript into the HTML page.  The project has a predefined script to help
-do this.
-
-```
-npm run update-index-async
+```sh
+$ bower install
 ```
 
-This will copy the contents of the `angular-loader.js` library file into the `index-async.html` page.
-You can run this every time you update the version of Angular that you are using.
+In the future, should you want to add a new Bower package to your app, run the
+`install` command:
 
-
-## Serving the Application Files
-
-While angular is client-side-only technology and it's possible to create angular webapps that
-don't require a backend server at all, we recommend serving the project files using a local
-webserver during development to avoid issues with security restrictions (sandbox) in browsers. The
-sandbox implementation varies between browsers, but quite often prevents things like cookies, xhr,
-etc to function properly when an html page is opened via `file://` scheme instead of `http://`.
-
-
-### Running the App during Development
-
-The angular-seed project comes preconfigured with a local development webserver.  It is a node.js
-tool called [http-server][http-server].  You can start this webserver with `npm start` but you may choose to
-install the tool globally:
-
-```
-sudo npm install -g http-server
+```sh
+$ bower install packagename --save-dev
 ```
 
-Then you can start your own development web server to serve static files from a folder by
-running:
+The `--save-dev` flag tells Bower to add the package at its current version to
+our project's `bower.js` file so should another developer download our
+application (or we download it from a different computer), we can simply run the
+`bower install` command as above and all our dependencies will be installed for
+us. Neat!
 
+Technically, `ngBoilerplate` is now ready to go.
+
+However, prior to hacking on your application, you will want to modify the
+`package.json` file to contain your project's information. Do not remove any
+items from the `devDependencies` array as all are needed for the build process
+to work.
+
+To ensure your setup works, launch grunt:
+
+```sh
+$ grunt watch
 ```
-http-server -a localhost -p 8000
+
+The built files are placed in the `build/` directory by default. Open the
+`build/index.html` file in your browser and check it out! Because everything is
+compiled, no XHR requests are needed to retrieve templates, so until this needs
+to communicate with your backend there is no need to run it from a web server.
+
+`watch` is actually an alias of the `grunt-contrib-watch` that will first run a
+partial build before watching for file changes. With this setup, any file that
+changes will trigger only those build tasks necessary to bring the app up to
+date. For example, when a template file changes, the templates are recompiled
+and concatenated, but when a test/spec file changes, only the tests are run.
+This allows the watch command to complete in a fraction of the time it would
+ordinarily take.
+
+In addition, if you're running a Live Reload plugin in your browser (see below),
+you won't even have to refresh to see the changes! When the `watch` task detects
+a file change, it will reload the page for you. Sweet.
+
+When you're ready to push your app into production, just run the `compile`
+command:
+
+```sh
+$ grunt compile
 ```
 
-Alternatively, you can choose to configure your own webserver, such as apache or nginx. Just
-configure your server to serve the files under the `app/` directory.
+This will concatenate and minify your sources and place them by default into the
+`bin/` directory. There will only be three files: `index.html`,
+`your-app-name.js`, and `your-app-name.css`. All of the vendor dependencies like
+Bootstrap styles and AngularJS itself have been added to them for super-easy
+deploying. If you use any assets (`src/assets/`) then they will be copied to
+`bin/` as is.
 
+Lastly, a complete build is always available by simply running the default
+task, which runs `build` and then `compile`:
 
-### Running the App in Production
+```sh
+$ grunt
+```
 
-This really depends on how complex your app is and the overall infrastructure of your system, but
-the general rule is that all you need in production are all the files under the `app/` directory.
-Everything else should be omitted.
+### The Build System
 
-Angular apps are really just a bunch of static html, css and js files that just need to be hosted
-somewhere they can be accessed by browsers.
+The best way to learn about the build system is by familiarizing yourself with
+Grunt and then reading through the heavily documented build script,
+`Gruntfile.js`. But you don't need to do that to be very productive with
+`ngBoilerplate`. What follows in this section is a quick introduction to the
+tasks provided and should be plenty to get you started.
 
-If your Angular app is talking to the backend server via xhr or other means, you need to figure
-out what is the best way to host the static files to comply with the same origin policy if
-applicable. Usually this is done by hosting the files by the backend server or through
-reverse-proxying the backend server(s) and webserver(s).
+The driver of the process is the `delta` multi-task, which watches for file
+changes using `grunt-contrib-watch` and executes one of nine tasks when a file
+changes:
 
+* `delta:gruntfile` - When `Gruntfile.js` changes, this task runs the linter
+  (`jshint`) on that one file and reloads the configuration.
+* `delta:assets` - When any file within `src/assets/` changes, all asset files
+  are copied to `build/assets/`.
+* `delta:html` - When `src/index.html` changes, it is compiled as a Grunt
+  template, so script names, etc., are dynamically replaced with the correct
+  values configured dynamically by Grunt.
+* `delta:less` - When any `*.less` file within `src/` changes, the
+  `src/less/main.less` file is linted and copied into
+  `build/assets/ng-boilerplate.css`.
+* `delta:jssrc` - When any JavaScript file within `src/` that does not end in
+  `.spec.js` changes, all JavaScript sources are linted, all unit tests are run,
+  and the all source files are re-copied to `build/src`.
+* `delta:coffeesrc` - When any `*.coffee` file in `src/` that doesn't match
+  `*.spec.coffee` changes, the Coffee scripts are compiled independently into
+  `build/src` in a structure mirroring where they were in `src/` so it's easy to
+  locate problems. For example, the file
+  `src/common/titleService/titleService.coffee` is compiled to
+  `build/src/common/titleService/titleService.js`.
+* `delta:tpls` - When any `*.tpl.html` file within `src/` changes, all templates
+  are put into strings in a JavaScript file (technically two, one for
+  `src/common/` and another for `src/app/`) that will add the template to
+  AngularJS's
+  [`$templateCache`](http://docs.angularjs.org/api/ng.$templateCache) so
+  template files are part of the initial JavaScript payload and do not require
+  any future XHR.  The template cache files are `build/template-app.js` and
+  `build/template-common.js`.
+* `delta:jsunit` - When any `*.spec.js` file in `src/` changes, the test files
+  are linted and the unit tests are executed.
+* `delta:coffeeunit` - When any `*.spec.coffee` file in `src/` changes, the test
+  files are linted, compiled their tests executed.
 
-## Continuous Integration
+As covered in the previous section, `grunt watch` will execute a full build
+up-front and then run any of the aforementioned `delta:*` tasks as needed to
+ensure the fastest possible build. So whenever you're working on your project,
+start with:
 
-### Travis CI
+```sh
+$ grunt watch
+```
 
-[Travis CI][travis] is a continuous integration service, which can monitor GitHub for new commits
-to your repository and execute scripts such as building the app or running tests. The angular-seed
-project contains a Travis configuration file, `.travis.yml`, which will cause Travis to run your
-tests when you push to GitHub.
+And everything will be done automatically!
 
-You will need to enable the integration between Travis and GitHub. See the Travis website for more
-instruction on how to do this.
+### Build vs. Compile
 
-### CloudBees
+To make the build even faster, tasks are placed into two categories: build and
+compile. The build tasks (like those we've been discussing) are the minimal
+tasks required to run your app during development.
 
-CloudBees have provided a CI/deployment setup:
+Compile tasks, however, get your app ready for production. The compile tasks
+include concatenation, minification, compression, etc. These tasks take a little
+bit longer to run and are not at all necessary for development so are not called
+automatically during build or watch.
 
-<a href="https://grandcentral.cloudbees.com/?CB_clickstart=https://raw.github.com/CloudBees-community/angular-js-clickstart/master/clickstart.json">
-<img src="https://d3ko533tu1ozfq.cloudfront.net/clickstart/deployInstantly.png"/></a>
+To initiate a full compile, you simply run the default task:
 
-If you run this, you will get a cloned version of this repo to start working on in a private git repo,
-along with a CI service (in Jenkins) hosted that will run unit and end to end tests in both Firefox and Chrome.
+```sh
+$ grunt
+```
 
+This will perform a build and then a compile. The compiled site - ready for
+uploading to the server! - is located in `bin/`, taking a cue from
+traditional software development. To test that your full site works as
+expected, open the `bin/index.html` file in your browser. Voila!
 
-## Contact
+### Live Reload!
 
-For more information on AngularJS please check out http://angularjs.org/
+`ngBoilerplate` also includes [Live Reload](http://livereload.com/), so you no
+longer have to refresh your page after making changes! You need a Live Reload
+browser plugin for this:
 
-[git]: http://git-scm.com/
-[bower]: http://bower.io
-[npm]: https://www.npmjs.org/
-[node]: http://nodejs.org
-[protractor]: https://github.com/angular/protractor
-[jasmine]: http://jasmine.github.io
-[karma]: http://karma-runner.github.io
-[travis]: https://travis-ci.org/
-[http-server]: https://github.com/nodeapps/http-server
+- Chrome - [Chrome Webstore](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei)
+- Firefox - [Download from Live Reload](http://download.livereload.com/2.0.8/LiveReload-2.0.8.xpi)
+- Safari - [Download from Live Reload](http://download.livereload.com/2.0.9/LiveReload-2.0.9.safariextz)
+- Internet Explorer - Surely you jest.
+
+Note that if you're using the Chrome version with `file://` URLs (as is the
+default with `ngBoilerplate`) you need to tell Live Reload to allow it. Go to
+`Menu -> Tools -> Extensions` and check the "Allow access to file URLs" box next
+to the Live Reload plugin.
+
+When you load your page, click the Live Reload icon in your toolbar and
+everything should work magically. w00t!
+
+If you'd prefer to not install a browser extension, then you must add the
+following to the end of the `body` tag in `index.html`:
+
+```html
+<script src="http://localhost:35729/livereload.js"></script>
+```
+
+Boom!
+
+## Roadmap
+
+This is a project that is not broad in scope, so there's not really much of a
+wish list here. But I would like to see a couple of things:
+
+I'd like it to be a little simpler. I want this to be a universal starting
+point. If someone is starting a new AngularJS project, she should be able to
+clone, merge, or download its source and immediately start doing what she needs
+without renaming a bunch of files and methods or deleting spare parts. What I
+have works for a first release, but I just think there is a little too much here
+right now.
+
+I'd also like to see a simple generator. Nothing like Yeoman, as there already
+is one of those, but just something that allows the user to say "I want
+Bootstrap but not Font Awesome and my app is called 'coolApp'. Gimme." Perhaps a
+custom download builder like UI Bootstrap has. Like that. Then again, perhaps
+some Yeoman generators wouldn't be out of line. I don't know. What do you think?
+
+Naturally, I am open to all manner of ideas and suggestions. See the
+"Contributing" section below.
+
+### To Do
+
+See the [issues list](http://github.com/joshdmiller/ng-boilerplate/issues). And
+feel free to submit your own!
+
+### Contributing
+
+This is an opinionated kickstarter, but the opinions are fluid and
+evidence-based. Don't like the way I did something? Think you know of a better
+way? Have an idea to make this more useful? Let me know! You can contact me
+through all the usual channels or you can open an issue on the GitHub page. If
+you're feeling ambitious, you can even submit a pull request - how thoughtful
+of you!
+
+So join the team! We're good people.
+
