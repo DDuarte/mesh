@@ -417,7 +417,7 @@ module.exports = function (grunt) {
              */
             gruntfile: {
                 files: 'Gruntfile.js',
-                tasks: [ 'jshint:gruntfile' ],
+                tasks: [ 'jshint:gruntfile'],
                 options: {
                     livereload: false
                 }
@@ -450,7 +450,7 @@ module.exports = function (grunt) {
              */
             html: {
                 files: [ '<%= app_files.html %>' ],
-                tasks: [ 'index:build' ]
+                tasks: [ 'index:build', 'vulcanize:build' ]
             },
 
             /**
@@ -461,7 +461,7 @@ module.exports = function (grunt) {
                     '<%= app_files.atpl %>',
                     '<%= app_files.ctpl %>'
                 ],
-                tasks: [ 'html2js' ]
+                tasks: [ 'html2js', 'index:build', 'vulcanize:build' ]
             },
 
             /**
@@ -521,7 +521,7 @@ module.exports = function (grunt) {
      * before watching for changes.
      */
     grunt.renameTask('watch', 'delta');
-    grunt.registerTask('watch', [ 'build', 'karma:unit', 'delta' ]);
+    grunt.registerTask('watch', [ 'build', 'vulcanize:build', 'delta' ]);
 
     /**
      * The default task is to build and compile.
@@ -534,8 +534,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean', 'html2js', 'jshint', 'less:build',
         'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets', 'copy:build_vendor_polymer', 'copy:build_vendor_maps',
-        'copy:build_appjs', 'copy:build_vendorjs', 'index:build', 'vulcanize:build'/*, 'karmaconfig',
-        'karma:continuous'*/
+        'copy:build_appjs', 'copy:build_vendorjs', 'index:build', 'vulcanize:build'
     ]);
 
     /**
