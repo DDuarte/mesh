@@ -59,7 +59,6 @@ module.exports = {
      */
     vendor_files: {
         js: [
-            'vendor/platform/platform.js',
             'vendor/angular/angular.js',
             'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
             'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',
@@ -71,10 +70,6 @@ module.exports = {
         ],
         assets: [
 
-        ],
-        maps: [
-            'vendor/platform/platform.js.map',
-            'vendor/polymer/polymer.js.map'
         ]
     }
 };

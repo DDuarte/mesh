@@ -116,34 +116,6 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            build_vendor_polymer: {
-                files: [
-                    /*{
-                        src: [ '<%= vendor_files.polymer %>' ],
-                        dest: '<%= build_dir %>/vendor/polymer',
-                        cwd: '.',
-                        expand: true,
-                        flatten: true
-                    }*/
-                    {
-                        src: [ '**' ],
-                        dest: '<%= build_dir %>/vendor',
-                        cwd: 'vendor',
-                        expand: true
-                    }
-                ]
-            },
-            build_vendor_maps: {
-                files: [
-                    {
-                        src: [ '<%= vendor_files.maps %>' ],
-                        dest: '<%= build_dir %>',
-                        cwd: '.',
-                        expand: true,
-                        flatten: true
-                    }
-                ]
-            },
             build_appjs: {
                 files: [
                     {
@@ -515,7 +487,7 @@ module.exports = function (grunt) {
      */
     grunt.registerTask('build', [
         'clean', 'html2js', 'jshint', 'less:build',
-        'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets', 'copy:build_vendor_polymer', 'copy:build_vendor_maps',
+        'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
         'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
     ]);
 
