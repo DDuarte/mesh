@@ -72,11 +72,6 @@ module.exports = {
         assets: [
 
         ],
-        polymer: [
-            'vendor/polymer/polymer.js',
-            'vendor/polymer/layout.html',
-            'vendor/polymer/polymer.html'
-        ],
         maps: [
             'vendor/platform/platform.js.map',
             'vendor/polymer/polymer.js.map'

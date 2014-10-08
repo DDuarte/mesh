@@ -16,7 +16,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-ngmin');
     grunt.loadNpmTasks('grunt-html2js');
-    grunt.loadNpmTasks('grunt-vulcanize');
 
     /**
      * Load in our build configuration file.
@@ -456,7 +455,7 @@ module.exports = function (grunt) {
              */
             html: {
                 files: [ '<%= app_files.html %>' ],
-                tasks: [ 'index:build'/*, 'vulcanize:build'*/ ]
+                tasks: [ 'index:build' ]
             },
 
             /**
@@ -467,7 +466,7 @@ module.exports = function (grunt) {
                     '<%= app_files.atpl %>',
                     '<%= app_files.ctpl %>'
                 ],
-                tasks: [ 'html2js', 'index:build'/*, 'vulcanize:build'*/ ]
+                tasks: [ 'html2js', 'index:build' ]
             },
 
             /**
@@ -491,34 +490,6 @@ module.exports = function (grunt) {
                     livereload: false
                 }
             }
-        },
-
-        /**
-         * Build tool for HTMLImports and Web Components: Concatenate a set of Web Components into one file
-         */
-        vulcanize: {
-            build: {
-                options: {
-                    inline: true,
-                    excludes: {
-                        imports: [
-                            '<%= vendor_files.noVulcanize %>'
-                        ]
-                    }
-
-                },
-                files: {
-                    'build/index.html': 'build/index.html'
-                }
-            },
-            compile: {
-                options: {
-                    // Task-specific options go here.
-                },
-                files: {
-                    'bin/index.html': 'bin/index.html'
-                }
-            }
         }
     };
 
@@ -532,7 +503,7 @@ module.exports = function (grunt) {
      * before watching for changes.
      */
     grunt.renameTask('watch', 'delta');
-    grunt.registerTask('watch', [ 'build'/*, 'vulcanize:build'*/, 'delta' ]);
+    grunt.registerTask('watch', [ 'build', 'delta' ]);
 
     /**
      * The default task is to build and compile.
@@ -545,7 +516,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean', 'html2js', 'jshint', 'less:build',
         'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets', 'copy:build_vendor_polymer', 'copy:build_vendor_maps',
-        'copy:build_appjs', 'copy:build_vendorjs', 'index:build'/*, 'vulcanize:build'*/
+        'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
     ]);
 
     /**
@@ -553,8 +524,7 @@ module.exports = function (grunt) {
      * minifying your code.
      */
     grunt.registerTask('compile', [
-        'less:compile', 'copy:compile_assets', 'ngmin', 'concat:compile_js', 'uglify', 'index:compile'/*,
-        'vulcanize:compile'*/
+        'less:compile', 'copy:compile_assets', 'ngmin', 'concat:compile_js', 'uglify', 'index:compile'
     ]);
 
     /**
