@@ -109,10 +109,9 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: [ '<%= vendor_files.assets %>' ],
-                        dest: '<%= build_dir %>/assets/',
+                        dest: '<%= build_dir %>',
                         cwd: '.',
-                        expand: true,
-                        flatten: true
+                        expand: true
                     }
                 ]
             },
@@ -435,8 +434,9 @@ module.exports = function (grunt) {
              */
             tpls: {
                 files: [
-                    '<%= app_files.atpl %>',
-                    '<%= app_files.ctpl %>'
+                    '<%= app_files.ctpl %>',
+                    '<%= app_files.atpl %>'
+
                 ],
                 tasks: [ 'html2js', 'index:build' ]
             },

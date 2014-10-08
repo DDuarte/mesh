@@ -3,7 +3,11 @@ angular.module( 'meshApp', [
   'templates-common',
   'meshApp.login',
   'meshApp.model',
-  'ui.router'
+  'meshApp.home',
+  'sideBar',
+  'headerBar',
+  'ui.router',
+  'ui.bootstrap'
 ])
 
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
@@ -20,6 +24,5 @@ angular.module( 'meshApp', [
     }
   });
 })
-
 ;
 
