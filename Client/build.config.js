@@ -68,11 +68,21 @@ module.exports = {
             'vendor/angular-ui-utils/modules/route/route.js',
             'lib/threejs/three.js'
         ],
+        map: [
+            'vendor/jquery/dist/jquery.min.map'
+        ],
         css: [
-            'assets/style.default.css'
         ],
         assets: [
-            'assets/**',
+            'assets/bootstrap.min.css',
+            'assets/bootstrap-override.css',
+            'assets/weather-icons.min.css',
+            'assets/jquery-ui-1.10.3.css',
+            'assets/font-awesome.min.css',
+            'assets/animate.min.css',
+            'assets/animate.delay.css',
+            'assets/toggles.css',
+            'assets/pace.css',
             'fonts/**',
             'images/**'
         ]

@@ -128,7 +128,7 @@ module.exports = function (grunt) {
             build_vendorjs: {
                 files: [
                     {
-                        src: [ '<%= vendor_files.js %>' ],
+                        src: [ '<%= vendor_files.js %>', '<%= vendor_files.map %>' ],
                         dest: '<%= build_dir %>/',
                         cwd: '.',
                         expand: true
@@ -222,6 +222,9 @@ module.exports = function (grunt) {
             build: {
                 files: {
                     '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.less %>'
+                },
+                options: {
+
                 }
             },
             compile: {

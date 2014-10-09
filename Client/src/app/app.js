@@ -4,6 +4,7 @@ angular.module( 'meshApp', [
   'meshApp.login',
   'meshApp.model',
   'meshApp.home',
+  'meshApp.profile',
   'ui.router',
   'ui.bootstrap'
 ])
