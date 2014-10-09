@@ -10,7 +10,7 @@
     "bugs": "https://bitbucket.org/teammesh/mesh/issues?status=new&status=open",
     "repository": {
         "type": "git",
-        "url": "git@github.com:ngbp/ngbp.git"
+        "url": "git@bitbucket.org:teammesh/mesh.git"
     },
     "dependencies": {},
     "devDependencies": {
@@ -29,12 +29,10 @@
         "grunt-html2js": "^0.1.9",
         "grunt-karma": "^0.8.2",
         "grunt-ngmin": "0.0.2",
-        "grunt-vulcanize": "^0.4.1",
         "karma": "^0.12.9",
         "karma-chrome-launcher": "^0.1.5",
         "karma-coffee-preprocessor": "^0.2.1",
         "karma-firefox-launcher": "^0.1.3",
-        "karma-jasmine": "^0.1.5",
-        "vulcanize": "^0.4.2"
+        "karma-jasmine": "^0.1.5"
     }
 }
