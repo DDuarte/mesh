@@ -15,4 +15,10 @@ angular.module('meshApp.register', [
         $scope.init = function () {
             angular.element('body').css("background-color","#428bca");
         };
+
+        $scope.registerInfo = {};
+
+        $scope.registerNewAccount = function() {
+            alert("Not yet implemented:\n"+JSON.stringify($scope.registerInfo, null, '\t'));
+        };
     });
