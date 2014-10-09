@@ -48,10 +48,10 @@ angular.module( 'meshApp.home', [
     };
 
     // Tooltip
-    angular.element('.tooltips').tooltip({ container: 'body'});
+    // angular.element('.tooltips').tooltip({ container: 'body'});
 
     // Popover
-    angular.element('.popovers').popover();
+    // angular.element('.popovers').popover();
 
     // Show panel buttons when hovering panel heading
     angular.element('.panel-heading').hover(function() {
@@ -108,15 +108,7 @@ angular.module( 'meshApp.home', [
         return false;
     });
 
-    // Add class nav-hover to mene. Useful for viewing sub-menu
-    angular.element('.leftpanel .nav li').hover(function(){
-        angular.element(this).addClass('nav-hover');
-    }, function(){
-        angular.element(this).removeClass('nav-hover');
-    });
-
     angular.element(window).bind('resize', function() {
-        console.log("RESIZE");
         hideMenu();
     });
 
