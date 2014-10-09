@@ -13,27 +13,27 @@
 
                 <div class="mb30"></div>
 
-                <form role="form">
+                <form name="login_form">
                     <div class="input-group mb15">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="text" class="form-control" placeholder="Username" ng-model="loginInfo.username">
+                        <input type="text" class="form-control" placeholder="Username" ng-model="loginInfo.username" required>
                     </div>
                     <!-- input-group -->
                     <div class="input-group mb15">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                        <input type="password" class="form-control" placeholder="Password" ng-model="loginInfo.password">
+                        <input type="password" class="form-control" placeholder="Password" ng-model="loginInfo.password" required>
                     </div>
                     <!-- input-group -->
 
                     <div class="clearfix">
                         <div class="pull-left">
                             <div class="ckbox ckbox-primary mt10">
-                                <input type="checkbox" id="rememberMe" value="1">
+                                <input type="checkbox" id="rememberMe" value="1" ng-model="rememberUser">
                                 <label for="rememberMe">Remember Me</label>
                             </div>
                         </div>
                         <div class="pull-right">
-                            <button type="submit" class="btn btn-success">Sign In <i class="fa fa-angle-right ml5"></i>
+                            <button type="submit" class="btn btn-success" data-ng-disabled="login_form.$invalid" ng-click="login();">Sign In <i class="fa fa-angle-right ml5"></i>
                             </button>
                         </div>
                     </div>

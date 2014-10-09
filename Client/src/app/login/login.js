@@ -15,4 +15,10 @@ angular.module('meshApp.login', [
         $scope.init = function () {
             angular.element('body').css("background-color","#428bca");
         };
+
+        $scope.loginInfo = {};
+
+        $scope.login = function() {
+            alert("Not yet implemented:\n"+JSON.stringify($scope.loginInfo, null, '\t'));
+        };
     });
