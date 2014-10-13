@@ -60,6 +60,7 @@ module.exports = {
      */
     vendor_files: {
         js: [
+            'vendor/lodash/dist/lodash.min.js',
             'vendor/jquery/dist/jquery.min.js',
             'js/bootstrap.min.js',
             'vendor/angular/angular.js',

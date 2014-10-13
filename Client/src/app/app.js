@@ -6,15 +6,18 @@ angular.module( 'meshApp', [
   'meshApp.model',
   'meshApp.home',
   'meshApp.profile',
+  'meshApp.messages',
   'ui.router',
   'ui.bootstrap'
 ])
 
+.constant('_', window._)
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
   $urlRouterProvider.otherwise( '/login' );
 })
 
-.run( function run () {
+.run( function run ($rootScope) {
+  $rootScope._ = window._;
 })
 
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
