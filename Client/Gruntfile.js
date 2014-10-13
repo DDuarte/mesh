@@ -176,6 +176,7 @@ module.exports = function (grunt) {
                     '<%= build_dir %>/src/**/*.js',
                     '<%= html2js.app.dest %>',
                     '<%= html2js.common.dest %>',
+                    '<%= html2js.ab.dest %>',
                     'module.suffix'
                 ],
                 dest: '<%= compile_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.js'
@@ -295,7 +296,21 @@ module.exports = function (grunt) {
                 },
                 src: [ '<%= app_files.ctpl %>' ],
                 dest: '<%= build_dir %>/templates-common.js'
+            },
+
+            ab: {
+                options: {
+                    base: '.',
+                    module: 'ui-templates',
+                    rename: function (modulePath) {
+                        var moduleName = modulePath.replace('src/common/templates/angular-bootstrap/', '');
+                        return 'template/' + moduleName;
+                    }
+                },
+                src: ['<%= app_files.angularBootstrapTpl %>'],
+                dest: '<%= build_dir %>/ui-templates.js'
             }
+
         },
 
         /**

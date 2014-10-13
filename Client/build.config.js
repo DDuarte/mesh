@@ -25,6 +25,7 @@ module.exports = {
 
         atpl: [ 'src/app/**/*.tpl.html' ],
         ctpl: [ 'src/common/**/*.tpl.html' ],
+        angularBootstrapTpl: [ 'src/common/templates/angular-bootstrap/**/*.html' ],
 
         html: [ 'src/index.html' ],
         less: 'src/less/main.less'
