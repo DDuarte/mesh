@@ -77,15 +77,15 @@
                         <div class="col-sm-6">
                             <div class="input-group mb15">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                <input id="birthDatePicker" pick-a-date="curDate" pick-a-date-options="{ format: 'dd/mm/yyyy', today: '' }" type="text" class="form-control" placeholder="Birthdate (dd/mm/yyyy)" ng-model="registerInfo.birthdate" required>
+                                <input id="birthDatePicker" pick-a-date="defaultDate" pick-a-date-options="dateOptions" type="text" class="form-control" placeholder="Birthdate (dd/mm/yyyy)" ng-model="registerInfo.birthdate" required>
                             </div>
                             <!-- input-group -->
                         </div>
 
                         <div class="col-sm-6">
-                            <div class="input-group mb15">
+                            <div id="country-listing" class="input-group mb15">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                                <input type="text" class="form-control" placeholder="Country" ng-model="registerInfo.country" required>
+                                <country-select ng-class="{'placeholding': !registerInfo.country}" class="form-control" ng-model="registerInfo.country" required></country-select>
                             </div>
                             <!-- input-group -->
                         </div>
