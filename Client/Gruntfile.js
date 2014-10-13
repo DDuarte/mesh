@@ -108,7 +108,7 @@ module.exports = function (grunt) {
             build_vendor_assets: {
                 files: [
                     {
-                        src: [ '<%= vendor_files.assets %>' ],
+                        src: [ '<%= vendor_files.assets %>', '<%= vendor_files.css %>' ],
                         dest: '<%= build_dir %>',
                         cwd: '.',
                         expand: true
