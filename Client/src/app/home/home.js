@@ -47,6 +47,8 @@ angular.module('meshApp.home', [
             }
         };
 
+        $scope.smallWindow = function () { return angular.element(window).width() <= 456; };
+
         angular.element(window).ready(function () {
             // Tooltip
             angular.element('.tooltips').tooltip({ container: 'body'});
@@ -123,7 +125,7 @@ angular.module('meshApp.home', [
                 }
 
                 // Search form move to left
-                if (angular.element(window).width() <= 360) {
+                if ($scope.smallWindow()) {
                     if (angular.element('.leftpanel .form-search').length === 0) {
                         angular.element('.form-search').insertAfter(angular.element('.profile-left'));
                     }

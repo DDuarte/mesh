@@ -62,4 +62,6 @@ angular.module('meshApp.messages', [
             ]
         };
 
+        $scope.activePane = 'inbox';
+
     });
