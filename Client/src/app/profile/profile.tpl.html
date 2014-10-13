@@ -28,11 +28,6 @@
         <div><i class="fa fa-briefcase"></i> Software Engineer at <a href="#">Company, Inc.</a></div>
 
         <div class="mb20"></div>
-
-        <div class="btn-group">
-            <button class="btn btn-primary btn-bordered">Following</button>
-            <button class="btn btn-primary btn-bordered">Followers</button>
-        </div>
     </div>
     <!-- text-center -->
 
@@ -67,17 +62,9 @@
 
 <div class="col-sm-8 col-md-9">
 
-<!-- Nav tabs -->
-<ul class="nav nav-tabs nav-line">
-    <li class="active"><a href="#activities" data-toggle="tab"><strong>Activities</strong></a></li>
-    <li><a href="#followers" data-toggle="tab"><strong>Followers</strong></a></li>
-    <li><a href="#following" data-toggle="tab"><strong>Following</strong></a></li>
-    <li><a href="#events" data-toggle="tab"><strong>My Events</strong></a></li>
-</ul>
-
-<!-- Tab panes -->
-<div class="tab-content nopadding noborder">
-<div class="tab-pane active" id="activities">
+<tabset>
+<tab>
+    <tab-heading><strong>Activities</strong></tab-heading>
     <div class="activity-list">
         <div class="media">
             <a class="pull-left" href="#">
@@ -268,11 +255,9 @@
     <!-- activity-list -->
 
     <button class="btn btn-white btn-block">Show More</button>
-</div>
-<!-- tab-pane -->
-
-<div class="tab-pane" id="followers">
-
+</tab>
+<tab>
+    <tab-heading><strong>Followers</strong></tab-heading>
     <div class="follower-list">
         <div class="media">
             <a class="pull-left" href="#">
@@ -459,11 +444,9 @@
         <!-- media -->
     </div>
     <!--follower-list -->
-</div>
-<!-- tab-pane -->
-
-<div class="tab-pane" id="following">
-
+</tab>
+<tab>
+    <tab-heading><strong>Following</strong></tab-heading>
     <div class="activity-list">
         <div class="media">
             <a class="pull-left" href="#">
@@ -620,10 +603,9 @@
     </div>
     <!-- activity-list -->
     <button class="btn btn-white btn-block">Show More</button>
-</div>
-<!-- tab-pane -->
-
-<div class="tab-pane" id="events">
+</tab>
+<tab>
+    <tab-heading><strong>My Events</strong></tab-heading>
     <div class="events">
         <h5 class="lg-title mb20">Upcoming Events</h5>
 
@@ -784,8 +766,8 @@
         <!-- row -->
     </div>
     <!-- events -->
-</div>
-<!-- tab-pane -->
+</tab>
+</tabset>
 
 </div>
 <!-- tab-content -->
@@ -794,6 +776,4 @@
 <!-- col-sm-9 -->
 </div>
 <!-- row -->
-</div>
-
 </div>
