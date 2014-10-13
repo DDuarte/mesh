@@ -68,12 +68,17 @@ module.exports = {
             'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',
             'vendor/angular-ui-router/release/angular-ui-router.js',
             'vendor/angular-ui-utils/modules/route/route.js',
+            'vendor/pickadate/lib/compressed/picker.js',
+            'vendor/pickadate/lib/compressed/picker.date.js',
+            'vendor/pickadate/lib/compressed/picker.time.js',
             'lib/threejs/three.js'
         ],
         map: [
             'vendor/jquery/dist/jquery.min.map'
         ],
         css: [
+            'vendor/pickadate/lib/compressed/themes/default.css',
+            'vendor/pickadate/lib/compressed/themes/default.date.css'
         ],
         assets: [
             'assets/bootstrap.min.css',
