@@ -27,12 +27,32 @@
   .row:last-child {
     margin-bottom: 0;
   }
-  
+
   h4 [class*=" icon-"], h4 [class^="icon-"] {
     margin-right: 5px;
     vertical-align: -10%;
     font-size: 28px;
     line-height: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .show-left .leftpanel {
+    z-index: 1;
+    box-shadow: 3px 0px 15px #DBDBDB;
+    background-color: white;
+  }
+
+  .show-left .mainpanel {
+    margin-left: 0px;
+  }
+
+  .show-left .headerwrapper .header-left {
+    margin-left: -168px;
+  }
+
+  .show-left .headerwrapper .header-right {
+    margin-left: 0px;
   }
 }
 

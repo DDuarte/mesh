@@ -128,10 +128,12 @@ angular.module('meshApp.home', [
                 if ($scope.smallWindow()) {
                     if (angular.element('.leftpanel .form-search').length === 0) {
                         angular.element('.form-search').insertAfter(angular.element('.profile-left'));
+                        angular.element('.form-search').css('margin', '10px 10px 10px 10px');
                     }
                 } else {
                     if (angular.element('.header-right .form-search').length === 0) {
                         angular.element('.form-search').insertBefore(angular.element('.btn-group-notification'));
+                        angular.element('.form-search').css('margin', 'inherit');
                     }
                 }
             }
