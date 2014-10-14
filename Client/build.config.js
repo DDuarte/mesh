@@ -71,10 +71,13 @@ module.exports = {
             'vendor/pickadate/lib/compressed/picker.js',
             'vendor/pickadate/lib/compressed/picker.date.js',
             'vendor/pickadate/lib/compressed/picker.time.js',
+            'vendor/moment/min/moment.min.js',
+            'vendor/angular-moment/angular-moment.min.js',
             'lib/threejs/three.js'
         ],
         map: [
-            'vendor/jquery/dist/jquery.min.map'
+            'vendor/jquery/dist/jquery.min.map',
+            'vendor/angular-moment/angular-moment.min.js.map'
         ],
         css: [
             'vendor/pickadate/lib/compressed/themes/default.css',
