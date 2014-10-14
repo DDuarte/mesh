@@ -64,4 +64,10 @@ angular.module('meshApp.model', [
     })
 
     .controller('ModelCtrl', function ModelController($scope) {
+        $scope.tabs = {comments: true, description: false, settings: false};
+
+        $scope.newComment = '';
+        $scope.submitNewComment = function() {
+            alert('Not yet implement. Comment:\n' + $scope.newComment);
+        };
     });

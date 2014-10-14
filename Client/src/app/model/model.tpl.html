@@ -25,17 +25,35 @@
         </div>
         <div class="mt20">
             <tabset>
-                <tab class="pull-right">
+                <tab class="pull-right" active="tabs.settings">
                     <tab-heading>
                         <i class="fa fa-cog"></i>
                     </tab-heading>
+                    <div style="height:200px">
+
+                    </div>
                 </tab>
-                <tab class="pull-right">
+                <tab class="pull-right" active="tabs.description">
                     <tab-heading><strong>Description</strong></tab-heading>
+                    <div style="height:200px">
+
+                    </div>
                 </tab>
-                <tab class="pull-right" active="true">
+                <tab class="pull-right" active="tabs.comments">
                     <tab-heading><strong>Comments</strong></tab-heading>
                     <div class="comment-list">
+                        <div class="media msg-reply">
+                            <a class="pull-left" href="#">
+                                <img class="img-circle img-online" src="images/photos/profile.png" alt="username">
+                            </a>
+                            <div class="media-body">
+                                <textarea ng-model="$parent.newComment" id="new-comment-area" ng-maxlength="1024"
+                                          class="form-control" placeholder="Comment on this model"></textarea>
+                                <small id="nc-charcount">{{1024-$parent.newComment.length}} characters remaining.</small>
+                                <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment()"><i class="fa fa-plus mr5"></i> Add Comment</button>
+                            </div>
+
+                        </div>
                         <model-comment author="Elen Adarna" avatar="images/photos/profile.png" date="Today at 3:18pm">
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                             tempor incididunt ut labore et dolore magna aliqua. Nostrud exercitation
