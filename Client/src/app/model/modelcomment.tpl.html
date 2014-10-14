@@ -1,0 +1,17 @@
+<div class="media">
+    <a class="pull-left" href="#">
+        <img class="media-object img-circle" src="{{authorImg}}" alt="{{authorName}}"/>
+    </a>
+
+    <div class="media-body">
+        <a href="#/profile/{{authorName}}"><strong>{{authorName}}</strong></a> posted a comment. <br/>
+        <small class="text-muted">{{commentDate}}</small>
+        <div class="media blog-media">
+            <div class="media-body">
+                <p ng-transclude></p>
+            </div>
+        </div>
+        <!-- media -->
+    </div>
+    <!-- media-body -->
+</div>

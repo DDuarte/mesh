@@ -18,7 +18,11 @@ angular.module('meshApp.model', [
                 scene.add(mesh);
 
                 renderer = new THREE.CanvasRenderer();
-                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setSize(angular.element('#rendererContainer').width(), angular.element('#rendererContainer').width()*9/16);
+
+                window.addEventListener('resize', function() {
+                    renderer.setSize(angular.element('#rendererContainer').width(), angular.element('#rendererContainer').width()*9/16);
+                }, false);
 
                 element.append(angular.element(renderer.domElement));
 
@@ -33,6 +37,20 @@ angular.module('meshApp.model', [
                     renderer.render(scene, camera);
                 }
             }
+        };
+    })
+
+    .directive('modelComment', function() {
+        return {
+            restrict: 'E',
+            transclude: true,
+            replace: true,
+            scope: {
+                authorName: '@author',
+                authorImg: '@avatar',
+                commentDate: '@date'
+            },
+            templateUrl: 'model/modelcomment.tpl.html'
         };
     })
 
