@@ -1,4 +1,42 @@
-Model
-<div class="content">
-    <vizualizer/>
+<div ng-controller="ModelCtrl">
+    <div class="pageheader">
+        <div class="media">
+            <div class="pageicon pull-left">
+                <i class="fa fa-cubes"></i>
+            </div>
+            <div class="media-body">
+                <ul class="breadcrumb">
+                    <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
+                    <li><a href="#">Pages</a></li>
+                    <li>Model Page</li>
+                </ul>
+                <h4>Model Page</h4>
+            </div>
+        </div>
+        <!-- media -->
+    </div>
+    <!-- pageheader -->
+
+    <div class="contentpanel">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2" id="rendererContainer">
+                <vizualizer/>
+            </div>
+        </div>
+        <div class="mt20">
+            <tabset>
+                <tab class="pull-right">
+                    <tab-heading>
+                        <i class="fa fa-cog"></i>
+                    </tab-heading>
+                </tab>
+                <tab class="pull-right">
+                    <tab-heading><strong>Description</strong></tab-heading>
+                </tab>
+                <tab class="pull-right" active="true">
+                    <tab-heading><strong>Comments</strong></tab-heading>
+                </tab>
+            </tabset>
+        </div>
+    </div>
 </div>
