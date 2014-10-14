@@ -8,7 +8,8 @@ angular.module( 'meshApp', [
   'meshApp.profile',
   'meshApp.messages',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ui.mesh.verticalTabs'
 ])
 
 .constant('_', window._)
