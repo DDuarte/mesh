@@ -1,21 +1,6 @@
 <div ng-controller="ModelCtrl">
-    <div class="pageheader">
-        <div class="media">
-            <div class="pageicon pull-left">
-                <i class="fa fa-cube"></i>
-            </div>
-            <div class="media-body">
-                <ul class="breadcrumb">
-                    <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
-                    <li><a href="#">Pages</a></li>
-                    <li>Model Page</li>
-                </ul>
-                <h4>Model Page</h4>
-            </div>
-        </div>
-        <!-- media -->
-    </div>
-    <!-- pageheader -->
+    <breadcrum icon="fa fa-cube" title="Model Page" path="Pages"></breadcrum>
+    
     <div class="contentpanel">
         <h1 style="margin-top:0">{{model.name}}</h1>
 

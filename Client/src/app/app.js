@@ -7,9 +7,11 @@ angular.module( 'meshApp', [
   'meshApp.home',
   'meshApp.profile',
   'meshApp.messages',
+  'meshApp.group',
   'ui.router',
   'ui.bootstrap',
   'ui.mesh.verticalTabs',
+  'ui.mesh.breadcrum',
   'angularMoment'
 ])
 

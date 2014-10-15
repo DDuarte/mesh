@@ -1,51 +1,54 @@
-<div class="contentpanel">
-    <div class="clearfix mb10">
-        <div class="col-sm-3 col-md-3 col-lg-2 mb10">
-            <a href="" class="pull-left btn btn-success btn-block btn-create-msg mb10">Create Message</a>
+<div>
+    <breadcrum icon="fa fa-envelope" title="Messages" path="Pages"></breadcrum>
+    <div class="contentpanel">
+        <div class="clearfix mb10">
+            <div class="col-sm-3 col-md-3 col-lg-2 mb10">
+                <a href="" class="pull-left btn btn-success btn-block btn-create-msg mb10">Create Message</a>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-8"></div>
+            <div class="col-sm-3 col-md-3 col-lg-2">
+                <a href="" class="pull-right btn btn-block btn-danger btn-create-msg" ng-class="{disabled: noMessagesSelected()}" ng-click="deleteMessages(messages.inbox)">Delete messages</a>
+            </div>
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-8"></div>
-        <div class="col-sm-3 col-md-3 col-lg-2">
-            <a href="" class="pull-right btn btn-block btn-danger btn-create-msg" ng-class="{disabled: noMessagesSelected()}" ng-click="deleteMessages(messages.inbox)">Delete messages</a>
-        </div>
-    </div>
 
-    <v-tabset>
-        <v-tab>
-            <tab-heading>
-                <span class="badge pull-right">2</span>
-                <i class="glyphicon glyphicon-inbox"></i> Inbox
-            </tab-heading>
-            <ul class="media-list msg-list">
-                <li class="media unread" ng-class="{unread: message.unread}"
-                    ng-repeat="message in messages.inbox">
-                    <div class="ckbox ckbox-primary pull-left">
-                        <input ng-model="message.selected" type="checkbox" id="checkbox{{$index+1}}">
-                        <label for="checkbox{{$index + 1}}"></label>
-                    </div>
-                    <a class="pull-left" href="#">
-                        <img class="media-object img-circle img-online" src="images/photos/user1.png" alt="...">
-                    </a>
-
-                    <div class="media-body">
-                        <div class="pull-right media-option">
-                            <small>Yesterday 5:51am</small>
+        <v-tabset>
+            <v-tab>
+                <tab-heading>
+                    <span class="badge pull-right">2</span>
+                    <i class="glyphicon glyphicon-inbox"></i> Inbox
+                </tab-heading>
+                <ul class="media-list msg-list">
+                    <li class="media unread" ng-class="{unread: message.unread}"
+                        ng-repeat="message in messages.inbox">
+                        <div class="ckbox ckbox-primary pull-left">
+                            <input ng-model="message.selected" type="checkbox" id="checkbox{{$index+1}}">
+                            <label for="checkbox{{$index+1}}"></label>
                         </div>
-                        <h4 class="sender">{{message.sender.username}}</h4>
+                        <a class="pull-left" href="#">
+                            <img class="media-object img-circle img-online" src="images/photos/user1.png" alt="...">
+                        </a>
 
-                        <p><a href="view_message.html"><strong class="subject">{{message.title}}</strong>
-                            {{message.content}}</a></p>
-                    </div>
-                </li>
-            </ul>
-            <button class="btn btn-primary center-block"> Load more messages</button>
-        </v-tab>
-        <v-tab>
-            <tab-heading>
-                <i class="glyphicon glyphicon-send"></i> Sent
-            </tab-heading>
-            <button class="btn btn-primary center-block"> Load more messages</button>
-        </v-tab>
-    </v-tabset>
+                        <div class="media-body">
+                            <div class="pull-right media-option">
+                                <small>Yesterday 5:51am</small>
+                            </div>
+                            <h4 class="sender">{{message.sender.username}}</h4>
+
+                            <p><a href="view_message.html"><strong class="subject">{{message.title}}</strong>
+                                {{message.content}}</a></p>
+                        </div>
+                    </li>
+                </ul>
+                <button class="btn btn-primary center-block"> Load more messages</button>
+            </v-tab>
+            <v-tab>
+                <tab-heading>
+                    <i class="glyphicon glyphicon-send"></i> Sent
+                </tab-heading>
+                <button class="btn btn-primary center-block"> Load more messages</button>
+            </v-tab>
+        </v-tabset>
 
 
-</div><!-- contentpanel -->
+    </div><!-- contentpanel -->
+</div>
