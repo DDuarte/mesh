@@ -6,32 +6,33 @@
   "main": "index.js",
   "contributors": [
     {
-        "name": "Diogo Santos",
-        "url": "https://bitbucket.org/nanner"
+      "name": "Diogo Santos",
+      "url": "https://bitbucket.org/nanner"
     },
     {
-        "name": "Duarte Duarte",
-        "url": "https://github.com/DDuarte"
+      "name": "Duarte Duarte",
+      "url": "https://github.com/DDuarte"
     },
     {
-        "name": "Luís Cleto",
-        "url": "https://bitbucket.org/luiscleto"
+      "name": "Luís Cleto",
+      "url": "https://bitbucket.org/luiscleto"
     },
     {
-        "name": "Miguel Marques",
-        "url": "https://bitbucket.org/migulorama"
+      "name": "Miguel Marques",
+      "url": "https://bitbucket.org/migulorama"
     },
     {
-        "name": "Pedro Fernandes",
-        "url": "https://bitbucket.org/pedrorfernandes"
+      "name": "Pedro Fernandes",
+      "url": "https://bitbucket.org/pedrorfernandes"
     },
     {
-        "name": "Ruben Cordeiro",
-        "url": "https://bitbucket.org/RubenCordeiro"
+      "name": "Ruben Cordeiro",
+      "url": "https://bitbucket.org/RubenCordeiro"
     }
   ],
   "license": "ISC",
   "dependencies": {
-    "hapi": "~6.8.1"
+    "hapi": "~6.8.1",
+    "redis": "^0.12.1"
   }
 }
