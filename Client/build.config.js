@@ -73,6 +73,7 @@ module.exports = {
             'vendor/pickadate/lib/compressed/picker.time.js',
             'vendor/moment/min/moment.min.js',
             'vendor/angular-moment/angular-moment.min.js',
+            'vendor/ng-tags-input/ng-tags-input.min.js',
             'lib/threejs/three.js'
         ],
         map: [
@@ -81,7 +82,8 @@ module.exports = {
         ],
         css: [
             'vendor/pickadate/lib/compressed/themes/default.css',
-            'vendor/pickadate/lib/compressed/themes/default.date.css'
+            'vendor/pickadate/lib/compressed/themes/default.date.css',
+            'vendor/ng-tags-input/ng-tags-input.min.css'
         ],
         assets: [
             'assets/bootstrap.min.css',

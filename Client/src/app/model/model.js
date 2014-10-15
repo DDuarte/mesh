@@ -1,25 +1,29 @@
 var placeholderModel = {
-    "name": "The Box",
+    "name": "My horse",
     "files": "http://www.nowhereatall.com",
-    "upvotes": "20",
-    "downvotes": "2",
+    "upvotes": 20,
+    "downvotes": 2,
     "authorName": "Donatello",
     "authorAvatar": "http://i.imgur.com/KgKyXqN.jpg",
-    "authorAbout": "I like pizza and deep philosophical conundrums.",
+    "authorAbout": "I like pizza and my amazing horse.",
     "publicationDate": "2010-04-05T12:38:20.000Z",
-    "description" : "what have you done to me?\na miasma of darkness as perceptions crawl.\nonce we savored wonder,\ninnocent and untainted,\nbut your desire paled.\na feverish morass of darkness -\nmemories follow darkness, follow bitterness,\nlove dissolved.\nin a haze of sorrow,\nI see you.",
+    "description" : "Look at my horse, my horse is amazing!",
+    "visibility" : "public",
+    "tags": [
+        "horse", "amazing"
+    ],
     "comments" :[
         {
             "author": "Michelangelo",
             "avatar": "http://i.imgur.com/PbgQGd1.png",
             "date": "2011-10-05T14:45:00.000Z",
-            "content": "Slender beams of moonlight enter this darkened chamber as I kneel, always a slave, always lost, frozen here, waiting.\nHaloed forms wrought in panes of glass loom as dust dances in the air, forming an image in my mind, reaving my darkened soul.\nRealization dawning on my face.\nI raise my head, now submitting to this uncaring truth."
+            "content": "It tastes just like raisins!"
         },
         {
             "author": "Leonardo",
             "avatar": "http://i.imgur.com/EYi19tc.png?1",
             "date": "2011-10-05T14:48:00.000Z",
-            "content": "Lol, wut?"
+            "content": "That doesn't look like a horse..."
         }
     ]
 };
@@ -34,7 +38,7 @@ angular.module('meshApp.model', [
             link: function (scope, element, attrs) {
                 scene = new THREE.Scene();
 
-                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+                camera = new THREE.PerspectiveCamera(75, 16 / 9, 1, 10000);
                 camera.position.z = 1000;
 
                 geometry = new THREE.BoxGeometry(400, 400, 400);
@@ -90,16 +94,28 @@ angular.module('meshApp.model', [
         });
     })
 
-    .controller('ModelCtrl', function ModelController($scope, $window) {
+    .controller('ModelCtrl', function ModelController($scope, $q/*, $http*/) {
         $scope.model=placeholderModel; //TODO replace this with actual model GET
         $scope.favourited = false; //TODO check if model is already favourited
         $scope.followingAuthor = false; //TODO
+
+        $scope.newModel = {};
+        $scope.newModel.description = $scope.model.description;
+        $scope.newModel.tags = $scope.model.tags;
+        $scope.newModel.visibility = $scope.model.visibility;
 
         $scope.tabs = {comments: false, details: true, settings: false};
 
         $scope.newComment = '';
         $scope.submitNewComment = function() {
             alert('Not yet implement. Comment:\n' + $scope.newComment);
+        };
+
+        $scope.loadTags = function ($query) {
+            //return $http.get('/tags?query=' + $query);
+            var def = $q.defer();
+            def.resolve(['3D','Model','Autocompleting tags','Mesh']);
+            return def.promise;
         };
 
         $scope.upvote = function() {
@@ -118,5 +134,14 @@ angular.module('meshApp.model', [
         };
         $scope.downloadModel = function () {
             alert('Download not yet implemented');
+        };
+        $scope.exportModel = function () {
+            alert('Export to dropbox not yet implemented');
+        };
+        $scope.updateModel = function () {
+            alert('Save model not yet implemented');
+        };
+        $scope.deleteModel = function () {
+            alert('Delete model not yet implemented');
         };
     });

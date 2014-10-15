@@ -13,13 +13,14 @@ angular.module( 'meshApp', [
   'ui.bootstrap',
   'ui.mesh.verticalTabs',
   'ui.mesh.breadcrum',
-  'angularMoment'
+  'angularMoment',
+  'ngTagsInput'
 ])
 
 .constant('_', window._)
 .constant('angularMomentConfig', {
-        preprocess: 'utc',
-        timezone: 'Europe/London'
+        preprocess: 'utc'/*,
+        timezone: 'Europe/London'*/
     }
 )
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {

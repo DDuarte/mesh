@@ -1,6 +1,6 @@
 <div ng-controller="ModelCtrl">
     <breadcrum icon="fa fa-cube" title="Model Page" path="Pages"></breadcrum>
-    
+
     <div class="contentpanel">
         <h1 style="margin-top:0">{{model.name}}</h1>
 
@@ -65,8 +65,34 @@
                     <tab-heading>
                         <i class="fa fa-cog"></i>
                     </tab-heading>
-                    <div style="height:200px">
+                    <h3>Description</h3>
+                    <textarea ng-model="newModel.description" style="resize:vertical;" ng-maxlength="1024"
+                              class="form-control" placeholder="Write a description"></textarea>
+                    <small class="nc-charcount">{{1024-newModel.description.length}} characters remaining.
+                    </small>
+                    <h3>Tags</h3>
+                    <tags-input ng-model="newModel.tags">
+                        <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
+                    </tags-input>
+                    <h3>Visibility</h3>
 
+                    <div>
+                        <span class="rdio rdio-primary">
+                            <input type="radio" id="rdioPublic" ng-model="newModel.visibility" value="public"/>
+                            <label for="rdioPublic">Public</label>
+                        </span>
+                        <span class="rdio rdio-primary ml10">
+                            <input type="radio" id="rdioPrivate" ng-model="newModel.visibility" value="private"/>
+                            <label for="rdioPrivate">Private</label>
+                        </span>
+                    </div>
+                    <div class="mt20">
+                        <button class="btn btn-success" ng-click="updateModel();">
+                            Save Changes
+                        </button>
+                        <button class="btn btn-danger" ng-click="deleteModel();">
+                            Delete Model
+                        </button>
                     </div>
                 </tab>
                 <tab class="pull-right" active="tabs.details">
@@ -79,12 +105,26 @@
                             <h3>Description</h3>
 
                             <p style="white-space: pre;">{{model.description}}</p>
+
+                            <h3>Tags</h3>
+
+                            <div class="media-manager-sidebar">
+                                <ul class="tag-list mb20">
+                                    <li ng-repeat="tag in model.tags">
+                                        <a href="#/search/q={{tag.text}}">{{tag.text}}</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="col-md-4">
-                            <h3>Download</h3>
+                            <h3>Get this model</h3>
                             <button ng-click="downloadModel();" class="btn btn-primary">
                                 <i class="fa fa-download"></i>
                                 <span>Download</span>
+                            </button>
+                            <button ng-click="exportModel();" class="btn btn-primary" tooltip="Export to Dropbox">
+                                <i class="fa fa-dropbox"></i>
+                                <span>Export</span>
                             </button>
                         </div>
                     </div>
@@ -99,7 +139,7 @@
                         <div class="media-body">
                             <textarea ng-model="$parent.newComment" id="new-comment-area" ng-maxlength="1024"
                                       class="form-control" placeholder="Comment on this model"></textarea>
-                            <small id="nc-charcount">{{1024-$parent.newComment.length}} characters remaining.
+                            <small class="nc-charcount">{{1024-$parent.newComment.length}} characters remaining.
                             </small>
                             <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment()"><i
                                     class="fa fa-plus mr5"></i> Add Comment
