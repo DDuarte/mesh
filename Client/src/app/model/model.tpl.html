@@ -12,15 +12,21 @@
                 <div class="row">
                     <div class="col-md-12">
                     <span class="btn-toolbar pull-right">
-                        <button ng-click="favouriteModel();" class="btn btn-bordered" tooltip="Add to favourites">
-                            <i ng-class="{'glyphicon-heart-empty': !favourited, 'glyphicon-heart': favourited}"
-                               class="glyphicon"></i>
+                        <button ng-if="!favourited" ng-click="favouriteModel();" class="btn btn-bordered"
+                                tooltip-append-to-body="true" tooltip="Add to favourites">
+                            <i class="glyphicon glyphicon-heart-empty"></i>
                         </button>
-                        <button ng-click="upvote();" class="btn btn-bordered" tooltip="I like this">
+                        <button ng-if="favourited" ng-click="favouriteModel();" class="btn btn-bordered"
+                                tooltip-append-to-body="true" tooltip="Remove from favourites">
+                            <i class="glyphicon glyphicon-heart"></i>
+                        </button>
+                        <button ng-click="upvote();" class="btn btn-bordered"
+                                tooltip-append-to-body="true" tooltip="I like this">
                             <i class="fa fa-thumbs-up"></i>
                             <span>{{model.upvotes}}</span>
                         </button>
-                        <button ng-click="downvote();" class="btn btn-bordered" tooltip="I don't like this">
+                        <button ng-click="downvote();" class="btn btn-bordered"
+                                tooltip-append-to-body="true" tooltip="I don't like this">
                             <i class="fa fa-thumbs-down"></i>
                             <span>{{model.downvotes}}</span>
                         </button>
