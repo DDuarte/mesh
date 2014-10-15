@@ -11,7 +11,7 @@ angular.module('meshApp.login', [
         });
     })
 
-    .controller('LoginCtrl', function LoginController($scope) {
+    .controller('LoginCtrl', function LoginController($scope, $state) {
         $scope.init = function () {
             angular.element('body').css("background-color","#428bca");
         };
@@ -19,6 +19,7 @@ angular.module('meshApp.login', [
         $scope.loginInfo = {};
 
         $scope.login = function() {
-            alert("Not yet implemented:\n"+JSON.stringify($scope.loginInfo, null, '\t'));
+            console.log($scope.loginInfo);
+            $state.go('home.profile');
         };
     });

@@ -11,8 +11,10 @@ angular.module('meshApp.profile', [
     })
 
     .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http) {
-        $http.get('http://meshdev.ddns.net:8000/users/' + $stateParams.id). // TODO: make url configurable?
-            success(function (data, status, headers, config) {
-                $scope.user = data;
-            });
+        $scope.init = function() {
+            $http.get('http://meshdev.ddns.net:8000/users/' + $stateParams.id). // TODO: make url configurable?
+                success(function (data, status, headers, config) {
+                    $scope.user = data;
+                });
+        };
     });
