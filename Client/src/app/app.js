@@ -9,10 +9,16 @@ angular.module( 'meshApp', [
   'meshApp.messages',
   'ui.router',
   'ui.bootstrap',
-  'ui.mesh.verticalTabs'
+  'ui.mesh.verticalTabs',
+  'angularMoment'
 ])
 
 .constant('_', window._)
+.constant('angularMomentConfig', {
+        preprocess: 'utc',
+        timezone: 'Europe/London'
+    }
+)
 .config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
   $urlRouterProvider.otherwise( '/login' );
 })

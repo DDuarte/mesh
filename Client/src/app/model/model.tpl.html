@@ -2,7 +2,7 @@
     <div class="pageheader">
         <div class="media">
             <div class="pageicon pull-left">
-                <i class="fa fa-cubes"></i>
+                <i class="fa fa-cube"></i>
             </div>
             <div class="media-body">
                 <ul class="breadcrumb">
@@ -16,11 +16,56 @@
         <!-- media -->
     </div>
     <!-- pageheader -->
-
     <div class="contentpanel">
+        <h1 style="margin-top:0">{{model.name}}</h1>
+
         <div class="row">
-            <div class="col-md-8 col-md-offset-2" id="rendererContainer">
-                <vizualizer/>
+            <div class="col-md-8">
+                <div id="rendererContainer">
+                    <visualizer></visualizer>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                    <span class="btn-toolbar pull-right">
+                        <button ng-click="favouriteModel();" class="btn btn-bordered" tooltip="Add to favourites">
+                            <i ng-class="{'glyphicon-heart-empty': !favourited, 'glyphicon-heart': favourited}"
+                               class="glyphicon"></i>
+                        </button>
+                        <button ng-click="upvote();" class="btn btn-bordered" tooltip="I like this">
+                            <i class="fa fa-thumbs-up"></i>
+                            <span>{{model.upvotes}}</span>
+                        </button>
+                        <button ng-click="downvote();" class="btn btn-bordered" tooltip="I don't like this">
+                            <i class="fa fa-thumbs-down"></i>
+                            <span>{{model.downvotes}}</span>
+                        </button>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 panel panel-default" style="padding:0;">
+                <div class="panel-heading">
+                    <h3>Created by</h3>
+                </div>
+                <div class="panel-body contact-group">
+                    <div class="media">
+                        <div class="pull-left">
+                            <img class="img-circle img-online" src="{{model.authorAvatar}}"
+                                 alt="{{model.authorName}}">
+                        </div>
+                        <div class="media-heading ml10">
+                            <h3 class="mt0 mb0">{{model.authorName}}</h3>
+                        </div>
+                        <div class="media-body m0 ml10">
+                            <button ng-click="followAuthor();" class="btn btn-primary">
+                                <span>{{followingAuthor ? 'Unfollow' : 'Follow'}}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt20">
+                        {{model.authorAbout}}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="mt20">
@@ -33,34 +78,49 @@
 
                     </div>
                 </tab>
-                <tab class="pull-right" active="tabs.description">
-                    <tab-heading><strong>Description</strong></tab-heading>
-                    <div style="height:200px">
+                <tab class="pull-right" active="tabs.details">
+                    <tab-heading><strong>Details</strong></tab-heading>
+                    <div style="font-weight: bold;">
+                        Published on <span>{{model.publicationDate | amDateFormat:'dddd, MMMM Do YYYY'}}</span>.
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3>Description</h3>
 
+                            <p style="white-space: pre;">{{model.description}}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h3>Download</h3>
+                            <button ng-click="downloadModel();" class="btn btn-primary">
+                                <i class="fa fa-download"></i>
+                                <span>Download</span>
+                            </button>
+                        </div>
                     </div>
                 </tab>
                 <tab class="pull-right" active="tabs.comments">
                     <tab-heading><strong>Comments</strong></tab-heading>
-                    <div class="comment-list">
-                        <div class="media msg-reply">
-                            <a class="pull-left" href="#">
-                                <img class="img-circle img-online" src="images/photos/profile.png" alt="username">
-                            </a>
-                            <div class="media-body">
-                                <textarea ng-model="$parent.newComment" id="new-comment-area" ng-maxlength="1024"
-                                          class="form-control" placeholder="Comment on this model"></textarea>
-                                <small id="nc-charcount">{{1024-$parent.newComment.length}} characters remaining.</small>
-                                <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment()"><i class="fa fa-plus mr5"></i> Add Comment</button>
-                            </div>
+                    <div class="media msg-reply">
+                        <a class="pull-left" href="#">
+                            <img class="img-circle img-online" src="images/photos/profile.png" alt="username">
+                        </a>
 
+                        <div class="media-body">
+                            <textarea ng-model="$parent.newComment" id="new-comment-area" ng-maxlength="1024"
+                                      class="form-control" placeholder="Comment on this model"></textarea>
+                            <small id="nc-charcount">{{1024-$parent.newComment.length}} characters remaining.
+                            </small>
+                            <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment()"><i
+                                    class="fa fa-plus mr5"></i> Add Comment
+                            </button>
                         </div>
-                        <model-comment author="Elen Adarna" avatar="images/photos/profile.png" date="Today at 3:18pm">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Nostrud exercitation
-                            ullamco laboris nisi ut aliquip ex ea commodo consequat
-                        </model-comment>
-                        <model-comment author="Elen Adarna" avatar="images/photos/profile.png" date="Today at 3:18pm">
-                            Nulla efficitur eu ex vitae viverra. Sed sollicitudin lacus a lacinia ornare.
+
+                    </div>
+                    <div class="comment-list mt20">
+                        <model-comment ng-repeat="comment in model.comments" author="{{comment.author}}"
+                                       avatar="{{comment.avatar}}"
+                                       date="{{comment.date}}">
+                            {{comment.content}}
                         </model-comment>
                     </div>
                 </tab>
