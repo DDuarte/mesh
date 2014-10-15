@@ -12,7 +12,7 @@ var placeholderModel = {
     "tags": [
         "horse", "amazing"
     ],
-    "comments" :[
+    "comments": [
         {
             "author": "Michelangelo",
             "avatar": "http://i.imgur.com/PbgQGd1.png",
@@ -35,43 +35,77 @@ angular.module('meshApp.model', [
         return {
             restrict: 'AE',
             // replace: 'true',
-            link: function (scope, element, attrs) {
-                scene = new THREE.Scene();
+            link: function postLink($scope, $element, $attrs) {
+                var camera, scene, renderer, mesh;
 
-                camera = new THREE.PerspectiveCamera(75, 16 / 9, 1, 10000);
-                camera.position.z = 1000;
+                var done = false;
 
-                geometry = new THREE.BoxGeometry(400, 400, 400);
-                material = new THREE.MeshBasicMaterial({ color: 0xff00ff, wireframe: true });
+                $scope.init = function () {
+                    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+                    camera.position.z = 1000;
 
-                mesh = new THREE.Mesh(geometry, material);
-                scene.add(mesh);
+                    scene = new THREE.Scene();
 
-                renderer = new THREE.CanvasRenderer();
-                renderer.setSize(angular.element('#rendererContainer').innerWidth(), angular.element('#rendererContainer').innerWidth()*9/16);
-                renderer.setClearColor(0xffffff, 1);
+                    var canvas = document.createElement('canvas');
+                    canvas.width = angular.element('#rendererContainer').innerWidth();
+                    canvas.height = angular.element('#rendererContainer').innerWidth() * 9 / 16;
 
-                window.addEventListener('resize', function() {
-                    renderer.setSize(angular.element('#rendererContainer').innerWidth(), angular.element('#rendererContainer').innerWidth()*9/16);
-                }, false);
+                    mesh = new THREE.Mesh(
+                        new THREE.BoxGeometry(400, 400, 400),
+                        new THREE.MeshBasicMaterial({ color: 0xff00ff, wireframe: true })
+                    );
 
-                element.append(angular.element(renderer.domElement));
+                    scene.add(mesh);
 
-                animate();
+                    renderer = new THREE.WebGLRenderer({ antialias: true });
+                    renderer.setClearColor(0xffffff, 1);
+                    renderer.setSize(angular.element('#rendererContainer').innerWidth(), angular.element('#rendererContainer').innerWidth() * 9 / 16);
 
-                function animate() {
-                    requestAnimationFrame(animate);
+                    $element.append(angular.element(renderer.domElement));
 
-                    mesh.rotation.x += 0.01;
-                    mesh.rotation.y += 0.02;
+                    window.addEventListener('resize', $scope.onWindowResize, false);
+                };
 
+                $scope.onWindowResize = function () {
+                    renderer.setSize(angular.element('#rendererContainer').innerWidth(), angular.element('#rendererContainer').innerWidth() * 9 / 16);
+                };
+
+                $scope.animate = function () {
+                    if (!done) {
+                        requestAnimationFrame($scope.animate);
+                        mesh.rotation.x += 0.01;
+                        mesh.rotation.y += 0.02;
+                        $scope.render();
+                    }
+                };
+
+                $scope.render = function () {
                     renderer.render(scene, camera);
-                }
+                };
+
+                $scope.$on('$destroy', function () {
+                    console.log("$destroy");
+
+                    done = true;
+
+                    scene.remove(mesh);
+                    mesh.geometry.dispose();
+                    mesh.material.dispose();
+
+                    mesh = scene = camera = renderer = undefined;
+                    delete mesh;
+                    delete scene;
+                    delete camera;
+                    delete renderer;
+                });
+
+                $scope.init();
+                $scope.animate();
             }
         };
     })
 
-    .directive('modelComment', function() {
+    .directive('modelComment', function () {
         return {
             restrict: 'E',
             transclude: true,
@@ -95,7 +129,7 @@ angular.module('meshApp.model', [
     })
 
     .controller('ModelCtrl', function ModelController($scope, $q/*, $http*/) {
-        $scope.model=placeholderModel; //TODO replace this with actual model GET
+        $scope.model = placeholderModel; //TODO replace this with actual model GET
         $scope.favourited = false; //TODO check if model is already favourited
         $scope.followingAuthor = false; //TODO
 
@@ -107,7 +141,7 @@ angular.module('meshApp.model', [
         $scope.tabs = {comments: false, details: true, settings: false};
 
         $scope.newComment = '';
-        $scope.submitNewComment = function() {
+        $scope.submitNewComment = function () {
             alert('Not yet implement. Comment:\n' + $scope.newComment);
         };
 
@@ -118,10 +152,10 @@ angular.module('meshApp.model', [
             return def.promise;
         };
 
-        $scope.upvote = function() {
+        $scope.upvote = function () {
             alert('Upvote not yet implemented');
         };
-        $scope.downvote = function() {
+        $scope.downvote = function () {
             alert('Downvote not yet implemented');
         };
         $scope.favouriteModel = function () {
