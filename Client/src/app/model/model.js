@@ -92,11 +92,10 @@ angular.module('meshApp.model', [
                     mesh.geometry.dispose();
                     mesh.material.dispose();
 
-                    mesh = scene = camera = renderer = undefined;
-                    delete mesh;
-                    delete scene;
-                    delete camera;
-                    delete renderer;
+                    mesh = null;
+                    scene = null;
+                    camera = null;
+                    renderer = null;
                 });
 
                 $scope.init();
