@@ -8,6 +8,7 @@ angular.module( 'meshApp', [
   'meshApp.profile',
   'meshApp.messages',
   'meshApp.group',
+  'meshApp.search',
   'ui.router',
   'ui.bootstrap',
   'ui.mesh.verticalTabs',
