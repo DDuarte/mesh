@@ -74,7 +74,10 @@ module.exports = {
             'vendor/moment/min/moment.min.js',
             'vendor/angular-moment/angular-moment.min.js',
             'vendor/ng-tags-input/ng-tags-input.min.js',
-            'lib/threejs/three.js'
+            'lib/three.js',
+            'lib/Detector.js',
+            'lib/jquery.fullscreen.js',
+            'lib/OrbitControls.js'
         ],
         map: [
             'vendor/jquery/dist/jquery.min.map',

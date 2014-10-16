@@ -7,8 +7,8 @@ var placeholderModel = {
     "authorAvatar": "http://i.imgur.com/KgKyXqN.jpg",
     "authorAbout": "I like pizza and my amazing horse.",
     "publicationDate": "2010-04-05T12:38:20.000Z",
-    "description" : "Look at my horse, my horse is amazing!",
-    "visibility" : "public",
+    "description": "Look at my horse, my horse is amazing!",
+    "visibility": "public",
     "tags": [
         "horse", "amazing"
     ],
@@ -36,19 +36,15 @@ angular.module('meshApp.model', [
             restrict: 'AE',
             // replace: 'true',
             link: function postLink($scope, $element, $attrs) {
-                var camera, scene, renderer, mesh;
+                var scene, renderer, mesh;
 
                 var done = false;
 
                 $scope.init = function () {
-                    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-                    camera.position.z = 1000;
+                    $scope.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+                    $scope.camera.position.z = 1000;
 
                     scene = new THREE.Scene();
-
-                    var canvas = document.createElement('canvas');
-                    canvas.width = angular.element('#rendererContainer').innerWidth();
-                    canvas.height = angular.element('#rendererContainer').innerWidth() * 9 / 16;
 
                     mesh = new THREE.Mesh(
                         new THREE.BoxGeometry(400, 400, 400),
@@ -57,30 +53,83 @@ angular.module('meshApp.model', [
 
                     scene.add(mesh);
 
-                    renderer = new THREE.WebGLRenderer({ antialias: true });
+                    var args = { antialias: true };
+
+                    renderer = Detector.webgl ? new THREE.WebGLRenderer(args) : new THREE.CanvasRenderer(args);
                     renderer.setClearColor(0xffffff, 1);
-                    renderer.setSize(angular.element('#rendererContainer').innerWidth(), angular.element('#rendererContainer').innerWidth() * 9 / 16);
+
+                    $scope.size = { width: angular.element('#rendererContainer').innerWidth(), height: angular.element('#rendererContainer').innerWidth() * 9 / 16 };
+
+                    renderer.setSize($scope.size.width, $scope.size.height);
 
                     $element.append(angular.element(renderer.domElement));
 
+                    $scope.controls = new THREE.OrbitControls($scope.camera, renderer.domElement);
+                    $scope.controls.addEventListener('change', $scope.render);
+                    $scope.controls.noPan = true;
+
                     window.addEventListener('resize', $scope.onWindowResize, false);
+                    window.addEventListener("orientationchange", $scope.onOrientationChange, false);
+                    angular.element(document).bind('fullscreenchange', $scope.onFullScreenChange);
+                };
+
+                $scope.updateSizeAndCamera = function () {
+                    if ($scope.isFullScreen()) {
+                        $scope.size.width = window.innerWidth;
+                        $scope.size.height = window.innerHeight;
+                    } else {
+                        $scope.size.width = angular.element('#rendererContainer').innerWidth();
+                        $scope.size.height = angular.element('#rendererContainer').innerWidth() * 9 / 16;
+                    }
+
+                    console.log("Size: " + JSON.stringify($scope.size));
+
+                    $scope.camera.aspect = $scope.size.width / $scope.size.height;
+                    $scope.camera.updateProjectionMatrix();
+
+                    renderer.setSize($scope.size.width, $scope.size.height);
+                };
+
+                $scope.onOrientationChange = function () {
+                    $scope.updateSizeAndCamera();
+                    console.log("onOrientationChange: " + JSON.stringify($scope.size));
+                    $scope.render();
                 };
 
                 $scope.onWindowResize = function () {
-                    renderer.setSize(angular.element('#rendererContainer').innerWidth(), angular.element('#rendererContainer').innerWidth() * 9 / 16);
+                    $scope.updateSizeAndCamera();
+                    console.log("onWindowResize: " + JSON.stringify($scope.size));
+                    $scope.render();
                 };
 
                 $scope.animate = function () {
                     if (!done) {
                         requestAnimationFrame($scope.animate);
-                        mesh.rotation.x += 0.01;
-                        mesh.rotation.y += 0.02;
+                        /*
+                         mesh.rotation.x += 0.01;
+                         mesh.rotation.y += 0.02;
+                         */
+                        $scope.controls.update();
                         $scope.render();
                     }
                 };
 
                 $scope.render = function () {
-                    renderer.render(scene, camera);
+                    renderer.render(scene, $scope.camera);
+                };
+
+                $scope.isFullScreen = function () {
+                    return !!angular.element(renderer.domElement).fullScreen();
+                };
+
+                $scope.toggleFullScreen = function () {
+                    angular.element(renderer.domElement).toggleFullScreen();
+                    console.log("toggleFullScreen: " + JSON.stringify($scope.size));
+                };
+
+                $scope.onFullScreenChange = function (ev) {
+                    console.log("onFullScreenChange: " + JSON.stringify($scope.size));
+                    $scope.onWindowResize();
                 };
 
                 $scope.$on('$destroy', function () {
@@ -94,7 +143,8 @@ angular.module('meshApp.model', [
 
                     mesh = null;
                     scene = null;
-                    camera = null;
+                    $scope.camera = null;
+                    $scope.controls = null;
                     renderer = null;
                 });
 
@@ -147,7 +197,7 @@ angular.module('meshApp.model', [
         $scope.loadTags = function ($query) {
             //return $http.get('/tags?query=' + $query);
             var def = $q.defer();
-            def.resolve(['3D','Model','Autocompleting tags','Mesh']);
+            def.resolve(['3D', 'Model', 'Autocompleting tags', 'Mesh']);
             return def.promise;
         };
 

@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div id="rendererContainer">
-                    <visualizer></visualizer>
+                    <visualizer ng-dblclick="toggleFullScreen()"></visualizer>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -29,6 +29,10 @@
                                 tooltip-append-to-body="true" tooltip="I don't like this">
                             <i class="fa fa-thumbs-down"></i>
                             <span>{{model.downvotes}}</span>
+                        </button>
+                        <button ng-click="toggleFullScreen()" class="btn btn-bordered"
+                                tooltip-append-to-body="true" tooltip="Toggle FullScreen">
+                            <i class="glyphicon glyphicon-fullscreen"></i>
                         </button>
                     </span>
                     </div>

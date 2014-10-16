@@ -45,6 +45,8 @@ angular.module('meshApp.home', [
                     angular.element('body').removeClass('show-left');
                 }
             }
+
+            angular.element(window).trigger('resize');
         };
 
         $scope.smallWindow = function () { return angular.element(window).width() <= 456; };
