@@ -99,7 +99,8 @@ module.exports = {
             'assets/toggles.css',
             'assets/pace.css',
             'fonts/**',
-            'images/**'
+            'images/**',
+            'assets/android.json'
         ]
     }
 };
