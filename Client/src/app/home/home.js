@@ -29,7 +29,7 @@ angular.module('meshApp.home', [
         });
     })
 
-    .controller("HomeCtrl", function ($scope, $state, SearchService) {
+    .controller("HomeCtrl", function ($scope, $state) {
         $scope.collapseSidebar = function () {
             if (!angular.element('body').hasClass('hidden-left')) {
                 if (angular.element('.headerwrapper').hasClass('collapsed')) {
@@ -156,8 +156,7 @@ angular.module('meshApp.home', [
         });
 
         $scope.submitSearch = function() {
-            SearchService.setQuery($scope.query);
-            $state.go('home.search');
+            $state.go('home.search', {q: $scope.query});
         };
     })
 

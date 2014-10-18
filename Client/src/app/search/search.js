@@ -3,28 +3,17 @@ angular.module('meshApp.search', [
 ])
     .config(function config($stateProvider) {
         $stateProvider.state('home.search', {
-            url: '/search',
+            url: '/search?q',
             controller: 'SearchCtrl',
             templateUrl: 'search/search.tpl.html',
             data: { pageTitle: 'Search' }
         });
     })
 
-    .service('SearchService', function SearchService() {
-        var search = {
-            query: null
-        };
-
-        return {
-            getQuery: function() { return search.query; },
-            setQuery: function(query) { search.query = query; }
-        };
-    })
-
-    .controller('SearchCtrl', function SearchController($scope, SearchService) {
+    .controller('SearchCtrl', function SearchController($scope, $stateParams) {
         $scope.init = function() {
-        };
-        $scope.search = {
-            query: SearchService.getQuery()
+            $scope.search = {
+                query: $stateParams.q
+            };
         };
     });
