@@ -13,6 +13,7 @@ angular.module( 'meshApp', [
   'ui.bootstrap',
   'ui.mesh.verticalTabs',
   'ui.mesh.breadcrum',
+  'ui.mesh.modelthumbnail',
   'angularMoment',
   'ngTagsInput'
 ])
