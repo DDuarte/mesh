@@ -38,6 +38,8 @@ angular.module('meshApp.search', [
             ];
 
             $scope.searchType = 'model';
+            angular.element('#model').addClass('active');
+
             $scope.currentPage = 1;
             $scope.pageSize = 4;
 
@@ -47,8 +49,18 @@ angular.module('meshApp.search', [
         };
 
         $scope.changeSearchType = function(searchType) {
+            if ($scope.searchType === '') {
+                $scope.searchType = 'all';
+            }
+            angular.element('#' + $scope.searchType).removeClass('active');
+
             $scope.searchType = searchType;
             $scope.currentPage = 1;
+
+            if (searchType === '') {
+                searchType = 'all';
+            }
+            angular.element('#' + searchType).addClass('active');
         };
 
         $scope.setPage = function (pageNo) {
