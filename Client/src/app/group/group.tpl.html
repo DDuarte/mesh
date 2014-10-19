@@ -8,9 +8,18 @@
             <v-tabset>
                 <v-tab ng-repeat="gallery in galleries">
                     <tab-heading>{{gallery.name}}</tab-heading>
-                    <div class="col-sm-12 col-md-6 col-lg-3" ng-repeat="model in gallery.models">
-                        {{model.name}}
-                    </div>
+                    <modelthumbnail ng-repeat="model in gallery.models"
+                                    model-url="#/model"
+                                    image-url="http://kraskovoinfo.ru/images/users/avatars/f3db4f99fe43aca89c30b1925d5c3a37.png"
+                                    title="{{model.name}}"
+                                    author="Donatello"
+                                    author-url="#/profile/donatello"
+                                    author-avatar="http://i.imgur.com/KgKyXqN.jpg"
+                                    date="2010-04-05T12:38:20.000Z"
+                                    num-comments="2"
+                                    upvotes="20"
+                                    downvotes="2">
+                    </modelthumbnail>
                 </v-tab>
             </v-tabset>
         </tab>
