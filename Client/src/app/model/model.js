@@ -198,7 +198,11 @@ angular.module('meshApp.model', [
                     $scope.scene.remove($scope.mesh);
 
                     $scope.mesh.geometry.dispose();
-                    $scope.mesh.material.dispose();
+                    if ($scope.mesh.material instanceof THREE.MeshFaceMaterial) {
+                        _.forEach($scope.mesh.material.materials, function (mat) { mat.dispose(); });
+                    } else {
+                        $scope.mesh.material.dispose();
+                    }
 
                     $scope.mesh = null;
                     $scope.scene = null;
