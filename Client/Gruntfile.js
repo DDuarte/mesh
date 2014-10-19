@@ -138,9 +138,9 @@ module.exports = function (grunt) {
             compile_assets: {
                 files: [
                     {
-                        src: [ '**' ],
-                        dest: '<%= compile_dir %>/assets',
-                        cwd: '<%= build_dir %>/assets',
+                        src: [ 'assets/**', 'fonts/**', 'images/**', '<%= vendor_files.css %>' ],
+                        dest: '<%= compile_dir %>',
+                        cwd: '<%= build_dir %>',
                         expand: true
                     }
                 ]
