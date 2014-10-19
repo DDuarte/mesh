@@ -1,6 +1,8 @@
 var Hapi = require('hapi'),
     redis = require('redis'),
-    client = redis.createClient();
+    client = redis.createClient(),
+    neo4j = require('neo4j'),
+    db = new neo4j.GraphDatabase('http://localhost:7474');
 
 client.on('error', function (err) {
     console.log('Redis error ' + err);
@@ -35,6 +37,35 @@ server.route({
     method: 'GET',
     path: '/users/{id}',
     handler: getUser
+});
+
+function getModel(request, reply) {
+
+    var query = [
+        'MATCH (model:Model)',
+        'WHERE model.id = {modelId}',
+        'RETURN model'
+    ].join('\n');
+
+    var params = {
+        modelId: Number(request.params.id)
+    };
+
+
+    db.query(query, params, function (err, results) {
+        if (err) throw err;
+        if (results.length == 0) {
+            reply('No such model.').code(404);
+        } else {
+            reply(results[0].model.data).header('Access-Control-Allow-Origin', "*");
+        }
+    });
+}
+
+server.route({
+    method: 'GET',
+    path: '/model/{id}',
+    handler: getModel
 });
 
 // Start the server

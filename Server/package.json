@@ -33,6 +33,7 @@
   "license": "ISC",
   "dependencies": {
     "hapi": "~6.8.1",
+    "neo4j": "^1.1.0",
     "redis": "^0.12.1"
   }
 }
