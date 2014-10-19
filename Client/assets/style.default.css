@@ -2935,54 +2935,6 @@ table.dataTable.dtr-inline.collapsed tbody th:first-child:before {
     line-height: normal;
 }
 
-
-
-/***** 9.6 SEARCH RESULTS *****/
-
-.nav-file-type > li > a {
-    color: #666;
-}
-
-.nav-file-type > li > a > i {
-    width: 16px;
-    margin-right: 5px;
-    color: #333;
-}
-
-.nav-file-type > li.active > a,
-.nav-file-type > li.active > a:hover {
-    background-color: #4e5154;    
-}
-
-.nav-file-type > li.active > a > i {
-    color: #fff;
-}
-
-.results-list .media {
-    border-bottom: 1px solid #eee;
-}
-
-.results-list .media-object {
-    width: 125px;
-    margin-right: 10px;
-}
-
-.results-list .filename {
-    margin: 0;
-    font-size: 16px;
-}
-
-.results-list .media-body {
-    line-height: 18px;
-}
-
-.pagination-search {
-    margin-bottom: 10px;
-    margin-top: 0;
-}
-
-
-
 /***** 9.7 SIGN IN/UP PAGE *****/
 
 body.signin {

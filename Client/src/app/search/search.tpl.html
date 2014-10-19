@@ -10,18 +10,65 @@
                 <li><a href="#">Pages</a></li>
                 <li>Search Results</li>
             </ul>
-            <h4>Search Results for {{search.query}}</h4>
+            <h4>Search Results</h4>
         </div>
     </div><!-- media -->
 </div><!-- pageheader -->
 
 <div class="contentpanel">
 
-    <div class="row">
+    <div class="row search">
+        <div class="col-sm-8 col-md-9">
+            <pagination boundary-links="true" total-items="filtered.length" page="currentPage"
+                        class="pagination pagination-search" items-per-page="pageSize"
+                        previous-text="&lsaquo;" next-text="&rsaquo;"
+                        first-text="&laquo;" last-text="&raquo;"></pagination>
+
+            <div class="panel panel-dark-head">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Search results for "{{search.query}}"</h4>
+                    <p>About {{filtered.length}} results (0.13 seconds)</p>
+                </div><!-- panel-heading -->
+                <tabset>
+                    <tab ng-click="changeSearchType('model')">
+                        <tab-heading><strong>Models</strong></tab-heading>
+                    </tab>
+                    <tab ng-click="changeSearchType('group')">
+                        <tab-heading><strong>Groups</strong></tab-heading>
+                    </tab>
+                    <tab ng-click="changeSearchType('user')">
+                        <tab-heading><strong>Users</strong></tab-heading>
+                    </tab>
+                </tabset>
+                <div class="panel-body">
+
+                    <div class="results-list">
+
+                        <div class="media" ng-repeat="result in filtered = (results | filter: searchType) | startFrom: (currentPage-1)*pageSize | limitTo: pageSize">
+                            <a href="#/model" class="pull-left">
+                                <img alt="" ng-src="{{result.image}}" class="media-object thumbnail">
+                            </a>
+                            <div class="media-body">
+                                <h4 class="filename text-primary"><a href="#/model">{{result.name}}</a></h4>
+                                <small class="text-muted">Created: January 10, 2014 at 7:30am</small><br />
+                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
+                            </div>
+                        </div>
+
+                    </div><!-- results-list -->
+                </div><!-- panel-body -->
+            </div><!-- panel -->
+
+            <pagination boundary-links="true" total-items="filtered.length" page="currentPage"
+                        class="pagination pagination-search" items-per-page="pageSize"
+                        previous-text="&lsaquo;" next-text="&rsaquo;"
+                        first-text="&laquo;" last-text="&raquo;"></pagination>
+
+        </div><!-- col-sm-8 -->
         <div class="col-sm-4 col-md-3">
             <h4 class="md-title mb5">Refine Results</h4>
             <div class="input-group">
-                <input type="search" class="form-control" value="Web Design">
+                <input type="search" class="form-control" ng-model="search.query">
                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
             </div><!-- input-group -->
 
@@ -62,148 +109,6 @@
             <br />
 
         </div><!-- col-sm-4 -->
-        <div class="col-sm-8 col-md-9">
-            <ul class="pagination pagination-search">
-                <li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a></li>
-                <li><a href="#">1</a></li>
-                <li class="active"><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-            </ul>
-            <div class="panel panel-dark-head">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Search results for "Web Design"</h4>
-                    <p>About 1,370 results (0.13 seconds)</p>
-                </div><!-- panel-heading -->
-                <div class="panel-body">
-
-                    <div class="results-list">
-
-                        <div class="media">
-                            <a href="#" class="pull-left">
-                                <img alt="" src="images/photos/media1.jpg" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="filename text-primary">Pizza.png</h4>
-                                <small class="text-muted">Type: JPG Image</small><br />
-                                <small class="text-muted">Created: January 10, 2014 at 7:30am</small><br />
-                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
-                            </div>
-                        </div>
-
-                        <div class="media">
-                            <a href="#" class="pull-left">
-                                <img alt="" src="images/photos/media-doc.png" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="filename text-primary">MyDocument.pdf</h4>
-                                <small class="text-muted">Type: PDF Document</small><br />
-                                <small class="text-muted">Created: January 13, 2014 at 7:30am</small><br />
-                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
-                            </div>
-                        </div>
-
-                        <div class="media">
-                            <a href="#" class="pull-left">
-                                <img alt="" src="images/photos/media2.png" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="filename text-primary">SwimmingPool.png</h4>
-                                <small class="text-muted">Type: PNG Image</small><br />
-                                <small class="text-muted">Created: January 10, 2014 at 7:30am</small><br />
-                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
-                            </div>
-                        </div>
-
-                        <div class="media">
-                            <a href="#" class="pull-left">
-                                <img alt="" src="images/photos/media-audio.png" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="filename text-primary">WreckingBall.mp3</h4>
-                                <small class="text-muted">Type: MP3 Audio</small><br />
-                                <small class="text-muted">Created: January 13, 2014 at 7:30am</small><br />
-                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
-                            </div>
-                        </div>
-
-                        <div class="media">
-                            <a href="#" class="pull-left">
-                                <img alt="" src="images/photos/media3.png" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="filename text-primary">Painting.mp4</h4>
-                                <small class="text-muted">Type: MP4 Video</small><br />
-                                <small class="text-muted">Created: January 13, 2014 at 7:30am</small><br />
-                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
-                            </div>
-                        </div>
-
-                        <div class="media">
-                            <a href="#" class="pull-left">
-                                <img alt="" src="images/photos/media1.jpg" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="filename text-primary">Pizza.png</h4>
-                                <small class="text-muted">Type: JPG Image</small><br />
-                                <small class="text-muted">Created: January 10, 2014 at 7:30am</small><br />
-                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
-                            </div>
-                        </div>
-
-                        <div class="media">
-                            <a href="#" class="pull-left">
-                                <img alt="" src="images/photos/media-doc.png" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="filename text-primary">MyDocument.pdf</h4>
-                                <small class="text-muted">Type: PDF Document</small><br />
-                                <small class="text-muted">Created: January 13, 2014 at 7:30am</small><br />
-                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
-                            </div>
-                        </div>
-
-                        <div class="media">
-                            <a href="#" class="pull-left">
-                                <img alt="" src="images/photos/media2.png" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="filename text-primary">SwimmingPool.png</h4>
-                                <small class="text-muted">Type: PNG Image</small><br />
-                                <small class="text-muted">Created: January 10, 2014 at 7:30am</small><br />
-                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
-                            </div>
-                        </div>
-
-                        <div class="media">
-                            <a href="#" class="pull-left">
-                                <img alt="" src="images/photos/media-audio.png" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="filename text-primary">WreckingBall.mp3</h4>
-                                <small class="text-muted">Type: MP3 Audio</small><br />
-                                <small class="text-muted">Created: January 13, 2014 at 7:30am</small><br />
-                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
-                            </div>
-                        </div>
-
-                    </div><!-- results-list -->
-                </div><!-- panel-body -->
-            </div><!-- panel -->
-
-            <ul class="pagination pagination-search">
-                <li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a></li>
-                <li><a href="#">1</a></li>
-                <li class="active"><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-            </ul>
-
-        </div><!-- col-sm-8 -->
     </div><!-- row -->
 
 </div><!-- contentpanel -->
