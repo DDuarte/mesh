@@ -241,16 +241,18 @@ angular.module('meshApp.model', [
     })
 
     .controller('ModelCtrl', function ModelController($scope, $stateParams, $q, $http) {
+
         $scope.init = function() {
+            $scope.newModel = {};
+
             $http.get('http://meshdev.ddns.net:8000/models/' + $stateParams.id). // TODO: make url configurable?
                 success(function (data, status, headers, config) {
                     $scope.model = data;
                     $scope.favourited = false; //TODO check if model is already favourited
                     $scope.followingAuthor = false; //TODO
 
-                    $scope.newModel = {};
                     $scope.newModel.description = $scope.model.description;
-                    $scope.newModel.tags = $scope.model.tags;
+                    $scope.newModel.tags = $scope.model.tags.slice(0); //clone
                     $scope.newModel.visibility = $scope.model.visibility;
                     console.log($scope.model);
                 });
