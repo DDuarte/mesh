@@ -648,19 +648,59 @@
 <tab>
     <tab-heading><strong>My Account</strong></tab-heading>
     <div class="container">
-        <div class="row">
-            <form class="form-horizontal pull-left">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">Username</label>
+        <div class="row pull-left">
+            <div class="panel panel-default col-md-12">
 
-                    <div class="col-sm-8">
-                        <input type="text" placeholder="{{user.username}}" class="form-control" disabled>
-                    </div>
-                </div>
-            </form>
-        </div>
+                <div class="panel-body ">
 
-        <button class="btn btn-material-bluegrey">Do some stuff</button>
+                    <form class="form-horizontal form-bordered">
+                        <div class="form-group">
+                            <label class="control-label">Username</label>
+                            <div>
+                                <input type="text" placeholder={{user.username}} class="form-control" disabled>
+                            </div>
+                        </div><!-- form-group -->
+
+                        <div class="form-group">
+                            <label class="control-label">First name</label>
+                            <div>
+                                <input type="text" placeholder={{user.firstName}} class="form-control" disabled>
+                            </div>
+                        </div><!-- form-group -->
+
+                        <div class="form-group">
+                            <label class="control-label">Last name</label>
+                            <div class="">
+                                <input type="text" placeholder={{user.lastName}} class="form-control" disabled>
+                            </div>
+                        </div><!-- form-group -->
+
+                        <div class="form-group">
+                            <label class="control-label" for="userEmail">Email</label>
+                            <div class="">
+                                <input type="text" placeholder="{{user.email}}" class="form-control" id="userEmail" disabled>
+                            </div>
+                        </div><!-- form-group -->
+
+                        <div class="form-group">
+                            <label class="control-label">About</label>
+                            <div class="">
+                                <textarea id="autoResizeTA" class="form-control" rows="5" style="height: 90px;">{{user.about}}</textarea>
+                            </div>
+                        </div><!-- form-group -->
+
+                        <div class="form-group">
+                            <label class="control-label">Interests</label>
+                            <div class="">
+                                <input name="tags" id="tags" class="form-control" value="foo,bar,baz" style="display: none;"><div id="tags_tagsinput" class="tagsinput" style="width: auto; height: 100px;"><span class="tag"><span>foo&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a></span><span class="tag"><span>bar&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a></span><span class="tag"><span>baz&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a></span><div id="tags_addTag"><input id="tags_tag" value="" data-default="add a tag" style="color: rgb(102, 102, 102); width: 68px;"></div><div class="tags_clear"></div></div>
+                            </div>
+                        </div><!-- form-group -->
+
+                    </form>
+                    <button class="btn btn-success pull-right">Save changes</button>
+                </div><!-- panel-body -->
+
+            </div>
 </tab>
 </tabset>
 
