@@ -111,7 +111,11 @@ angular.module('meshApp.model', [
                 }
 
                 $scope.addModelToScene = function (geometry, materials) {
+
                     var material = new THREE.MeshFaceMaterial( materials );
+                    material.overdraw = true;
+                    _.forEach(material.materials, function (mat) { mat.overdraw = true; });
+
                     $scope.mesh = new THREE.Mesh( geometry, material );
 
                     geometry.computeBoundingBox();
@@ -162,7 +166,7 @@ angular.module('meshApp.model', [
 
                 $scope.animate = function () {
                     if (!done) {
-                        requestAnimationFrame($scope.animate);
+                        requestAnimationFrame($scope.animate, $scope.renderer.domElement);
                         /*
                          mesh.rotation.x += 0.01;
                          mesh.rotation.y += 0.02;
