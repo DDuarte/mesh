@@ -42,8 +42,9 @@ server.route({
 function getModel(request, reply) {
 
     var query = [
-        'MATCH (m:Model{id : {modelId}})<-[:OWNS]-(author)',
-        'RETURN { name: m.name, description: m.description, files: m.files, downVotes: m.downVotes, upVotes: m.upVotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: m.tags, author: {name: author.name, avatar: author.avatar, about: author.about } } as model'
+        'MATCH (m:Model{id : 1})<-[:OWNS]-(author)',
+        'MATCH m<-[c:COMMENTED]-(cAuthor)',
+        'RETURN { name: m.name, description: m.description, files: m.files, downVotes: m.downvotes, upVotes: m.upvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: m.tags, author: {name: author.name, avatar: author.avatar, about: author.about }, comments: collect({ date: c.date, content: c.content, author: cAuthor.name, avatar: cAuthor.avatar }) } as model'
     ].join('\n');
 
     var params = {
