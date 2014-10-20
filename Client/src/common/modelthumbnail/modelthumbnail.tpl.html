@@ -1,10 +1,10 @@
 <div class="col-md-4">
 <div class="thumbnail" style="max-width:300px;">
-    <a href="{{modelUrl}}" >
+    <a ui-sref="home.model({id: modelId})" >
         <img class="modelthumb" ng-src="{{imageUrl}}" alt="{{title}}" onError="this.src='http://placehold.it/290x193&amp;text=Model';">
     </a>
     <div class="caption center-block">
-        <a href="{{modelUrl}}"><h4 style="display:inline">{{title}}</h4></a>
+        <a ui-sref="home.model({id: modelId})"><h4 style="display:inline">{{title}}</h4></a>
         <span class="fa fa-thumbs-down pull-right text-red">{{downvotes}}</span>
         <span class="fa fa-thumbs-up text-right pull-right text-green">{{upvotes}}</span>
         <span class="fa fa-comment-o pull-right">{{numComments}}</span>
@@ -13,7 +13,7 @@
                 <img ng-src="{{authorAvatar}}" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info" style="padding-right: 0; padding-left: 10px;">
-                <p><a href="{{authorUrl}}">{{author}}</a></p>
+                <p><a ui-sref="home.profile({id: author})">{{author}}</a></p>
                 <p>
                     <span class="fa fa-clock-o"></span> <span am-time-ago="date"></span>
                 </p>
@@ -21,4 +21,4 @@
         </div>
     </div>
 </div>
-    </div>
+</div>

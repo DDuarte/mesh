@@ -1,10 +1,10 @@
 <div class="media">
-    <a class="pull-left" href="#">
+    <a class="pull-left" ui-sref="home.profile({id: authorName})">
         <img class="media-object img-circle" ng-src="{{authorImg}}" alt="{{authorName}}"/>
     </a>
 
     <div class="media-body">
-        <a href="#/profile/{{authorName}}"><strong>{{authorName}}</strong></a> posted a comment. <br/>
+        <a ui-sref="home.profile({id: authorName})"><strong>{{authorName}}</strong></a> posted a comment. <br/>
         <small class="text-muted"><span class="fa fa-clock-o"></span> <span am-time-ago="commentDate"></span></small>
         <div class="media blog-media">
             <div class="media-body">

@@ -233,7 +233,7 @@ angular.module('meshApp.model', [
 
     .config(function config($stateProvider) {
         $stateProvider.state('home.model', {
-            url: '/model',
+            url: '/model/:id',
             controller: 'ModelCtrl',
             templateUrl: 'model/model.tpl.html',
             data: { pageTitle: 'model' }

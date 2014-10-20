@@ -5,11 +5,10 @@ angular.module('ui.mesh.modelthumbnail', [])
             replace: true,
             restrict: 'E',
             scope: {
-                modelUrl: '@',
+                modelId: '@',
                 imageUrl: '@',
                 title: '@',
                 author: '@',
-                authorUrl: '@',
                 authorAvatar: '@',
                 date: '@',
                 numComments: '@',
