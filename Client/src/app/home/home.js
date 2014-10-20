@@ -141,7 +141,6 @@ angular.module('meshApp.home', [
             }
             hideMenu();
 
-
             collapsedMenu(); // for loading/refreshing the page
             function collapsedMenu() {
 
@@ -151,8 +150,6 @@ angular.module('meshApp.home', [
                     angular.element('.headerwrapper, .mainwrapper').removeClass('collapsed');
                 }
             }
-
-
         });
 
         $scope.submitSearch = function() {

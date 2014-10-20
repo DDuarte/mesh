@@ -1,4 +1,6 @@
 var Hapi = require('hapi'),
+    Joi = require('joi'),
+    fuzzy = require('fuzzy'),
     redis = require('redis'),
     client = redis.createClient(),
     neo4j = require('neo4j'),
@@ -70,6 +72,36 @@ server.route({
     method: 'GET',
     path: '/models/{id}',
     handler: getModel
+});
+
+var default_tags = ['abstract','art','black','blue','dark','drawing','girl','green',
+    'illustration','light','model','photo','photography','street','woman','pokemon',
+    'polygon','animal','human body'];
+
+function getTags(request, reply) {
+    client.sadd('tags', default_tags); // ignores if tags already exist
+    // TODO: Call sadd on redis when models are created
+
+    client.smembers('tags', function (err, tags) {
+        if (err) throw err;
+        var filter = request.query.filter;
+        var results = fuzzy.filter(filter, tags);
+        var matches = results.map(function(m) { return m.string; });
+        reply(matches).header('Access-Control-Allow-Origin', "*");
+    });
+}
+
+server.route({
+   method: 'GET',
+    path: '/tags',
+    handler: getTags,
+    config: {
+        validate: {
+            query: {
+                filter: Joi.string().max(30).required()
+            }
+        }
+    }
 });
 
 // Start the server

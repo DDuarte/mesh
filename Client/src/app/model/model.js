@@ -240,7 +240,7 @@ angular.module('meshApp.model', [
         });
     })
 
-    .controller('ModelCtrl', function ModelController($scope, $stateParams, $q, $http) {
+    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http) {
 
         $scope.init = function() {
             $scope.newModel = {};
@@ -266,10 +266,7 @@ angular.module('meshApp.model', [
         };
 
         $scope.loadTags = function ($query) {
-            //return $http.get('/tags?query=' + $query);
-            var def = $q.defer();
-            def.resolve(['3D', 'Model', 'Autocompleting tags', 'Mesh']);
-            return def.promise;
+            return $http.get('http://meshdev.ddns.net:8000/tags?filter=' + $query);
         };
 
         $scope.upvote = function () {

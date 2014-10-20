@@ -32,7 +32,9 @@
   ],
   "license": "ISC",
   "dependencies": {
+    "fuzzy": "^0.1.0",
     "hapi": "~6.8.1",
+    "joi": "^4.7.0",
     "neo4j": "^1.1.0",
     "redis": "^0.12.1"
   }
