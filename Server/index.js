@@ -2,7 +2,7 @@ var Hapi = require('hapi'),
     redis = require('redis'),
     client = redis.createClient(),
     neo4j = require('neo4j'),
-    db = new neo4j.GraphDatabase('http://meshdev.ddns.net:7474');
+    db = new neo4j.GraphDatabase('http://localhost:7474');
 
 client.on('error', function (err) {
     console.log('Redis error ' + err);
