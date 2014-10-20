@@ -2,7 +2,7 @@ var Hapi = require('hapi'),
     redis = require('redis'),
     client = redis.createClient(),
     neo4j = require('neo4j'),
-    db = new neo4j.GraphDatabase('http://localhost:7474');
+    db = new neo4j.GraphDatabase('http://meshdev.ddns.net:7474');
 
 client.on('error', function (err) {
     console.log('Redis error ' + err);
@@ -43,7 +43,7 @@ function getModel(request, reply) {
 
     var query = [
         'MATCH (m:Model{id : {modelId}})<-[:OWNS]-(author)',
-        'RETURN { name: m.name, description: m.description, files: m.files, downVotes: m.downVotes, upVotes: m.upVotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: m.tags, author: {name: author.name, avatar: author.avatar, about: author.about } }'
+        'RETURN { name: m.name, description: m.description, files: m.files, downVotes: m.downVotes, upVotes: m.upVotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: m.tags, author: {name: author.name, avatar: author.avatar, about: author.about } } as model'
     ].join('\n');
 
     var params = {
@@ -52,11 +52,13 @@ function getModel(request, reply) {
 
 
     db.query(query, params, function (err, results) {
+        console.log("getModel");
+        console.log(results);
         if (err) throw err;
         if (results.length == 0) {
             reply('No such model.').code(404);
         } else {
-            reply(results[0].model.data).header('Access-Control-Allow-Origin', "*");
+            reply(results[0].model).header('Access-Control-Allow-Origin', "*");
         }
     });
 }
