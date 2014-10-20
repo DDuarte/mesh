@@ -8,7 +8,7 @@ angular.module('meshApp.group', [
         url: '/group',
         controller: 'GroupCtrl',
         templateUrl: 'group/group.tpl.html',
-        data: { pageTitle: 'group' }
+        data: { pageTitle: 'Group | Mesh' }
     });
 })
 

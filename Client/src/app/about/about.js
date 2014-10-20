@@ -13,7 +13,7 @@ angular.module( 'meshApp.about', [
         templateUrl: 'about/about.tpl.html'
       }
     },
-    data:{ pageTitle: 'What is It?' }
+    data:{ pageTitle: 'What is It? | Mesh' }
   });
 })
 

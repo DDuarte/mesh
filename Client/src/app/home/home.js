@@ -25,7 +25,7 @@ angular.module('meshApp.home', [
         $stateProvider.state('home', {
             templateUrl: 'home/home.tpl.html',
             abstract: true,
-            data: { pageTitle: 'Home' }
+            data: { pageTitle: 'Home | Mesh' }
         });
     })
 

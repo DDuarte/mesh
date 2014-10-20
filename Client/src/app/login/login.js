@@ -7,7 +7,7 @@ angular.module('meshApp.login', [
             url: '/login',
             controller: 'LoginCtrl',
             templateUrl: 'login/login.tpl.html',
-            data: { pageTitle: 'Login' }
+            data: { pageTitle: 'Login | Mesh' }
         });
     })
 

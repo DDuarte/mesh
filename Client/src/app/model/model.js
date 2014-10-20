@@ -236,7 +236,7 @@ angular.module('meshApp.model', [
             url: '/model/:id',
             controller: 'ModelCtrl',
             templateUrl: 'model/model.tpl.html',
-            data: { pageTitle: 'model' }
+            data: { pageTitle: 'Model | Mesh' }
         });
     })
 

@@ -6,7 +6,7 @@ angular.module('meshApp.messages', [
             url: '/messages',
             controller: 'MessagesCtrl',
             templateUrl: 'messages/messages.tpl.html',
-            data: { pageTitle: 'messages' }
+            data: { pageTitle: 'Messages | Mesh' }
         });
     })
 

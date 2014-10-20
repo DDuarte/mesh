@@ -6,7 +6,7 @@ angular.module('meshApp.profile', [
             url: '/profile/:id',
             controller: 'ProfileCtrl',
             templateUrl: 'profile/profile.tpl.html',
-            data: { pageTitle: 'profile' }
+            data: { pageTitle: 'Profile | Mesh' }
         });
     })
 
