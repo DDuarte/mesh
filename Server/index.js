@@ -42,7 +42,7 @@ server.route({
 function getModel(request, reply) {
 
     var query = [
-        'MATCH (m:Model{id : {modelID}})<-[:OWNS]-(author)',
+        'MATCH (m:Model{id : {modelId}})<-[:OWNS]-(author)',
         'MATCH m<-[c:COMMENTED]-(cAuthor)',
         'WITH *',
         'ORDER BY c.date DESC LIMIT 10',
