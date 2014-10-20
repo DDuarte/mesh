@@ -5,7 +5,7 @@
 
     <div class="media-body">
         <a ui-sref="home.profile({id: authorName})"><strong>{{authorName}}</strong></a> posted a comment. <br/>
-        <small class="text-muted"><span class="fa fa-clock-o"></span> <span am-time-ago="commentDate"></span></small>
+        <small class="text-muted"><span class="fa fa-clock-o"></span> <span am-time-ago="commentDate" title="{{commentDate | amDateFormat:'dddd, MMMM Do YYYY'}}"></span></small>
         <div class="media blog-media">
             <div class="media-body">
                 <p ng-transclude></p>
