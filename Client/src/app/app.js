@@ -2,7 +2,6 @@ angular.module( 'meshApp', [
   'templates-app',
   'templates-common',
   'meshApp.login',
-  'meshApp.about',
   'meshApp.register',
   'meshApp.model',
   'meshApp.home',
