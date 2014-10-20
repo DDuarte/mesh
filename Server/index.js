@@ -65,7 +65,7 @@ function getModel(request, reply) {
 
 server.route({
     method: 'GET',
-    path: '/model/{id}',
+    path: '/models/{id}',
     handler: getModel
 });
 

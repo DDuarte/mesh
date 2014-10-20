@@ -1,4 +1,4 @@
-<div ng-controller="ModelCtrl">
+<div ng-controller="ModelCtrl" ng-init="init()">
     <breadcrum icon="fa fa-cube" title="Model Page" path="Pages"></breadcrum>
 
     <div class="contentpanel">
@@ -45,11 +45,11 @@
                 <div class="panel-body contact-group">
                     <div class="media">
                         <div class="pull-left">
-                            <img class="img-circle img-online" ng-src="{{model.authorAvatar}}"
-                                 alt="{{model.authorName}}">
+                            <img class="img-circle img-online" ng-src="{{model.author.avatar}}"
+                                 alt="{{model.author.name}}">
                         </div>
                         <div class="media-heading ml10">
-                            <h3 class="mt0 mb0">{{model.authorName}}</h3>
+                            <h3 class="mt0 mb0">{{model.author.name}}</h3>
                         </div>
                         <div class="media-body m0 ml10">
                             <button ng-click="followAuthor();" class="btn btn-primary">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="mt20">
-                        {{model.authorAbout}}
+                        {{model.author.about}}
                     </div>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                             <div class="media-manager-sidebar clearfix">
                                 <ul class="tag-list mb20">
                                     <li ng-repeat="tag in model.tags">
-                                        <a ui-sref="home.search({q: tag.text })">{{tag.text}}</a>
+                                        <a ui-sref="home.search({q: tag })">{{tag}}</a>
                                     </li>
                                 </ul>
                             </div>

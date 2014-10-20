@@ -21,7 +21,7 @@ var placeholderModel = {
         },
         {
             "author": "Leonardo",
-            "avatar": "http://i.imgur.com/EYi19tc.png?1",
+            "avatar": "http://i.imgur.com/EYi19tc.png",
             "date": "2011-10-05T14:48:00.000Z",
             "content": "That doesn't look like a horse..."
         }
@@ -240,15 +240,21 @@ angular.module('meshApp.model', [
         });
     })
 
-    .controller('ModelCtrl', function ModelController($scope, $q/*, $http*/) {
-        $scope.model = placeholderModel; //TODO replace this with actual model GET
-        $scope.favourited = false; //TODO check if model is already favourited
-        $scope.followingAuthor = false; //TODO
+    .controller('ModelCtrl', function ModelController($scope, $stateParams, $q, $http) {
+        $scope.init = function() {
+            $http.get('http://localhost:8000/models/' + $stateParams.id). // TODO: make url configurable?
+                success(function (data, status, headers, config) {
+                    $scope.model = data;
+                    $scope.favourited = false; //TODO check if model is already favourited
+                    $scope.followingAuthor = false; //TODO
 
-        $scope.newModel = {};
-        $scope.newModel.description = $scope.model.description;
-        $scope.newModel.tags = $scope.model.tags;
-        $scope.newModel.visibility = $scope.model.visibility;
+                    $scope.newModel = {};
+                    $scope.newModel.description = $scope.model.description;
+                    $scope.newModel.tags = $scope.model.tags;
+                    $scope.newModel.visibility = $scope.model.visibility;
+                    console.log($scope.model);
+                });
+        };
 
         $scope.tabs = {comments: false, details: true, settings: false};
 
