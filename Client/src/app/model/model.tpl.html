@@ -115,7 +115,7 @@
                             <div class="media-manager-sidebar clearfix">
                                 <ul class="tag-list mb20">
                                     <li ng-repeat="tag in model.tags">
-                                        <a href="#/search?q={{tag.text}}">{{tag.text}}</a>
+                                        <a ui-sref="home.search({q: tag.text })">{{tag.text}}</a>
                                     </li>
                                 </ul>
                             </div>
