@@ -4,19 +4,13 @@
 
     <tabset>
         <tab heading="Members">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table table-primary mb30">
                         <thead>
                         <tr>
-                            <th>
-                                <a href="" ng-click="orderByField='index'; reverseSort = !reverseSort" style="color: inherit">
-                                    #
-                                    <span ng-show="orderByField == 'index'" style="color: inherit">
-                                        <span ng-show="!reverseSort" style="color: inherit">^</span>
-                                        <span ng-show="reverseSort" style="color: inherit">v</span>
-                                    </span>
-                                </a>
+                            <th width="10%">
+
                             </th>
                             <th>
                                 <a href="" ng-click="orderByField='username'; reverseSort = !reverseSort" style="color: inherit">
@@ -58,7 +52,11 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="member in groupMembers|orderBy:orderByField:reverseSort">
-                            <td>{{member.index + 1}}</td>
+                            <td>
+                                <a class="pull-left" href="#">
+                                    <img class="media-object img-circle img-online" alt="..." src="images/photos/{{member.avatarLink}}" width="50%">
+                                </a>
+                            </td>
                             <td>{{member.username}}</td>
                             <td>{{member.name}}</td>
                             <td>{{member.joinDate | date}}</td>
