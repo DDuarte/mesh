@@ -9,7 +9,7 @@
                     <table class="table table-primary mb30">
                         <thead>
                         <tr>
-                            <th width="10%">
+                            <th width="50px;">
 
                             </th>
                             <th>
@@ -53,8 +53,8 @@
                         <tbody>
                         <tr ng-repeat="member in groupMembers|orderBy:orderByField:reverseSort">
                             <td>
-                                <a class="pull-left" href="#">
-                                    <img class="media-object img-circle img-online" alt="..." src="images/photos/{{member.avatarLink}}" width="50%">
+                                <a ui-sref="home.profile({id: member.username})">
+                                    <img class="media-object img-circle" alt="..." src="images/photos/{{member.avatarLink}}" style="width:100%;">
                                 </a>
                             </td>
                             <td>{{member.username}}</td>
