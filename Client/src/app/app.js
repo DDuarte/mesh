@@ -32,10 +32,13 @@ angular.module( 'meshApp', [
   $rootScope._ = window._;
 })
 
-.controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
+.controller( 'AppCtrl', function AppCtrl ( $scope, $http, $location ) {
   $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
     if ( angular.isDefined( toState.data.pageTitle ) ) {
       $scope.pageTitle = toState.data.pageTitle;
+      $scope.loadTags = function ($query) {
+          return $http.get('http://meshdev.ddns.net:8000/tags?filter=' + $query);
+      };
     }
   });
 })

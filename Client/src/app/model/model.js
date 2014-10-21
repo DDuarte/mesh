@@ -269,10 +269,6 @@ angular.module('meshApp.model', [
             alert('Not yet implement. Comment:\n' + $scope.newComment);
         };
 
-        $scope.loadTags = function ($query) {
-            return $http.get('http://meshdev.ddns.net:8000/tags?filter=' + $query);
-        };
-
         $scope.upvote = function () {
             alert('Upvote not yet implemented');
         };
