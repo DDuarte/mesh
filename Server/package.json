@@ -33,6 +33,7 @@
   "license": "ISC",
   "dependencies": {
     "fuzzy": "^0.1.0",
+    "bluebird": "^2.3.6",
     "hapi": "~6.8.1",
     "joi": "^4.7.0",
     "neo4j": "^1.1.0",

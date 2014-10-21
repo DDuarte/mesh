@@ -1,10 +1,11 @@
+'use strict';
+
 var Hapi = require('hapi'),
     Joi = require('joi'),
     fuzzy = require('fuzzy'),
     redis = require('redis'),
     client = redis.createClient(),
-    neo4j = require('neo4j'),
-    db = new neo4j.GraphDatabase('http://localhost:7474');
+    Model = require('./models/model');
 
 client.on('error', function (err) {
     console.log('Redis error ' + err);
@@ -42,29 +43,14 @@ server.route({
 });
 
 function getModel(request, reply) {
-
-    var query = [
-        'MATCH (m:Model{id : {modelId}})<-[:OWNS]-(author)',
-        'MATCH m<-[c:COMMENTED]-(cAuthor)',
-        'WITH *',
-        'ORDER BY c.date DESC LIMIT 10',
-        'RETURN { name: m.name, description: m.description, files: m.files, downvotes: m.downvotes, upvotes: m.upvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: m.tags, author: {name: author.name, avatar: author.avatar, about: author.about }, comments: collect({ date: c.date, content: c.content, author: cAuthor.name, avatar: cAuthor.avatar }) } as model'
-    ].join('\n');
-
-    var params = {
-        modelId: Number(request.params.id)
-    };
-
-
-    db.query(query, params, function (err, results) {
-        console.log("getModel");
-        console.log(results);
-        if (err) throw err;
+    Model.getById(request.params.id).then(function (results) {
         if (results.length == 0) {
             reply('No such model.').code(404);
         } else {
             reply(results[0].model).header('Access-Control-Allow-Origin', "*");
         }
+    }, function (error) {
+        reply('Internal error').code(500);
     });
 }
 
