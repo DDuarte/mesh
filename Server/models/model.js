@@ -62,4 +62,4 @@ model.getByName = function (name) {
     });
 };
 
-exports = model;
+module.exports = model;
