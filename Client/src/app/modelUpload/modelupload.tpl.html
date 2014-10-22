@@ -1,0 +1,146 @@
+<div ng-controller="ModelUploadCtrl" ng-init="init()">
+
+    <breadcrum icon="fa fa-user" title="Profile Page" path="Pages"></breadcrum>
+
+    <div class="contentpanel">
+
+        <div class="col-sm-4 col-md-3">
+            <div class="text-center">
+                <img src="http://placehold.it/590x590" class="img-circle img-offline img-responsive" alt=""/>
+                <h4 class="profile-name mb5">{{user.id}}</h4>
+
+                <div><i class="fa fa-certificate"></i> Page views: <b>{{user.counter}}</b></div>
+                <div><i class="fa fa-map-marker"></i> San Francisco, California, USA</div>
+                <div><i class="fa fa-envelope-o"></i> <a href=""> elenDarna@gmail.com </a></div>
+
+                <div class="mb20"></div>
+            </div>
+            <!-- text-center -->
+
+            <br/>
+
+            <h5 class="md-title">About</h5>
+
+            <p class="mb30">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitat... <a href="#">Show More</a>
+            </p>
+
+            <h5 class="md-title">Interests</h5>
+
+            <div class="media-manager-sidebar">
+                <ul class="tag-list mb30">
+                    <li><a ui-sref="home.search({q: 'Animation' })">Animation</a></li>
+                    <li><a ui-sref="home.search({q: 'Design' })">Design</a></li>
+                    <li><a ui-sref="home.search({q: 'Trailer' })">Trailer</a></li>
+                </ul>
+            </div>
+            <br>
+            <br>
+
+            <div class="mb30"></div>
+            <h5 class="md-title">Connect</h5>
+            <ul class="list-unstyled social-list">
+                <li><i class="fa fa-linkedin"></i> <a href="#">linkedin.com/4ever-eileen</a></li>
+            </ul>
+
+            <div class="mb30"></div>
+        </div>
+        <!-- col-sm-4 col-md-3 -->
+
+        <div class="col-sm-8 col-md-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body ">
+
+                            <form class="form-horizontal form-bordered">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 pull-left">Title</label>
+
+                                    <div class="col-md-10">
+                                        <input type="text" placeholder="Model title" class="form-control col-md-10">
+                                    </div>
+                                </div>
+                                <!-- form-group -->
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 pull-left">Description</label>
+
+                                    <div class="col-md-10">
+                                        <textarea id="autoResizeTA" class="form-control" rows="5" style="height: 90px;"></textarea>
+                                    </div>
+                                </div>
+                                <!-- form-group -->
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 pull-left" for="privacy">Privacy</label>
+
+                                    <div class="col-md-10">
+                                        <select id="privacy" class="form-control col-md-10">
+                                            <option value="public">Public</option>
+                                            <option value="private">Private</option>
+                                        </select> 
+                                    </div>
+
+                                    <ul class="select2-results" role="listbox" id="select2-results-4"></ul>
+                                </div>
+                                <!-- form-group -->
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 pull-left">Tags</label>
+
+                                    <div class="col-md-10">
+                                        <input name="tags" id="tags" value="foo,bar,baz"
+                                        style="display: none;">
+
+                                        <tags-input ng-model="newModel.tags">
+                                            <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
+                                        </tags-input>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 pull-left">Galleries</label>
+
+                                    <div class="col-md-10">
+                                        <input name="tags" id="tags" value="foo,bar,baz"
+                                        style="display: none;">
+
+                                        <tags-input ng-model="newModel.tags">
+                                            <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
+                                        </tags-input>
+                                    </div>
+                                </div>
+                                <!-- form-group -->
+
+                            </form>
+                            <button class="btn btn-success pull-right">Upload</button>
+
+                            <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-btns">
+                                    <a href="#" class="panel-minimize tooltips" data-toggle="tooltip" title="Minimize Panel"><i class="fa fa-minus"></i></a>
+                                    <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
+                                </div><!-- panel-btns -->
+                                <h4 class="panel-title">Dropzone Multi-File Upload</h4>
+                                <p>DropzoneJS is an open source library that provides drag'n'drop file uploads with image previews. <a href="http://dropzonejs.com/" target="_blank">http://dropzonejs.com/</a></p>
+                            </div>
+                            <div class="panel-body">
+                                <p>This is just a demo. Uploaded files are <strong>not</strong> stored. This does not handle your file uploads on the server. You have to implement the code to receive and store the file yourself.</p>
+                                <br />
+                                <form action="http://themepixels.com/demo/webpage/chain/files" class="dropzone">
+                                    <div class="fallback">
+                                        <input name="file" type="file" multiple />
+                                    </div>
+                                </form>
+                            </div><!-- panel-body -->
+                        </div><!-- panel -->
+                        </div>
+                        <!-- panel-body -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- col-sm-9 -->
+    </div>
