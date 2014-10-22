@@ -1,6 +1,7 @@
 angular.module( 'meshApp', [
   'templates-app',
   'templates-common',
+  'meshApp.config',
   'meshApp.login',
   'meshApp.register',
   'meshApp.model',
@@ -36,8 +37,8 @@ angular.module( 'meshApp', [
   $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
     if ( angular.isDefined( toState.data.pageTitle ) ) {
       $scope.pageTitle = toState.data.pageTitle;
-      $scope.loadTags = function ($query) {
-          return $http.get('http://meshdev.ddns.net:8000/tags?filter=' + $query);
+      $scope.loadTags = function ($query, server) {
+          return $http.get(server.url + '/tags?filter=' + $query);
       };
     }
   });

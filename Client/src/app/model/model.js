@@ -244,12 +244,12 @@ angular.module('meshApp.model', [
         });
     })
 
-    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http) {
+    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server) {
 
         $scope.init = function() {
             $scope.newModel = {};
 
-            $http.get('http://meshdev.ddns.net:8000/models/' + $stateParams.id). // TODO: make url configurable?
+            $http.get(server.url + '/models/' + $stateParams.id). // TODO: make url configurable?
                 success(function (data, status, headers, config) {
                     $scope.model = data;
                     $scope.favourited = false; //TODO check if model is already favourited
