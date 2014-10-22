@@ -17,13 +17,17 @@ model.getById = function (id) {
     return new Promise( function (resolve, reject) {
         var query = [
             'MATCH (m:Model{id : {modelId}})<-[:OWNS]-(author)',
-            'MATCH m<-[c:COMMENTED]-(cAuthor)',
-            'WITH *',
-            'ORDER BY c.date DESC LIMIT 10',
-            'WITH m, author, collect({ date: c.date, content: c.content, author: cAuthor.name, avatar: cAuthor.avatar }) AS modelComments',
-            'MATCH m-[:TAGGED]->(modelTag:Tag)',
-            'RETURN { name: m.name, description: m.description, files: m.files, downVotes: m.downvotes, upVotes: m.upvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: collect(modelTag.name), author: { name: author.name, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: collect(modelTag.name)} AS model'
-            ].join('\n');
+            'OPTIONAL MATCH m<-[c:COMMENTED]-(cAuthor)',
+            'WITH * ORDER BY c.date DESC LIMIT 10',
+            'WITH m, author, extract(c1 IN filter(c1 IN collect({c: c, author: cAuthor}) WHERE c1.c IS NOT NULL) | { date: c1.c.date, content: c1.c.content, author: c1.author.name, avatar: c1.author.avatar }) AS modelComments',
+            'OPTIONAL MATCH m-[:TAGGED]->(modelTag:Tag)',
+            'WITH m, author, modelComments, collect(modelTag.name) AS modelTags',
+            'OPTIONAL MATCH (u:User)-[ru:VOTED {type: "UP"}]->m',
+            'WITH m, author, modelComments, modelTags, count(ru) as modelUpvotes',
+            'OPTIONAL MATCH (u:User)-[rd:VOTED {type: "DOWN"}]->m',
+            'WITH m, author, modelComments, modelTags, modelUpvotes, count(rd) as modelDownvotes',
+            'RETURN { name: m.name, description: m.description, files: m.files, downvotes: modelDownvotes, upvotes: modelUpvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: modelTags, author: { name: author.name, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model'
+        ].join('\n');
 
         var params = {
             modelId: Number(id)
@@ -46,11 +50,17 @@ model.getById = function (id) {
 model.getByName = function (name) {
     return new Promise ( function (resolve, reject) {
         var query = [
-            'MATCH (m:Model{name: {modelName}})<-[:OWNS]-(author)',
-            'MATCH m<-[c:COMMENTED]-(cAuthor)',
-            'WITH *',
-            'ORDER BY c.date DESC LIMIT 10',
-            'RETURN {name: m.name, description: m.description, files: m.files, downVotes: m.downvotes, upVotes: m.upvotes, publicationDate: m.publicationDate, visibility: m..visibility, tags: m.tags, author: { name: author.name, avatar: author.avatar, about: author.about }, comments: collect({ date: c.date, content: c.content, author: cAuthor.name, avatar: cAuthor.avatar }) } as model'
+            'MATCH (m:Model{name : {modelName}})<-[:OWNS]-(author)',
+            'OPTIONAL MATCH m<-[c:COMMENTED]-(cAuthor)',
+            'WITH * ORDER BY c.date DESC LIMIT 10',
+            'WITH m, author, extract(c1 IN filter(c1 IN collect({c: c, author: cAuthor}) WHERE c1.c IS NOT NULL) | { date: c1.c.date, content: c1.c.content, author: c1.author.name, avatar: c1.author.avatar }) AS modelComments',
+            'OPTIONAL MATCH m-[:TAGGED]->(modelTag:Tag)',
+            'WITH m, author, modelComments, collect(modelTag.name) AS modelTags',
+            'OPTIONAL MATCH (u:User)-[ru:VOTED {type: "UP"}]->m',
+            'WITH m, author, modelComments, modelTags, count(ru) as modelUpvotes',
+            'OPTIONAL MATCH (u:User)-[rd:VOTED {type: "DOWN"}]->m',
+            'WITH m, author, modelComments, modelTags, modelUpvotes, count(rd) as modelDownvotes',
+            'RETURN { name: m.name, description: m.description, files: m.files, downvotes: modelDownvotes, upvotes: modelUpvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: modelTags, author: { name: author.name, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model'
         ].join('\n');
 
         var params = {
