@@ -33,11 +33,13 @@
 
                     <div class="results-list">
 
-                        <div class="media" ng-repeat="result in filtered = (results | filter: searchType) | startFrom: (currentPage-1)*pageSize | limitTo: pageSize">
-                            <a href="#/model" class="pull-left">
-                                <img alt="" ng-src="{{result.image}}" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
+                        <div class="media row" ng-repeat="result in filtered = (results | filter: searchType) | startFrom: (currentPage-1)*pageSize | limitTo: pageSize">
+                            <div class="col-xs-6">
+                                <a href="#/model" class="pull-left">
+                                    <img alt="" ng-src="{{result.image}}" class="img-responsive thumbnail">
+                                </a>
+                            </div>
+                            <div class="media-body col-xs-6">
                                 <h4 class="filename text-primary"><a href="#/model">{{result.name}}</a></h4>
                                 <small class="text-muted">Created: January 10, 2014 at 7:30am</small><br />
                                 <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
@@ -54,12 +56,29 @@
                         first-text="&laquo;" last-text="&raquo;"></pagination>
 
         </div><!-- col-sm-8 -->
+
         <div class="col-sm-4 col-md-3">
             <h4 class="md-title mb5">Refine Results</h4>
-            <div class="input-group">
-                <input type="search" class="form-control" ng-model="search.query">
-                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-            </div><!-- input-group -->
+            <div class="input-group mb15">
+                <div class="input-group-btn">
+                    <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button">All <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a>User Name</a></li>
+                        <li><a>User Full Name</a></li>
+                        <li><a>User Email</a></li>
+                        <li class="divider"></li>
+                        <li><a>Model Name</a></li>
+                        <li><a>Model Tags</a></li>
+                        <li class="divider"></li>
+                        <li><a>Gallery Name</a></li>
+                        <li class="divider"></li>
+                        <li><a>Group Name</a></li>
+                        <li><a>Group Description</a></li>
+                        <li><a>Group Tag</a></li>
+                    </ul>
+                </div><!-- input-group-btn -->
+                <input type="text" class="form-control">
+            </div>
 
             <div class="mb20"></div>
 
@@ -77,12 +96,13 @@
             <div id="slider" class="slider-primary mb20"></div>
 
             <div class="mb20"></div>
-
+            <h4 class="md-title mb5">Filter by</h4>
             <ul class="nav nav-pills nav-stacked nav-file-type">
-                <li id="all"><a ng-click="changeSearchType('')"><i class="glyphicon glyphicon-list"></i> All</a></li>
-                <li id="model"><a ng-click="changeSearchType('model')"><i class="glyphicon glyphicon-file"></i> Models</a></li>
-                <li id="group"><a ng-click="changeSearchType('group')"><i class="glyphicon glyphicon-globe"></i> Groups</a></li>
-                <li id="user"><a ng-click="changeSearchType('user')"><i class="glyphicon glyphicon-user"></i> Users</a></li>
+                <li id="all"><a ng-click="changeSearchType('')"><i class="fa fa-list"></i> All Results</a></li>
+                <li id="model"><a ng-click="changeSearchType('model')"><i class="fa fa-file"></i> Models</a></li>
+                <li id="group"><a ng-click="changeSearchType('group')"><i class="fa fa-group"></i> Groups</a></li>
+                <li id="gallery"><a ng-click="changeSearchType('gallery')"><i class="fa fa-folder"></i> Galleries</a></li>
+                <li id="user"><a ng-click="changeSearchType('user')"><i class="fa fa-user"></i> Users</a></li>
             </ul>
 
             <div class="mb20"></div>
