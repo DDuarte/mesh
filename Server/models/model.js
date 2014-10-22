@@ -16,7 +16,7 @@ var model = {};
 model.getById = function (id) {
     return new Promise( function (resolve, reject) {
         var query = [
-            'MATCH (m:Model{id : 1})<-[:OWNS]-(author)',
+            'MATCH (m:Model{id : modelId})<-[:OWNS]-(author)',
             'MATCH m<-[c:COMMENTED]-(cAuthor)',
             'WITH *',
             'ORDER BY c.date DESC LIMIT 10',
