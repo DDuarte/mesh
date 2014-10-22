@@ -33,11 +33,13 @@
 
                     <div class="results-list">
 
-                        <div class="media" ng-repeat="result in filtered = (results | filter: searchType) | startFrom: (currentPage-1)*pageSize | limitTo: pageSize">
-                            <a href="#/model" class="pull-left">
-                                <img alt="" ng-src="{{result.image}}" class="media-object thumbnail">
-                            </a>
-                            <div class="media-body">
+                        <div class="media row" ng-repeat="result in filtered = (results | filter: searchType) | startFrom: (currentPage-1)*pageSize | limitTo: pageSize">
+                            <div class="col-xs-6">
+                                <a href="#/model" class="pull-left">
+                                    <img alt="" ng-src="{{result.image}}" class="img-responsive thumbnail">
+                                </a>
+                            </div>
+                            <div class="media-body col-xs-6">
                                 <h4 class="filename text-primary"><a href="#/model">{{result.name}}</a></h4>
                                 <small class="text-muted">Created: January 10, 2014 at 7:30am</small><br />
                                 <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
