@@ -20,7 +20,7 @@ module.exports = {
      * app's unit tests.
      */
     app_files: {
-        js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
+        js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js', '!src/app/config/**' ],
         jsunit: [ 'src/**/*.spec.js' ],
 
         atpl: [ 'src/app/**/*.tpl.html' ],
@@ -102,5 +102,17 @@ module.exports = {
             'images/**',
             'assets/android.json'
         ]
+    },
+
+    config: {
+        dev: {
+            js: [ 'src/app/config/config.dev.js' ]
+        },
+        master: {
+            js: [ 'src/app/config/config.master.js' ]
+        },
+        local: {
+            js: [ 'src/app/config/config.local.js' ]
+        }
     }
 };

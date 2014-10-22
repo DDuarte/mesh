@@ -135,6 +135,24 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            build_dev_config: {
+                src: [ '<%= config.dev.js %>' ],
+                dest: '<%= build_dir %>/',
+                cwd: '.',
+                expand: true
+            },
+            build_master_config: {
+                src: [ '<%= config.master.js %>' ],
+                dest: '<%= build_dir %>/',
+                cwd: '.',
+                expand: true
+            },
+            build_local_config: {
+                src: [ '<%= config.local.js %>' ],
+                dest: '<%= build_dir %>/',
+                cwd: '.',
+                expand: true
+            },
             compile_assets: {
                 files: [
                     {
@@ -341,10 +359,11 @@ module.exports = function (grunt) {
              * add all script files directly to the `<head>` of `index.html`. The
              * `src` property contains the list of included files.
              */
-            build: {
+            buildDev: {
                 dir: '<%= build_dir %>',
                 src: [
                     '<%= vendor_files.js %>',
+                    '<%= config.dev.js %>',
                     '<%= build_dir %>/src/**/*.js',
                     '<%= html2js.common.dest %>',
                     '<%= html2js.app.dest %>',
@@ -353,6 +372,35 @@ module.exports = function (grunt) {
                     '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
                 ]
             },
+
+            buildMaster: {
+                dir: '<%= build_dir %>',
+                src: [
+                    '<%= vendor_files.js %>',
+                    '<%= config.master.js %>',
+                    '<%= build_dir %>/src/**/*.js',
+                    '<%= html2js.common.dest %>',
+                    '<%= html2js.app.dest %>',
+                    '<%= html2js.ab.dest %>',
+                    '<%= vendor_files.css %>',
+                    '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+                ]
+            },
+
+            buildLocal: {
+                dir: '<%= build_dir %>',
+                src: [
+                    '<%= vendor_files.js %>',
+                    '<%= config.local.js %>',
+                    '<%= build_dir %>/src/**/*.js',
+                    '<%= html2js.common.dest %>',
+                    '<%= html2js.app.dest %>',
+                    '<%= html2js.ab.dest %>',
+                    '<%= vendor_files.css %>',
+                    '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+                ]
+            },
+
 
             /**
              * When it is time to have a completely compiled application, we can
@@ -445,7 +493,7 @@ module.exports = function (grunt) {
              */
             html: {
                 files: [ '<%= app_files.html %>' ],
-                tasks: [ 'index:build' ]
+                tasks: [ 'index:buildDev' ]
             },
 
             /**
@@ -457,7 +505,7 @@ module.exports = function (grunt) {
                     '<%= app_files.atpl %>'
 
                 ],
-                tasks: [ 'html2js', 'index:build' ]
+                tasks: [ 'html2js', 'index:buildDev' ]
             },
 
             /**
@@ -504,10 +552,24 @@ module.exports = function (grunt) {
     /**
      * The `build` task gets your app ready to run for development and testing.
      */
-    grunt.registerTask('build', [
+    grunt.registerTask('build', [ 'dev-build' ]);
+
+    grunt.registerTask('dev-build', [
         'clean', 'html2js', 'jshint', 'less:build',
         'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-        'copy:build_appjs', 'copy:build_vendorjs', 'index:build'
+        'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_dev_config', 'index:buildDev'
+    ]);
+
+    grunt.registerTask('master-build', [
+        'clean', 'html2js', 'jshint', 'less:build',
+        'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+        'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_master_config', 'index:buildMaster'
+    ]);
+
+    grunt.registerTask('local-build', [
+        'clean', 'html2js', 'jshint', 'less:build',
+        'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+        'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_local_config', 'index:buildLocal'
     ]);
 
     /**
@@ -515,8 +577,14 @@ module.exports = function (grunt) {
      * minifying your code.
      */
     grunt.registerTask('compile', [
-        'less:compile', 'copy:compile_assets', 'ngmin', 'concat:compile_js', 'uglify', 'index:compile'
+        'less:compile', 'copy:compile_assets', 'ngmin', 'concat:compile_js', /*'uglify',*/ 'index:compile'
     ]);
+
+    grunt.registerTask('dev-compile', [ 'dev-build', 'compile' ]);
+
+    grunt.registerTask('master-compile', [ 'master-build', 'compile' ] );
+
+    grunt.registerTask('local-compile', [ 'local-build', 'compile' ] );
 
     /**
      * A utility function to get all app JavaScript sources.

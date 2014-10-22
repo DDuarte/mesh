@@ -16,21 +16,14 @@ angular.module('meshApp.register', [
             angular.element('body').css("background-color","#428bca");
         };
 
-        $scope.registerInfo = {};
+        $scope.curDate = new Date();
 
+        $scope.registerInfo = {};
         $scope.registerNewAccount = function() {
             alert("Not yet implemented:\n"+JSON.stringify($scope.registerInfo, null, '\t'));
         };
 
-        $scope.curDate = new Date();
-        $scope.defaultDate = new Date($scope.curDate.getYear()-50, $scope.curDate.getMonth(), $scope.curDate.getDate());
-        $scope.dateOptions = {
-            format: 'dd/mm/yyyy',
-            selectMonths: true,
-            selectYears: 100,
-            labelMonthNext: '',
-            labelMonthPrev: ''
-        };
+        $scope.isOpen = false;
     })
 
     .directive('pickADate', function () {
