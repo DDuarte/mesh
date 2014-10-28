@@ -1,18 +1,36 @@
 'use strict';
 
-var Hapi = require('hapi'),
+var _ = require('lodash'),
+    Hapi = require('hapi'),
     Joi = require('joi'),
     fuzzy = require('fuzzy'),
+    jwt = require('jsonwebtoken'),
     redis = require('redis'),
     client = redis.createClient(),
-    Model = require('./models/model');
+    Model = require('./models/model'),
+    User = require('./models/user');
 
 client.on('error', function (err) {
     console.log('Redis error ' + err);
 });
 
 // Create a server with a host and port
-var server = new Hapi.Server(process.argv[2] || 8000);
+var server = Hapi.createServer('0.0.0.0', process.argv[2] || 8000, { cors: true });
+
+var privateKey = 'Kitties';
+
+var accounts = {
+    123: {
+        id: 123,
+        user: 'john',
+        fullName: 'John Q Public',
+        password: 'hello123'
+    }
+};
+
+var token = jwt.sign({ accountId: 123 }, privateKey);
+
+console.log(token);
 
 // Add the route
 server.route({
@@ -24,6 +42,7 @@ server.route({
         });
     }
 });
+
 
 function getUser(request, reply) {
     var id = request.params.id;
@@ -60,9 +79,9 @@ server.route({
     handler: getModel
 });
 
-var default_tags = ['abstract','art','black','blue','dark','drawing','girl','green',
-    'illustration','light','model','photo','photography','street','woman','pokemon',
-    'polygon','animal','human body'];
+var default_tags = ['abstract', 'art', 'black', 'blue', 'dark', 'drawing', 'girl', 'green',
+    'illustration', 'light', 'model', 'photo', 'photography', 'street', 'woman', 'pokemon',
+    'polygon', 'animal', 'human body'];
 
 function getTags(request, reply) {
     client.sadd('tags', default_tags); // ignores if tags already exist
@@ -72,13 +91,15 @@ function getTags(request, reply) {
         if (err) throw err;
         var filter = request.query.filter;
         var results = fuzzy.filter(filter, tags);
-        var matches = results.map(function(m) { return m.string; });
+        var matches = results.map(function (m) {
+            return m.string;
+        });
         reply(matches).header('Access-Control-Allow-Origin', "*");
     });
 }
 
 server.route({
-   method: 'GET',
+    method: 'GET',
     path: '/tags',
     handler: getTags,
     config: {
@@ -88,6 +109,95 @@ server.route({
             }
         }
     }
+});
+
+var validate = function (rToken, decodedToken, callback) {
+    console.log(rToken);
+    console.log(decodedToken);
+
+    if (token != rToken) {
+        return callback(null, false);
+    }
+
+    if (decodedToken) {
+        console.log(decodedToken.username.toString());
+    }
+
+    client.get(decodedToken.username, function (err, tok) {
+        if (!tok) {
+            return callback(null, false);
+        } else if (tok == rToken) {
+            return callback(null, true, decodedToken.username);
+        } else {
+            return callback(null, false);
+        }
+    });
+};
+
+server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
+
+    server.auth.strategy('token', 'jwt', { key: privateKey, validateFunc: validate });
+
+    server.route({
+        method: 'GET',
+        path: '/tokenRequired',
+        config: { auth: 'token' },
+        handler: function (request, reply) {
+            var replyObj = { text: 'I am a JSON response, and you needed a token to get me.', credentials: request.auth.credentials };
+            reply(replyObj);
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/login',
+        config: { auth: false },
+        handler: function (request, reply) {
+            var user = request.payload.user;
+            var password = request.payload.password;
+
+            console.log(user);
+            console.log(password);
+
+            User.getByUsername(user).then(function (userData) {
+                if (userData[0]) {
+                    userData = userData[0].user;
+                    console.log(userData);
+                    var insertedPasswordHash = User.generatePasswordHash(user, password);
+                    console.log(insertedPasswordHash);
+                    if (userData.passwordHash && insertedPasswordHash.toLowerCase() == userData.passwordHash.toLowerCase()) {
+                        client.get(user, function(err, tok) {
+                            if (err) reply({error: err}).code(500);
+
+                            if (tok) {
+                                console.log("User '" + user + "' is already signed in.");
+                                return reply({token: tok});
+                            } else {
+                                var token = jwt.sign({ username: user }, privateKey);
+                                client.set(user, token);
+                                return reply({token: token});
+                            }
+                        });
+                    } else {
+                        reply('Invalid password.').code(401);
+                    }
+                } else {
+                    reply('Invalid username.').code(401);
+                }
+            });
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/noTokenRequired',
+        config: { auth: false },
+        handler: function (request, reply) {
+            var replyObj = { text: 'I am JSON response, but you did not need a token to get me' };
+            reply(replyObj);
+        }
+    });
+
 });
 
 // Start the server
