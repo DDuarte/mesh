@@ -94,53 +94,54 @@
                                         style="display: none;">
 
                                         <tags-input ng-model="newModel.tags">
-                                            <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
-                                        </tags-input>
-                                    </div>
+                                        <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
+                                    </tags-input>
                                 </div>
-
-                                <div class="form-group">
-                                    <label class="control-label col-md-2 pull-left">Galleries</label>
-
-                                    <div class="col-md-10">
-                                        <input name="tags" id="tags" value="foo,bar,baz"
-                                        style="display: none;">
-
-                                        <tags-input ng-model="newModel.tags">
-                                            <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
-                                        </tags-input>
-                                    </div>
-                                </div>
-                                <!-- form-group -->
-
-                            </form>
-                            <button class="btn btn-success pull-right">Upload</button>
-
-                            <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="panel-btns">
-                                    <a href="#" class="panel-minimize tooltips" data-toggle="tooltip" title="Minimize Panel"><i class="fa fa-minus"></i></a>
-                                    <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
-                                </div><!-- panel-btns -->
-                                <h4 class="panel-title">Dropzone Multi-File Upload</h4>
-                                <p>DropzoneJS is an open source library that provides drag'n'drop file uploads with image previews. <a href="http://dropzonejs.com/" target="_blank">http://dropzonejs.com/</a></p>
                             </div>
-                            <div class="panel-body">
-                                <p>This is just a demo. Uploaded files are <strong>not</strong> stored. This does not handle your file uploads on the server. You have to implement the code to receive and store the file yourself.</p>
-                                <br />
-                                <form action="http://themepixels.com/demo/webpage/chain/files" class="dropzone">
-                                    <div class="fallback">
-                                        <input name="file" type="file" multiple />
-                                    </div>
-                                </form>
-                            </div><!-- panel-body -->
-                        </div><!-- panel -->
-                        </div>
-                        <!-- panel-body -->
-                    </div>
-                </div>
-            </div>
 
-        </div>
-        <!-- col-sm-9 -->
-    </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2 pull-left">Galleries</label>
+
+                                <div class="col-md-10">
+                                    <input name="tags" id="tags" value="foo,bar,baz"
+                                    style="display: none;">
+
+                                    <tags-input ng-model="newModel.tags">
+                                    <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
+                                </tags-input>
+                            </div>
+                        </div>
+                        <!-- form-group -->
+
+                    </form>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-btns">
+                                <a href="#" class="panel-minimize tooltips" data-toggle="tooltip" title="Minimize Panel"><i class="fa fa-minus"></i></a>
+                                <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
+                            </div><!-- panel-btns -->
+                            <h4 class="panel-title">Dropzone Multi-File Upload</h4>
+                            <p>DropzoneJS is an open source library that provides drag'n'drop file uploads with image previews. <a href="http://dropzonejs.com/" target="_blank">http://dropzonejs.com/</a></p>
+                        </div>
+                        <div class="panel-body">
+                            <p>This is just a demo. Uploaded files are <strong>not</strong> stored. This does not handle your file uploads on the server. You have to implement the code to receive and store the file yourself.</p>
+                            <br />
+                                <form action="http://www.torrentplease.com/dropzone.php" class="dropzone" method="post" enctype="multipart/form-data" ng-dropzone dropzone="dropzone" dropzone-config="dropzoneConfig">
+                                  <div class="fallback">
+                                    <input name="file" type="file" multiple />
+                                  </div
+                              </form>
+                          </div><!-- panel-body -->
+                      </div><!-- panel -->
+                  </div>
+                  <!-- panel-body -->
+
+                  <button class="btn btn-success pull-right">Upload</button>
+              </div>
+          </div>
+      </div>
+
+  </div>
+  <!-- col-sm-9 -->
+</div>
