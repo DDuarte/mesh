@@ -13,6 +13,11 @@
 
                 <div class="mb30"></div>
 
+                <div ng-show="loginError" class="alert alert-danger">
+                    <strong>Login error: </strong> {{loginError}}
+                    Please try again!
+                </div>
+                
                 <form name="login_form">
                     <div class="input-group mb15">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>

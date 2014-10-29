@@ -31,9 +31,9 @@ angular.module( 'meshApp', [
   $urlRouterProvider.otherwise( '/login' );
 })
 
-.run( function run ($rootScope, api) {
+.run( function run ($rootScope, meshApi) {
   $rootScope._ = window._;
-  api.init();
+  meshApi.init();
 })
 
 .controller( 'AppCtrl', function AppCtrl ( $scope, $http, $location ) {
