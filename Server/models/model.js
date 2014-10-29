@@ -19,7 +19,7 @@ model.getById = function (id) {
             'MATCH (m:Model{id : {modelId}})<-[:OWNS]-(author)',
             'OPTIONAL MATCH m<-[c:COMMENTED]-(cAuthor)',
             'WITH * ORDER BY c.date DESC LIMIT 10',
-            'WITH m, author, extract(c1 IN filter(c1 IN collect({c: c, author: cAuthor}) WHERE c1.c IS NOT NULL) | { date: c1.c.date, content: c1.c.content, author: c1.author.name, avatar: c1.author.avatar }) AS modelComments',
+            'WITH m, author, extract(c1 IN filter(c1 IN collect({c: c, author: cAuthor}) WHERE c1.c IS NOT NULL) | { date: c1.c.date, content: c1.c.content, author: c1.author.username, avatar: c1.author.avatar }) AS modelComments',
             'OPTIONAL MATCH m-[:TAGGED]->(modelTag:Tag)',
             'WITH m, author, modelComments, collect(modelTag.name) AS modelTags',
             'OPTIONAL MATCH (u:User)-[ru:VOTED {type: "UP"}]->m',
@@ -53,7 +53,7 @@ model.getByName = function (name) {
             'MATCH (m:Model{name : {modelName}})<-[:OWNS]-(author)',
             'OPTIONAL MATCH m<-[c:COMMENTED]-(cAuthor)',
             'WITH * ORDER BY c.date DESC LIMIT 10',
-            'WITH m, author, extract(c1 IN filter(c1 IN collect({c: c, author: cAuthor}) WHERE c1.c IS NOT NULL) | { date: c1.c.date, content: c1.c.content, author: c1.author.name, avatar: c1.author.avatar }) AS modelComments',
+            'WITH m, author, extract(c1 IN filter(c1 IN collect({c: c, author: cAuthor}) WHERE c1.c IS NOT NULL) | { date: c1.c.date, content: c1.c.content, author: c1.author.username, avatar: c1.author.avatar }) AS modelComments',
             'OPTIONAL MATCH m-[:TAGGED]->(modelTag:Tag)',
             'WITH m, author, modelComments, collect(modelTag.name) AS modelTags',
             'OPTIONAL MATCH (u:User)-[ru:VOTED {type: "UP"}]->m',
@@ -65,6 +65,39 @@ model.getByName = function (name) {
 
         var params = {
             modelName: name
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results);
+        });
+    });
+};
+
+/**
+ *
+ * Adds a comment to a specified model
+ * @param modelId id of the model
+ * @param username username of the comment's author
+ * @param content text content for the comment
+ * @returns {Promise} Returns a promise with the created content, rejects to error otherwise
+ *
+ */
+model.addComment = function (modelId, username, content) {
+    return new Promise ( function (resolve, reject) {
+        var query = [
+            'MATCH (u:User {username:{author}}), (m:Model {id:{id}})',
+            'CREATE (u)-[c:COMMENTED {date:{date}, content:{comment}}]->(m)',
+            'RETURN { date: c.date, content: c.content, author: u.username, avatar: u.avatar } as comment'
+        ].join('\n');
+
+        var timeStamp = new Date();
+
+        var params = {
+            id: modelId,
+            author: username,
+            comment: content,
+            date: timeStamp.toISOString()
         };
 
         db.query(query, params, function (err, results) {

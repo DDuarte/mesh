@@ -182,6 +182,32 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
         }
     });
 
+
+    server.route({
+        method: 'POST',
+        path: '/models/{id}/comment',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: Joi.number().integer().min(1),
+                    comment: Joi.string().min(1).max(1024).trim()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Model.addComment(request.params.id, request.auth.credentials.username, request.payload.comment).then(function (result) {
+                if (result.length == 0) {
+                    reply('No such model.').code(404);
+                } else {
+                    reply(result);
+                }
+            }, function (error) {
+                reply('Internal error').code(500);
+            });
+        }
+    })
+
 });
 
 // Start the server
