@@ -37,9 +37,9 @@ angular.module( 'meshApp', [
 .config(['$httpProvider', function ($httpProvider) {
   // Reset headers to avoid OPTIONS request (aka preflight)
   $httpProvider.defaults.headers.common = {};
-  $httpProvider.defaults.headers.post = {};
-  $httpProvider.defaults.headers.put = {};
-  $httpProvider.defaults.headers.patch = {};
+  $httpProvider.defaults.headers.post = { 'Content-Type': 'application/json'};
+  $httpProvider.defaults.headers.put = { 'Content-Type': 'application/json'};
+  $httpProvider.defaults.headers.patch = { 'Content-Type': 'application/json'};
 }])
 .controller( 'AppCtrl', function AppCtrl ( $scope, $http, $location ) {
   $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
