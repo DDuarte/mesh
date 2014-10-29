@@ -102,7 +102,7 @@ model.addComment = function (modelId, username, content) {
 
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
-            return resolve(results);
+            return resolve(results[0] ? results[0].comment : results);
         });
     });
 };
