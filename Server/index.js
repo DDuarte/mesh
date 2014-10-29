@@ -15,7 +15,7 @@ client.on('error', function (err) {
 });
 
 // Create a server with a host and port
-var server = Hapi.createServer('0.0.0.0', process.argv[2] || 8000);
+var server = Hapi.createServer(process.argv[2] || 8001, { cors: true });
 
 var privateKey = 'Kitties';
 
