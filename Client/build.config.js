@@ -64,6 +64,7 @@ module.exports = {
             'vendor/jquery/dist/jquery.min.js',
             'js/bootstrap.min.js',
             'vendor/angular/angular.js',
+            'vendor/angular-cookies/angular-cookies.min.js',
             'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
             'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',
             'vendor/angular-ui-router/release/angular-ui-router.js',
@@ -83,7 +84,8 @@ module.exports = {
         ],
         map: [
             'vendor/jquery/dist/jquery.min.map',
-            'vendor/angular-moment/angular-moment.min.js.map'
+            'vendor/angular-moment/angular-moment.min.js.map',
+            'vendor/angular-cookies/angular-cookies.min.js.map'
         ],
         css: [
             'vendor/pickadate/lib/compressed/themes/default.css',
