@@ -142,7 +142,15 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
     server.route({
         method: 'POST',
         path: '/login',
-        config: {auth: false},
+        config: {
+            auth: false,
+            validate: {
+                payload: {
+                    username: Joi.string().required(),
+                    password: Joi.string().required()
+                }
+            }
+        },
         handler: function (request, reply) {
             var user = request.payload.username;
             var password = request.payload.password;
@@ -197,8 +205,11 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
             auth: 'token',
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1),
-                    comment: Joi.string().min(1).max(1024).trim()
+                    id: Joi.number().integer().min(1).required()
+
+                },
+                payload: {
+                    comment: Joi.string().min(1).max(1024).trim().required()
                 }
             }
         },
