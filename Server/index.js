@@ -192,7 +192,7 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
 
     server.route({
         method: 'POST',
-        path: '/models/{id}/comment',
+        path: '/models/{id}/comments',
         config: {
             auth: 'token',
             validate: {
