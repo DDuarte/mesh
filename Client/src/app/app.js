@@ -10,6 +10,7 @@ angular.module( 'meshApp', [
   'meshApp.messages',
   'meshApp.group',
   'meshApp.search',
+  'meshApp.modelUpload',
   'ui.router',
   'ui.bootstrap',
   'ui.mesh.verticalTabs',
