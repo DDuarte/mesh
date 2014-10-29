@@ -120,10 +120,8 @@ model.getCommentsOlderThan = function (modelId, startdate) {
             'MATCH (u:User)-[c:COMMENTED]->(m:Model {id: {id}})',
             startdate ? 'WHERE c.date <= {date}' : '',
             'WITH * ORDER BY c.date DESC LIMIT 10',
-            'RETURN { date: c.date, content: c.content, author: u.username, avatar: u.avatar } as comments'
+            'RETURN collect({ date: c.date, content: c.content, author: u.username, avatar: u.avatar }) as comments'
         ].join('\n');
-
-        var timeStamp = new Date();
 
         var params = {
             id: modelId,
@@ -132,7 +130,7 @@ model.getCommentsOlderThan = function (modelId, startdate) {
 
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
-            return resolve(results[0] ? results[0].comment : results);
+            return resolve(results[0] ? results[0].comments : results);
         });
     });
 };
