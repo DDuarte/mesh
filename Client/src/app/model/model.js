@@ -265,24 +265,44 @@ angular.module('meshApp.model', [
         $scope.tabs = {comments: false, details: true, settings: false};
 
         $scope.newComment = '';
-        $scope.commenting = false;
-        $scope.submitNewComment = function () {
-            if ($scope.commenting) {
+        $scope.submitNewComment = function ($event) {
+            var elem = angular.element($event.currentTarget);
+            if (elem.hasClass('disabled')) {
                 return;
             }
-            $scope.commenting=true;
+            elem.addClass('disabled');
             meshApi.addComment($stateParams.id, $scope.newComment).
                 success(function(data, status, headers, config) {
                     $scope.model.comments.unshift(data);
                     $scope.newComment = '';
-                    $scope.commenting = false;
+                    elem.removeClass('disabled');
                 }).
                 error(function(data, status, headers, config) {
                     alert('Error ' + status + ' occurred: ' + data.message);
-                    $scope.commenting = false;
+                    elem.removeClass('disabled');
                 });
         };
-
+        $scope.loadMoreComments = function ($event) {
+            var elem = angular.element($event.currentTarget);
+            if (elem.hasClass('hidden')) {
+                return;
+            }
+            elem.addClass('hidden');
+            meshApi.getComments($stateParams.id, $scope.model.comments[$scope.model.comments.length-1].date).
+                success(function(data, status, headers, config) {
+                    console.log(data);
+                    for (var i = 0; i < data.length; ++i) {
+                        $scope.model.comments.push(data[i]);
+                    }
+                    if (data.length >= 10) {
+                        elem.removeClass('hidden');
+                    }
+                }).
+                error(function(data, status, headers, config) {
+                    alert('Error ' + status + ' occurred: ' + data.message);
+                    elem.removeClass('hidden');
+                });
+        };
         $scope.upvote = function () {
             alert('Upvote not yet implemented');
         };

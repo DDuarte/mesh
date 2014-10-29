@@ -118,7 +118,7 @@ model.getCommentsOlderThan = function (modelId, startdate) {
     return new Promise ( function (resolve, reject) {
         var query = [
             'MATCH (u:User)-[c:COMMENTED]->(m:Model {id: {id}})',
-            startdate ? 'WHERE c.date <= {date}' : '',
+            startdate ? 'WHERE c.date < {date}' : '',
             'WITH * ORDER BY c.date DESC LIMIT 10',
             'RETURN collect({ date: c.date, content: c.content, author: u.username, avatar: u.avatar }) as comments'
         ].join('\n');

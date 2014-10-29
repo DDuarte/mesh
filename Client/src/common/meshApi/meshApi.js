@@ -7,6 +7,11 @@ angular.module('meshApp').factory('meshApi', function ($http, server, $cookieSto
             return $http.post(server.url + '/models/' + modelId + '/comments', {comment: comment}, {
                 headers: {'Authorization': 'Bearer ' + $cookieStore.get('token')}
             });
+        },
+        getComments: function (modelId, date) {
+            return $http.get(server.url + '/models/' + modelId + '/comments', {
+                params: {startdate: date}
+            });
         }
     };
 });

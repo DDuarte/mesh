@@ -148,8 +148,8 @@
                                 <small class="nc-charcount">{{1024-$parent.$parent.newComment.length}} characters
                                     remaining.
                                 </small>
-                                <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment();"
-                                        data-ng-disabled="new_comment.$invalid || $parent.$parent.commenting">
+                                <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment($event);"
+                                        data-ng-disabled="new_comment.$invalid">
                                     <i class="fa fa-plus mr5"></i> Add Comment
                                 </button>
                             </form>
@@ -162,6 +162,9 @@
                                        date="{{comment.date}}">
                             {{comment.content}}
                         </model-comment>
+                        <div id="load-more-comments" class="media" ng-click="loadMoreComments($event);">
+                            Load more comments
+                        </div>
                     </div>
                 </tab>
             </tabset>
