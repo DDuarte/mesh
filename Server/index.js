@@ -19,19 +19,6 @@ var server = Hapi.createServer('0.0.0.0', process.argv[2] || 8000, { cors: true 
 
 var privateKey = 'Kitties';
 
-var accounts = {
-    123: {
-        id: 123,
-        user: 'john',
-        fullName: 'John Q Public',
-        password: 'hello123'
-    }
-};
-
-var token = jwt.sign({ accountId: 123 }, privateKey);
-
-console.log(token);
-
 // Add the route
 server.route({
     method: 'GET',
@@ -115,19 +102,16 @@ var validate = function (rToken, decodedToken, callback) {
     console.log(rToken);
     console.log(decodedToken);
 
-    if (token != rToken) {
-        return callback(null, false);
-    }
-
     if (decodedToken) {
         console.log(decodedToken.username.toString());
     }
 
     client.get(decodedToken.username, function (err, tok) {
+        if (err) return reply(err).code(500);
         if (!tok) {
             return callback(null, false);
         } else if (tok == rToken) {
-            return callback(null, true, decodedToken.username);
+            return callback(null, true, decodedToken);
         } else {
             return callback(null, false);
         }
@@ -153,7 +137,7 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
         path: '/login',
         config: { auth: false },
         handler: function (request, reply) {
-            var user = request.payload.user;
+            var user = request.payload.username;
             var password = request.payload.password;
 
             console.log(user);

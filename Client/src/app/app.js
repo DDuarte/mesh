@@ -25,12 +25,14 @@ angular.module( 'meshApp', [
         timezone: 'Europe/London'*/
     }
 )
-.config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
+.config( function myAppConfig ( $stateProvider, $urlRouterProvider, $httpProvider ) {
+  // $httpProvider.responseInterceptors.push('httpInterceptor');
   $urlRouterProvider.otherwise( '/login' );
 })
 
-.run( function run ($rootScope) {
+.run( function run ($rootScope, api) {
   $rootScope._ = window._;
+  api.init();
 })
 
 .controller( 'AppCtrl', function AppCtrl ( $scope, $http, $location ) {

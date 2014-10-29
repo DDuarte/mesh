@@ -11,7 +11,7 @@ angular.module('meshApp.login', [
         });
     })
 
-    .controller('LoginCtrl', function LoginController($scope, $state) {
+    .controller('LoginCtrl', function LoginController($scope, $state, /*$cookieStore,*/ authorization, api) {
         $scope.init = function () {
             angular.element('body').css("background-color","#428bca");
         };
@@ -19,7 +19,24 @@ angular.module('meshApp.login', [
         $scope.loginInfo = {};
 
         $scope.login = function() {
-            console.log($scope.loginInfo);
-            $state.go('home.profile');
+            var credentials = $scope.loginInfo;
+            console.log(credentials);
+
+            var success = function (data) {
+                console.log("inside");
+                var token = data.token;
+
+                api.init(token);
+
+                // $cookieStore.put('token', token);
+                $state.go('home.profile');
+            };
+
+            var error = function (err) {
+                console.log(err);
+                // TODO: apply user notification here..
+            };
+
+            authorization.login(credentials).success(success).error(error);
         };
     });
