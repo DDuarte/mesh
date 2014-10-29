@@ -244,7 +244,7 @@ angular.module('meshApp.model', [
         });
     })
 
-    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server) {
+    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi) {
 
         $scope.init = function() {
             $scope.newModel = {};
@@ -266,7 +266,13 @@ angular.module('meshApp.model', [
 
         $scope.newComment = '';
         $scope.submitNewComment = function () {
-            alert('Not yet implement. Comment:\n' + $scope.newComment);
+            meshApi.addComment($stateParams.id, $scope.newComment).
+                success(function(data, status, headers, config) {
+                    $scope.model.comments.unshift(data);
+                }).
+                error(function(data, status, headers, config) {
+                    alert('Error ' + status + ' occurred: ' + data);
+                });
         };
 
         $scope.upvote = function () {

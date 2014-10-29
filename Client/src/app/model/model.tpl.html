@@ -141,7 +141,7 @@
                         </a>
 
                         <div class="media-body">
-                            <textarea ng-model="$parent.newComment" id="new-comment-area" ng-maxlength="1024"
+                            <textarea ng-model="$parent.newComment" id="new-comment-area" ng-minlength="1" ng-maxlength="1024"
                                       class="form-control" placeholder="Comment on this model"></textarea>
                             <small class="nc-charcount">{{1024-$parent.newComment.length}} characters remaining.
                             </small>
