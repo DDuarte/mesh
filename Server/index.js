@@ -57,10 +57,32 @@ function getModel(request, reply) {
     });
 }
 
+//TODO check permissions for these 2 routes
 server.route({
     method: 'GET',
     path: '/models/{id}',
     handler: getModel
+});
+server.route({
+    method: 'GET',
+    path: '/models/{id}/comments',
+    config: {
+        validate: {
+            params: {
+                id: Joi.number().integer().min(1).required()
+            },
+            query: {
+                startdate: Joi.string().isoDate().optional()
+            }
+        }
+    },
+    handler: function (request, reply) {
+        Model.getCommentsOlderThan(request.params.id, request.query.startdate).then(function (result) {
+            reply(result);
+        }, function (error) {
+            reply('Internal error').code(500);
+        });
+    }
 });
 
 var default_tags = ['abstract', 'art', 'black', 'blue', 'dark', 'drawing', 'girl', 'green',
@@ -206,7 +228,6 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
             validate: {
                 params: {
                     id: Joi.number().integer().min(1).required()
-
                 },
                 payload: {
                     comment: Joi.string().min(1).max(1024).trim().required()

@@ -107,4 +107,34 @@ model.addComment = function (modelId, username, content) {
     });
 };
 
+/**
+ * Fetches a model's comments older than a given date
+ *
+ * @param modelId
+ * @param startdate
+ * @returns {Promise} returns resolved content, rejects to error otherwise
+ */
+model.getCommentsOlderThan = function (modelId, startdate) {
+    return new Promise ( function (resolve, reject) {
+        var query = [
+            'MATCH (u:User)-[c:COMMENTED]->(m:Model {id: {id}})',
+            startdate ? 'WHERE c.date <= {date}' : '',
+            'WITH * ORDER BY c.date DESC LIMIT 10',
+            'RETURN { date: c.date, content: c.content, author: u.username, avatar: u.avatar } as comments'
+        ].join('\n');
+
+        var timeStamp = new Date();
+
+        var params = {
+            id: modelId,
+            date: startdate
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results[0] ? results[0].comment : results);
+        });
+    });
+};
+
 module.exports = model;
