@@ -42,11 +42,11 @@ angular.module( 'meshApp', [
   $httpProvider.defaults.headers.put = { 'Content-Type': 'application/json'};
   $httpProvider.defaults.headers.patch = { 'Content-Type': 'application/json'};
 }])
-.controller( 'AppCtrl', function AppCtrl ( $scope, $http, $location ) {
+.controller( 'AppCtrl', function AppCtrl ( $scope, $http, server, $location ) {
   $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
     if ( angular.isDefined( toState.data.pageTitle ) ) {
       $scope.pageTitle = toState.data.pageTitle;
-      $scope.loadTags = function ($query, server) {
+      $scope.loadTags = function ($query) {
           return $http.get(server.url + '/tags?filter=' + $query);
       };
     }
