@@ -73,11 +73,18 @@ function getTags(request, reply) {
 
     client.smembers('tags', function (err, tags) {
         if (err) throw err;
+
+        var matches = [];
         var filter = request.query.filter;
-        var results = fuzzy.filter(filter, tags);
-        var matches = results.map(function (m) {
-            return m.string;
-        });
+        if (filter) {
+            var results = fuzzy.filter(filter, tags);
+            matches = results.map(function (m) {
+                return m.string;
+            });
+        } else {
+            matches = tags;
+        }
+
         reply(matches);
     });
 }
@@ -89,7 +96,7 @@ server.route({
     config: {
         validate: {
             query: {
-                filter: Joi.string().max(30).required()
+                filter: Joi.string().max(30).optional()
             }
         }
     }
