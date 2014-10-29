@@ -265,13 +265,21 @@ angular.module('meshApp.model', [
         $scope.tabs = {comments: false, details: true, settings: false};
 
         $scope.newComment = '';
-        $scope.submitNewComment = function (comment) {
-            meshApi.addComment($stateParams.id, comment).
+        $scope.commenting = false;
+        $scope.submitNewComment = function () {
+            if ($scope.commenting) {
+                return;
+            }
+            $scope.commenting=true;
+            meshApi.addComment($stateParams.id, $scope.newComment).
                 success(function(data, status, headers, config) {
                     $scope.model.comments.unshift(data);
+                    $scope.newComment = '';
+                    $scope.commenting = false;
                 }).
                 error(function(data, status, headers, config) {
                     alert('Error ' + status + ' occurred: ' + data.message);
+                    $scope.commenting = false;
                 });
         };
 

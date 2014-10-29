@@ -141,18 +141,23 @@
                         </a>
 
                         <div class="media-body">
-                            <textarea ng-model="$parent.newComment" id="new-comment-area" ng-minlength="1" ng-maxlength="1024"
-                                      class="form-control" placeholder="Comment on this model"></textarea>
-                            <small class="nc-charcount">{{1024-$parent.newComment.length}} characters remaining.
-                            </small>
-                            <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment($parent.newComment)"><i
-                                    class="fa fa-plus mr5"></i> Add Comment
-                            </button>
+                            <form name="new_comment">
+                                <textarea ng-model="$parent.$parent.newComment" id="new-comment-area" ng-minlength="1"
+                                          ng-maxlength="1024" class="form-control" placeholder="Comment on this model"
+                                          style="border-color: #cccccc; -webkit-box-shadow: none; box-shadow: none;" required></textarea>
+                                <small class="nc-charcount">{{1024-$parent.$parent.newComment.length}} characters
+                                    remaining.
+                                </small>
+                                <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment();"
+                                        data-ng-disabled="new_comment.$invalid || $parent.$parent.commenting">
+                                    <i class="fa fa-plus mr5"></i> Add Comment
+                                </button>
+                            </form>
                         </div>
 
                     </div>
                     <div class="comment-list mt20">
-                        <model-comment ng-repeat="comment in model.comments" author="{{comment.author}}"
+                        <model-comment ng-repeat="comment in $parent.$parent.model.comments" author="{{comment.author}}"
                                        avatar="{{comment.avatar}}"
                                        date="{{comment.date}}">
                             {{comment.content}}
