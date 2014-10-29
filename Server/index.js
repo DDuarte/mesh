@@ -19,17 +19,14 @@ var server = Hapi.createServer('0.0.0.0', process.argv[2] || 8000);
 
 var privateKey = 'Kitties';
 
-// Add the route
+// Test route
 server.route({
     method: 'GET',
     path: '/',
     handler: function (request, reply) {
-        client.incr('counter', function (err, val) {
-            reply('Counter: ' + val);
-        });
+        reply('Hello! Yes, this is working.');
     }
 });
-
 
 function getUser(request, reply) {
     var id = request.params.id;
@@ -120,14 +117,17 @@ var validate = function (rToken, decodedToken, callback) {
 
 server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
 
-    server.auth.strategy('token', 'jwt', { key: privateKey, validateFunc: validate });
+    server.auth.strategy('token', 'jwt', {key: privateKey, validateFunc: validate});
 
     server.route({
         method: 'GET',
         path: '/tokenRequired',
-        config: { auth: 'token' },
+        config: {auth: 'token'},
         handler: function (request, reply) {
-            var replyObj = { text: 'I am a JSON response, and you needed a token to get me.', credentials: request.auth.credentials };
+            var replyObj = {
+                text: 'I am a JSON response, and you needed a token to get me.',
+                credentials: request.auth.credentials
+            };
             reply(replyObj);
         }
     });
@@ -135,7 +135,7 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
     server.route({
         method: 'POST',
         path: '/login',
-        config: { auth: false },
+        config: {auth: false},
         handler: function (request, reply) {
             var user = request.payload.username;
             var password = request.payload.password;
@@ -150,14 +150,14 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
                     var insertedPasswordHash = User.generatePasswordHash(user, password);
                     console.log(insertedPasswordHash);
                     if (userData.passwordHash && insertedPasswordHash.toLowerCase() == userData.passwordHash.toLowerCase()) {
-                        client.get(user, function(err, tok) {
+                        client.get(user, function (err, tok) {
                             if (err) reply({error: err}).code(500);
 
                             if (tok) {
                                 console.log("User '" + user + "' is already signed in.");
                                 return reply({token: tok});
                             } else {
-                                var token = jwt.sign({ username: user }, privateKey);
+                                var token = jwt.sign({username: user}, privateKey);
                                 client.set(user, token);
                                 return reply({token: token});
                             }
@@ -175,9 +175,9 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
     server.route({
         method: 'GET',
         path: '/noTokenRequired',
-        config: { auth: false },
+        config: {auth: false},
         handler: function (request, reply) {
-            var replyObj = { text: 'I am JSON response, but you did not need a token to get me' };
+            var replyObj = {text: 'I am JSON response, but you did not need a token to get me'};
             reply(replyObj);
         }
     });
@@ -209,6 +209,18 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
     })
 
 });
+
+
+server.pack.register({plugin: require('hapi-route-directory'), options: {path: '/api'}}, function (err) {
+    if (err)
+        throw err;
+});
+
+server.pack.register({plugin: require('hapi-routes-status'), options: {path: '/status'}}, function (err) {
+    if (err)
+        throw err;
+});
+
 
 // Start the server
 server.start();
