@@ -30,12 +30,17 @@ angular.module( 'meshApp', [
   // $httpProvider.responseInterceptors.push('httpInterceptor');
   $urlRouterProvider.otherwise( '/login' );
 })
-
 .run( function run ($rootScope, meshApi) {
   $rootScope._ = window._;
   meshApi.init();
 })
-
+.config(['$httpProvider', function ($httpProvider) {
+  // Reset headers to avoid OPTIONS request (aka preflight)
+  $httpProvider.defaults.headers.common = {};
+  $httpProvider.defaults.headers.post = {};
+  $httpProvider.defaults.headers.put = {};
+  $httpProvider.defaults.headers.patch = {};
+}])
 .controller( 'AppCtrl', function AppCtrl ( $scope, $http, $location ) {
   $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
     if ( angular.isDefined( toState.data.pageTitle ) ) {
