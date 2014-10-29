@@ -15,7 +15,7 @@ client.on('error', function (err) {
 });
 
 // Create a server with a host and port
-var server = Hapi.createServer('0.0.0.0', process.argv[2] || 8000, { cors: true });
+var server = Hapi.createServer('0.0.0.0', process.argv[2] || 8000);
 
 var privateKey = 'Kitties';
 
@@ -38,7 +38,7 @@ function getUser(request, reply) {
         reply({
             'id': id,
             'counter': counter
-        }).header('Access-Control-Allow-Origin', "*");
+        });
     });
 }
 
@@ -53,7 +53,7 @@ function getModel(request, reply) {
         if (results.length == 0) {
             reply('No such model.').code(404);
         } else {
-            reply(results[0].model).header('Access-Control-Allow-Origin', "*");
+            reply(results[0].model);
         }
     }, function (error) {
         reply('Internal error').code(500);
@@ -81,7 +81,7 @@ function getTags(request, reply) {
         var matches = results.map(function (m) {
             return m.string;
         });
-        reply(matches).header('Access-Control-Allow-Origin', "*");
+        reply(matches);
     });
 }
 
