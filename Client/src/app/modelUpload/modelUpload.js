@@ -49,13 +49,11 @@ angular.module('meshApp.modelUpload', [
       uploadMultiple: true,
       parallelUploads: 100,
       maxFiles: 100,
-      maxFileSize: 20,
-    }
-  };
+      maxFileSize: 20
+    };
 
   // Configure dropzone event handlers
   /*$scope.eventHandlers = {
     successmultiple: function(files, response) { alert("test"); }
   };*/
-
 });
