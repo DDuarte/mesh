@@ -265,13 +265,13 @@ angular.module('meshApp.model', [
         $scope.tabs = {comments: false, details: true, settings: false};
 
         $scope.newComment = '';
-        $scope.submitNewComment = function () {
-            meshApi.addComment($stateParams.id, $scope.newComment).
+        $scope.submitNewComment = function (comment) {
+            meshApi.addComment($stateParams.id, comment).
                 success(function(data, status, headers, config) {
                     $scope.model.comments.unshift(data);
                 }).
                 error(function(data, status, headers, config) {
-                    alert('Error ' + status + ' occurred: ' + data);
+                    alert('Error ' + status + ' occurred: ' + data.message);
                 });
         };
 

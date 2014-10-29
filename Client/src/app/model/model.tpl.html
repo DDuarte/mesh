@@ -145,7 +145,7 @@
                                       class="form-control" placeholder="Comment on this model"></textarea>
                             <small class="nc-charcount">{{1024-$parent.newComment.length}} characters remaining.
                             </small>
-                            <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment()"><i
+                            <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment($parent.newComment)"><i
                                     class="fa fa-plus mr5"></i> Add Comment
                             </button>
                         </div>
