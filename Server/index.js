@@ -14,10 +14,10 @@ client.on('error', function (err) {
     console.log('Redis error ' + err);
 });
 
+
+
 // Create a server with a host and port
 var server = Hapi.createServer(process.argv[2] || 8001, { cors: true });
-
-var privateKey = 'Kitties';
 
 // Test route
 server.route({
@@ -158,54 +158,6 @@ server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
                 credentials: request.auth.credentials
             };
             reply(replyObj);
-        }
-    });
-
-    server.route({
-        method: 'POST',
-        path: '/login',
-        config: {
-            auth: false,
-            validate: {
-                payload: {
-                    username: Joi.string().required(),
-                    password: Joi.string().required()
-                }
-            }
-        },
-        handler: function (request, reply) {
-            var user = request.payload.username;
-            var password = request.payload.password;
-
-            console.log(user);
-            console.log(password);
-
-            User.getByUsername(user).then(function (userData) {
-                if (userData[0]) {
-                    userData = userData[0].user;
-                    console.log(userData);
-                    var insertedPasswordHash = User.generatePasswordHash(user, password);
-                    console.log(insertedPasswordHash);
-                    if (userData.passwordHash && insertedPasswordHash.toLowerCase() == userData.passwordHash.toLowerCase()) {
-                        client.get(user, function (err, tok) {
-                            if (err) reply({error: err}).code(500);
-
-                            if (tok) {
-                                console.log("User '" + user + "' is already signed in.");
-                                return reply({token: tok});
-                            } else {
-                                var token = jwt.sign({username: user}, privateKey);
-                                client.set(user, token);
-                                return reply({token: token});
-                            }
-                        });
-                    } else {
-                        reply('Invalid password.').code(401);
-                    }
-                } else {
-                    reply('Invalid username.').code(401);
-                }
-            });
         }
     });
 
