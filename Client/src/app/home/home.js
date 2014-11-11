@@ -143,12 +143,13 @@ angular.module('meshApp.home', [
 
             collapsedMenu(); // for loading/refreshing the page
             function collapsedMenu() {
-
+/*
                 if (angular.element('.logo').css('position') == 'relative') {
                     angular.element('.headerwrapper, .mainwrapper').addClass('collapsed');
                 } else {
                     angular.element('.headerwrapper, .mainwrapper').removeClass('collapsed');
                 }
+                */
             }
         });
 

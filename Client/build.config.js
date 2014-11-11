@@ -93,8 +93,6 @@ module.exports = {
             'vendor/ng-tags-input/ng-tags-input.min.css'
         ],
         assets: [
-            'assets/bootstrap.min.css',
-            'assets/bootstrap-override.css',
             'assets/weather-icons.min.css',
             'assets/jquery-ui-1.10.3.css',
             'assets/font-awesome.min.css',
