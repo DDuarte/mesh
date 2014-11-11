@@ -99,13 +99,13 @@ module.exports = function (server) {
                                         client.expire(user, tokenTTL);
                                     }
                                 });
-                                return reply({username: user, token: tok});
+                                return reply({username: user, token: tok, avatar: userData.avatar });
                             } else {
                                 var token = jwt.sign({username: user}, privateKey);
                                 client.set(user, token);
                                 if (!rememberMe)
                                     client.expire(user, tokenTTL);
-                                return reply({username: user, token: token});
+                                return reply({username: user, token: token, avatar: userData.avatar });
                             }
                         });
                     } else {
