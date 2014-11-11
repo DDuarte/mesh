@@ -26,7 +26,6 @@ angular.module('meshApp.login', [
 
                 meshApi.init(token);
 
-                $cookieStore.put('token', token);
                 $state.go('home.profile');
             };
 

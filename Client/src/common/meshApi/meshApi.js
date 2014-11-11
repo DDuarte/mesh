@@ -1,11 +1,17 @@
 angular.module('meshApp').factory('meshApi', function ($http, server, $cookieStore) {
-    return {
+    var api = {
         init: function (token) {
-            $http.defaults.headers.Authorization = 'Bearer ' + token;
+            $cookieStore.put('token', token);
+        },
+        logout: function () {
+            $cookieStore.remove('token');
+        },
+        isLoggedIn: function () {
+            return !!getLoggedToken();
         },
         addComment: function (modelId, comment) {
             return $http.post(server.url + '/models/' + modelId + '/comments', {comment: comment}, {
-                headers: {'Authorization': 'Bearer ' + $cookieStore.get('token')}
+                headers: getHeaders()
             });
         },
         getComments: function (modelId, date) {
@@ -14,4 +20,14 @@ angular.module('meshApp').factory('meshApi', function ($http, server, $cookieSto
             });
         }
     };
+
+    var getLoggedToken = function () {
+        return $cookieStore.get('token');
+    };
+
+    var getHeaders = function() {
+            return api.isLoggedIn() ? {'Authorization': 'Bearer ' + getLoggedToken()} : {};
+    };
+
+    return api;
 });
