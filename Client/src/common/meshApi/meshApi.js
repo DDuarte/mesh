@@ -1,13 +1,20 @@
 angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) {
     var api = {
-        init: function (token) {
+        init: function (token, username) {
             ipCookie('token', token);
+            ipCookie('loggedUser', username);
         },
         logout: function () {
-            return $http.post(server.url + '/logout', {}, { headers: getHeaders() }).success(function () { ipCookie.remove('token'); });
+            return $http.post(server.url + '/logout', {}, { headers: getHeaders() }).success(function () {
+                ipCookie.remove('token');
+                ipCookie.remove('loggedUser');
+            });
         },
         isLoggedIn: function () {
             return !!getLoggedToken();
+        },
+        getLoggedUsername: function () {
+            return ipCookie('loggedUser');
         },
         addComment: function (modelId, comment) {
             return $http.post(server.url + '/models/' + modelId + '/comments', {comment: comment}, {
