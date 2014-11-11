@@ -5,6 +5,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, $cookieSto
         },
         logout: function () {
             $cookieStore.remove('token');
+            return $http.post(server.url + '/logout', {}, { headers: getHeaders() });
         },
         isLoggedIn: function () {
             return !!getLoggedToken();

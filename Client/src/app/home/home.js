@@ -29,7 +29,7 @@ angular.module('meshApp.home', [
         });
     })
 
-    .controller("HomeCtrl", function ($scope, $state) {
+    .controller("HomeCtrl", function ($scope, $state, meshApi) {
         $scope.collapseSidebar = function () {
             if (!angular.element('body').hasClass('hidden-left')) {
                 if (angular.element('.headerwrapper').hasClass('collapsed')) {
@@ -154,6 +154,11 @@ angular.module('meshApp.home', [
 
         $scope.submitSearch = function() {
             $state.go('home.search', {q: $scope.query});
+        };
+
+        $scope.logout = function () {
+            meshApi.logout();
+            $state.go('login'); // TODO: Redirect to proper homepage.
         };
     })
 
