@@ -174,7 +174,7 @@ server.route({
                 reply(result);
             }
         }, function (error) {
-            reply('Internal error').code(500);
+            reply({ message: 'Internal error' }).code(500);
         });
     }
 });
