@@ -35,7 +35,7 @@ angular.module('meshApp.register', [
                 maxDate: '=',
                 pickADateOptions: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope, element/*, attrs*/) {
                 var options = $.extend(scope.pickADateOptions || {}, {
                     onSet: function (e) {
                         if (scope.$$phase || scope.$root.$$phase) {// we are coming from $watch or link setup
@@ -145,7 +145,7 @@ angular.module('meshApp.register', [
                 if (!!attrs.ngModel) {
                     var assignCountry = $parse(attrs.ngModel).assign;
 
-                    elem.bind('change', function (e) {
+                    elem.bind('change', function (/*e*/) {
                         assignCountry(elem.val());
                     });
 
