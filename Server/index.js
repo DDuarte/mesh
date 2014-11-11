@@ -152,6 +152,33 @@ server.route({
     }
 });
 
+server.route({
+    method: 'DELETE',
+    path: '/models/{id}/comments',
+    config: {
+        auth: 'token',
+        validate: {
+            params: {
+                id: Joi.number().integer().min(1).required()
+            },
+            payload: {
+                date: Joi.string().isoDate().required()
+            }
+        }
+    },
+    handler: function (request, reply) {
+        Model.removeComment(request.params.id, request.auth.credentials.username, request.payload.date).then(function (result) {
+            if (!result) {
+                reply('No such comment.').code(404);
+            } else {
+                reply(result);
+            }
+        }, function (error) {
+            reply('Internal error').code(500);
+        });
+    }
+});
+
 
 server.pack.register({plugin: require('hapi-route-directory'), options: {path: '/api'}}, function (err) {
     if (err)

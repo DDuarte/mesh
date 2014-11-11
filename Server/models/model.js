@@ -108,6 +108,35 @@ model.addComment = function (modelId, username, content) {
 };
 
 /**
+ *
+ * Removes a comment from a specified model
+ * @param modelId id of the model
+ * @param username username of the comment's author
+ * @param date date of the comment
+ * @returns {Promise} Returns a promise with the created content, rejects to error otherwise
+ *
+ */
+model.removeComment = function (modelId, username, date) {
+    return new Promise ( function (resolve, reject) {
+        var query = [
+            'MATCH (u:User {username: {username})-[c:COMMENTED {date: {date}}]->(m:Model {id: {modelId}})',
+            'DELETE c'
+        ].join('\n');
+
+        var params = {
+            modelId: modelId,
+            username: username,
+            date: date
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results.table.stats['relationship_deleted'] > 0);
+        });
+    });
+};
+
+/**
  * Fetches a model's comments older than a given date
  *
  * @param modelId

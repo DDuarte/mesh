@@ -13,7 +13,7 @@ var user = {};
  *
  * Returns a model by it's name
  * @param username string identifier of the user
- * @returns {Promise} Returns a promise with the resolved model, rejects to error otherwise
+ * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
  *
  */
 user.getByUsername = function (username) {
