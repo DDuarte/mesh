@@ -22,9 +22,7 @@ angular.module('meshApp.login', [
             var credentials = $scope.loginInfo;
 
             var success = function (data) {
-                var token = data.token;
-
-                meshApi.init(token, data.username);
+                meshApi.init(data);
 
                 $state.go('home.profile');
             };
