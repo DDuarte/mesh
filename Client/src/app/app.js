@@ -18,7 +18,7 @@ angular.module( 'meshApp', [
   'ui.mesh.modelthumbnail',
   'angularMoment',
   'ngTagsInput',
-  'ngCookies'
+  'ipCookie'
 ])
 
 .constant('_', window._)

@@ -11,7 +11,7 @@ angular.module('meshApp.login', [
         });
     })
 
-    .controller('LoginCtrl', function LoginController($scope, $state, $cookieStore, authorization, meshApi) {
+    .controller('LoginCtrl', function LoginController($scope, $state, authorization, meshApi) {
         $scope.init = function () {
             angular.element('body').css("background-color","#428bca");
         };

@@ -1,10 +1,10 @@
-angular.module('meshApp').factory('meshApi', function ($http, server, $cookieStore) {
+angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) {
     var api = {
         init: function (token) {
-            $cookieStore.put('token', token);
+            ipCookie('token', token);
         },
         logout: function () {
-            return $http.post(server.url + '/logout', {}, { headers: getHeaders() }).success(function () { $cookieStore.remove('token'); });
+            return $http.post(server.url + '/logout', {}, { headers: getHeaders() }).success(function () { ipCookie.remove('token'); });
         },
         isLoggedIn: function () {
             return !!getLoggedToken();
@@ -22,7 +22,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, $cookieSto
     };
 
     var getLoggedToken = function () {
-        return $cookieStore.get('token');
+        return ipCookie('token');
     };
 
     var getHeaders = function() {
