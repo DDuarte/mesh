@@ -10,7 +10,7 @@ module.exports = function (server) {
         path: '/logout',
         config: {auth: 'token'},
         handler: function (request, reply) {
-            client.remove(request.auth.username);
+            client.del(request.auth.credentials.username);
             return reply({});
         }
     });
