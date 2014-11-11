@@ -8,6 +8,7 @@ var redis = require('redis');
 var client = redis.createClient();
 
 var privateKey = 'Kitties';
+var tokenTTL = 7200;
 
 module.exports = function (server) {
 
@@ -24,6 +25,11 @@ module.exports = function (server) {
             if (!tok) {
                 return callback(null, false);
             } else if (tok == rToken) {
+                client.ttl(decodedToken.username, function (err, data) {
+                    if (!err && data != -1) {
+                        client.expire(decodedToken.username, tokenTTL);
+                    }
+                });
                 return callback(null, true, decodedToken);
             } else {
                 return callback(null, false);
@@ -68,14 +74,15 @@ module.exports = function (server) {
             validate: {
                 payload: {
                     username: Joi.string().required(),
-                    password: Joi.string().required()
+                    password: Joi.string().required(),
+                    rememberMe: Joi.boolean()
                 }
             }
         },
         handler: function (request, reply) {
             var user = request.payload.username;
             var password = request.payload.password;
-
+            var rememberMe = request.payload.rememberMe ? request.payload.rememberMe : false;
             User.getByUsername(user).then(function (userData) {
                 if (userData[0]) {
                     userData = userData[0].user;
@@ -87,11 +94,18 @@ module.exports = function (server) {
                             if (err) return reply(Boom.badImplementation(err));
 
                             if (tok) {
-                                return reply({token: tok});
+                                client.ttl(user, function (err, data) {
+                                    if (!err && data != -1) {
+                                        client.expire(user, tokenTTL);
+                                    }
+                                });
+                                return reply({username: user, token: tok});
                             } else {
                                 var token = jwt.sign({username: user}, privateKey);
                                 client.set(user, token);
-                                return reply({token: token});
+                                if (!rememberMe)
+                                    client.expire(user, tokenTTL);
+                                return reply({username: user, token: token});
                             }
                         });
                     } else {
