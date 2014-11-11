@@ -4,8 +4,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, $cookieSto
             $cookieStore.put('token', token);
         },
         logout: function () {
-            $cookieStore.remove('token');
-            return $http.post(server.url + '/logout', {}, { headers: getHeaders() });
+            return $http.post(server.url + '/logout', {}, { headers: getHeaders() }).success(function () { $cookieStore.remove('token'); });
         },
         isLoggedIn: function () {
             return !!getLoggedToken();
@@ -27,7 +26,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, $cookieSto
     };
 
     var getHeaders = function() {
-            return api.isLoggedIn() ? {'Authorization': 'Bearer ' + getLoggedToken()} : {};
+        console.log(getLoggedToken());
+        console.log(api.isLoggedIn());
+        return api.isLoggedIn() ? {'Authorization': 'Bearer ' + getLoggedToken()} : {};
     };
 
     return api;
