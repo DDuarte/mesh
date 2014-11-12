@@ -29,6 +29,14 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
             return $http.get(server.url + '/models/' + modelId + '/comments', {
                 params: {startdate: date}
             });
+        },
+        removeComment: function (modelId, date) {
+            return $http({
+                url: server.url + '/models/' + modelId + '/comments',
+                method: 'DELETE',
+                data: {date: date},
+                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+            });
         }
     };
 
@@ -37,9 +45,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
     };
 
     var getHeaders = function() {
-        console.log(getLoggedToken());
-        console.log(api.isLoggedIn());
-        return api.isLoggedIn() ? {'Authorization': 'Bearer ' + getLoggedToken()} : {};
+        return api.isLoggedIn() ? {'Authorization': 'Bearer ' + getLoggedToken().token} : {};
     };
 
     return api;
