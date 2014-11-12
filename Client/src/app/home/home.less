@@ -41,6 +41,10 @@ div.leftpanel {
   }
 }
 
+.paddingTop5 {
+  padding-top: 5px;
+}
+
 .mainwrapper:before {
   width: 0px;
 }
@@ -54,12 +58,48 @@ div.leftpanel {
 }
 
 nav.navbar {
-  padding: 10px 25px;
+  border: 0;
+
+  padding-top: 5px;
+  padding-left: 25px;
+  padding-right: 25px;
+
   background-color: #428BCA;
+
   width: 100%;
   margin: 0;
-  min-height: 60px;
+
   border-radius: 0;
+
+  .navbar-header {
+    padding-top: 5px;
+  }
+
+  .navbar-nav {
+    height: 100%;
+
+    li {
+      has('ui-sref-active'):hover {
+        background-color: #E4E7EA;
+      }
+      height: inherit;
+      a {
+        padding-top: 5px;
+        height: inherit;
+
+        color: white;
+        i {
+          font-size: 32px;
+          vertical-align: bottom;
+          margin-right: 5px;
+        }
+        span {
+          line-height: 28px;
+          font-size: 15px;
+        }
+      }
+    }
+  }
 
   .logo {
     display: inline-block;
@@ -67,19 +107,11 @@ nav.navbar {
     float: left;
   }
 
-  .navbar-nav > li > a {
-    color: white;
-    padding: 0 10px;
-    i {
-      font-size: 32px;
-      vertical-align: bottom;
-      margin-right: 5px;
-    }
-    span {
-      line-height: 28px;
-      font-size: 15px;
-    }
+  .navbar-nav {
+    margin-top: 0;
   }
+
+
 
   .form-search {
     float: left;
@@ -255,23 +287,43 @@ nav.navbar {
 
 }
 
+@media screen and (max-width: 1180px) {
+  .navbar .form-search {
+    display: none;
+  }
+}
+
+.navbar-nav li.active {
+  background-color: #BDBDBD;
+}
+
+@media screen and (max-width: 940px) {
+  .navbar, .navbar-nav {
+    * {
+      float: left;
+    }
+  }
+
+  .navbar-nav > li > a > span {
+    display: none;
+  }
+
+  .navbar-nav > li {
+    float: left;
+  }
+
+  .navbar-header {
+    float: left;
+  }
+}
+
 @media screen and (max-width: 768px) {
-  .show-left .leftpanel {
-    z-index: 1;
-    box-shadow: 3px 0px 15px #DBDBDB;
-    background-color: white;
+  .navbar-nav.navbar-right:last-child {
+    float: right !important;
   }
 
-  .show-left .mainpanel {
-    margin-left: 0px;
-  }
-
-  .show-left .headerwrapper .header-left {
-    margin-left: -168px;
-  }
-
-  .show-left .headerwrapper .header-right {
-    margin-left: 0px;
+  .navbar-nav {
+    margin: 0;
   }
 }
 

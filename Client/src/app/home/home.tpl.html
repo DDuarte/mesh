@@ -5,18 +5,9 @@
                 <a class="logo"> <img src="images/logo.png" alt=""/> </a>
             </div>
 
-            <ul class="nav navbar-nav">
-                <li><a ui-sref='home.profile' href=""><i class="fa fa-home"></i> <span>Profile</span></a></li>
-                <li><a ui-sref='home.model({id: 1})' href=""><i class="fa fa-cube"></i> <span>Model</span></a></li>
-                <li><a ui-sref='home.modelUpload' href=""><i class="fa fa-cloud-upload"></i> <span>Upload model</span></a></li>
-                <li><a ui-sref='home.messages' href=""><i class="fa fa-envelope-o"></i> <span>Messages</span></a></li>
-                <li><a ui-sref='home.group' href=""><i class="fa fa-group"></i> <span>Group</span></a></li>
-            </ul>
-
-
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right paddingTop5">
                 <li>
-                    <form class="navbar-form navbar-left  form form-search" ng-submit="submitSearch()">
+                    <form class="navbar-form navbar-left form form-search" ng-submit="submitSearch()">
                         <input ng-model="query" type="search" name="search" class="form-control" placeholder="Search"/>
                     </form>
 
@@ -167,6 +158,14 @@
                     </div>
                     <!-- btn-group -->
                 </li>
+            </ul>
+
+            <ul class="nav navbar-nav">
+                <li ui-sref-active="active"><a ui-sref='home.profile' href=""><i class="fa fa-home"></i> <span>Profile</span></a></li>
+                <li ui-sref-active="active"><a ui-sref='home.model({id: 1})' href=""><i class="fa fa-cube"></i> <span>Model</span></a></li>
+                <li ui-sref-active="active"><a ui-sref='home.modelUpload' href=""><i class="fa fa-cloud-upload"></i> <span>Upload model</span></a></li>
+                <li ui-sref-active="active"><a ui-sref='home.messages' href=""><i class="fa fa-envelope-o"></i> <span>Messages</span></a></li>
+                <li ui-sref-active="active"><a ui-sref='home.group' href=""><i class="fa fa-group"></i> <span>Group</span></a></li>
             </ul>
         </nav>
 
