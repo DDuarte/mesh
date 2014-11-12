@@ -17,6 +17,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
         getLoggedAvatar: function () {
             return getLoggedToken().avatar;
         },
+        register: function (registerInfo) {
+            return $http.post(server.url + '/register', registerInfo);
+        },
         addComment: function (modelId, comment) {
             return $http.post(server.url + '/models/' + modelId + '/comments', {comment: comment}, {
                 headers: getHeaders()

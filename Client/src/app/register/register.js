@@ -11,7 +11,7 @@ angular.module('meshApp.register', [
         });
     })
 
-    .controller('RegisterCtrl', function LoginController($scope) {
+    .controller('RegisterCtrl', function RegisterController($scope, meshApi) {
         $scope.init = function () {
             angular.element('body').css("background-color","#428bca");
         };
@@ -20,7 +20,8 @@ angular.module('meshApp.register', [
 
         $scope.registerInfo = {};
         $scope.registerNewAccount = function() {
-            alert("Not yet implemented:\n"+JSON.stringify($scope.registerInfo, null, '\t'));
+            meshApi.register($scope.registerInfo);
+            // TODO: show error if something invalid happened
         };
 
         $scope.isOpen = false;

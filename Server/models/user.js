@@ -34,10 +34,33 @@ user.getByUsername = function (username) {
     });
 };
 
+user.create = function (registerInfo) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MERGE (u: User{firstName: { firstName }, lastName: { lastName }, username: { username }, email: { email }, passwordHash: { passwordHash }, birthdate: { birthdate }, country: { country }})'
+        ].join('\n');
+
+        var params = {
+            firstName: registerInfo.firstName,
+            lastName: registerInfo.lastName,
+            username: registerInfo.username,
+            email: registerInfo.email,
+            passwordHash: user.generatePasswordHash(registerInfo.username, registerInfo.password),
+            birthdate: registerInfo.birthdate,
+            country: registerInfo.country
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results);
+        });
+    });
+};
+
 user.generatePasswordHash = function (username, password) {
-    var hasher = crypto.createHash('sha256');
-    hasher.update(username + '+' + password);
-    return hasher.digest('hex');
+    var hash = crypto.createHash('sha256');
+    hash.update(username + '+' + password);
+    return hash.digest('hex');
 };
 
 module.exports = user;
