@@ -317,16 +317,15 @@ angular.module('meshApp.model', [
                 template: 'modalDialogId',
                 className: 'ngdialog-theme-default'
             }).then(function () {
+                for (var i = 0; i < $scope.model.comments.length; ++i) {
+                    if ($scope.model.comments[i].date === date && $scope.model.comments[i].author === $scope.loggedUsername) {
+                        $scope.model.comments.splice(i, 1);
+                        break;
+                    }
+                }
                 meshApi.removeComment($scope.model.id, date).
                     success(function(data, status, headers, config) {
-                        if (data) {
-                            for (var i = 0; i < $scope.model.comments.length; ++i) {
-                                if ($scope.model.comments[i].date === date && $scope.model.comments[i].author === $scope.loggedUsername) {
-                                    $scope.model.comments.splice(i, 1);
-                                    break;
-                                }
-                            }
-                        }
+
                     }).
                     error(function(data, status, headers, config) {
                         alert('Error ' + status + ' occurred: ' + data.message);
