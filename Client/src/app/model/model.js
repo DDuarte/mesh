@@ -246,7 +246,7 @@ angular.module('meshApp.model', [
         });
     })
 
-    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi) {
+    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi, ngDialog) {
 
         $scope.isLoggedIn = meshApi.isLoggedIn();
         if ($scope.isLoggedIn) {
@@ -313,19 +313,25 @@ angular.module('meshApp.model', [
                 });
         };
         $scope.removeComment = function (date) {
-            meshApi.removeComment($scope.model.id, date).
-                success(function(data, status, headers, config) {
-                    if (data) {
-                        for (var i = 0; i < $scope.model.comments.length; ++i) {
-                            if ($scope.model.comments[i].date === date && $scope.model.comments[i].author === $scope.loggedUsername) {
-                                $scope.model.comments.splice(i, 1);
+            ngDialog.openConfirm({
+                template: 'modalDialogId',
+                className: 'ngdialog-theme-default'
+            }).then(function () {
+                meshApi.removeComment($scope.model.id, date).
+                    success(function(data, status, headers, config) {
+                        if (data) {
+                            for (var i = 0; i < $scope.model.comments.length; ++i) {
+                                if ($scope.model.comments[i].date === date && $scope.model.comments[i].author === $scope.loggedUsername) {
+                                    $scope.model.comments.splice(i, 1);
+                                    break;
+                                }
                             }
                         }
-                    }
-                }).
-                error(function(data, status, headers, config) {
-                    alert('Error ' + status + ' occurred: ' + data.message);
-                });
+                    }).
+                    error(function(data, status, headers, config) {
+                        alert('Error ' + status + ' occurred: ' + data.message);
+                    });
+            });
         };
         $scope.upvote = function () {
             alert('Upvote not yet implemented');
