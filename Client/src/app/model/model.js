@@ -262,6 +262,8 @@ angular.module('meshApp.model', [
                     $scope.favourited = false; //TODO check if model is already favourited
                     $scope.followingAuthor = false; //TODO
 
+                    $scope.hasMoreComments = $scope.model.comments.length > 9;
+
                     $scope.newModel.description = $scope.model.description;
                     $scope.newModel.tags = $scope.model.tags.slice(0); //clone
                     $scope.newModel.visibility = $scope.model.visibility;

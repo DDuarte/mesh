@@ -164,7 +164,7 @@
                                        remove-comment="removeComment(date)">
                             {{comment.content}}
                         </model-comment>
-                        <div id="load-more-comments" class="media" ng-click="loadMoreComments($event);">
+                        <div id="load-more-comments" class="media" ng-hide="!$parent.$parent.hasMoreComments" ng-click="loadMoreComments($event);">
                             Load more comments
                         </div>
                     </div>
