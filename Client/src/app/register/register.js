@@ -30,7 +30,7 @@ angular.module('meshApp.register', [
             };
 
             var error = function (err) {
-                $scope.registerError = err;
+                $scope.registerError = err.message;
             };
 
             meshApi.register($scope.registerInfo).success(success).error(error);
@@ -155,13 +155,7 @@ angular.module('meshApp.register', [
             template: '<select><option value="" disabled selected>Select Your Country</option><option>' + countries.join('</option><option>') + '</option></select>',
             replace: true,
             link: function (scope, elem, attrs) {
-                if (!!attrs.ngModel) {
-                    var assignCountry = $parse(attrs.ngModel).assign;
-
-                    elem.bind('change', function (/*e*/) {
-                        assignCountry(elem.val());
-                    });
-
+                if (attrs.ngModel) {
                     scope.$watch(attrs.ngModel, function (country) {
                         elem.val(country);
                     });
