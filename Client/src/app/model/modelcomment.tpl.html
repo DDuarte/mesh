@@ -6,6 +6,7 @@
     <div class="media-body">
         <a ui-sref="home.profile({id: authorName})"><strong>{{authorName}}</strong></a> posted a comment. <br/>
         <small class="text-muted"><span class="fa fa-clock-o"></span> <span am-time-ago="commentDate" title="{{commentDate | amDateFormat:'dddd, MMMM Do YYYY'}}"></span></small>
+        <span class="glyphicon  glyphicon-trash pull-right" ng-click="removeComment({date: commentDate});" ng-if="authorName === loggedUsername"></span>
         <div class="media blog-media">
             <div class="media-body">
                 <p ng-transclude></p>

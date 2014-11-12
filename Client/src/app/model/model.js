@@ -229,7 +229,9 @@ angular.module('meshApp.model', [
             scope: {
                 authorName: '@author',
                 authorImg: '@avatar',
-                commentDate: '@date'
+                commentDate: '@date',
+                loggedUsername: '@loggedusername',
+                removeComment: '&'
             },
             templateUrl: 'model/modelcomment.tpl.html'
         };
@@ -245,6 +247,11 @@ angular.module('meshApp.model', [
     })
 
     .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi) {
+
+        $scope.isLoggedIn = meshApi.isLoggedIn();
+        if ($scope.isLoggedIn) {
+            $scope.loggedUsername = meshApi.getLoggedUsername();
+        }
 
         $scope.init = function() {
             $scope.newModel = {};
@@ -301,6 +308,21 @@ angular.module('meshApp.model', [
                 error(function(data, status, headers, config) {
                     alert('Error ' + status + ' occurred: ' + data.message);
                     elem.removeClass('hidden');
+                });
+        };
+        $scope.removeComment = function (date) {
+            meshApi.removeComment($scope.model.id, date).
+                success(function(data, status, headers, config) {
+                    if (data) {
+                        for (var i = 0; i < $scope.model.comments.length; ++i) {
+                            if ($scope.model.comments[i].date === date && $scope.model.comments[i].author === $scope.loggedUsername) {
+                                $scope.model.comments.splice(i, 1);
+                            }
+                        }
+                    }
+                }).
+                error(function(data, status, headers, config) {
+                    alert('Error ' + status + ' occurred: ' + data.message);
                 });
         };
         $scope.upvote = function () {

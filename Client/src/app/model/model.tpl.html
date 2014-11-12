@@ -135,7 +135,7 @@
                 </tab>
                 <tab class="pull-right" active="tabs.comments">
                     <tab-heading><strong>Comments</strong></tab-heading>
-                    <div class="media msg-reply">
+                    <div class="media msg-reply" ng-show="isLoggedIn">
                         <a class="pull-left" href="">
                             <img class="img-circle img-online" src="images/photos/profile.png" alt="username">
                         </a>
@@ -159,7 +159,9 @@
                     <div class="comment-list mt20">
                         <model-comment ng-repeat="comment in $parent.$parent.model.comments" author="{{comment.author}}"
                                        avatar="{{comment.avatar}}"
-                                       date="{{comment.date}}">
+                                       date="{{comment.date}}"
+                                       loggedUsername="{{loggedUsername}}"
+                                       remove-comment="removeComment(date)">
                             {{comment.content}}
                         </model-comment>
                         <div id="load-more-comments" class="media" ng-click="loadMoreComments($event);">
