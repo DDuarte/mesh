@@ -14,6 +14,11 @@
 
                 <div class="mb30"></div>
 
+                <div ng-show="registerError" class="alert alert-danger">
+                    <strong>Register error: </strong> {{registerError}}
+                    Please try again!
+                </div>
+
                 <form name="register_form">
                     <div class="row">
                         <div class="col-sm-6">
@@ -124,3 +129,13 @@
 
     </section>
 </div>
+
+<script type="text/ng-template" id="followupRegister">
+    <div class="ngdialog-message">
+        <h2>Verify Email</h2>
+        <p>We have sent an email to {{ registerInfo.email }} with a link that you will need to follow.</p>
+    </div>
+    <div class="ngdialog-buttons mt">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ui-sref="login">Login <i class="fa fa-angle-right ml5"></i></button>
+    </div>
+</script>

@@ -80,7 +80,8 @@ module.exports = {
             'lib/three.js',
             'lib/Detector.js',
             'lib/jquery.fullscreen.js',
-            'lib/OrbitControls.js'
+            'lib/OrbitControls.js',
+            'vendor/ngDialog/js/ngDialog.js'
         ],
         map: [
             'vendor/jquery/dist/jquery.min.map',

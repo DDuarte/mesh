@@ -11,7 +11,7 @@ angular.module('meshApp.register', [
         });
     })
 
-    .controller('RegisterCtrl', function RegisterController($scope, meshApi) {
+    .controller('RegisterCtrl', function RegisterController($scope, meshApi, ngDialog) {
         $scope.init = function () {
             angular.element('body').css("background-color","#428bca");
         };
@@ -20,8 +20,20 @@ angular.module('meshApp.register', [
 
         $scope.registerInfo = {};
         $scope.registerNewAccount = function() {
-            meshApi.register($scope.registerInfo);
-            // TODO: show error if something invalid happened
+
+            var success = function (/*data*/) {
+                ngDialog.open({
+                    template: 'followupRegister',
+                    className: 'ngdialog-theme-default',
+                    scope: $scope
+                });
+            };
+
+            var error = function (err) {
+                $scope.registerError = err;
+            };
+
+            meshApi.register($scope.registerInfo).success(success).error(error);
         };
 
         $scope.isOpen = false;
