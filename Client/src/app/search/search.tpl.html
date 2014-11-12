@@ -19,7 +19,7 @@
 
     <div class="row search">
         <div class="col-sm-8 col-md-9">
-            <pagination boundary-links="true" total-items="filtered.length" page="currentPage"
+            <pagination boundary-links="true" total-items="filtered.length" ng-model="currentPage"
                         class="pagination pagination-search" items-per-page="pageSize"
                         previous-text="&lsaquo;" next-text="&rsaquo;"
                         first-text="&laquo;" last-text="&raquo;"></pagination>
@@ -50,7 +50,7 @@
                 </div><!-- panel-body -->
             </div><!-- panel -->
 
-            <pagination boundary-links="true" total-items="filtered.length" page="currentPage"
+            <pagination boundary-links="true" total-items="filtered.length" ng-model="currentPage"
                         class="pagination pagination-search" items-per-page="pageSize"
                         previous-text="&lsaquo;" next-text="&rsaquo;"
                         first-text="&laquo;" last-text="&raquo;"></pagination>

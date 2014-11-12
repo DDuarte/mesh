@@ -29,7 +29,7 @@ angular.module('meshApp.login', [
 
             var error = function (err) {
                 console.log(err);
-                $scope.loginError = err;
+                $scope.loginError = err.message;
             };
 
             authorization.login(credentials).success(success).error(error);
