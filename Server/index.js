@@ -135,7 +135,7 @@ server.route({
                 id: Joi.number().integer().min(1).required()
             },
             payload: {
-                comment: Joi.string().min(1).max(1024).trim().required()
+                comment: Joi.string().trim().min(1).max(1024).required()
             }
         }
     },
