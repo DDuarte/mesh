@@ -113,13 +113,13 @@ model.addComment = function (modelId, username, content) {
  * @param modelId id of the model
  * @param username username of the comment's author
  * @param date date of the comment
- * @returns {Promise} Returns a promise with the created content, rejects to error otherwise
+ * @returns {Promise} Returns a promise which resolves to true, rejects to error otherwise
  *
  */
 model.removeComment = function (modelId, username, date) {
     return new Promise ( function (resolve, reject) {
         var query = [
-            'MATCH (u:User {username: {username})-[c:COMMENTED {date: {date}}]->(m:Model {id: {modelId}})',
+            'MATCH (u:User {username: {username}})-[c:COMMENTED {date: {date}}]->(m:Model {id: {modelId}})',
             'DELETE c'
         ].join('\n');
 
@@ -131,7 +131,7 @@ model.removeComment = function (modelId, username, date) {
 
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
-            return resolve(results.table.stats['relationship_deleted'] > 0);
+            return resolve(true); //todo (possibly) return something based on whether the match worked or not
         });
     });
 };
