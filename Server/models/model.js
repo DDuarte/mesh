@@ -28,11 +28,16 @@ model.getById = function (id, loggedUser) {
             'WITH m, author, modelComments, modelTags, count(ru) as modelUpvotes',
             'OPTIONAL MATCH (u:User)-[rd:VOTED {type: "DOWN"}]->m',
             'WITH m, author, modelComments, modelTags, modelUpvotes, count(rd) as modelDownvotes',
-            'RETURN { id: m.id, name: m.name, description: m.description, files: m.files, downvotes: modelDownvotes, upvotes: modelUpvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: modelTags, author: { name: author.name, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model'
+            'WITH m, { id: m.id, name: m.name, description: m.description, files: m.files, downvotes: modelDownvotes, upvotes: modelUpvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: modelTags, author: { name: author.name, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model',
+            'OPTIONAL MATCH (User{username: {username}})-[v:VOTED]->(m)',
+            'WITH m, model, v.type as uservote',
+            'OPTIONAL MATCH (User{username: {username}})-[f:FAVOURITED]->(m)',
+            'RETURN model, uservote, (f IS NOT NULL ) as favourited'
         ].join('\n');
 
         var params = {
-            modelId: Number(id)
+            modelId: Number(id),
+            username: loggedUser
         };
 
         db.query(query, params, function (err, results) {
