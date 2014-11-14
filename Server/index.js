@@ -47,11 +47,12 @@ server.route({
 });
 
 function getModel(request, reply) {
-    Model.getById(request.params.id).then(function (results) {
+    console.log(request.auth.credentials);
+    Model.getById(request.params.id, request.auth.credentials ? request.auth.credentials.username : '').then(function (results) {
         if (results.length == 0) {
             reply('No such model.').code(404);
         } else {
-            reply(results[0].model);
+            reply(results[0]);
         }
     }, function (error) {
         reply('Internal error').code(500);
@@ -62,6 +63,17 @@ function getModel(request, reply) {
 server.route({
     method: 'GET',
     path: '/models/{id}',
+    config: {
+        auth: {
+            mode: 'optional',
+            strategy: 'token'
+        },
+        validate: {
+            params: {
+                id: Joi.number().integer().min(1).required()
+            }
+        }
+    },
     handler: getModel
 });
 server.route({

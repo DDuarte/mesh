@@ -10,10 +10,12 @@ var model = {};
 /**
  *
  * Returns a model by it's identifier
- * @param {Number} id
  *
+ * @param {Number} id
+ * @param {String} loggedUser username of the current autenticated user (if null, empty string will be used)
+ * @returns {Promise} Returns a promise with the resolved model, rejects to error otherwise
  */
-model.getById = function (id) {
+model.getById = function (id, loggedUser) {
     return new Promise( function (resolve, reject) {
         var query = [
             'MATCH (m:Model{id : {modelId}})<-[:OWNS]-(author)',
