@@ -191,6 +191,56 @@ server.route({
     }
 });
 
+server.route({
+    method: 'POST',
+    path: '/models/{id}/votes',
+    config: {
+        auth: 'token',
+        validate: {
+            params: {
+                id: Joi.number().integer().min(1).required()
+            },
+            payload: {
+                vote: Joi.string().trim().regex(/(DOWN)|(UP)/).required()
+            }
+        }
+    },
+    handler: function (request, reply) {
+        Model.addVote(request.params.id, request.auth.credentials.username, request.payload.vote).then(function (result) {
+            if (result.length == 0) {
+                reply('No such model.').code(404);
+            } else {
+                reply(result);
+            }
+        }, function (error) {
+            reply('Internal error').code(500);
+        });
+    }
+});
+
+server.route({
+    method: 'DELETE',
+    path: '/models/{id}/votes',
+    config: {
+        auth: 'token',
+        validate: {
+            params: {
+                id: Joi.number().integer().min(1).required()
+            }
+        }
+    },
+    handler: function (request, reply) {
+        Model.deleteVote(request.params.id, request.auth.credentials.username).then(function (result) {
+            if (result.length == 0) {
+                reply('No such model.').code(404);
+            } else {
+                reply(result);
+            }
+        }, function (error) {
+            reply('Internal error').code(500);
+        });
+    }
+});
 
 server.pack.register({plugin: require('hapi-route-directory'), options: {path: '/api'}}, function (err) {
     if (err)

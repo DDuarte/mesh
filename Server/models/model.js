@@ -171,4 +171,63 @@ model.getCommentsOlderThan = function (modelId, startdate) {
     });
 };
 
+
+/**
+ *
+ * Adds a vote to a specified model
+ * @param modelId id of the model
+ * @param username username of the comment's author
+ * @param vote vote type
+ * @returns {Promise} Returns a promise with the created vote, rejects to error otherwise
+ *
+ */
+model.addVote = function (modelId, username, vote) {
+    return new Promise ( function (resolve, reject) {
+        var query = [
+            'MATCH (u:User {username: {username}}), (m:Model {id: {modelId}})',
+            'MERGE (u)-[v:VOTED]->(m)',
+            'SET v.type = {vote}',
+            'RETURN v'
+        ].join('\n');
+
+        var params = {
+            id: modelId,
+            author: username,
+            vote: vote
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results[0]);
+        });
+    });
+};
+
+/**
+ *
+ * Removes a vote from a specified model
+ * @param modelId id of the model
+ * @param username username of the comment's author
+ * @returns {Promise} Returns a promise which resolves to true, rejects to error otherwise
+ *
+ */
+model.deleteVote = function (modelId, username) {
+    return new Promise ( function (resolve, reject) {
+        var query = [
+            'MATCH (u:User {username: {username}})-[v:VOTED]->(m:Model {id: {modelId}})',
+            'DELETE v'
+        ].join('\n');
+
+        var params = {
+            id: modelId,
+            author: username
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(true); //todo (possibly) return something based on whether the match worked or not
+        });
+    });
+};
+
 module.exports = model;
