@@ -42,6 +42,8 @@ module.exports = function (server) {
 
             User.create(request.payload);
             // TODO: return error if something invalid
+
+			reply().code(200);
         }
     });
 };
