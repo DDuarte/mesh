@@ -20,6 +20,16 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
         getModel: function (id) {
             return $http.get(server.url + '/models/' + id, {headers: getHeaders()});
         },
+        addModelVote: function (modelId, vote) {
+            return $http.post(server.url + '/models/' + modelId + '/votes', {vote: vote},{headers: getHeaders()});
+        },
+        deleteModelVote: function (modelId) {
+            return $http({
+                url: server.url + '/models/' + modelId + '/votes',
+                method: 'DELETE',
+                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+            });
+        },
         register: function (registerInfo) {
             return $http.post(server.url + '/register', registerInfo);
         },

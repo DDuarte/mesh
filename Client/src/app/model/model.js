@@ -257,7 +257,7 @@ angular.module('meshApp.model', [
             $scope.newModel = {};
 
             meshApi.getModel($stateParams.id). // TODO: make url configurable?
-                success(function (data, status, headers, config) {
+                success( function (data, status, headers, config) {
 
                     console.log(data);
                     $scope.model = data.model;
@@ -271,8 +271,8 @@ angular.module('meshApp.model', [
                     $scope.newModel.tags = $scope.model.tags.slice(0); //clone
                     $scope.newModel.visibility = $scope.model.visibility;
                 }).
-            error(function (err) {
-                    alert("Something went wrong: " + err); //TODO redirect to error page
+            error( function (err) {
+                    alert("The model could not be retrieved: " + err.message); //TODO redirect to error page
                 });
         };
 
@@ -286,12 +286,12 @@ angular.module('meshApp.model', [
             }
             elem.addClass('disabled');
             meshApi.addComment($stateParams.id, $scope.newComment).
-                success(function(data, status, headers, config) {
+                success( function (data, status, headers, config) {
                     $scope.model.comments.unshift(data);
                     $scope.newComment = '';
                     elem.removeClass('disabled');
                 }).
-                error(function(data, status, headers, config) {
+                error( function (data, status, headers, config) {
                     alert('Error ' + status + ' occurred: ' + data.message);
                     elem.removeClass('disabled');
                 });
@@ -303,7 +303,7 @@ angular.module('meshApp.model', [
             }
             elem.addClass('hidden');
             meshApi.getComments($stateParams.id, $scope.model.comments[$scope.model.comments.length-1].date).
-                success(function(data, status, headers, config) {
+                success( function (data, status, headers, config) {
                     console.log(data);
                     for (var i = 0; i < data.length; ++i) {
                         $scope.model.comments.push(data[i]);
@@ -312,7 +312,7 @@ angular.module('meshApp.model', [
                         elem.removeClass('hidden');
                     }
                 }).
-                error(function(data, status, headers, config) {
+                error( function (data, status, headers, config) {
                     alert('Error ' + status + ' occurred: ' + data.message);
                     elem.removeClass('hidden');
                 });
@@ -329,19 +329,85 @@ angular.module('meshApp.model', [
                     }
                 }
                 meshApi.removeComment($scope.model.id, date).
-                    success(function(data, status, headers, config) {
+                    success( function (data, status, headers, config) {
 
                     }).
-                    error(function(data, status, headers, config) {
+                    error( function (data, status, headers, config) {
                         alert('Error ' + status + ' occurred: ' + data.message);
                     });
             });
         };
+        var processingVote = false;
         $scope.upvote = function () {
-            alert('Upvote not yet implemented');
+            if (processingVote) {
+                return;
+            }
+            processingVote = true;
+            if ($scope.userVote == 'UP') {
+                meshApi.deleteModelVote($scope.model.id).
+                    success( function (data, status, headers, config) {
+                        if ($scope.userVote == 'UP') {
+                            $scope.model.upvotes--;
+                        }
+                        $scope.userVote = '';
+                        processingVote = false;
+                    }).
+                    error( function (data, status, headers, config) {
+                        alert('Error ' + status + ' occurred: ' + data.message);
+                        processingVote = false;
+                    });
+            }
+            else {
+                meshApi.addModelVote($scope.model.id, 'UP').
+                    success( function (data, status, headers, config) {
+                        if ($scope.userVote == 'DOWN') {
+                            $scope.model.downvotes--;
+                        }
+                        $scope.userVote = 'UP';
+                        $scope.model.upvotes++;
+                        processingVote = false;
+                    }).
+                    error( function (data, status, headers, config) {
+                        alert('Error ' + status + ' occurred: ' + data.message);
+                        processingVote = false;
+                    });
+            }
         };
+
         $scope.downvote = function () {
-            alert('Downvote not yet implemented');
+            if (processingVote) {
+                return;
+            }
+            processingVote = true;
+            if ($scope.userVote == 'DOWN') {
+                meshApi.deleteModelVote($scope.model.id).
+                    success( function (data, status, headers, config) {
+                        if ($scope.userVote == 'UP') {
+                            $scope.model.upvotes--;
+                        }
+                        $scope.userVote = '';
+                        processingVote = false;
+                    }).
+                    error( function (data, status, headers, config) {
+                        alert('Error ' + status + ' occurred: ' + data.message);
+                        processingVote = false;
+                    });
+            }
+            else {
+                meshApi.addModelVote($scope.model.id, 'DOWN').
+                    success( function (data, status, headers, config) {
+                        if ($scope.userVote == 'DOWN') {
+                            $scope.model.upvotes--;
+                        }
+                        $scope.userVote = 'DOWN';
+                        $scope.model.downvotes++;
+                        processingVote = false;
+                    }).
+                    error( function (data, status, headers, config) {
+                        alert('Error ' + status + ' occurred: ' + data.message);
+                        processingVote = false;
+                    });
+            }
         };
         $scope.favouriteModel = function () {
             alert('Favourite model not yet implemented');
