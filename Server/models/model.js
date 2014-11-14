@@ -184,7 +184,7 @@ model.getCommentsOlderThan = function (modelId, startdate) {
 model.addVote = function (modelId, username, vote) {
     return new Promise ( function (resolve, reject) {
         var query = [
-            'MATCH (u:User {username: {username}}), (m:Model {id: {modelId}})',
+            'MATCH (u:User {username: {username}}), (m:Model {id: {id}})',
             'MERGE (u)-[v:VOTED]->(m)',
             'SET v.type = {vote}',
             'RETURN v'
@@ -192,7 +192,7 @@ model.addVote = function (modelId, username, vote) {
 
         var params = {
             id: modelId,
-            author: username,
+            username: username,
             vote: vote
         };
 
@@ -214,13 +214,13 @@ model.addVote = function (modelId, username, vote) {
 model.deleteVote = function (modelId, username) {
     return new Promise ( function (resolve, reject) {
         var query = [
-            'MATCH (u:User {username: {username}})-[v:VOTED]->(m:Model {id: {modelId}})',
+            'MATCH (u:User {username: {username}})-[v:VOTED]->(m:Model {id: {id}})',
             'DELETE v'
         ].join('\n');
 
         var params = {
             id: modelId,
-            author: username
+            username: username
         };
 
         db.query(query, params, function (err, results) {
