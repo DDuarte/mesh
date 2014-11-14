@@ -256,10 +256,13 @@ angular.module('meshApp.model', [
         $scope.init = function() {
             $scope.newModel = {};
 
-            $http.get(server.url + '/models/' + $stateParams.id). // TODO: make url configurable?
+            meshApi.getModel($stateParams.id). // TODO: make url configurable?
                 success(function (data, status, headers, config) {
-                    $scope.model = data;
-                    $scope.favourited = false; //TODO check if model is already favourited
+
+                    console.log(data);
+                    $scope.model = data.model;
+                    $scope.favourited = data.favourited;
+                    $scope.userVote = data.uservote;
                     $scope.followingAuthor = false; //TODO
 
                     $scope.hasMoreComments = $scope.model.comments.length > 9;
@@ -267,7 +270,9 @@ angular.module('meshApp.model', [
                     $scope.newModel.description = $scope.model.description;
                     $scope.newModel.tags = $scope.model.tags.slice(0); //clone
                     $scope.newModel.visibility = $scope.model.visibility;
-                    console.log($scope.model);
+                }).
+            error(function (err) {
+                    alert("Something went wrong: " + err); //TODO redirect to error page
                 });
         };
 
