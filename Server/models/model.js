@@ -24,15 +24,16 @@ model.getById = function (id, loggedUser) {
             'WITH m, author, extract(c1 IN filter(c1 IN collect({c: c, author: cAuthor}) WHERE c1.c IS NOT NULL) | { date: c1.c.date, content: c1.c.content, author: c1.author.username, avatar: c1.author.avatar }) AS modelComments',
             'OPTIONAL MATCH m-[:TAGGED]->(modelTag:Tag)',
             'WITH m, author, modelComments, collect(modelTag.name) AS modelTags',
-            'OPTIONAL MATCH (u:User)-[ru:VOTED {type: "UP"}]->m',
+            'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
             'WITH m, author, modelComments, modelTags, count(ru) as modelUpvotes',
-            'OPTIONAL MATCH (u:User)-[rd:VOTED {type: "DOWN"}]->m',
-            'WITH m, author, modelComments, modelTags, modelUpvotes, count(rd) as modelDownvotes',
-            'WITH m, { id: m.id, name: m.name, description: m.description, files: m.files, downvotes: modelDownvotes, upvotes: modelUpvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: modelTags, author: { name: author.name, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model',
-            'OPTIONAL MATCH (User{username: {username}})-[v:VOTED]->(m)',
-            'WITH m, model, v.type as uservote',
-            'OPTIONAL MATCH (User{username: {username}})-[f:FAVOURITED]->(m)',
-            'RETURN model, uservote, (f IS NOT NULL ) as favourited'
+            'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
+            'WITH m, author, { id: m.id, name: m.name, description: m.description, files: m.files, downvotes: count(rd), upvotes: modelUpvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: modelTags, author: { name: author.name, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model',
+            'OPTIONAL MATCH (u:User{username: {username}})-[v:VOTED]->(m)',
+            'WITH m, u, author, model, v.type as uservote',
+            'OPTIONAL MATCH (u)-[f:FAVOURITED]->(m)',
+            'WITH model, u, author, uservote, (f IS NOT NULL ) as favourited',
+            'OPTIONAL MATCH (u)-[fol:FOLLOWING]->(author)',
+            'RETURN model, uservote, favourited, (fol IS NOT NULL) as followingAuthor'
         ].join('\n');
 
         var params = {
