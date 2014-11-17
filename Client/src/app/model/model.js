@@ -409,9 +409,24 @@ angular.module('meshApp.model', [
                     });
             }
         };
+
+        var processingFavouriteRequest = false;
         $scope.favouriteModel = function () {
-            alert('Favourite model not yet implemented');
-            $scope.favourited = !$scope.favourited;
+            if (processingFavouriteRequest) {
+                return;
+            }
+            processingFavouriteRequest = true;
+            var apiCall = $scope.favourited ? meshApi.removeModelFromFavourites : meshApi.addModelToFavourites;
+            apiCall($scope.model.id).
+                success( function (data, status, headers, config) {
+                    $scope.favourited = !$scope.favourited;
+                    processingFavouriteRequest = false;
+                }).
+                error( function (data, status, headers, config) {
+                    console.log(data);
+                    alert('Error ' + status + ' occurred: ' + data.message);
+                    processingFavouriteRequest = false;
+                });
         };
         $scope.followAuthor = function () {
             alert('Follow author not yet implemented');

@@ -50,6 +50,19 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 data: {date: date},
                 headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
+        },
+        addModelToFavourites: function (modelId) {
+            return $http.post(server.url + '/users/' + getLoggedToken().username + '/favourites', {modelid: modelId}, {
+                headers: getHeaders()
+            });
+        },
+        removeModelFromFavourites: function (modelId) {
+            return $http({
+                url: server.url + '/users/' + getLoggedToken().username + '/favourites',
+                method: 'DELETE',
+                data: {modelid: modelId},
+                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+            });
         }
     };
 
