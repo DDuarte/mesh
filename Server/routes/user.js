@@ -105,6 +105,8 @@ module.exports = function (server) {
         handler: function (request, reply) {
             if (request.params.username != request.auth.credentials.username)
                 reply('Permission denied').code(403);
+            if (request.params.username == request.payload.otheruser)
+                reply('Can\'t follow yourself').code(400);
 
             User.followUser(request.auth.credentials.username, request.payload.otheruser).then(function (result) {
                 if (result.length == 0) {
