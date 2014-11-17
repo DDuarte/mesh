@@ -263,7 +263,7 @@ angular.module('meshApp.model', [
                     $scope.model = data.model;
                     $scope.favourited = data.favourited;
                     $scope.userVote = data.uservote;
-                    $scope.followingAuthor = false; //TODO
+                    $scope.followingAuthor = data.followingAuthor;
 
                     $scope.hasMoreComments = $scope.model.comments.length > 9;
 
@@ -428,9 +428,24 @@ angular.module('meshApp.model', [
                     processingFavouriteRequest = false;
                 });
         };
+
+        var processingFollowingRequest = false;
         $scope.followAuthor = function () {
-            alert('Follow author not yet implemented');
-            $scope.followingAuthor = !$scope.followingAuthor;
+            if (processingFollowingRequest) {
+                return;
+            }
+            processingFollowingRequest = true;
+            var fapiCall = $scope.followingAuthor ? meshApi.unfollowUser : meshApi.followUser;
+            fapiCall($scope.model.author.name).
+                success( function (data, status, headers, config) {
+                    $scope.followingAuthor = !$scope.followingAuthor;
+                    processingFollowingRequest = false;
+                }).
+                error( function (data, status, headers, config) {
+                    console.log(data);
+                    alert('Error ' + status + ' occurred: ' + data.message);
+                    processingFollowingRequest = false;
+                });
         };
         $scope.downloadModel = function () {
             alert('Download not yet implemented');

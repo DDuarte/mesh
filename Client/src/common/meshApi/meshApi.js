@@ -63,6 +63,19 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 data: {modelid: modelId},
                 headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
+        },
+        followUser: function (otheruser) {
+            return $http.post(server.url + '/users/' + getLoggedToken().username + '/followers', {otheruser: otheruser}, {
+                headers: getHeaders()
+            });
+        },
+        unfollowUser: function (otheruser) {
+            return $http({
+                url: server.url + '/users/' + getLoggedToken().username + '/followers',
+                method: 'DELETE',
+                data: {otheruser: otheruser},
+                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+            });
         }
     };
 

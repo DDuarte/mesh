@@ -49,11 +49,12 @@
                                  alt="{{model.author.name}}">
                         </div>
                         <div class="media-heading ml10">
-                            <h3 class="mt0 mb0">{{model.author.name}}</h3>
+                            <a ui-sref="home.profile({id: model.author.name})"><h3 class="mt0 mb0">{{model.author.name}}</h3></a>
                         </div>
                         <div class="media-body m0 ml10">
                             <button ng-click="followAuthor();" class="btn btn-primary">
-                                <span>{{followingAuthor ? 'Unfollow' : 'Follow'}}</span>
+                                <span ng-show="followingAuthor">Unfollow</span>
+                                <span ng-hide="followingAuthor">Follow</span>
                             </button>
                         </div>
                     </div>
