@@ -4,8 +4,7 @@ var User = require('../models/user');
 var Boom = require('boom');
 var Joi = require('joi');
 var jwt = require('jsonwebtoken');
-var redis = require('redis');
-var client = redis.createClient();
+var client = require('../common/redisClient');
 
 var privateKey = 'Kitties';
 var tokenTTL = 7200;

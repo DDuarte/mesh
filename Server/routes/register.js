@@ -13,11 +13,11 @@ module.exports = function (server) {
             auth: false,
             validate: {
                 payload: {
-                    firstName: Joi.string().required(),
-                    lastName: Joi.string().required(),
-                    username: Joi.string().required(),
+                    firstName: Joi.string().required(),         // TODO validate length
+                    lastName: Joi.string().required(),          // TODO validate length
+                    username: Joi.string().required(),          // TODO validate length
                     email: Joi.string().email().required(),
-                    password: Joi.string().required(),
+                    password: Joi.string().required(),          // TODO validate length
                     birthdate: Joi.date().required(),
                     country: Joi.string().required() // move list to server and validate properly
                 }
