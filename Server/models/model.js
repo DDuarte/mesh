@@ -27,7 +27,7 @@ model.getById = function (id, loggedUser) {
             'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
             'WITH m, author, modelComments, modelTags, count(ru) as modelUpvotes',
             'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
-            'WITH m, author, { id: m.id, name: m.name, description: m.description, files: m.files, downvotes: count(rd), upvotes: modelUpvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: modelTags, author: { name: author.name, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model',
+            'WITH m, author, { id: m.id, name: m.name, description: m.description, files: m.files, downvotes: count(rd), upvotes: modelUpvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: modelTags, author: { name: author.username, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model',
             'OPTIONAL MATCH (u:User{username: {username}})-[v:VOTED]->(m)',
             'WITH m, u, author, model, v.type as uservote',
             'OPTIONAL MATCH (u)-[f:FAVOURITED]->(m)',
