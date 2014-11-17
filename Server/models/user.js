@@ -11,7 +11,62 @@ var user = {};
 
 /**
  *
- * Returns a model by it's name
+ * Adds a model to a user's favourites
+ * @param username string identifier of the user
+ * @param modelId identifier of the model
+ * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
+ *
+ */
+user.addFavouriteModel = function (username, modelId) {
+    return new Promise ( function (resolve, reject) {
+        var query = [
+            'MATCH (u:User {username: {username}}), (m:Model {id: {id}})',
+            'MERGE (u)-[f:FAVOURITED]->(m)',
+            'RETURN f'
+        ].join('\n');
+
+        var params = {
+            username: username,
+            id: modelId
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results[0]);
+        });
+    });
+};
+
+/**
+ *
+ * Removes a model from a user's favourites
+ * @param username string identifier of the user
+ * @param modelId identifier of the model
+ * @returns {Promise} Returns a promise which resolves to true, rejects to error otherwise
+ *
+ */
+user.removeFavouriteModel = function (username, modelId) {
+    return new Promise ( function (resolve, reject) {
+        var query = [
+            'MATCH (User {username: {username}})-[f:FAVOURITED]->(Model {id: {id}})',
+            'DELETE f'
+        ].join('\n');
+
+        var params = {
+            username: username,
+            id: modelId
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(true); //todo (possibly) return something based on whether the match worked or not
+        });
+    });
+};
+
+/**
+ *
+ * Returns a user by it's name
  * @param username string identifier of the user
  * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
  *
