@@ -9,5 +9,7 @@ before_script:
   - cd Client
   - npm install
   - bower install
+  - cd Server
+  - npm install
 
 script: grunt
