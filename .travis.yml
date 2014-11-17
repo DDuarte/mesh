@@ -2,14 +2,19 @@ language: node_js
 node_js:
   - "0.10"
 
+before_install:
+  - echo "yes" | sudo add-apt-repository ppa:boost-latest/ppa
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install gcc-4.8 g++-4.8
+
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - npm install --quiet -g grunt-cli karma bower
-  - cd Client
+  - cd Server
+  - npm install
+  - cd .:/Client
   - npm install
   - bower install
-  - cd ../Server
-  - npm install
 
 script: grunt
