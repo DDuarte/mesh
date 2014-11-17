@@ -70,7 +70,7 @@
                         <div class="col-sm-6">
                             <div class="input-group mb15">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                <input type="password" class="form-control" placeholder="Confirm Password" required> <!-- TODO: make sure it's equal to registerInfo.password -->
+                                <input type="password" class="form-control" placeholder="Confirm Password" ng-model="confirmPassword" compare-to="registerInfo.password" required>
                             </div>
                             <!-- input-group -->
                         </div>
