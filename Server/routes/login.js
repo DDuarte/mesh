@@ -6,6 +6,8 @@ var Joi = require('joi');
 var jwt = require('jsonwebtoken');
 var client = require('../common/redisClient');
 
+var schema = require('../schema');
+
 var privateKey = 'Kitties';
 var tokenTTL = 7200;
 
@@ -72,9 +74,9 @@ module.exports = function (server) {
             auth: false,
             validate: {
                 payload: {
-                    username: Joi.string().required(),
-                    password: Joi.string().required(),
-                    rememberMe: Joi.boolean()
+                    username: schema.user.username.required(),
+                    password: schema.user.password.required(),
+                    rememberMe: schema.user.rememberMe
                 }
             }
         },

@@ -11,6 +11,8 @@ var db = new neo4j.GraphDatabase(
 );
 var Boom = require('boom');
 
+var schema = require('../schema');
+
 module.exports = function (server) {
     function getModel(request, reply) {
         console.log(request.auth.credentials);
@@ -36,7 +38,7 @@ module.exports = function (server) {
             },
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1).required()
+                    id: schema.model.id.required()
                 }
             }
         },
@@ -48,10 +50,10 @@ module.exports = function (server) {
         config: {
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1).required()
+                    id: schema.model.id.required()
                 },
                 query: {
-                    startdate: Joi.string().isoDate().optional()
+                    startdate: schema.model.date.optional()
                 }
             }
         },
@@ -71,10 +73,10 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1).required()
+                    id: schema.model.id.required()
                 },
                 payload: {
-                    comment: Joi.string().trim().min(1).max(1024).required()
+                    comment: schema.model.comment.required()
                 }
             }
         },
@@ -98,10 +100,10 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1).required()
+                    id: schema.model.id.required()
                 },
                 payload: {
-                    date: Joi.string().isoDate().required()
+                    date: schema.model.date.required()
                 }
             }
         },
@@ -125,10 +127,10 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1).required()
+                    id: schema.model.id.required()
                 },
                 payload: {
-                    vote: Joi.string().trim().regex(/(DOWN)|(UP)/).required()
+                    vote: schema.model.vote.required()
                 }
             }
         },
@@ -152,7 +154,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1).required()
+                    id: schema.model.id.required()
                 }
             }
         },

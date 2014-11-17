@@ -4,6 +4,8 @@ var User = require('../models/user');
 var Boom = require('boom');
 var Joi = require('joi');
 
+var schema = require('../schema');
+
 module.exports = function (server) {
 
     server.route({
@@ -13,13 +15,13 @@ module.exports = function (server) {
             auth: false,
             validate: {
                 payload: {
-                    firstName: Joi.string().required(),         // TODO validate length
-                    lastName: Joi.string().required(),          // TODO validate length
-                    username: Joi.string().required(),          // TODO validate length
-                    email: Joi.string().email().required(),
-                    password: Joi.string().required(),          // TODO validate length
-                    birthdate: Joi.date().required(),
-                    country: Joi.string().required() // move list to server and validate properly
+                    firstName: schema.user.firstName.required(),         // TODO validate length
+                    lastName: schema.user.lastName.required(),          // TODO validate length
+                    username: schema.user.username.required(),          // TODO validate length
+                    email: schema.user.email.required(),
+                    password: schema.user.password.required(),          // TODO validate length
+                    birthdate: schema.user.birthdate.required(),
+                    country: schema.user.country.required() // move list to server and validate properly
                 }
             }
         },

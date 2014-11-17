@@ -5,6 +5,8 @@ var Joi = require('joi'),
     fuzzy = require('fuzzy'),
     Boom = require('boom');
 
+var schema = require('../schema');
+
 var default_tags = ['abstract', 'art', 'black', 'blue', 'dark', 'drawing', 'girl', 'green',
     'illustration', 'light', 'model', 'photo', 'photography', 'street', 'woman', 'pokemon',
     'polygon', 'animal', 'human body'];
@@ -40,7 +42,7 @@ module.exports  = function (server) {
         config: {
             validate: {
                 query: {
-                    filter: Joi.string().max(30).optional()
+                    filter: schema.tag.filter.optional()
                 }
             }
         }
