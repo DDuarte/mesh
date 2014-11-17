@@ -5,4 +5,4 @@ module.exports = function () {
         console.log('Redis error ' + err);
     });
     return client;
-};
+}();
