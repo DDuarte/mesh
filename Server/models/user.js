@@ -11,6 +11,54 @@ var user = {};
 
 /**
  *
+ * Returns a user by it's name
+ * @param username string identifier of the user
+ * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
+ *
+ */
+user.getByUsername = function (username) {
+    return new Promise ( function (resolve, reject) {
+        var query = [
+            'MATCH (u: User{username: { username }})',
+            'RETURN { username: u.username, passwordHash: u.passwordHash, name: u.name, avatar: u.avatar } as user'
+        ].join('\n');
+
+        var params = {
+            username: username
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results);
+        });
+    });
+};
+
+user.create = function (registerInfo) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MERGE (u: User{firstName: { firstName }, lastName: { lastName }, username: { username }, email: { email }, passwordHash: { passwordHash }, birthdate: { birthdate }, country: { country }})'
+        ].join('\n');
+
+        var params = {
+            firstName: registerInfo.firstName,
+            lastName: registerInfo.lastName,
+            username: registerInfo.username,
+            email: registerInfo.email,
+            passwordHash: user.generatePasswordHash(registerInfo.username, registerInfo.password),
+            birthdate: registerInfo.birthdate,
+            country: registerInfo.country
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results);
+        });
+    });
+};
+
+/**
+ *
  * Adds a model to a user's favourites
  * @param username string identifier of the user
  * @param modelId identifier of the model
@@ -66,48 +114,55 @@ user.removeFavouriteModel = function (username, modelId) {
 
 /**
  *
- * Returns a user by it's name
- * @param username string identifier of the user
+ * Adds a user to another user's followers
+ * @param follower string identifier of the user that wants to follow another user
+ * @param followed string identifier of the user being followed
  * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
  *
  */
-user.getByUsername = function (username) {
+user.followUser = function (follower, followed) {
     return new Promise ( function (resolve, reject) {
         var query = [
-            'MATCH (u: User{username: { username }})',
-            'RETURN { username: u.username, passwordHash: u.passwordHash, name: u.name, avatar: u.avatar } as user'
+            'MATCH (u:User {username: {follower}}), (u2:User {username: {followed}})',
+            'MERGE (u)-[f:FOLLOWING]->(u2)',
+            'RETURN f'
         ].join('\n');
 
         var params = {
-            username: username
+            follower: follower,
+            followed: followed
         };
 
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
-            return resolve(results);
+            return resolve(results[0]);
         });
     });
 };
 
-user.create = function (registerInfo) {
-    return new Promise(function (resolve, reject) {
+/**
+ *
+ * Adds a user to another user's followers
+ * @param follower string identifier of the user that wants to follow another user
+ * @param followed string identifier of the user being followed
+ * @returns {Promise} Returns a promise which resolves to true, rejects to error otherwise
+ *
+ */
+user.unfollowUser = function (follower, followed) {
+    return new Promise ( function (resolve, reject) {
         var query = [
-            'MERGE (u: User{firstName: { firstName }, lastName: { lastName }, username: { username }, email: { email }, passwordHash: { passwordHash }, birthdate: { birthdate }, country: { country }})'
+            'MATCH (User {username: {follower}})-[f:FOLLOWING]->(User {username: {followed}})',
+            'DELETE f'
         ].join('\n');
 
         var params = {
-            firstName: registerInfo.firstName,
-            lastName: registerInfo.lastName,
-            username: registerInfo.username,
-            email: registerInfo.email,
-            passwordHash: user.generatePasswordHash(registerInfo.username, registerInfo.password),
-            birthdate: registerInfo.birthdate,
-            country: registerInfo.country
+            follower: follower,
+            followed: followed
         };
 
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
-            return resolve(results);
+            return resolve(true); //todo (possibly) return something based on whether the match worked or not
         });
     });
 };

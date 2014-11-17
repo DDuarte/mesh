@@ -160,7 +160,7 @@ module.exports = function (server) {
         },
         handler: function (request, reply) {
             Model.deleteVote(request.params.id, request.auth.credentials.username).then(function (result) {
-                if (result.length == 0) {
+                if (!result) {
                     reply('No such model.').code(404);
                 } else {
                     reply(result);
