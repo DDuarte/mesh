@@ -1,6 +1,6 @@
 'use strict';
 
-var Model = require('../models/Model');
+var Model = require('../models/model');
 var Promise = require('bluebird');
 var neo4j = require('neo4j');
 var client = require('../common/redisClient');
