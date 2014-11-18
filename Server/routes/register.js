@@ -34,17 +34,17 @@ module.exports = function (server) {
                 }
             });
 
-            // TODO: Implement user.getByEmail
-            /*User.getByEmail(email).then(function (userData) {
+            User.getByEmail(email).then(function (userData) {
                 if (userData[0]) {
                     return reply(Boom.conflict('Existing user'));
                 }
-            });*/
+            });
 
-            User.create(request.payload);
-            // TODO: return error if something invalid
-
-			reply().code(200);
+            User.create(request.payload).then(function () {
+                reply().code(200);
+            }).catch( function () {
+                reply(Boom.badImplementation('Failed to insert the user into the database'));
+            });
         }
     });
 };
