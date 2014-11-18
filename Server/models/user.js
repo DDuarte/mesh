@@ -16,7 +16,7 @@ var user = {};
  *
  */
 user.getByUsername = function (username) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u: User{username: { username }})',
             'RETURN { username: u.username, passwordHash: u.passwordHash, name: u.name, avatar: u.avatar, email: u.email } as user'
@@ -38,12 +38,14 @@ user.getByUsername = function (username) {
 };
 
 /**
+ *
  * Returns a user by it's email
  * @param {String} email String email identifier of the user
- * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwie
+ * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
+ *
  */
 user.getByEmail = function (email) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u:User {email: {email}})',
             'RETURN { username: u.username, passwordHash: u.passwordHash, name: u.name, avatar: u.avatar, email: u.email } as user '
@@ -65,14 +67,16 @@ user.getByEmail = function (email) {
 };
 
 /**
+ *
  * Creates a user based on the registerInfo
  * @param {Object} registerInfo Info to be inserted as the user's information
  * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
+ *
  */
 user.create = function (registerInfo) {
     return new Promise(function (resolve, reject) {
         var query = [
-            'MERGE (u: User{firstName: { firstName }, lastName: { lastName }, username: { username }, email: { email }, passwordHash: { passwordHash }, birthdate: { birthdate }, country: { country }})'
+            'MERGE (u: User{firstName: { firstName }, lastName: { lastName }, username: { username }, email: { email }, passwordHash: { passwordHash }, birthdate: { birthdate }, country: { country }, active: {active}})'
         ].join('\n');
 
         var params = {
@@ -105,7 +109,7 @@ user.create = function (registerInfo) {
  *
  */
 user.addFavouriteModel = function (username, modelId) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u:User {username: {username}}), (m:Model {id: {id}})',
             'MERGE (u)-[f:FAVOURITED]->(m)',
@@ -133,7 +137,7 @@ user.addFavouriteModel = function (username, modelId) {
  *
  */
 user.removeFavouriteModel = function (username, modelId) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (User {username: {username}})-[f:FAVOURITED]->(Model {id: {id}})',
             'DELETE f'
@@ -160,7 +164,7 @@ user.removeFavouriteModel = function (username, modelId) {
  *
  */
 user.followUser = function (follower, followed) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u:User {username: {follower}}), (u2:User {username: {followed}})',
             'MERGE (u)-[f:FOLLOWING]->(u2)',
@@ -188,7 +192,7 @@ user.followUser = function (follower, followed) {
  *
  */
 user.unfollowUser = function (follower, followed) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (User {username: {follower}})-[f:FOLLOWING]->(User {username: {followed}})',
             'DELETE f'
@@ -207,10 +211,37 @@ user.unfollowUser = function (follower, followed) {
 };
 
 /**
- * Generates a passwordhash from a username and password
+ *
+ * Activates a user account
+ * @param {String} username User identifier
+ * @return {Promise} Resolved if the user exists, rejected otherwise
+ *
+ */
+user.activate = function (username) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (u:User {username: {username}})',
+            'SET u.active = true'
+        ].join('\n');
+
+        var params = {
+            username: username
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(true);
+        });
+    });
+};
+
+/**
+ *
+ * Generates a password hash from a username and password
  * @param {String} username
  * @param {String} password
  * @returns {String} Hash of the username and password
+ *
  */
 user.generatePasswordHash = function (username, password) {
     var hash = crypto.createHash('sha256');
