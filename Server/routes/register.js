@@ -58,7 +58,9 @@ module.exports = function (server) {
                 var token = uid(16);
 
                 // associated the generated token with the user
-                client.hset("account_tokens", request.auth.credentials.username, token);
+                client.hset("account_tokens", username, token);
+
+                var url = 'http://meshdev.ddns.net:8001/activateToken?token=' + token + '&username=' + username; // TODO: change server base url
 
                 // setup e-mail data with unicode symbols
                 var mailOptions = {
@@ -66,7 +68,7 @@ module.exports = function (server) {
                     to: email, // list of receivers
                     subject: 'Mesh: Account verification', // Subject line
                     html: '<b>Greetings from the Mesh team! You can activate your account here:</b><br>' +
-                        '<a src="' + server.url.dev + "/activateToken?token=" + token + '&username=' + request.payload.username + '">' + '</a>' // TODO: change server base url
+                        '<a src="' + url + '">' + url + '</a>'
                 };
 
                 // send mail with defined transport object
@@ -77,7 +79,8 @@ module.exports = function (server) {
                 });
 
                 reply().code(200);
-            }).catch(function () {
+            }).catch(function (err) {
+                console.log("routes/register: " + err + " - " + JSON.stringify(request.payload));
                 reply(Boom.badImplementation('Failed to insert the user into the database'));
             });
 

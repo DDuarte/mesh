@@ -29,7 +29,7 @@ user.getByUsername = function (username) {
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
 
-            if (results.length >= 0)
+            if (results.length > 0)
                 return resolve(results);
             else
                 return reject('No users were found');
@@ -49,7 +49,7 @@ user.getByEmail = function (email) {
         var query = [
             'MATCH (u:User {email: {email}})',
             'RETURN { username: u.username, passwordHash: u.passwordHash, name: u.name, avatar: u.avatar, email: u.email } as user '
-        ];
+        ].join('\n');
 
         var params = {
             email: email
@@ -58,7 +58,7 @@ user.getByEmail = function (email) {
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
 
-            if (results.length >= 0)
+            if (results.length > 0)
                 return resolve(results);
             else
                 return reject('No user was found');
@@ -86,16 +86,14 @@ user.create = function (registerInfo) {
             email: registerInfo.email,
             passwordHash: user.generatePasswordHash(registerInfo.username, registerInfo.password),
             birthdate: registerInfo.birthdate,
-            country: registerInfo.country
+            country: registerInfo.country,
+            active: registerInfo.active
         };
 
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
 
-            if (results.length >= 0)
-                return resolve(results);
-            else
-                return reject('No user was found');
+            return resolve(results);
         });
     });
 };
