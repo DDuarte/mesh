@@ -41,9 +41,6 @@ module.exports = function (server) {
             var username = request.payload.username;
             var email = request.payload.email;
 
-            // associated the generated token with the user
-            client.hset("account_tokens", request.auth.credentials.username, token);
-
             User.getByUsername(username).then(function (userData) {
                 if (userData[0]) {
                     return reply(Boom.conflict('Existing user'));
@@ -59,6 +56,10 @@ module.exports = function (server) {
             request.payload.active = false;
             User.create(request.payload).then(function () {
                 var token = uid(16);
+
+                // associated the generated token with the user
+                client.hset("account_tokens", request.auth.credentials.username, token);
+
                 // setup e-mail data with unicode symbols
                 var mailOptions = {
                     from: 'noreply@meshdev.ddns.net', // sender address
