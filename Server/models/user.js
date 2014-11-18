@@ -6,7 +6,6 @@ var db = new neo4j.GraphDatabase(
         'http://localhost:7474'
 );
 var crypto = require('crypto');
-
 var user = {};
 
 /**
@@ -20,7 +19,7 @@ user.getByUsername = function (username) {
     return new Promise ( function (resolve, reject) {
         var query = [
             'MATCH (u: User{username: { username }})',
-            'RETURN { username: u.username, passwordHash: u.passwordHash, name: u.name, avatar: u.avatar } as user'
+            'RETURN { username: u.username, passwordHash: u.passwordHash, name: u.name, avatar: u.avatar, email: u.email } as user'
         ].join('\n');
 
         var params = {
@@ -29,11 +28,47 @@ user.getByUsername = function (username) {
 
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
-            return resolve(results);
+
+            if (results.length >= 0)
+                return resolve(results);
+            else
+                return reject('No users were found');
         });
     });
 };
 
+/**
+ * Returns a user by it's email
+ * @param {String} email String email identifier of the user
+ * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwie
+ */
+user.getByEmail = function (email) {
+    return new Promise ( function (resolve, reject) {
+        var query = [
+            'MATCH (u:User {email: {email}})',
+            'RETURN { username: u.username, passwordHash: u.passwordHash, name: u.name, avatar: u.avatar, email: u.email } as user '
+        ];
+
+        var params = {
+            email: email
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+
+            if (results.length >= 0)
+                return resolve(results);
+            else
+                return reject('No user was found');
+        });
+    });
+};
+
+/**
+ * Creates a user based on the registerInfo
+ * @param {Object} registerInfo Info to be inserted as the user's information
+ * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
+ */
 user.create = function (registerInfo) {
     return new Promise(function (resolve, reject) {
         var query = [
@@ -52,9 +87,11 @@ user.create = function (registerInfo) {
 
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
-            return resolve(results);
-        });
-    });
+
+            if (results.length >= 0)
+                return resolve(results);
+            else
+                return reject('No user was found');
 };
 
 /**
@@ -167,6 +204,12 @@ user.unfollowUser = function (follower, followed) {
     });
 };
 
+/**
+ * Generates a passwordhash from a username and password
+ * @param {String} username
+ * @param {String} password
+ * @returns {String} Hash of the username and password
+ */
 user.generatePasswordHash = function (username, password) {
     var hash = crypto.createHash('sha256');
     hash.update(username + '+' + password);
