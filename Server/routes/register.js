@@ -27,11 +27,11 @@ module.exports = function (server) {
             auth: false,
             validate: {
                 payload: {
-                    firstName: schema.user.firstName.required().max(20),
-                    lastName: schema.user.lastName.required().max(20),
-                    username: schema.user.username.required().min(3).max(20),
+                    firstName: schema.user.firstName.required(),
+                    lastName: schema.user.lastName.required(),
+                    username: schema.user.username.required(),
                     email: schema.user.email.required(),
-                    password: schema.user.password.required().max(256),
+                    password: schema.user.password.required(),
                     birthdate: schema.user.birthdate.required(),
                     country: schema.user.country.required() // TODO: Include all countries in the list
                 }

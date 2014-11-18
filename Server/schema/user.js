@@ -1,11 +1,11 @@
 var Joi = require('joi');
 
 module.exports = {
-    firstName: Joi.string(),         // TODO validate length
-    lastName: Joi.string(),          // TODO validate length
-    username: Joi.string(),          // TODO validate length
+    firstName: Joi.string().max(20),
+    lastName: Joi.string().max(20),
+    username: Joi.string().min(3).max(20),
     email: Joi.string().email(),
-    password: Joi.string(),          // TODO validate length
+    password: Joi.string().max(256),
     birthdate: Joi.date(),
     country: Joi.string(), // move list to server and validate properly
     rememberMe: Joi.boolean()
