@@ -1,8 +1,7 @@
 
 var client = require('../common/redisClient');
 
-var Joi = require('joi'),
-    fuzzy = require('fuzzy'),
+var fuzzy = require('fuzzy'),
     Boom = require('boom');
 
 var schema = require('../schema');

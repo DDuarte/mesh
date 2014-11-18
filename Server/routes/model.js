@@ -1,7 +1,6 @@
 'use strict';
 
 var Model = require('../models/model.js');
-var Joi = require('joi');
 var Promise = require('bluebird');
 var neo4j = require('neo4j');
 var db = new neo4j.GraphDatabase(

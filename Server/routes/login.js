@@ -2,7 +2,6 @@
 
 var User = require('../models/user');
 var Boom = require('boom');
-var Joi = require('joi');
 var jwt = require('jsonwebtoken');
 var client = require('../common/redisClient');
 

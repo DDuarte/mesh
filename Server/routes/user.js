@@ -4,12 +4,13 @@ var User = require('../models/user');
 var Promise = require('bluebird');
 var neo4j = require('neo4j');
 var client = require('../common/redisClient');
-var Joi = require('joi');
 var db = new neo4j.GraphDatabase(
     process.env['NEO4J_URL'] ||
     process.env['GRAPHENEDB_URL'] ||
     'http://localhost:7474'
 );
+
+var schema = require('../schema');
 
 module.exports = function (server) {
 
@@ -35,10 +36,10 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    username: Joi.string().required()
+                    username: schema.user.username.required()
                 },
                 payload: {
-                    modelid: Joi.number().integer().min(1).required()
+                    modelid: schema.model.id.required()
                 }
             }
         },
@@ -65,10 +66,10 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    username: Joi.string().required()
+                    username: schema.user.username.required()
                 },
                 payload: {
-                    modelid: Joi.number().integer().min(1).required()
+                    modelid: schema.model.id.required()
                 }
             }
         },
@@ -95,10 +96,10 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    username: Joi.string().required()
+                    username: schema.user.username.required()
                 },
                 payload: {
-                    otheruser: Joi.string().required()
+                    otheruser: schema.user.username.required()
                 }
             }
         },
@@ -127,10 +128,10 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    username: Joi.string().required()
+                    username: schema.user.username.required()
                 },
                 payload: {
-                    otheruser: Joi.string().required()
+                    otheruser: schema.user.username.required()
                 }
             }
         },
