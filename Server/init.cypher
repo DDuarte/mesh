@@ -1,0 +1,4 @@
+CREATE CONSTRAINT ON (model:Model) ASSERT model.id IS UNIQUE
+CREATE CONSTRAINT ON (uniqueid:UniqueId) ASSERT uniqueid.name IS UNIQUE
+CREATE CONSTRAINT ON (user:User) ASSERT user.username IS UNIQUE
+CREATE CONSTRAINT ON (user:User) ASSERT user.email IS UNIQUE
