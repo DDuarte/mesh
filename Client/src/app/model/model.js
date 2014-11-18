@@ -29,7 +29,7 @@ var placeholderModel = {
 };
 
 angular.module('meshApp.model', [
-    'ui.router'
+    'ui.router', 'ui.bootstrap'
 ])
     .directive('visualizer', function () {
         return {
