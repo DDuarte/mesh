@@ -92,6 +92,8 @@ user.create = function (registerInfo) {
                 return resolve(results);
             else
                 return reject('No user was found');
+        });
+    });
 };
 
 /**
