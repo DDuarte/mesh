@@ -24,14 +24,14 @@
                         <div class="col-sm-6">
                             <div class="input-group mb15">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                <input type="text" class="form-control" placeholder="Enter First Name" ng-model="registerInfo.firstName" required>
+                                <input type="text" class="form-control" placeholder="Enter First Name" ng-model="registerInfo.firstName" max="20" required>
                             </div>
                             <!-- input-group -->
                         </div>
                         <div class="col-sm-6">
                             <div class="input-group mb15">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                <input type="text" class="form-control" placeholder="Enter Last Name" ng-model="registerInfo.lastName" required>
+                                <input type="text" class="form-control" placeholder="Enter Last Name" ng-model="registerInfo.lastName" max="20" required>
                             </div>
                             <!-- input-group -->
                         </div>
@@ -43,7 +43,7 @@
                         <div class="col-sm-6">
                             <div class="input-group mb15">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                <input type="text" class="form-control" placeholder="Enter Username" ng-model="registerInfo.username" required>
+                                <input type="text" class="form-control" placeholder="Enter Username" ng-model="registerInfo.username" min="3" max="20" required>
                             </div>
                             <!-- input-group -->
                         </div>
@@ -62,7 +62,7 @@
                         <div class="col-sm-6">
                             <div class="input-group mb15">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                <input type="password" class="form-control" placeholder="Enter Password" ng-model="registerInfo.password" required>
+                                <input type="password" class="form-control" placeholder="Enter Password" ng-model="registerInfo.password" min="6" max="256" required>
                             </div>
                             <!-- input-group -->
                         </div>
