@@ -14,13 +14,13 @@ module.exports = function (server) {
             auth: false,
             validate: {
                 payload: {
-                    firstName: schema.user.firstName.required(),         // TODO validate length
-                    lastName: schema.user.lastName.required(),          // TODO validate length
-                    username: schema.user.username.required(),          // TODO validate length
+                    firstName: schema.user.firstName.required().max(20),
+                    lastName: schema.user.lastName.required().max(20),
+                    username: schema.user.username.required().min(3).max(20),
                     email: schema.user.email.required(),
-                    password: schema.user.password.required(),          // TODO validate length
+                    password: schema.user.password.required().max(256),
                     birthdate: schema.user.birthdate.required(),
-                    country: schema.user.country.required() // move list to server and validate properly
+                    country: schema.user.country.required() // TODO: Include all countries in the list
                 }
             }
         },
