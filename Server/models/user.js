@@ -71,7 +71,7 @@ user.getByEmail = function (email) {
 user.create = function (registerInfo) {
     return new Promise(function (resolve, reject) {
         var query = [
-            'MERGE (u: User{firstName: { firstName }, lastName: { lastName }, username: { username }, email: { email }, passwordHash: { passwordHash }, birthdate: { birthdate }, country: { country }, active: {active}})'
+            'MERGE (u: User{firstName: { firstName }, lastName: { lastName }, username: { username }, email: { email }, passwordHash: { passwordHash }, birthdate: { birthdate }, avatar: { avatarUrl }, country: { country }, active: {active}})'
         ].join('\n');
 
         var params = {
@@ -82,7 +82,8 @@ user.create = function (registerInfo) {
             passwordHash: user.generatePasswordHash(registerInfo.username, registerInfo.password),
             birthdate: registerInfo.birthdate,
             country: registerInfo.country,
-            active: registerInfo.active
+            active: registerInfo.active,
+            avatarUrl: user.generateGravatarUrl(registerInfo.email)
         };
 
         db.query(query, params, function (err, results) {
@@ -227,6 +228,18 @@ user.activate = function (username) {
         });
     });
 };
+
+/**
+ * generates a gravatar URL from a user's email
+ * @param email
+ * @returns {String} gravatar URL
+ */
+user.generateGravatarUrl = function (email) {
+    var hash = crypto.createHash('md5');
+    hash.update(email);
+    return 'http://www.gravatar.com/avatar/' +  hash.digest('hex');
+};
+
 
 /**
  *
