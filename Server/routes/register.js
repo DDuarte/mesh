@@ -33,7 +33,7 @@ module.exports = function (server) {
                     email: schema.user.email.required(),
                     password: schema.user.password.required(),
                     birthdate: schema.user.birthdate.required(),
-                    country: schema.user.country.required() // TODO: Include all countries in the list
+                    country: schema.user.country.required()
                 }
             }
         },
@@ -48,11 +48,11 @@ module.exports = function (server) {
                 // associated the generated token with the user
                 client.hset("account_tokens", username, token);
 
-                var url = 'http://meshdev.ddns.net:8001/activateToken?token=' + token + '&username=' + username; // TODO: change server base url
+                var url = 'http://meshdev.ddns.net/#/activate?token=' + token + '&username=' + username; // TODO: change server base url
 
                 // setup e-mail data with unicode symbols
                 var mailOptions = {
-                    from: transporter.auth.user, // sender address
+                    from: transporter.transporter.options.auth.user, // sender address
                     to: email, // list of receivers
                     subject: 'Mesh: Account verification', // Subject line
                     html: '<b>Greetings from the Mesh team! You can activate your account here:</b><br>' +
@@ -73,7 +73,6 @@ module.exports = function (server) {
                 console.log("routes/register: " + err + " - " + JSON.stringify(request.payload));
                 reply(Boom.badImplementation('Failed to insert the user into the database'));
             });
-
         }
     });
 };

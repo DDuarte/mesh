@@ -4,17 +4,19 @@ angular.module('meshApp.login', [
 
     .config(function config($stateProvider) {
         $stateProvider.state('login', {
-            url: '/login',
+            url: '/login?state',
             controller: 'LoginCtrl',
             templateUrl: 'login/login.tpl.html',
             data: { pageTitle: 'Login | Mesh' }
         });
     })
 
-    .controller('LoginCtrl', function LoginController($scope, $state, authorization, meshApi) {
+    .controller('LoginCtrl', function LoginController($scope, $stateParams, $state, authorization, meshApi) {
         $scope.init = function () {
             angular.element('body').css("background-color","#428bca");
         };
+
+        $scope.state = $stateParams.state;
 
         $scope.loginInfo = {};
 
@@ -28,8 +30,8 @@ angular.module('meshApp.login', [
             };
 
             var error = function (err) {
-                console.log(err);
-                $scope.loginError = err.message;
+                console.log(JSON.stringify(err));
+                $scope.loginError = err.message ? err.message : err;
             };
 
             authorization.login(credentials).success(success).error(error);

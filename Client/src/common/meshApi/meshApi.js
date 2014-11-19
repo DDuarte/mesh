@@ -8,6 +8,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 ipCookie.remove('token');
             });
         },
+        validateAccount: function(username, activationToken) {
+            return $http.post(server.url + '/activateToken', { username: username, token: activationToken });
+        },
         isLoggedIn: function () {
             return !!getLoggedToken();
         },

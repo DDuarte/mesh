@@ -12,11 +12,11 @@ var Nodemailer = require('nodemailer'),
 
 module.exports = function (server) {
     server.route({
-        method: 'GET',
+        method: 'POST',
         path: '/activateToken',
         config: {
             validate: {
-                query: {
+                payload: {
                     token: schema.token.token.required(),
                     username: schema.user.username.required()
                 }
@@ -24,18 +24,19 @@ module.exports = function (server) {
             auth: false
         },
         handler: function (request, reply) {
-            var token = client.hget("account_tokens", request.query.username);
+            client.hget("account_tokens", request.payload.username, function (err, token) {
+                if (err || !token || token !== request.payload.token) {
+                    reply(Boom.badRequest('The provided token is not valid'));
+                    return;
+                }
 
-            if (!token || token !== request.query.token) {
-                reply(Boom.badRequest('The provided token is not valid'));
-            }
+                client.del('account_tokens', request.payload.username);
 
-            client.del('account_tokens', request.query.username);
-
-            User.activate(request.query.username).then(function (user) {
-                reply.redirect(server.tokenActivationRedirectPath);
-            }).catch(function () {
-                reply(Boom.badImplementation('Specified user could not be created in the database'));
+                User.activate(request.payload.username).then(function (user) {
+                    reply().code(200);
+                }).catch(function () {
+                    reply(Boom.badImplementation('Specified user could not be created in the database'));
+                });
             });
         }
     });

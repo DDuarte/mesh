@@ -4,7 +4,7 @@
         <div class="panel panel-signin">
             <div class="panel-body">
                 <div class="logo text-center">
-                    <img src="images/logo-primary.png" alt="Link3D Logo">
+                    <img src="images/logo-primary.png" alt="Mesh Logo">
                 </div>
                 <br/>
                 <h4 class="text-center mb5">Already a Member?</h4>
@@ -15,6 +15,14 @@
 
                 <div ng-show="loginError" class="alert alert-danger">
                     <strong>Login error: </strong> {{loginError}}.
+                    Please try again!
+                </div>
+                <div ng-show="state=='successActivation'" class="alert alert-info">
+                    <strong>Activation successful</strong>.
+                    Please login!
+                </div>
+                <div ng-show="state=='failedActivation'" class="alert alert-danger">
+                    <strong>Activation failed</strong>.
                     Please try again!
                 </div>
                 
