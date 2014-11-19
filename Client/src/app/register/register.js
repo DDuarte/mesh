@@ -17,9 +17,11 @@ angular.module('meshApp.register', [
         };
 
         $scope.curDate = new Date();
+        $scope.tempDate = '';
 
         $scope.registerInfo = {};
         $scope.registerNewAccount = function() {
+            $scope.registerInfo.birthdate = $scope.tempDate.toISOString().slice(0,10);
 
             var success = function (/*data*/) {
                 ngDialog.open({
