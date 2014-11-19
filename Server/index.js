@@ -5,7 +5,7 @@ var Hapi = require('hapi');
 // Create a server with a host and port
 var server = Hapi.createServer(process.argv[2] || 8001, { cors: true });
 
-server.tokenActivationRedirectPath = 'http://meshdev.ddns/dev/#/login?state=activateAccount';
+server.tokenActivationRedirectPath = 'http://meshdev.ddns.net/dev/#/login?state=activateAccount';
 
 require('./routes/')(server);
 

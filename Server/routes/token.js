@@ -30,10 +30,10 @@ module.exports = function (server) {
                 reply(Boom.badRequest('The provided token is not valid'));
             }
 
-            client.del('account_tokens', request.auth.credentials.username);
+            client.del('account_tokens', request.query.username);
 
-            User.activate(request.auth.credentials.username).then(function (user) {
-                reply.redirect(server.tokenActivationRedirectPath); //TODO: replace hardcoded path
+            User.activate(request.query.username).then(function (user) {
+                reply.redirect(server.tokenActivationRedirectPath);
             }).catch(function () {
                 reply(Boom.badImplementation('Specified user could not be created in the database'));
             });
