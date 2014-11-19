@@ -21,7 +21,9 @@ angular.module('meshApp.register', [
 
         $scope.registerInfo = {};
         $scope.registerNewAccount = function() {
-            $scope.registerInfo.birthdate = $scope.tempDate.toISOString().slice(0,10);
+            $scope.registerInfo.birthdate = $scope.tempDate.getFullYear() +
+            '-' + ('0' + ($scope.tempDate.getMonth()+1).toString()).slice(-2) + '-' +
+            ('0' + $scope.tempDate.getDate()).slice(-2);
 
             var success = function (/*data*/) {
                 ngDialog.open({
