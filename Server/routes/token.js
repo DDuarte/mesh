@@ -6,7 +6,8 @@ var Nodemailer = require('nodemailer'),
     redis = require('redis'),
     client = redis.createClient(),
     User = require('../models/user'),
-    Boom = require('boom');
+    Boom = require('boom'),
+    schema = require('../schema');
 
 
 module.exports = function (server) {
@@ -16,8 +17,8 @@ module.exports = function (server) {
         config: {
             validate: {
                 query: {
-                    token: Joi.string().min(16).max(16),
-                    username: Joi.string().max(20)
+                    token: schema.token.required(),
+                    username: schema.user.username.required()
                 }
             },
             auth: false

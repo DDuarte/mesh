@@ -1,5 +1,6 @@
 module.exports = {
     user: require('./user'),
     model: require('./model'),
-    tag: require('./tag')
+    tag: require('./tag'),
+    token: require('./token')
 };
