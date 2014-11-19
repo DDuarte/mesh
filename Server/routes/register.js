@@ -68,12 +68,13 @@ module.exports = function (server) {
                     to: email, // list of receivers
                     subject: 'Mesh: Account verification', // Subject line
                     html: '<b>Greetings from the Mesh team! You can activate your account here:</b><br>' +
-                        '<a src="' + url + '">' + url + '</a>'
+                        '<a href="' + url + '">' + url + '</a>'
                 };
 
                 // send mail with defined transport object
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
+                        console.log("routes/register/sendMail: " + error);
                         reply(Boom.badImplementation('Internal error: failed to send email'));
                     }
                 });
