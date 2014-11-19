@@ -48,7 +48,7 @@ module.exports = function (server) {
                 // associated the generated token with the user
                 client.hset("account_tokens", username, token);
 
-                var url = 'http://meshdev.ddns.net/dev/#/activate?token=' + token + '&username=' + username; // TODO: change server base url
+                var url = request.origin + '/#/activate?token=' + token + '&username=' + username; // TODO: change server base url
 
                 // setup e-mail data with unicode symbols
                 var mailOptions = {
