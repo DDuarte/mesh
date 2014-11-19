@@ -35,7 +35,7 @@ module.exports = function (server) {
                 User.activate(request.payload.username).then(function (user) {
                     reply().code(200);
                 }).catch(function () {
-                    reply(Boom.badImplementation('Specified user could not be created in the database'));
+                    reply(Boom.badImplementation('Specified user could not be activated in the database'));
                 });
             });
         }
