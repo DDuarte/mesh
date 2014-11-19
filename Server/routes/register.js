@@ -41,18 +41,6 @@ module.exports = function (server) {
             var username = request.payload.username;
             var email = request.payload.email;
 
-            User.getByUsername(username).then(function (userData) {
-                if (userData[0]) {
-                    return reply(Boom.conflict('Existing user'));
-                }
-            });
-
-            User.getByEmail(email).then(function (userData) {
-                if (userData[0]) {
-                    return reply(Boom.conflict('Existing user'));
-                }
-            });
-
             request.payload.active = false;
             User.create(request.payload).then(function () {
                 var token = uid(16);
@@ -81,6 +69,7 @@ module.exports = function (server) {
 
                 reply().code(200);
             }).catch(function (err) {
+                // reply(Boom.conflict('Existing user')); TODO FIX
                 console.log("routes/register: " + err + " - " + JSON.stringify(request.payload));
                 reply(Boom.badImplementation('Failed to insert the user into the database'));
             });

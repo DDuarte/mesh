@@ -71,7 +71,7 @@ user.getByEmail = function (email) {
 user.create = function (registerInfo) {
     return new Promise(function (resolve, reject) {
         var query = [
-            'MERGE (u: User{firstName: { firstName }, lastName: { lastName }, username: { username }, email: { email }, passwordHash: { passwordHash }, birthdate: { birthdate }, avatar: { avatarUrl }, country: { country }, active: {active}})'
+            'CREATE (u: User{ lowerUsername: lower({ username }), firstName: { firstName }, lastName: { lastName }, username: { username }, email: { email }, passwordHash: { passwordHash }, birthdate: { birthdate }, avatar: { avatarUrl }, country: { country }, active: {active}})'
         ].join('\n');
 
         var params = {
