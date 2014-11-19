@@ -38,32 +38,7 @@ module.exports = function (server) {
     };
 
     server.pack.register(require('hapi-auth-jsonwebtoken'), function (err) {
-
         server.auth.strategy('token', 'jwt', {key: privateKey, validateFunc: validate});
-
-        server.route({
-            method: 'GET',
-            path: '/tokenRequired',
-            config: {auth: 'token'},
-            handler: function (request, reply) {
-                var replyObj = {
-                    text: 'I am a JSON response, and you needed a token to get me.',
-                    credentials: request.auth.credentials
-                };
-                reply(replyObj);
-            }
-        });
-
-        server.route({
-            method: 'GET',
-            path: '/noTokenRequired',
-            config: {auth: false},
-            handler: function (request, reply) {
-                var replyObj = { text: 'I am JSON response, but you did not need a token to get me' };
-                reply(replyObj);
-            }
-        });
-
     });
 
     server.route({
