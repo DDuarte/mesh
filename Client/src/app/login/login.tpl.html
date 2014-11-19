@@ -23,12 +23,10 @@
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <input type="text" class="form-control" id="username" name="username" placeholder="Username" ng-model="loginInfo.username" required>
                     </div>
-                    <!-- input-group -->
                     <div class="input-group mb15">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="loginInfo.password" required>
                     </div>
-                    <!-- input-group -->
 
                     <div class="clearfix">
                         <div class="pull-left">
@@ -38,13 +36,17 @@
                             </div>
                         </div>
                         <div class="pull-right">
-                            <button type="submit" class="btn btn-success" data-ng-disabled="login_form.$invalid" ng-click="login();">Sign In <i class="fa fa-angle-right ml5"></i>
+                            <button type="submit" class="btn btn-success" data-ng-disabled="login_form.$invalid" ng-click="login();">
+                                Sign In <i class="fa fa-angle-right ml5"></i>
+                            </button>
+                            <button type="submit" tooltip="Forgot your password?" class="btn btn-warning" ng-click="login();">
+                                <i class="fa fa-question-circle"></i>
                             </button>
                         </div>
                     </div>
                 </form>
 
-                <div class="text-center mb30">OR</div>
+                <div class="text-center mb30 mt20">OR</div>
 
                 <a ui-sref="register" class="btn btn-default btn-block"><i class="fa fa-linkedin"></i> &nbsp Sign in with LinkedIn </a>
 
@@ -59,3 +61,13 @@
 
     </section>
 </div>
+
+<script type="text/ng-template" id="followupRegister">
+    <div class="ngdialog-message">
+        <h2>Forgot your email?</h2>
+        <p>We'll send you an email with a link so that you can choose a new password.</p>
+    </div>
+    <div class="ngdialog-buttons mt">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ui-sref="login">Login <i class="fa fa-angle-right ml5"></i></button>
+    </div>
+</script>

@@ -49,6 +49,6 @@ module.exports = {
     email: Joi.string().email(),
     password: Joi.string().max(256),
     birthdate: Joi.date(),
-    country: Joi.any.allow(countries),
+    country: Joi.any().allow(countries),
     rememberMe: Joi.boolean()
 };

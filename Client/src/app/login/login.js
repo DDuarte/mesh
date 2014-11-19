@@ -1,5 +1,5 @@
 angular.module('meshApp.login', [
-    'ui.router'
+    'ui.router', 'ui.bootstrap'
 ])
 
     .config(function config($stateProvider) {

@@ -17,7 +17,7 @@ module.exports = function (server) {
         config: {
             validate: {
                 query: {
-                    token: schema.token.required(),
+                    token: schema.token.token.required(),
                     username: schema.user.username.required()
                 }
             },
