@@ -64,7 +64,7 @@ module.exports = function (server) {
 
                 // setup e-mail data with unicode symbols
                 var mailOptions = {
-                    from: 'noreply@meshdev.ddns.net', // sender address
+                    from: transporter.auth.user, // sender address
                     to: email, // list of receivers
                     subject: 'Mesh: Account verification', // Subject line
                     html: '<b>Greetings from the Mesh team! You can activate your account here:</b><br>' +
