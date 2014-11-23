@@ -1,5 +1,6 @@
 var Promise = require('bluebird');
 var db = require('../common/neo4jDatabase');
+
 var group = {};
 
 /**
