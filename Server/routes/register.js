@@ -38,7 +38,7 @@ module.exports = function (server) {
                 // associated the generated token with the user
                 client.hset("account_tokens", username, token);
 
-                var url = request.origin + '/#/activate?token=' + token + '&username=' + username;
+                var url = 'http://meshdev.ddns.net/dev/#/activate?token=' + token + '&username=' + username; // TODO: change server base url
                 var html = "<b>Greetings from the Mesh team! You can activate your account here:</b><br><a href=\"" + url + '">' + url + '</a>';
 
                 sendMail(email, 'Account activation', html, function (error) {
