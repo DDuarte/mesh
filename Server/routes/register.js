@@ -1,24 +1,14 @@
 'use strict';
 
-var Nodemailer = require('nodemailer'),
-    User = require('../models/user'),
+var User = require('../models/user'),
     Boom = require('boom'),
     uid = require('rand-token').uid,
     redis = require('redis'),
-    client = redis.createClient();
-
-var schema = require('../schema');
+    client = redis.createClient(),
+    sendMail = require('../common/sendMail'),
+    schema = require('../schema');
 
 module.exports = function (server) {
-
-    // create reusable transporter object using SMTP transport
-    var transporter = Nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: 'noreply@meshdev.ddns.net',
-            pass: 'B4nanalol'
-        }
-    });
 
     server.route({
         method: 'POST',
@@ -48,19 +38,10 @@ module.exports = function (server) {
                 // associated the generated token with the user
                 client.hset("account_tokens", username, token);
 
-                var url = request.origin + '/#/activate?token=' + token + '&username=' + username; // TODO: change server base url
+                var url = request.origin + '/#/activate?token=' + token + '&username=' + username;
+                var html = "<b>Greetings from the Mesh team! You can activate your account here:</b><br><a href=\"" + url + '">' + url + '</a>';
 
-                // setup e-mail data with unicode symbols
-                var mailOptions = {
-                    from: transporter.transporter.options.auth.user, // sender address
-                    to: email, // list of receivers
-                    subject: 'Mesh: Account verification', // Subject line
-                    html: '<b>Greetings from the Mesh team! You can activate your account here:</b><br>' +
-                        '<a href="' + url + '">' + url + '</a>'
-                };
-
-                // send mail with defined transport object
-                transporter.sendMail(mailOptions, function (error, info) {
+                sendMail(email, 'Account activation', html, function (error) {
                     if (error) {
                         console.log("routes/register/sendMail: " + error);
                         reply(Boom.badImplementation('Internal error: failed to send email'));
