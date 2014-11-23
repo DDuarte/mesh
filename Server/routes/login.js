@@ -92,6 +92,8 @@ module.exports = function (server) {
                 } else {
                     reply(Boom.badRequest('Invalid username'));
                 }
+            }, function () {
+                reply(Boom.badRequest('Invalid username'));
             });
         }
     });
