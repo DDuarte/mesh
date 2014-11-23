@@ -15,9 +15,9 @@ group.create = function(groupInfo) {
         'RETURN group'
     ].join('\n');
 
-    return new Promise (function (resolve, reject) {
+    return new Promise (function (resolve) {
         db.query(query, groupInfo, function (err, results) {
-            if (err) return reject(err);
+            if (err) throw new Error('Internal database error');
             return resolve(results[0]);
         });
     })
@@ -40,7 +40,7 @@ group.getByName = function (name) {
 
     return new Promise(function (resolve, reject) {
         db.query(query, params, function (err, results) {
-            if (err) return reject(err);
+            if (err) throw new Error('Internal database error');
 
             if (results.length > 0)
                 return resolve(results[0]);
@@ -68,7 +68,7 @@ group.getById = function (id) {
 
     return new Promise(function (resolve, reject) {
         db.query(query, params, function (err, results) {
-            if (err) return reject(err);
+            if (err) throw new Error('Internal database error');
 
             if (results.length > 0)
                 return resolve(results[0]);
@@ -97,7 +97,7 @@ group.isAdmin = function(groupName, userName) {
 
     return new Promise (function(resolve, reject) {
         db.query(query, params, function(err, results) {
-            if (err) return reject(err);
+            if (err) throw new Error('Internal database error');
 
             if (results.length > 0)
                 return resolve(true);
@@ -126,7 +126,7 @@ group.isMember = function(groupName, userName) {
 
     return new Promise (function(resolve, reject) {
         db.query(query, params, function(err, results) {
-            if (err) return reject(err);
+            if (err) throw new Error('Internal database error');
 
             if (results.length > 0)
                 return resolve(true);
@@ -156,7 +156,7 @@ group.addMember = function (groupName, memberName) {
 
     return new Promise (function(resolve, reject) {
         db.query(query, params, function(err) {
-            if (err) return reject(err);
+            if (err) throw new Error('Internal Database error');
             return resolve(true);
         });
     });
@@ -182,7 +182,7 @@ group.addAdmin = function (groupName, adminName) {
 
     return new Promise(function(resolve, reject) {
         db.query(query, params, function(err) {
-            if (err) return reject(err);
+            if (err) throw new Error('Internal database error');
             return resolve(true);
         });
     });
@@ -190,22 +190,23 @@ group.addAdmin = function (groupName, adminName) {
 
 /**
  * Returns the group administrators
- * @param {String} groupName Name of the group
+ * @param {String} groupId Id of the group
  * @returns {Promise} Resolves to the group administrators if successful, rejects otherwise
  */
-group.getAdministrators = function (groupName) {
+group.getAdministrators = function (groupId) {
     var query = [
-        'MATCH (group:Group {name: {name}})<-[:IS_ADMIN]-(admins:User)',
+        'MATCH (group:Group)<-[:IS_ADMIN]-(admins:User)',
+        'WHERE id(group) = {id}',
         'RETURN admins'
     ].join('\n');
 
     var params = {
-        name: groupName
+        id: groupId
     };
 
     return new Promise(function(resolve, reject) {
         db.query(query, params, function(err, results) {
-            if (err) return reject(err);
+            if (err) throw new Error('Internal database error');
             return resolve(results);
         });
     });
@@ -213,22 +214,23 @@ group.getAdministrators = function (groupName) {
 
 /**
  * Returns the group members
- * @param {String} groupName Name of the group
+ * @param {String} groupId Id of the group
  * @returns {Promise} Resolves to the group members if successful, rejects otherwise
  */
-group.getMembers = function (groupName) {
+group.getMembers = function (groupId) {
     var query = [
-        'MATCH (group:Group {name: {name}})<-[:IS_MEMBER]-(members:User)',
+        'MATCH (group:Group)<-[:IS_MEMBER]-(members:User)',
+        'WHERE id(group) = {id}',
         'RETURN members'
     ].join('\n');
 
     var params = {
-        name: groupName
+        id: groupId
     };
 
     return new Promise(function(resolve, reject) {
         db.query(query, params, function(err, results) {
-            if (err) return reject(err);
+            if (err) throw new Error('Internal database error');
             return resolve(results);
         });
     });
