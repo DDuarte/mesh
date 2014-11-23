@@ -45,7 +45,7 @@ group.getByName = function (name) {
             if (results.length > 0)
                 return resolve(results[0]);
             else
-                return reject('No group was found');
+                return reject(false);
         });
     });
 };
@@ -57,7 +57,8 @@ group.getByName = function (name) {
  */
 group.getById = function (id) {
     var query = [
-        'MATCH (group:Group {id: {id}})',
+        'MATCH (group:Group)',
+        'WHERE id(group) = {id}',
         'RETURN group'
     ].join('\n');
 
@@ -72,7 +73,7 @@ group.getById = function (id) {
             if (results.length > 0)
                 return resolve(results[0]);
             else
-                return reject('No group was found');
+                return reject(false);
         });
     });
 };
@@ -232,3 +233,5 @@ group.getMembers = function (groupName) {
         });
     });
 };
+
+module.exports = group;
