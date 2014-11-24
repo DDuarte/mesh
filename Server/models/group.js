@@ -237,4 +237,174 @@ group.getMembers = function (groupId) {
     });
 };
 
+/**
+ * Returns all the galleries of a group
+ * @param {Integer} groupId Id of the group
+ * @returns {Promise} Resolves to the group galleries if successful, throws an exception in case of a database error
+ */
+group.getAllGalleries = function(groupId) {
+    var query = [
+        'MATCH (group:Group)-[:OWNS]->(galleries:Gallery)',
+        'WHERE id(group) = {id}',
+        'RETURN galleries.name'
+    ].join('\n');
+
+    var params = {
+        id: groupId
+    };
+
+    return new Promise(function(resolve, reject) {
+        db.query(query, params, function(err, results) {
+            if (err) throw new Error('Internal database error');
+            return resolve(results);
+        });
+    })
+};
+
+/**
+ * Returns all the public galleries of a group
+ * @param {Integer} groupId Id of the given group
+ * @returns {Promise} Resolves to the galleries if successful, throws exception in case of database error
+ */
+group.getPublicGalleries = function(groupId) {
+    var query = [
+        'MATCH (group:Group)-[:OWNS]->(galleries:Gallery {public: true})',
+        'WHERE id(group) = {id}',
+        'RETURN galleries.name'
+    ].join('\n');
+
+    var params = {
+        id: groupId
+    };
+
+    return new Promise(function(resolve, reject) {
+        db.query(query, params, function(err, results) {
+            if (err) throw new Error('Internal database error');
+            return resolve(results);
+        });
+    });
+};
+
+/**
+ * Returns all the private galleries of a group
+ * @param {Integer} groupId Id of the given group
+ * @returns {Promise} Resolves to the galleries if successful, throws exception in case of database error
+ */
+group.getPrivateGalleries = function(groupId) {
+    var query = [
+        'MATCH (group:Group)-[:OWNS]->(galleries:Gallery {public: false})',
+        'WHERE id(group) = {id}',
+        'RETURN galleries.name'
+    ].join('\n');
+
+    var params = {
+        id: groupId
+    };
+
+    return new Promise(function(resolve, reject) {
+        db.query(query, params, function(err, results) {
+            if (err) throw new Error('Internal database error');
+            return resolve(results);
+        });
+    });
+};
+
+/**
+ * Returns all the models published in the group
+ * @param {Integer} groupId Id of the group
+ * @returns {Promise} Resolves to the published models if successful, throws an exception in case of database error
+ */
+group.getAllModels = function(groupId) {
+    var query = [
+        'MATCH (group:Group)-[:OWNS]->(galleries:Gallery)<-[:PUBLISHED]-(models:Model)',
+        'WHERE id(group) = {id}',
+        'RETURN models'
+    ].join('\n');
+
+    var params = {
+        id: groupId
+    };
+
+    return new Promise(function(resolve) {
+        db.query(query, params, function(err, results) {
+            if (err) throw new Error('Internal database error');
+            return resolve(results);
+        });
+    });
+};
+
+/**
+ * Returns all the models published in public galleries of the group
+ * @param {Integer} groupId
+ * @returns {Promise} Resolves to the models published in the group if successful, throws an exception in case of database error
+ */
+group.getPublicModels = function(groupId) {
+    var query = [
+        'MATCH (group:Group)-[:OWNS]->(galleries:Gallery {public: true})<-[:PUBLISHED]-(models:Model)',
+        'WHERE id(group) = {id}',
+        'RETURN models'
+    ].join('\n');
+
+    var params = {
+        id: groupId
+    };
+
+    return new Promise(function(resolve) {
+        db.query(query, params, function(err, results) {
+            if (err) throw new Error('Internal database error');
+            return resolve(results);
+        });
+    });
+};
+
+/**
+ * Returns all the models published in private galleries of the group
+ * @param {Integer} groupId
+ * @returns {Promise} Resolves to the models published in the group if successful, throws an exception in case of database error
+ */
+group.getPrivateModels = function(groupId) {
+    var query = [
+        'MATCH (group:Group)-[:OWNS]->(galleries:Gallery {public: false})<-[:PUBLISHED]-(models:Model)',
+        'WHERE id(group) = {id}',
+        'RETURN models'
+    ].join('\n');
+
+    var params = {
+        id: groupId
+    };
+
+    return new Promise(function(resolve) {
+        db.query(query, params, function(err, results) {
+            if (err) throw new Error('Internal database error');
+            return resolve(results);
+        });
+    });
+};
+
+/**
+ * Returns all the models published in a given gallery
+ * @param {Integer} groupId Id of the group
+ * @param {String} galleryName Name of the gallery
+ * @returns {Promise} Resolves to the published models in the gallery, throws an exception in case of a database error
+ */
+group.getModels = function(groupId, galleryName) {
+    var query = [
+        'MATCH (group:Group)-[:OWNS]->(galleries:Gallery {name: {galleryName}, public: false})<-[:PUBLISHED]-(models:Model)',
+        'WHERE id(group) = {id}',
+        'RETURN models'
+    ].join('\n');
+
+    var params = {
+        id: groupId,
+        galleryName: galleryName
+    };
+
+    return new Promise(function(resolve) {
+        db.query(query, params, function(err, results) {
+            if (err) throw new Error('Internal database error');
+            return resolve(results);
+        });
+    });
+};
+
 module.exports = group;
