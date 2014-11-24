@@ -245,7 +245,7 @@ module.exports = function (server) {
     });
 
     server.route({
-        path: 'groups/{id}/galleries/{galleryName}',
+        path: '/groups/{id}/galleries/{galleryName}',
         method: 'GET',
         config: {
             auth: 'token',
