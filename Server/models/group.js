@@ -103,7 +103,7 @@ group.isAdmin = function(groupName, userName) {
             if (results.length > 0)
                 return resolve(true);
             else
-                return reject(false);
+                return resolve(false);
         });
     });
 };
@@ -132,7 +132,7 @@ group.isMember = function(groupName, userName) {
             if (results.length > 0)
                 return resolve(true);
             else
-                return reject(false);
+                return resolve(false);
         });
     });
 };
