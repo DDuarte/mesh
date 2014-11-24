@@ -4,7 +4,7 @@ angular.module('meshApp.login', [
 
     .config(function config($stateProvider) {
         $stateProvider.state('login', {
-            url: '/login?state&token&username',
+            url: '/login?state&token&email',
             controller: 'LoginCtrl',
             templateUrl: 'login/login.tpl.html',
             data: { pageTitle: 'Login | Mesh' }
@@ -20,8 +20,7 @@ angular.module('meshApp.login', [
                     template: 'changePasswordDialogId',
                     className: 'ngdialog-theme-default'
                 }).then(function (password) {
-                    console.log($stateParams.username + ' - ' + $stateParams.token + ' - ' + password);
-                    meshApi.changePassword($stateParams.username, $stateParams.token, password);
+                    meshApi.changePassword($stateParams.email, $stateParams.token, password);
                 });
             }
         };
