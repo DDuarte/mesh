@@ -1,11 +1,12 @@
 'use strict';
 
-var User = require('../models/user');
-var Boom = require('boom');
-var jwt = require('jsonwebtoken');
-var client = require('../common/redisClient');
-
-var schema = require('../schema');
+var User = require('../models/user'),
+    Boom = require('boom'),
+    jwt = require('jsonwebtoken'),
+    client = require('../common/redisClient'),
+    schema = require('../schema'),
+    uid = require('rand-token').uid,
+    sendMail = require('../common/sendMail');
 
 var privateKey = 'Kitties';
 var tokenTTL = 7200;
