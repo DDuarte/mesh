@@ -6,6 +6,7 @@ angular.module( 'meshApp', [
   'meshApp.activate',
   'meshApp.register',
   'meshApp.model',
+  'meshApp.catalog',
   'meshApp.home',
   'meshApp.profile',
   'meshApp.messages',
