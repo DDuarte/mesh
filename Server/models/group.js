@@ -382,6 +382,36 @@ group.getPrivateModels = function(groupId) {
 };
 
 /**
+ * Returns the gallery information of a group
+ * @param {Integer} groupId Id of the group
+ * @param {String} galleryName Name of the gallery
+ * @returns {Promise} Resolves to the gallery information if successful, rejects otherwise, throws exception in case of database error
+ */
+group.getGallery = function(groupId, galleryName) {
+    var query = [
+        'MATCH (group:Group)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
+        'WHERE id(group) = {id}',
+        'RETURN gallery'
+    ].join('\n');
+
+    var params = {
+        id: groupId,
+        galleryName: galleryName
+    };
+
+    return new Promise(function(resolve, reject) {
+        db.query(query, params, function(err, results) {
+            if (err) throw new Error('Internal Server Error');
+
+            if (results.length > 0)
+                return resolve(results[0]);
+            else
+                return reject('No gallery was found');
+        });
+    });
+};
+
+/**
  * Returns all the models published in a given gallery
  * @param {Integer} groupId Id of the group
  * @param {String} galleryName Name of the gallery
