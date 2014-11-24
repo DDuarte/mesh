@@ -104,34 +104,31 @@ module.exports = function (server) {
         config: {
             validate: {
                 payload: {
-                    username: schema.user.username.required()
+                    email: schema.user.email.required()
                 }
             },
             auth: false
         },
         handler: function (request, reply) {
-            var username = request.payload.username;
+            var email = request.payload.email;
 
-            User.getByUsername(username).then(function (userData) {
+            User.getByEmail(email).then(function (userData) {
                 if (userData[0]) {
-                    userData = userData[0].user;
-                    var email = userData.email;
                     var token = uid(16);
 
-                    client.hset("forgotpw_tokens", username, token);
+                    client.hset("forgotpw_tokens", email, token);
 
-                    var url = 'http://meshdev.ddns.net/dev/#/login?state=forgotPassword&token=' + token + '&username=' + username;
+                    var url = 'http://meshdev.ddns.net/dev/#/login?state=forgotPassword&token=' + token + '&email=' + email;
                     var html = "<b>Change your password at:</b><br><a href=\"" + url + '">' + url + '</a>';
 
                     sendMail(email, 'Password change', html, function (error) {
                         if (error) {
                             console.log("routes/register/sendMail: " + error);
                             reply(Boom.badImplementation('Internal error: failed to send email'));
+                        } else {
+                            reply().code(200);
                         }
                     });
-
-                    reply().code(200);
-
                 } else {
                     reply(Boom.badRequest('Invalid username'));
                 }
@@ -147,7 +144,7 @@ module.exports = function (server) {
         config: {
             validate: {
                 payload: {
-                    username: schema.user.username.required(),
+                    email: schema.user.email.required(),
                     token: schema.token.token.required(),
                     password: schema.user.password.required()
                 }
@@ -155,19 +152,19 @@ module.exports = function (server) {
             auth: false
         },
         handler: function (request, reply) {
-            var username = request.payload.username;
+            var email = request.payload.email;
             var pl_token = request.payload.token;
             var newPass = request.payload.password;
 
-            client.hget("forgotpw_tokens", username, function (err, token) {
+            client.hget("forgotpw_tokens", email, function (err, token) {
                 if (err || !token || token !== pl_token) {
                     reply(Boom.badRequest('The provided token is not valid'));
                     return;
                 }
 
-                client.del('forgotpw_tokens', username);
+                client.del('forgotpw_tokens', email);
 
-                User.changePassword(username, newPass).then(function (user) {
+                User.changePassword(email, newPass).then(function (user) {
                     reply().code(200);
                 }).catch(function () {
                     reply(Boom.badImplementation('Cannot change password'));

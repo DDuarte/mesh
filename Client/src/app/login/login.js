@@ -51,8 +51,8 @@ angular.module('meshApp.login', [
             ngDialog.openConfirm({
                 template: 'forgotPasswordDialogId',
                 className: 'ngdialog-theme-default'
-            }).then(function (username) {
-                meshApi.forgotPassword(username);
+            }).then(function (email) {
+                meshApi.forgotPassword(email);
             });
         };
     });

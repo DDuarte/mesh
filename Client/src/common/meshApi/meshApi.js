@@ -11,8 +11,8 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
         validateAccount: function(username, activationToken) {
             return $http.post(server.url + '/activateToken', { username: username, token: activationToken });
         },
-        forgotPassword: function (username) {
-            return $http.post(server.url + '/forgotPassword', { username: username });
+        forgotPassword: function (email) {
+            return $http.post(server.url + '/forgotPassword', { email: email });
         },
         changePassword: function (username, token, password) {
             return $http.post(server.url + '/changePassword', { username: username, token: token, password: password });

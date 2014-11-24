@@ -75,11 +75,11 @@
         <h2>Forgot your password?</h2>
         <form name="forgotPasswordForm">
             <p>We'll send you an email with a link to choose a new password.</p>
-            <p><label for="username">Username: </label> <input required type="text" name="username" ng-model="forgotPasswordUsername" /></p>
+            <p><label for="emailForgot">Email: </label> <input required id="emailForgot" type="email" name="email" ng-model="forgotPasswordEmail" /></p>
         </form>
     </div>
     <div class="ngdialog-buttons mt">
-        <button type="button" class="ngdialog-button ngdialog-button-primary btn-d" ng-disabled="forgotPasswordForm.$invalid" ng-click="confirm(forgotPasswordUsername)">Confirm</button>
+        <button type="button" class="ngdialog-button ngdialog-button-primary btn-d" ng-disabled="forgotPasswordForm.$invalid" ng-click="confirm(forgotPasswordEmail)">Confirm</button>
         <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">Cancel</button>
     </div>
 </script>

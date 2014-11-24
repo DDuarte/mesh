@@ -238,16 +238,16 @@ user.activate = function (username) {
  * @return {Promise} Resolved if the user exists, rejected otherwise
  *
  */
-user.changePassword = function (username, newPassword) {
+user.changePassword = function (email, newPassword) {
     return new Promise(function (resolve, reject) {
         var query = [
-            'MATCH (u:User {username: {username}})',
+            'MATCH (u:User {email: {email}})',
             'SET u.passwordHash = {passwordHash}'
         ].join('\n');
 
         var params = {
-            username: username,
-            passwordHash: user.generatePasswordHash(username, newPassword)
+            email: email,
+            passwordHash: user.generatePasswordHash(email, newPassword)
         };
 
         db.query(query, params, function (err, results) {
