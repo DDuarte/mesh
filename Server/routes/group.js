@@ -202,4 +202,85 @@ module.exports = function (server) {
                 });
         }
     });
+
+    server.route({
+        path: '/groups/{id}/galleries',
+        method: 'GET',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.group.id.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            var groupId = request.params.id;
+            Group.isMember(groupId, request.auth.credentials.username)
+                .then(function (isMember) {
+                    // if user is member of the group, get the private and public galleries
+                    if (isMember) {
+                        Group.getAllGalleries(groupId)
+                            .then(function (galleries) {
+                                reply(galleries);
+                            })
+                            .catch(Error, function (error) {
+                                reply(Boom.badImplementation(error.message));
+                            });
+                    }
+                    else {
+                        Group.getPublicGalleries(groupId)
+                            .then(function (galleries) {
+                                reply(galleries);
+                            })
+                            .catch(Error, function (error) {
+                                reply(Boom.badImplementation(error.message));
+                            });
+                    }
+                })
+                .catch(Error, function (error) {
+                    reply(Boom.badImplementation(error.message));
+                });
+        }
+    });
+
+    server.route({
+        path: 'groups/{id}/galleries/{galleryName}',
+        method: 'GET',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.group.id.required(),
+                    galleryName: schema.group.galleryName.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            var groupId = request.params.id;
+            var galleryName = request.params.galleryName;
+            Group.getById(groupId)
+                .then(function () {
+                    Group.getGallery(groupId, galleryName)
+                        .then(function (gallery) {
+                            Group.getModels(groupId, galleryName)
+                                .then(function (models) {
+                                    reply(models);
+                                })
+                                .catch(Error, function (error) {
+                                    reply(Boom.badImplementation(error.message));
+                                });
+                        })
+                        .catch(Error, function(error) {
+                            return reply(error.message);
+                        })
+                        .catch(function(reason) {
+                            return reply(Boom.badRequest(reason));
+                        });
+                })
+                .catch(Error, function () {
+                    reply(Boom.badImplementation(error.message));
+                });
+        }
+    });
 };
