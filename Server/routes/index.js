@@ -3,7 +3,6 @@
 module.exports = function (server) {
     require('./login')(server);
     require('./logout')(server);
-    require('./token')(server);
     require('./register')(server);
     require('./user')(server);
     require('./model')(server);
