@@ -1,20 +1,24 @@
 'use strict';
 
-var Group = require('../models/group');
-var User = require('../models/user');
-var Joi = require('joi');
-var GroupSchema = require('../schemas/group');
-var Boom = require('boom');
+var Group = require('../models/group'),
+    User = require('../models/user'),
+    Joi = require('joi'),
+    schema = require('../schema'),
+    Boom = require('boom');
 
 module.exports = function (server) {
 
     server.route({
-        path: '/groups',
         method: 'POST',
+        path: '/groups',
         config: {
-            auth: true,
+            auth: 'token',
             validate: {
-                payload: GroupSchema
+                payload: {
+                    id: schema.group.id.required(),
+                    name: schema.group.name.required(),
+                    creationDate: schema.group.creationDate.required()
+                }
             }
         },
         handler: function (request, reply) {
@@ -42,10 +46,15 @@ module.exports = function (server) {
     });
 
     server.route({
-        path: '/groups/{id}',
         method: 'GET',
+        path: '/groups/{id}',
         config: {
-            auth: true
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.group.id.required()
+                }
+            }
         },
         handler: function (request, reply) {
             Group.getById(request.params.id)
@@ -65,10 +74,10 @@ module.exports = function (server) {
         path: '/groups/{id}/admins',
         method: 'GET',
         config: {
-            auth: true,
+            auth: 'token',
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1)
+                    id: schema.group.id.required()
                 }
             }
         },
@@ -98,10 +107,10 @@ module.exports = function (server) {
         path: '/group/{id}/members',
         method: 'GET',
         config: {
-            auth: true,
+            auth: 'token',
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1)
+                    id: schema.group.id.required()
                 }
             }
         },
@@ -131,11 +140,13 @@ module.exports = function (server) {
         path: '/groups/{id}/admins',
         method: 'POST',
         config: {
-            auth: true,
+            auth: 'token',
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1),
-                    adminName: Joi.string().min(1)
+                    id: schema.group.id.required()
+                },
+                payload: {
+                    adminName: schema.user.username.required()
                 }
             }
         },
@@ -145,7 +156,7 @@ module.exports = function (server) {
                     if (!isAdmin)
                         return reply(Boom.badRequest('Requesting user is not an administrator of the group'));
 
-                    Group.addAdmin(request.params.id, request.params.adminName)
+                    Group.addAdmin(request.params.id, request.payload.adminName)
                         .then(function () {
                             reply("Administrator successfully added").code(200);
                         })
@@ -162,11 +173,13 @@ module.exports = function (server) {
         path: '/groups/{id}/members',
         method: 'POST',
         config: {
-            auth: true,
+            auth: 'token',
             validate: {
                 params: {
-                    id: Joi.number().integer().min(1),
-                    adminName: Joi.string().min(1)
+                    id: schema.group.id.required()
+                },
+                payload: {
+                    adminName: schema.user.username.required()
                 }
             }
         },
@@ -176,7 +189,7 @@ module.exports = function (server) {
                     if (!isMember)
                         return reply(Boom.badRequest('Requesting user is not a member of the group'));
 
-                    Group.addAdmin(request.params.id, request.params.adminName)
+                    Group.addAdmin(request.params.id, request.payload.adminName)
                         .then(function () {
                             reply("Administrator successfully added").code(200);
                         })

@@ -1,6 +1,7 @@
 var Promise = require('bluebird');
 var db = require('../common/neo4jDatabase');
 var model = {};
+
 /**
  *
  * Returns a model by it's identifier

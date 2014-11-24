@@ -45,7 +45,7 @@ module.exports = function (server) {
         method: 'POST',
         path: '/login',
         config: {
-            auth: false,
+            auth: 'token',
             validate: {
                 payload: {
                     username: schema.user.username.required(),
