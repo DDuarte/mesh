@@ -1,10 +1,8 @@
 
-var client = require('../common/redisClient');
-
-var fuzzy = require('fuzzy'),
-    Boom = require('boom');
-
-var schema = require('../schema');
+var client = require('../common/redisClient'),
+    fuzzy = require('fuzzy'),
+    Boom = require('boom'),
+    schema = require('../schema');
 
 var default_tags = ['abstract', 'art', 'black', 'blue', 'dark', 'drawing', 'girl', 'green',
     'illustration', 'light', 'model', 'photo', 'photography', 'street', 'woman', 'pokemon',

@@ -63,7 +63,7 @@ module.exports = function (server) {
                     userData = userData[0].user;
                     console.log(userData);
                     if (!userData.active) {
-                        return reply(Boom.forbidden('Account is not activated.'));
+                        return reply(Boom.forbidden('Account is not activated'));
                     }
                     var insertedPasswordHash = User.generatePasswordHash(user, password);
                     console.log(insertedPasswordHash);

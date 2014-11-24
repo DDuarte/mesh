@@ -1,10 +1,9 @@
 'use strict';
 
-var User = require('../models/user');
-var Promise = require('bluebird');
-var client = require('../common/redisClient');
-
-var schema = require('../schema');
+var User = require('../models/user'),
+    Promise = require('bluebird'),
+    client = require('../common/redisClient'),
+    schema = require('../schema');
 
 module.exports = function (server) {
 

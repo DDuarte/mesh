@@ -47,7 +47,7 @@
                             <button type="submit" class="btn btn-success" data-ng-disabled="login_form.$invalid" ng-click="login();">
                                 Sign In <i class="fa fa-angle-right ml5"></i>
                             </button>
-                            <button type="submit" tooltip="Forgot your password?" class="btn btn-warning" ng-click="login();">
+                            <button type="button" tooltip="Forgot your password?" class="btn btn-warning" ng-click="showForgotPassword();">
                                 <i class="fa fa-question-circle"></i>
                             </button>
                         </div>
@@ -70,12 +70,29 @@
     </section>
 </div>
 
-<script type="text/ng-template" id="followupRegister">
+<script type="text/ng-template" id="forgotPasswordDialogId">
     <div class="ngdialog-message">
-        <h2>Forgot your email?</h2>
-        <p>We'll send you an email with a link so that you can choose a new password.</p>
+        <h2>Forgot your password?</h2>
+        <form name="forgotPasswordForm">
+            <p>We'll send you an email with a link to choose a new password.</p>
+            <p><label for="username">Username: </label> <input required type="text" name="username" ng-model="forgotPasswordUsername" /></p>
+        </form>
     </div>
     <div class="ngdialog-buttons mt">
-        <button type="button" class="ngdialog-button ngdialog-button-primary" ui-sref="login">Login <i class="fa fa-angle-right ml5"></i></button>
+        <button type="button" class="ngdialog-button ngdialog-button-primary btn-d" ng-disabled="forgotPasswordForm.$invalid" ng-click="confirm(forgotPasswordUsername)">Confirm</button>
+        <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="changePasswordDialogId">
+    <div class="ngdialog-message">
+        <h2>Change password</h2>
+        <form name="changePasswordForm">
+            <p><label for="password">New password: </label> <input required type="password" name="password" ng-model="changePasswordPassword" /></p>
+        </form>
+    </div>
+    <div class="ngdialog-buttons mt">
+        <button type="button" class="ngdialog-button ngdialog-button-primary btn-d" ng-disabled="changePasswordForm.$invalid" ng-click="confirm(changePasswordPassword)">Confirm</button>
+        <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">Cancel</button>
     </div>
 </script>

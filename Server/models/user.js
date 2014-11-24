@@ -1,6 +1,7 @@
-var Promise = require('bluebird');
-var db = require('../common/neo4jDatabase');
-var crypto = require('crypto');
+var Promise = require('bluebird'),
+    db = require('../common/neo4jDatabase'),
+    crypto = require('crypto');
+
 var user = {};
 
 /**
@@ -220,6 +221,33 @@ user.activate = function (username) {
 
         var params = {
             username: username
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(true);
+        });
+    });
+};
+
+/**
+ *
+ * Changes password of a user account
+ * @param {String} username User identifier
+ * @param {String} newPassword New password
+ * @return {Promise} Resolved if the user exists, rejected otherwise
+ *
+ */
+user.changePassword = function (username, newPassword) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (u:User {username: {username}})',
+            'SET u.passwordHash = {passwordHash}'
+        ].join('\n');
+
+        var params = {
+            username: username,
+            passwordHash: user.generatePasswordHash(username, newPassword)
         };
 
         db.query(query, params, function (err, results) {
