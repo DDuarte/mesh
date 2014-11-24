@@ -54,7 +54,7 @@ module.exports = function (server) {
             Model.getCommentsOlderThan(request.params.id, request.query.startdate).then(function (result) {
                 reply(result);
             }, function (error) {
-                reply(Boom.badImplementation('Internal Error'));
+                reply(Boom.badImplementation('Internal error: ' + error));
             });
         }
     });
@@ -76,12 +76,12 @@ module.exports = function (server) {
         handler: function (request, reply) {
             Model.addComment(request.params.id, request.auth.credentials.username, request.payload.comment).then(function (result) {
                 if (result.length == 0) {
-                    reply('No such model.').code(404);
+                    reply(Boom.notFound('No such model'));
                 } else {
                     reply(result);
                 }
             }, function (error) {
-                reply('Internal error').code(500);
+                reply(Boom.badImplementation('Internal error: ' + error));
             });
         }
     });
@@ -103,12 +103,12 @@ module.exports = function (server) {
         handler: function (request, reply) {
             Model.removeComment(request.params.id, request.auth.credentials.username, request.payload.date).then(function (result) {
                 if (!result) {
-                    reply('No such comment.').code(404);
+                    reply(Boom.notFound('No such comment'));
                 } else {
                     reply(result);
                 }
             }, function (error) {
-                reply({message: 'Internal error: ' + error}).code(500);
+                reply(Boom.badImplementation('Internal error: ' + error));
             });
         }
     });
@@ -130,12 +130,12 @@ module.exports = function (server) {
         handler: function (request, reply) {
             Model.addVote(request.params.id, request.auth.credentials.username, request.payload.vote).then(function (result) {
                 if (result.length == 0) {
-                    reply('No such model.').code(404);
+                    reply(Boom.notFound('No such model'));
                 } else {
                     reply(result);
                 }
             }, function (error) {
-                reply('Internal error').code(500);
+                reply(Boom.badImplementation('Internal error: ' + error));
             });
         }
     });
@@ -154,12 +154,12 @@ module.exports = function (server) {
         handler: function (request, reply) {
             Model.deleteVote(request.params.id, request.auth.credentials.username).then(function (result) {
                 if (!result) {
-                    reply('No such model.').code(404);
+                    reply(Boom.notFound('No such model'));
                 } else {
                     reply(result);
                 }
             }, function (error) {
-                reply('Internal error').code(500);
+                reply(Boom.badImplementation('Internal error: ' + error));
             });
         }
     });
