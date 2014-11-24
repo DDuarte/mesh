@@ -45,10 +45,10 @@ module.exports = function (server) {
                     if (error) {
                         console.log("routes/register/sendMail: " + error);
                         reply(Boom.badImplementation('Internal error: failed to send email'));
+                    } else {
+                        reply().code(200);
                     }
                 });
-
-                reply().code(200);
             }).catch(function (err) {
                 // reply(Boom.conflict('Existing user')); TODO FIX
                 console.log("routes/register: " + err + " - " + JSON.stringify(request.payload));
