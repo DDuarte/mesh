@@ -118,9 +118,10 @@ module.exports = function (server) {
                     var token = uid(16);
                     var username = userData[0].username;
 
-                    client.hset("forgotpw_tokens", email, token + '#' + username);
+                    var tokenUser = token + '-' + username;
+                    client.hset("forgotpw_tokens", email, tokenUser);
 
-                    var url = 'http://meshdev.ddns.net/dev/#/login?state=forgotPassword&token=' + token + '&email=' + email;
+                    var url = 'http://meshdev.ddns.net/dev/#/login?state=forgotPassword&token=' + tokenUser + '&email=' + email;
                     var html = "<b>Change your password at:</b><br><a href=\"" + url + '">' + url + '</a>';
 
                     sendMail(email, 'Password change', html, function (error) {
@@ -158,8 +159,8 @@ module.exports = function (server) {
             var pl_token = request.payload.token;
             var newPass = request.payload.password;
 
-            client.hget("forgotpw_tokens", email, function (err, tokenUsername) {
-                var split = tokenUsername.split('#');
+            client.hget("forgotpw_tokens", email, function (err, tokenUser) {
+                var split = tokenUser.split('-');
                 var token = split[0];
                 var username = split[1];
 
