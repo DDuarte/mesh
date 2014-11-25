@@ -116,7 +116,7 @@ module.exports = function (server) {
             User.getByEmail(email).then(function (userData) {
                 if (userData[0]) {
                     var token = uid(16);
-                    var username = userData[0].username;
+                    var username = userData[0].user.username;
 
                     var tokenUser = token + '-' + username;
                     client.hset("forgotpw_tokens", email, tokenUser);

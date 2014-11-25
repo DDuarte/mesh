@@ -14,8 +14,8 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
         forgotPassword: function (email) {
             return $http.post(server.url + '/forgotPassword', { email: email });
         },
-        changePassword: function (email, token, password) {
-            return $http.post(server.url + '/changePassword', { email: email, token: token, password: password });
+        changePassword: function (email, tokenUser, password) {
+            return $http.post(server.url + '/changePassword', { email: email, token: tokenUser.split('-')[0], password: password });
         },
         isLoggedIn: function () {
             return !!getLoggedToken();
