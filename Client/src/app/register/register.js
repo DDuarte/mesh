@@ -16,16 +16,20 @@ angular.module('meshApp.register', [
             angular.element('body').css("background-color","#428bca");
         };
 
+        $scope.registerPending = false;
+
         $scope.curDate = new Date();
         $scope.tempDate = '';
 
         $scope.registerInfo = {};
         $scope.registerNewAccount = function() {
+            $scope.registerPending = true;
             $scope.registerInfo.birthdate = $scope.tempDate.getFullYear() +
             '-' + ('0' + ($scope.tempDate.getMonth()+1).toString()).slice(-2) + '-' +
             ('0' + $scope.tempDate.getDate()).slice(-2);
 
             var success = function (/*data*/) {
+                $scope.registerPending = false;
                 ngDialog.open({
                     template: 'followupRegister',
                     className: 'ngdialog-theme-default',
@@ -34,6 +38,7 @@ angular.module('meshApp.register', [
             };
 
             var error = function (err) {
+                $scope.registerPending = false;
                 $scope.registerError = err.message;
             };
 
