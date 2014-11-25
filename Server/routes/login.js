@@ -116,8 +116,9 @@ module.exports = function (server) {
             User.getByEmail(email).then(function (userData) {
                 if (userData[0]) {
                     var token = uid(16);
+                    var username = userData[0].username;
 
-                    client.hset("forgotpw_tokens", email, token);
+                    client.hset("forgotpw_tokens", email, token + '#' + username);
 
                     var url = 'http://meshdev.ddns.net/dev/#/login?state=forgotPassword&token=' + token + '&email=' + email;
                     var html = "<b>Change your password at:</b><br><a href=\"" + url + '">' + url + '</a>';
@@ -157,7 +158,11 @@ module.exports = function (server) {
             var pl_token = request.payload.token;
             var newPass = request.payload.password;
 
-            client.hget("forgotpw_tokens", email, function (err, token) {
+            client.hget("forgotpw_tokens", email, function (err, tokenUsername) {
+                var split = tokenUsername.split('#');
+                var token = split[0];
+                var username = split[1];
+
                 if (err || !token || token !== pl_token) {
                     reply(Boom.badRequest('The provided token is not valid'));
                     return;
@@ -165,7 +170,7 @@ module.exports = function (server) {
 
                 client.del('forgotpw_tokens', email);
 
-                User.changePassword(email, newPass).then(function (user) {
+                User.changePassword(username, newPass).then(function (user) {
                     reply().code(200);
                 }).catch(function () {
                     reply(Boom.badImplementation('Cannot change password'));
