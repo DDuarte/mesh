@@ -189,7 +189,7 @@ user.followUser = function (follower, followed) {
 user.unfollowUser = function (follower, followed) {
     return new Promise(function (resolve, reject) {
         var query = [
-            'MATCH (User {username: {follower}})-[f:FOLLOWING]->(User {username: {followed}})',
+            'MATCH (a:User {username: {follower}})-[f:FOLLOWING]->(b:User {username: {followed}})',
             'DELETE f'
         ].join('\n');
 
