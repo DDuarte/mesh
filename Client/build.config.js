@@ -75,7 +75,6 @@ module.exports = {
             'vendor/angular-moment/angular-moment.min.js',
             'vendor/ng-tags-input/ng-tags-input.min.js',
             'vendor/dropzone/downloads/dropzone.min.js',
-            'vendor/angular-dropzone/lib/angular-dropzone.js',
             'lib/three.js',
             'lib/Detector.js',
             'lib/jquery.fullscreen.js',
