@@ -25,22 +25,7 @@ function pJS_desktop() {
             }
         },
         interactivity: {
-            enable: true,
-            mouse: {
-                distance: 200
-            },
-            detect_on: 'canvas',
-            mode: 'grab',
-            line_linked: {
-                opacity: 0.5
-            },
-            events: {
-                onclick: {
-                    enable: true,
-                    mode: 'push',
-                    nb: 4
-                }
-            }
+            enable: false
         },
         retina_detect: true
     });
@@ -75,22 +60,7 @@ function pJS_mobile() {
             }
         },
         interactivity: {
-            enable: false,
-            mouse: {
-                distance: 200
-            },
-            detect_on: 'canvas',
-            mode: 'grab',
-            line_linked: {
-                opacity: 0.5
-            },
-            events: {
-                onclick: {
-                    enable: true,
-                    mode: 'push',
-                    nb: 4
-                }
-            }
+            enable: false
         },
         retina_detect: true
     });
@@ -99,6 +69,10 @@ function pJS_mobile() {
 angular.module('meshApp').factory('particles', function () {
     return {
         init: function() {
+            if (typeof pJS !== 'undefined') {
+                pJS.fn.vendors.destroy();
+            }
+
             if(window.innerWidth > 1100) {
                 pJS_desktop();
             } else {
@@ -122,6 +96,9 @@ angular.module('meshApp').factory('particles', function () {
                     }
                 }
             }
+        },
+        destroy: function() {
+            pJS.fn.vendors.destroy();
         }
     };
 });
