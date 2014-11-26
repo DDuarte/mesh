@@ -11,9 +11,10 @@ angular.module('meshApp.login', [
         });
     })
 
-    .controller('LoginCtrl', function LoginController($scope, $stateParams, $state, authorization, meshApi, ngDialog) {
+    .controller('LoginCtrl', function LoginController($scope, $stateParams, $state, authorization, meshApi, ngDialog, particles) {
         $scope.init = function () {
             angular.element('body').css("background-color","#428bca");
+            particles.init();
 
             if ($stateParams.state == 'forgotPassword') {
                 ngDialog.openConfirm({

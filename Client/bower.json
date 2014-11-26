@@ -16,7 +16,7 @@
     "ngDialog": "~0.3.4"
   },
   "dependencies": {
-    "particles.js": "~1.0.2",
+    "particles.js": "~1.0.3",
     "angular-spinner": "~0.5.1"
   },
   "resolutions": {
