@@ -89,7 +89,7 @@ nav.navbar {
 
         color: white;
         i {
-          font-size: 32px;
+          font-size: 26px;
           vertical-align: bottom;
           margin-right: 5px;
         }
@@ -114,7 +114,7 @@ nav.navbar {
 
 
   .form-search {
-    float: left;
+    // float: left;
     margin-right: 10px;
     margin-top: 0;
     position: relative;
@@ -123,7 +123,7 @@ nav.navbar {
       -moz-border-radius: 50px;
       -webkit-border-radius: 50px;
       border-radius: 50px;
-      width: 200px;
+   // width: 200px;
       padding-left: 30px;
       height: 32px;
       font-size: 13px;
@@ -142,7 +142,7 @@ nav.navbar {
   .btn-group {
     margin: 0;
     line-height: 21px;
-    float: left;
+    // float: left;
   }
 
   .btn-group > .btn {
@@ -287,43 +287,73 @@ nav.navbar {
 
 }
 
-@media screen and (max-width: 1180px) {
+@media screen and (max-width: 1200px) and (min-width: 768px) {
+  .navbar-nav > li > a > span {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 980px) and (min-width: 768px) {
   .navbar .form-search {
     display: none;
   }
 }
 
-.navbar-nav li.active {
-  background-color: #BDBDBD;
-}
-
-@media screen and (max-width: 940px) {
-  .navbar, .navbar-nav {
-    * {
-      float: left;
-    }
-  }
-
-  .navbar-nav > li > a > span {
-    display: none;
-  }
-
-  .navbar-nav > li {
-    float: left;
-  }
-
-  .navbar-header {
-    float: left;
+@media screen and (min-width: 768px) {
+  .toggles {
+    float: right;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .navbar-nav.navbar-right:last-child {
-    float: right !important;
+  .navbar-form {
+    border-top: 0;
+    border-bottom: 0;
   }
 
-  .navbar-nav {
-    margin: 0;
+  nav.navbar .form-search:before {
+    top: 16px;
+  }
+
+  nav.navbar .navbar-header {
+    padding-bottom: 5px;
   }
 }
 
+.navbar-toggle {
+  position: relative;
+  float: right;
+  padding: 9px 10px;
+  margin: 0 0 0 10px;
+  background: transparent none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.navbar-button {
+  position: relative;
+  float: right;
+}
+
+.menu-collapse {
+  -moz-transition: all 0.2s ease-out 0s;
+  -webkit-transition: all 0.2s ease-out 0s;
+  transition: all 0.2s ease-out 0s;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.8);
+  padding: 6px 9px;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  font-size: 16px;
+  line-height: normal;
+}
+
+.menu-collapse:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.navbar {
+  min-height: 56px;
+}
