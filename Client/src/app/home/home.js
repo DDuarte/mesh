@@ -31,8 +31,9 @@ angular.module('meshApp.home', [
 
     .controller("HomeCtrl", function ($scope, $state, meshApi) {
 
-        if (!meshApi.isLoggedIn())
+        if (!meshApi.isLoggedIn()) {
             $state.go('login');
+        }
 
         angular.element(window).ready(function () {
 
