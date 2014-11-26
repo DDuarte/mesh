@@ -265,7 +265,7 @@ user.changePassword = function (username, newPassword) {
 user.generateGravatarUrl = function (email) {
     var hash = crypto.createHash('md5');
     hash.update(email);
-    return 'http://www.gravatar.com/avatar/' +  hash.digest('hex');
+    return 'http://www.gravatar.com/avatar/' +  hash.digest('hex') + '?d=identicon';
 };
 
 
