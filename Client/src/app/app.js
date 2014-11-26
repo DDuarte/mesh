@@ -32,9 +32,12 @@ angular.module('meshApp', [
          timezone: 'Europe/London'*/
     }
 )
-    .config(function myAppConfig($stateProvider, $urlRouterProvider) {
+    .config(function myAppConfig($stateProvider, $urlRouterProvider, ngDialogProvider) {
         // $httpProvider.responseInterceptors.push('httpInterceptor');
         $urlRouterProvider.otherwise('/login');
+
+        // Force reload on DOM changes
+        ngDialogProvider.setForceBodyReload(true);
     })
     .run(function run($rootScope, meshApi) {
         $rootScope._ = window._;
