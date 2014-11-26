@@ -2,6 +2,20 @@ var Promise = require('bluebird');
 var db = require('../common/neo4jDatabase');
 var model = {};
 
+/*
+ TO CREATE MODEL
+ 
+ // get unique id
+ MERGE (id:UniqueId{name:'Model'})
+ ON CREATE SET id.count = 1
+ ON MATCH SET id.count = id.count + 1
+ WITH id.count AS uid
+ // create Model node
+ CREATE (m:Model{id:uid,name:'My horse'})
+ RETURN m as model
+
+ */
+
 /**
  *
  * Returns a model by it's identifier
