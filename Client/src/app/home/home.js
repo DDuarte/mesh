@@ -31,20 +31,23 @@ angular.module('meshApp.home', [
 
     .controller("HomeCtrl", function ($scope, $state, meshApi) {
 
+        if (!meshApi.isLoggedIn())
+            $state.go('login');
+
         angular.element(window).ready(function () {
 
         });
 
         angular.element(window).bind('resize', function () {
             /*if (angular.element('nav.navbar').innerHeight() > 60) {
-                angular.element('.navbar-nav > li > a > span').addClass('hidden');
-            } else if (angular.element('.navbar-nav > li > a > span').hasClass('hidden')) {
-                angular.element('.navbar-nav > li > a > span').removeClass('hidden');
-                if (angular.element('nav.navbar').innerHeight() > 60) {
-                    angular.element('.navbar-nav > li > a > span').addClass('hidden');
-                }
-            }
-            console.log(angular.element('nav.navbar').innerHeight());*/
+             angular.element('.navbar-nav > li > a > span').addClass('hidden');
+             } else if (angular.element('.navbar-nav > li > a > span').hasClass('hidden')) {
+             angular.element('.navbar-nav > li > a > span').removeClass('hidden');
+             if (angular.element('nav.navbar').innerHeight() > 60) {
+             angular.element('.navbar-nav > li > a > span').addClass('hidden');
+             }
+             }
+             console.log(angular.element('nav.navbar').innerHeight());*/
         });
 
         $scope.submitSearch = function () {
