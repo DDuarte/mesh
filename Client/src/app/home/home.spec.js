@@ -4,11 +4,12 @@
  * build process will exclude all `.spec.js` files from the build
  * automatically.
  */
-describe( 'home section', function() {
-  beforeEach( module( 'meshApp.home' ) );
+describe('home section', function () {
+    beforeEach(module('ui.router')); // this declaration is mandatory for the tests to work
+    beforeEach(module('meshApp.home'));
 
-  it( 'should have a dummy test', inject( function() {
-    expect( true ).toBeTruthy();
-  }));
+    it('should have a dummy test', inject(function () {
+        expect(true).toBeTruthy();
+    }));
 });
 
