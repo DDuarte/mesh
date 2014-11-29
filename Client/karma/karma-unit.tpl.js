@@ -1,5 +1,5 @@
 module.exports = function ( karma ) {
-  karma.set({
+  var configuration = {
     /** 
      * From where to look for files, starting with the location of this file.
      */
@@ -17,7 +17,7 @@ module.exports = function ( karma ) {
       'src/assets/**/*.js'
     ],
     frameworks: [ 'jasmine' ],
-    plugins: [ 'karma-jasmine', 'karma-firefox-launcher', 'karma-chrome-launcher', 'karma-phantomJS-launcher' ],
+    plugins: [ 'karma-jasmine', 'karma-firefox-launcher', 'karma-chrome-launcher' ],
     preprocessors: {
     },
 
@@ -53,8 +53,20 @@ module.exports = function ( karma ) {
      * the aesthetic advantage of not launching a browser every time you save.
      */
     browsers: [
-      'PhantomJS'
-    ]
-  });
-};
+      'Chrome'
+    ],
 
+	customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
+  };
+
+  if (process.env.TRAVIS) {
+    configuration.browsers = ['Chrome_travis_ci'];
+  }
+
+  karma.set(configuration);
+};
