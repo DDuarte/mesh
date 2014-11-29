@@ -23,8 +23,7 @@ angular.module('meshApp', [
     'ngTagsInput',
     'ipCookie',
     'ngDialog',
-    'angularSpinner',
-    'ngMock'
+    'angularSpinner'
 ])
 
     .constant('_', window._)
