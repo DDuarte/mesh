@@ -311,6 +311,11 @@ nav.navbar {
     border-bottom: 0;
   }
 
+  nav.navbar .form-search {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   nav.navbar .form-search:before {
     top: 16px;
   }
@@ -320,11 +325,21 @@ nav.navbar {
   }
 }
 
+@media screen and (max-width: 400px) {
+  nav.navbar {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  nav.navbar .btn-group > .btn {
+    margin-left: 1px;
+  }
+}
+
 .navbar-toggle {
   position: relative;
   float: right;
   padding: 9px 10px;
-  margin: 0 0 0 10px;
+  margin: 0 0 0 5px;
   background: transparent none;
   border: 1px solid transparent;
   border-radius: 4px;

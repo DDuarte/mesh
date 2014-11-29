@@ -39,16 +39,9 @@ angular.module('meshApp.home', [
 
         });
 
-        angular.element(window).bind('resize', function () {
-            /*if (angular.element('nav.navbar').innerHeight() > 60) {
-             angular.element('.navbar-nav > li > a > span').addClass('hidden');
-             } else if (angular.element('.navbar-nav > li > a > span').hasClass('hidden')) {
-             angular.element('.navbar-nav > li > a > span').removeClass('hidden');
-             if (angular.element('nav.navbar').innerHeight() > 60) {
-             angular.element('.navbar-nav > li > a > span').addClass('hidden');
-             }
-             }
-             console.log(angular.element('nav.navbar').innerHeight());*/
+        var navMain = angular.element("#nav-main");
+        navMain.on("click", "a", null, function () {
+          navMain.collapse('hide');
         });
 
         $scope.submitSearch = function () {

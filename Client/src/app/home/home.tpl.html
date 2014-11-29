@@ -6,7 +6,7 @@
                 <a class="logo mr15 navbar-header"> <img src="images/logo.png" alt=""/> </a>
 
                 <div class="toggles navbar-header">
-                    <button type="button" class="menu-collapse navbar-toggle collapsed dropdown-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <button type="button" class="menu-collapse navbar-toggle collapsed dropdown-toggle" data-toggle="collapse" data-target="#nav-main">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="fa fa-bars"></span>
                     </button>
@@ -15,6 +15,7 @@
                             <i class="fa fa-caret-down"></i>
                         </button>
                         <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a ui-sref='home.search'><i class="glyphicon glyphicon-search"></i> Search</a></li>
                             <li><a ui-sref='home.profile'><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
                             <li><a href="#"><i class="glyphicon glyphicon-star"></i> Activity Log</a></li>
                             <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Account Settings</a></li>
@@ -153,7 +154,7 @@
                     </div>
                 </div>
 
-                <div class="collapse navbar-collapse navbar-header" id="bs-example-navbar-collapse-1">
+                <div class="collapse navbar-collapse navbar-header" id="nav-main">
                     <ul class="nav navbar-nav">
                         <li ui-sref-active="active"><a ui-sref='home.profile' href=""><i class="fa fa-home"></i> <span>Profile</span></a></li>
                         <li ui-sref-active="active"><a ui-sref="home.catalog" href="#/catalog"><i class="fa fa-cubes"></i> <span>Catalog</span></a></li>
