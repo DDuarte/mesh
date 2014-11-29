@@ -394,7 +394,7 @@ angular.module('meshApp.model', [
             else {
                 meshApi.addModelVote($scope.model.id, 'DOWN').
                     success( function (data, status, headers, config) {
-                        if ($scope.userVote == 'DOWN') {
+                        if ($scope.userVote == 'UP') {
                             $scope.model.upvotes--;
                         }
                         $scope.userVote = 'DOWN';
