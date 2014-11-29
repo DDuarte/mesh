@@ -56,7 +56,7 @@ module.exports = function ( karma ) {
       'Chrome'
     ],
 
-	customLaunchers: {
+    customLaunchers: {
       Chrome_travis_ci: {
         base: 'Chrome',
         flags: ['--no-sandbox']
