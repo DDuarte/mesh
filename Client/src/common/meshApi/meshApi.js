@@ -8,7 +8,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 ipCookie.remove('token');
             });
         },
-        validateAccount: function(username, activationToken) {
+        validateAccount: function (username, activationToken) {
             return $http.post(server.url + '/activateToken', { username: username, token: activationToken });
         },
         forgotPassword: function (email) {
@@ -30,13 +30,13 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
             return $http.get(server.url + '/models/' + id, {headers: getHeaders()});
         },
         addModelVote: function (modelId, vote) {
-            return $http.post(server.url + '/models/' + modelId + '/votes', {vote: vote},{headers: getHeaders()});
+            return $http.post(server.url + '/models/' + modelId + '/votes', {vote: vote}, {headers: getHeaders()});
         },
         deleteModelVote: function (modelId) {
             return $http({
                 url: server.url + '/models/' + modelId + '/votes',
                 method: 'DELETE',
-                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
         register: function (registerInfo) {
@@ -57,7 +57,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 url: server.url + '/models/' + modelId + '/comments',
                 method: 'DELETE',
                 data: {date: date},
-                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
         addModelToFavourites: function (modelId) {
@@ -70,7 +70,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 url: server.url + '/users/' + getLoggedToken().username + '/favourites',
                 method: 'DELETE',
                 data: {modelid: modelId},
-                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
         followUser: function (otheruser) {
@@ -83,10 +83,10 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 url: server.url + '/users/' + getLoggedToken().username + '/followers',
                 method: 'DELETE',
                 data: {otheruser: otheruser},
-                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
-        createGroup: function(groupName) {
+        createGroup: function (groupName) {
             return $http.post(server.url + '/groups', {name: groupName}, {
                 headers: getHeaders()
             });
@@ -94,10 +94,14 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
     };
 
     var getLoggedToken = function () {
-        return ipCookie('token');
+        if (ipCookie('token')) {
+            return ipCookie('token');
+        } else {
+            return { token: null };
+        }
     };
 
-    var getHeaders = function() {
+    var getHeaders = function () {
         return api.isLoggedIn() ? {'Authorization': 'Bearer ' + getLoggedToken().token} : {};
     };
 
