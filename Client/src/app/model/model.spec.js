@@ -72,7 +72,7 @@ describe("Model controller functionality", function () {
         expect(controller).toBeDefined();
     });
 
-    it('should decrement the number of likes when the like button is pressed again', function () {
+    it('should decrement the number of upvotes when the upvote button is pressed again', function () {
         // mock the upvote request
         $httpBackend.whenDELETE(serverUrl + '/models/' + stateParams.id + '/votes').respond(200);
         scope.upvote();
@@ -82,14 +82,14 @@ describe("Model controller functionality", function () {
         expect(scope.model.downvotes).toEqual(2);
     });
 
-    it('should increment the number of dislikes when the dislike button is pressed for the first time', function() {
+    it('should increment the number of downvotes and decrement the number of upvotes when the downvote button is pressed for the first time', function() {
         // mock the downvote request
         $httpBackend.whenPOST(serverUrl + '/models/' + stateParams.id + '/votes').respond(200);
         scope.downvote();
         $httpBackend.flush();
         expect(scope.model.downvotes).toEqual(3);
         expect(scope.userVote).toEqual('DOWN');
-        expect(scope.model.upvotes).toEqual(20);
+        expect(scope.model.upvotes).toEqual(19);
     });
 
 });
