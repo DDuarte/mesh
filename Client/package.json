@@ -36,6 +36,7 @@
     "karma-growl": "^0.1.0",
     "karma-growl-reporter": "^0.1.1",
     "karma-jasmine": "^0.1.5",
-    "karma-phantomjs-launcher": "^0.1.4"
+    "karma-phantomjs-launcher": "^0.1.4",
+    "phantomjs": "^1.9.12"
   }
 }
