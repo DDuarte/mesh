@@ -2,19 +2,40 @@ var Promise = require('bluebird');
 var db = require('../common/neo4jDatabase');
 var model = {};
 
-/*
- TO CREATE MODEL
- 
- // get unique id
- MERGE (id:UniqueId{name:'Model'})
- ON CREATE SET id.count = 1
- ON MATCH SET id.count = id.count + 1
- WITH id.count AS uid
- // create Model node
- CREATE (m:Model{id:uid,name:'My horse'})
- RETURN m as model
-
+/**
+ * Creates a model
+ * @param {String} name Name of the model
+ * @param {String} description Description of the model
+ * @param {String} filePath Path of the model file in the server
+ * @param {String} ownerName Name of the owner of the model
  */
+model.create = function (name, description, filePath, ownerName) {
+    var query = [
+        // get unique id
+        'MERGE (id:UniqueId{name:\'Model\'})',
+        'ON CREATE SET id.count = 1',
+        'ON MATCH SET id.count = id.count + 1',
+        'WITH id.count AS uid',
+        'CREATE (m:Model{id:uid,name:{name}, description: {description}, filePath: {filePath}})',
+        'MATCH (user:User {name: {ownerName}})',
+        'CREATE user-[:OWNS]->(m)',
+        'RETURN m as model'
+    ].join('\n');
+
+    var params = {
+        name: name,
+        description: description,
+        filePath: filePath,
+        ownerName: ownerName
+    };
+
+    return new Promise(function(resolve, reject) {
+        db.query(query, params, function(error, results) {
+            if (error) throw new Error('Internal database error');
+            resolve(results[0]);
+        });
+    });
+};
 
 /**
  *
