@@ -258,8 +258,6 @@ angular.module('meshApp.model', [
 
             meshApi.getModel($stateParams.id). // TODO: make url configurable?
                 success( function (data, status, headers, config) {
-
-                    console.log(data);
                     $scope.model = data.model;
                     $scope.favourited = data.favourited;
                     $scope.userVote = data.uservote;
@@ -345,7 +343,7 @@ angular.module('meshApp.model', [
             processingVote = true;
             if ($scope.userVote == 'UP') {
                 meshApi.deleteModelVote($scope.model.id).
-                    success( function (data, status, headers, config) {
+                    success( function () {
                         if ($scope.userVote == 'UP') {
                             $scope.model.upvotes--;
                         }
@@ -423,7 +421,6 @@ angular.module('meshApp.model', [
                     processingFavouriteRequest = false;
                 }).
                 error( function (data, status, headers, config) {
-                    console.log(data);
                     alert('Error ' + status + ' occurred: ' + data.message);
                     processingFavouriteRequest = false;
                 });
@@ -442,7 +439,6 @@ angular.module('meshApp.model', [
                     processingFollowingRequest = false;
                 }).
                 error( function (data, status, headers, config) {
-                    console.log(data);
                     alert('Error ' + status + ' occurred: ' + data.message);
                     processingFollowingRequest = false;
                 });
