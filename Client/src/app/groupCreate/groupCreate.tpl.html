@@ -8,23 +8,34 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-body ">
-                            <form class="form-horizontal form-bordered">
+                            <span spinner-key="spinner" us-spinner="{radius:20, width:8, length: 16}"></span>
+                            <div ng-show="groupRegisterError" class="alert alert-danger">
+                                <strong>Group register error: </strong> {{groupRegisterError}}.
+                                Please try again!
+                            </div>
+                            <form name="group_form" class="form-horizontal form-bordered">
                                 <div class="form-group">
                                     <label class="control-label col-md-2 pull-left">Name</label>
 
                                     <div class="col-md-10">
-                                        <input type="text" placeholder="Group Name" class="form-control col-md-10">
+                                        <input type="text" placeholder="Group Name" class="form-control col-md-10"
+                                               ng-minlength="5" ng-maxlength="20" ng-model="group.name">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-2 pull-left">Description</label>
 
                                     <div class="col-md-10">
-                                        <input type="text" placeholder="Group Description" class="form-control col-md-10">
+                                        <input type="text" placeholder="Group Description"
+                                               class="form-control col-md-10" ng-minlength="5" ng-maxlength="254"
+                                               ng-model="group.description">
                                     </div>
                                 </div>
                                 <!-- form-group -->
-                                <button class="btn btn-success pull-right">Create group</button>
+                                <button class="btn btn-success pull-right"
+                                        data-ng-disabled="group_form.$invalid || registerPending"
+                                        ng-click="createGroup(group)">Create group
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -34,4 +45,12 @@
             <!-- col-sm-9 -->
         </div>
     </div>
+
+    <script type="text/ng-template" id="groupCreateSuccessId">
+         Group successfully created
+         <div class="ngdialog-buttons mt">
+             <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="closeThisDialog('button')">Ok</button>
+         </div>
+    </script>
+
 </div>
