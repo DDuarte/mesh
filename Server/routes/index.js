@@ -8,4 +8,5 @@ module.exports = function (server) {
     require('./model')(server);
     require('./tag')(server);
     require('./group')(server);
+    require('./upload')(server);
 };
