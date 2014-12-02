@@ -23,6 +23,24 @@ module.exports = function (server) {
     });
 
     server.route({
+        method: 'GET',
+        path: '/myProfile',
+        config: {
+            auth: 'token'
+        },
+        handler: function(request, reply) {
+            var username = request.auth.credentials.username;
+            User.getByUsername(username)
+                .then(function(user) {
+                    reply(user);
+                })
+                .catch(function(reason) {
+                    reply({error: reason}).code(404);
+                })
+        }
+    });
+
+    server.route({
         method: 'POST',
         path: '/users/{username}/favourites',
         config: {
