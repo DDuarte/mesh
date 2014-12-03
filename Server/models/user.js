@@ -18,7 +18,7 @@ user.getByUsername = function (username) {
     return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u: User{username: { username }})',
-            'RETURN { firstName: u.firstName, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active } as user'
+            'RETURN { firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active } as user'
         ].join('\n');
 
         var params = {
