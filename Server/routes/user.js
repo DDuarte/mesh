@@ -110,6 +110,26 @@ module.exports = function (server) {
     });
 
     server.route({
+        method: 'GET',
+        path: '/users/{username}/followers',
+        config: {
+            auth: false,
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            User.getFollowers(request.params.username).then(function (result) {
+                reply(result);
+            }, function (error) {
+                reply('Internal error').code(500);
+            });
+        }
+    });
+
+    server.route({
         method: 'POST',
         path: '/users/{username}/followers',
         config: {
@@ -165,6 +185,26 @@ module.exports = function (server) {
                 } else {
                     reply(result);
                 }
+            }, function (error) {
+                reply('Internal error').code(500);
+            });
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/users/{username}/following',
+        config: {
+            auth: false,
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            User.getFollowing(request.params.username).then(function (result) {
+                reply(result);
             }, function (error) {
                 reply('Internal error').code(500);
             });

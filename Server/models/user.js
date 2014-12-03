@@ -65,6 +65,54 @@ user.getByEmail = function (email) {
     });
 };
 
+user.getFollowers = function (username) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (user:User{username: { username }})<-[:FOLLOWING]-(follower:User)',
+            'RETURN collect({username: follower.username, avatar: follower.avatar, email: follower.email}) as followers'
+        ].join('\n');
+
+        var params = {
+            username: username
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+
+            console.log(results);
+
+            if (results.length > 0)
+                return resolve(results[0]['followers']);
+            else
+                return reject('No users were found');
+        });
+    });
+};
+
+user.getFollowing = function (username) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (user:User{username: { username }})-[:FOLLOWING]->(followed:User)',
+            'RETURN collect({username: followed.username, avatar: followed.avatar, email: followed.email}) as following'
+        ].join('\n');
+
+        var params = {
+            username: username
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+
+            console.log(results);
+
+            if (results.length > 0)
+                return resolve(results[0]['following']);
+            else
+                return reject('No users were found');
+        });
+    });
+};
+
 /**
  *
  * Creates a user based on the registerInfo
