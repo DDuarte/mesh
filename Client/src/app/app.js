@@ -24,7 +24,8 @@ angular.module('meshApp', [
     'ipCookie',
     'ngDialog',
     'angularSpinner',
-    'infinite-scroll'
+    'infinite-scroll',
+    'angularFileUpload'
 ])
 
     .constant('_', window._)
