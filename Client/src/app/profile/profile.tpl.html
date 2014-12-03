@@ -417,12 +417,12 @@
 
                     <div class="panel-body ">
 
-                        <form class="form-horizontal form-bordered">
+                        <form name="userInfo" class="form-horizontal form-bordered">
                             <div class="form-group">
                                 <label class="control-label col-md-2 pull-left">Username</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" placeholder={{user.username}} class="form-control col-md-10" disabled>
+                                    <input type="text" ng-model=user.username class="form-control col-md-10" disabled>
                                 </div>
                             </div>
                             <!-- form-group -->
@@ -431,7 +431,7 @@
                                 <label class="control-label col-md-2 pull-left">First name</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" placeholder={{user.firstName}} class="form-control" disabled>
+                                    <input type="text" ng-model=user.firstName class="form-control">
                                 </div>
                             </div>
                             <!-- form-group -->
@@ -440,7 +440,7 @@
                                 <label class="control-label col-md-2 pull-left">Last name</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" placeholder={{user.lastName}} class="form-control" disabled>
+                                    <input type="text" ng-model=user.lastName class="form-control">
                                 </div>
                             </div>
                             <!-- form-group -->
@@ -449,7 +449,7 @@
                                 <label class="control-label col-md-2 pull-left" for="userEmail">Email</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" placeholder="{{user.email}}" class="form-control" id="userEmail"
+                                    <input type="text" ng-model="user.email" class="form-control" id="userEmail"
                                            disabled>
                                 </div>
                             </div>
@@ -459,7 +459,7 @@
                                 <label class="control-label col-md-2 pull-left">About</label>
 
                                 <div class="col-md-10">
-                                    <textarea id="autoResizeTA" class="form-control" rows="5" style="height: 90px;">{{user.about}}</textarea>
+                                    <textarea ng-model="user.about" id="autoResizeTA" class="form-control" rows="5" style="height: 90px;"></textarea>
                                 </div>
                             </div>
                             <!-- form-group -->
@@ -479,7 +479,7 @@
                             <!-- form-group -->
 
                         </form>
-                        <button class="btn btn-success pull-right">Save changes</button>
+                        <button type="submit" ng-click="submit()" ng-disabled="userInfo.$invalid" class="btn btn-success pull-right">Save changes</button>
                     </div>
                     <!-- panel-body -->
 

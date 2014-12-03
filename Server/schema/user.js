@@ -50,5 +50,6 @@ module.exports = {
     password: Joi.string().min(3).max(256),
     birthdate: Joi.date().format('YYYY-MM-DD'),
     country: Joi.any().allow(countries),
-    rememberMe: Joi.boolean()
+    rememberMe: Joi.boolean(),
+    about: Joi.string().max(1024)
 };

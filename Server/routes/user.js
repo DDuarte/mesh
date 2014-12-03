@@ -210,4 +210,39 @@ module.exports = function (server) {
             });
         }
     });
+
+
+    server.route({
+        method: 'PUT',
+        path: '/users/{username}',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                },
+                payload: {
+                    firstName: schema.user.firstName,
+                    lastName: schema.user.lastName,
+                    birthdate: schema.user.birthdate,
+                    country: schema.user.country,
+                    about: schema.user.about
+                }
+            }
+        },
+        handler: function (request, reply) {
+            if (request.params.username != request.auth.credentials.username)
+                reply('Permission denied').code(403);
+
+            User.update(request.auth.credentials.username, request.payload).then(function (result) {
+                if (!result) {
+                    reply('No such user.').code(404);
+                } else {
+                    reply(result);
+                }
+            }, function (error) {
+                reply('Internal error').code(500);
+            });
+        }
+    });
 };

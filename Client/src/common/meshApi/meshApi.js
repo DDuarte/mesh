@@ -111,6 +111,14 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 data: {modelName: modelName, modelDescription: modelDescription},
                 file: file // single file or a list of files. list is only for html5
             });
+        },
+        updateUser: function(user) {
+            return $http({
+                url: server.url + '/users/' + getLoggedToken().username,
+                method: 'PUT',
+                data: user,
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+            });
         }
     };
 
