@@ -10,12 +10,12 @@
                     <div class="panel panel-default">
                         <div class="panel-body ">
 
-                            <form class="form-horizontal form-bordered">
+                            <form name="uploadForm" class="form-horizontal form-bordered">
                                 <div class="form-group">
                                     <label class="control-label col-md-2 pull-left">Title</label>
 
                                     <div class="col-md-10">
-                                        <input type="text" placeholder="Model title" class="form-control col-md-10">
+                                        <input type="text" ng-model="model.name" placeholder="Model Name" class="form-control col-md-10" ng-required="true">
                                     </div>
                                 </div>
                                 <!-- form-group -->
@@ -24,7 +24,7 @@
                                     <label class="control-label col-md-2 pull-left">Description</label>
 
                                     <div class="col-md-10">
-                                        <textarea id="autoResizeTA" class="form-control" rows="5" style="height: 90px;"></textarea>
+                                        <textarea id="autoResizeTA" ng-model="model.description" class="form-control" rows="5" style="height: 90px;" ng-required="true"></textarea>
                                     </div>
                                 </div>
                                 <!-- form-group -->
@@ -33,7 +33,7 @@
                                     <label class="control-label col-md-2 pull-left" for="privacy">Privacy</label>
 
                                     <div class="col-md-10">
-                                        <select id="privacy" class="form-control col-md-10">
+                                        <select ng-model="model.privacy" id="privacy" class="form-control col-md-10" ng-required="true">
                                             <option value="public">Public</option>
                                             <option value="private">Private</option>
                                         </select>
@@ -50,7 +50,7 @@
                                         <input name="tags" id="tags" value="foo,bar,baz"
                                                style="display: none;">
 
-                                        <tags-input ng-model="newModel.tags">
+                                        <tags-input ng-model="model.tags">
                                             <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
                                         </tags-input>
                                     </div>
@@ -63,7 +63,7 @@
                                         <input name="tags" id="tags" value="foo,bar,baz"
                                                style="display: none;">
 
-                                        <tags-input ng-model="newModel.galleries">
+                                        <tags-input ng-model="model.galleries">
                                             <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
                                         </tags-input>
                                     </div>
@@ -71,18 +71,14 @@
                                 <!-- form-group -->
 
                                 <div class="panel-body">
-                                    <p>Upload the model files here.</p>
+                                    <p>Upload the model files here. <b>Only .obj and .stl files are allowed</b></p>
                                     <br />
-                                    <div class="dropzone" drop-zone id="file-dropzone">
-                                        <div class="fallback">
-                                            <input name="file" type="file" multiple />
-                                        </div>
-                                    </div>
+                                    <input type="file" ng-file-select="" accept="*.obj, *.stl" ng-model="modelData" name="file" required="">
                                 </div><!-- panel-body -->
 
                             </form>
 
-                            <button class="btn btn-success pull-right">Upload</button>
+                            <button class="btn btn-success pull-right disabled">Upload</button>
 
                         </div><!--panel-body-->
 

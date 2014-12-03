@@ -67,6 +67,7 @@ angular.module('meshApp.modelUpload', [
     })
 
     .controller('ModelUploadCtrl', function ModelUploadController($scope, $stateParams, $http) {
+        $scope.model = {};
         $scope.init = function() {
             Dropzone.autoDiscover = false;
             var hiddenInput = angular.element('.dz-hidden-input').remove();
