@@ -7,6 +7,9 @@ var user = {};
 /**
  *
  * Returns a user by it's name
+/**
+ *
+ * Returns a user by it's name
  * @param username string identifier of the user
  * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
  *
@@ -15,7 +18,7 @@ user.getByUsername = function (username) {
     return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u: User{username: { username }})',
-            'RETURN { username: u.username, passwordHash: u.passwordHash, name: u.name, avatar: u.avatar, email: u.email, active: u.active } as user'
+            'RETURN { firstName: u.firstName, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active } as user'
         ].join('\n');
 
         var params = {
@@ -26,7 +29,7 @@ user.getByUsername = function (username) {
             if (err) return reject(err);
 
             if (results.length > 0)
-                return resolve(results);
+                return resolve(results[0]['user']);
             else
                 return reject('No users were found');
         });
