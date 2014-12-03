@@ -115,7 +115,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         updateUser: function(user) {
             return $http({
                 url: server.url + '/users/' + getLoggedToken().username,
-                method: 'PUT',
+                method: 'PATCH',
                 data: user,
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });

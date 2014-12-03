@@ -213,7 +213,7 @@ module.exports = function (server) {
 
 
     server.route({
-        method: 'PUT',
+        method: 'PATCH',
         path: '/users/{username}',
         config: {
             auth: 'token',
