@@ -35,9 +35,9 @@ angular.module('meshApp.home', [
             $state.go('login');
         }
 
-        angular.element(window).ready(function () {
+        $scope.user = {};
 
-        });
+        $scope.user.username = meshApi.getLoggedUsername();
 
         var navMain = angular.element("#nav-main");
         navMain.on("click", "a", null, function () {
