@@ -18,18 +18,19 @@
             </v-tab>
             <v-tab>
                 <tab-heading>Newest</tab-heading>
-                <div ng-click="loadNewestModels()">FOR NOW, CLICK HERE</div>
-                <modelthumbnail ng-repeat="model in newest"
-                                model-id={{model.modelId}}
-                                image-url={{model.thumbnail}}
-                                title={{model.title}}
-                                author={{model.author}}
-                                author-avatar={{model.authorAvatar}}
-                                date={{model.date}}
-                                num-comments={{model.numComments}}
-                                upvotes={{model.upvotes}}
-                                downvotes={{model.downvotes}}>
-                </modelthumbnail>
+                <div id="newestModelList" class="row" infinite-scroll="loadNewestModels()" infinite-scroll-disabled="!hasMoreNewModels" infinite-scroll-distance="0">
+                    <modelthumbnail ng-repeat="model in newest"
+                                    model-id={{model.modelId}}
+                                    image-url={{model.thumbnail}}
+                                    title={{model.title}}
+                                    author={{model.author}}
+                                    author-avatar={{model.authorAvatar}}
+                                    date={{model.date}}
+                                    num-comments={{model.numComments}}
+                                    upvotes={{model.upvotes}}
+                                    downvotes={{model.downvotes}}>
+                    </modelthumbnail>
+                </div>
             </v-tab>
             <v-tab>
                 <tab-heading>Top Rated</tab-heading>

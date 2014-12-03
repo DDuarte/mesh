@@ -43,7 +43,7 @@ angular.module('meshApp.catalog', [
             }
             $scope.hasMoreNewModels = false;
 
-            meshApi.getModelsOlderThan( $scope.newest[0] ? $scope.newest[$scope.newest.length-1].date : null).
+            meshApi.getModelsOlderThan( $scope.newest.length > 0 ? ($scope.newest[$scope.newest.length-1].date) : null).
                 success( function (data, status, headers, config) {
                     for (var i = 0; i < data.length; ++i) {
                         $scope.newest.push(data[i]);
