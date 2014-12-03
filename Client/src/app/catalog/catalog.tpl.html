@@ -18,7 +18,7 @@
             </v-tab>
             <v-tab>
                 <tab-heading>Newest</tab-heading>
-                <div id="newestModelList" class="row" infinite-scroll="loadNewestModels()" infinite-scroll-disabled="!hasMoreNewModels" infinite-scroll-distance="0">
+                <div id="newestModelList" class="row" infinite-scroll="loadNewestModels()" infinite-scroll-disabled="!hasMoreNewModels" infinite-scroll-distance="1">
                     <modelthumbnail ng-repeat="model in newest"
                                     model-id={{model.modelId}}
                                     image-url={{model.thumbnail}}
