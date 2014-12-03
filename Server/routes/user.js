@@ -3,21 +3,48 @@
 var User = require('../models/user'),
     Promise = require('bluebird'),
     client = require('../common/redisClient'),
-    schema = require('../schema');
+    schema = require('../schema'),
+    Boom = require('boom');
 
 module.exports = function (server) {
 
+
+    /* server.route({
+     method: 'GET',
+     path: '/users/{id}',
+     handler: function (request, reply) {
+     var id = request.params.id;
+
+     client.incr(id + '_counter', function (err, counter) {
+     reply({
+     'id': id,
+     'counter': counter
+     });
+     });
+     }
+     });*/
+
     server.route({
         method: 'GET',
-        path: '/users/{id}',
+        path: '/users/{username}',
+        config: {
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                }
+            }
+        },
         handler: function (request, reply) {
-            var id = request.params.id;
+            var username = request.params.username;
 
-            client.incr(id + '_counter', function (err, counter) {
-                reply({
-                    'id': id,
-                    'counter': counter
-                });
+            client.incr(username + '_counter', function (err, counter) {
+                User.getByUsername(username)
+                    .then(function (user) {
+                        reply(user);
+                    })
+                    .catch(function (reason) {
+                        reply(Boom.notFound(reason));
+                    });
             });
         }
     });
@@ -28,13 +55,13 @@ module.exports = function (server) {
         config: {
             auth: 'token'
         },
-        handler: function(request, reply) {
+        handler: function (request, reply) {
             var username = request.auth.credentials.username;
             User.getByUsername(username)
-                .then(function(user) {
+                .then(function (user) {
                     reply(user);
                 })
-                .catch(function(reason) {
+                .catch(function (reason) {
                     reply({error: reason}).code(404);
                 })
         }
