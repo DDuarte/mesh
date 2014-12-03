@@ -73,12 +73,12 @@
                                 <div class="panel-body">
                                     <p>Upload the model files here. <b>Only .obj and .stl files are allowed</b></p>
                                     <br />
-                                    <input type="file" ng-file-select="" accept="*.obj, *.stl" ng-model="modelData" name="file" required="">
+                                    <input type="file" ng-file-select="" accept="*.obj, *.stl" ng-model="modelData" name="file" required>
                                 </div><!-- panel-body -->
 
                             </form>
 
-                            <button class="btn btn-success pull-right disabled">Upload</button>
+                            <button class="btn btn-success pull-right" ng-disabled="uploadForm.$invalid || !modelData" ng-click="upload()">Upload</button>
 
                         </div><!--panel-body-->
 

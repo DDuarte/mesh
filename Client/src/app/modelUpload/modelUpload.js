@@ -66,10 +66,22 @@ angular.module('meshApp.modelUpload', [
         };
     })
 
-    .controller('ModelUploadCtrl', function ModelUploadController($scope, $stateParams, $http) {
+    .controller('ModelUploadCtrl', function ModelUploadController($scope, meshApi) {
         $scope.model = {};
+        $scope.modelData = {};
         $scope.init = function() {
             Dropzone.autoDiscover = false;
             var hiddenInput = angular.element('.dz-hidden-input').remove();
+        };
+
+        $scope.upload = function() {
+            meshApi.uploadModel($scope.model.name, $scope.model.description, $scope.modelData)
+                .progress(function(evt) {
+                    console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file.name);
+                })
+                .success(function(data, status, headers, config) {
+                    // file is uploaded successfully
+                    console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
+                });
         };
     });

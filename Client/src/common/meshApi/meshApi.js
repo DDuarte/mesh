@@ -1,4 +1,4 @@
-angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) {
+angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, $upload) {
     var api = {
         init: function (data) {
             ipCookie('token', data);
@@ -101,6 +101,15 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
         createGroup: function (groupName) {
             return $http.post(server.url + '/groups', {name: groupName}, {
                 headers: getHeaders()
+            });
+        },
+        uploadModel: function(modelName, modelDescription, file) {
+            return $upload.upload({
+                url: server.url + '/upload', // upload.php script, node.js route, or servlet url
+                method: 'POST',
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token}, // only for html5
+                data: {modelName: modelName, modelDescription: modelDescription},
+                file: file // single file or a list of files. list is only for html5
             });
         }
     };
