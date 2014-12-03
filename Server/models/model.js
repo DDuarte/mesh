@@ -16,17 +16,21 @@ model.create = function (name, description, filePath, ownerName) {
         'ON CREATE SET id.count = 1',
         'ON MATCH SET id.count = id.count + 1',
         'WITH id.count AS uid',
-        'CREATE (m:Model{id:uid,name:{name}, description: {description}, filePath: {filePath}})',
-        'MATCH (user:User {name: {ownerName}})',
+        'CREATE (m:Model{id:uid,name:{name}, description: {description}, filePath: {filePath}, publicationDate: {currentDate}})', //TODO possibly add thumbnail
+        'WITH m',
+        'MATCH (user:User {username: {ownerName}})',
         'CREATE user-[:OWNS]->(m)',
         'RETURN m as model'
     ].join('\n');
+
+    var timestamp = new Date();
 
     var params = {
         name: name,
         description: description,
         filePath: filePath,
-        ownerName: ownerName
+        ownerName: ownerName,
+        currentDate: timestamp.toISOString()
     };
 
     return new Promise(function(resolve, reject) {
