@@ -23,7 +23,8 @@ angular.module('meshApp', [
     'ngTagsInput',
     'ipCookie',
     'ngDialog',
-    'angularSpinner'
+    'angularSpinner',
+    'infinite-scroll'
 ])
 
     .constant('_', window._)

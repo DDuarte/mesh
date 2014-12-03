@@ -13,7 +13,8 @@
     "ng-tags-input": "~2.1.1",
     "dropzone": "~3.10.2",
     "angular-cookie": "~4.0.6",
-    "ngDialog": "~0.3.4"
+    "ngDialog": "~0.3.4",
+    "ngInfiniteScroll": "1.0.0"
   },
   "dependencies": {
     "particles.js": "~1.0.3",
