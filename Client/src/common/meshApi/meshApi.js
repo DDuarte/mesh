@@ -26,6 +26,12 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
         getLoggedAvatar: function () {
             return getLoggedToken().avatar;
         },
+        getModelsOlderThan: function (date) {
+            return $http.get(server.url + '/catalog/newest', {
+                params: {startdate: date},
+                headers: getHeaders()
+            });
+        },
         getModel: function (id) {
             return $http.get(server.url + '/models/' + id, {headers: getHeaders()});
         },
