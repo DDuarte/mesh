@@ -31,7 +31,9 @@ catalog.getModelsOlderThan = function (startdate) {
 
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
-            return resolve(results[0] ? results[0].comments : results);
+            return resolve(results[0] ? results[0].models : results);
         });
     });
 };
+
+module.exports = catalog;

@@ -9,4 +9,5 @@ module.exports = function (server) {
     require('./tag')(server);
     require('./group')(server);
     require('./upload')(server);
+    require('./catalog')(server);
 };
