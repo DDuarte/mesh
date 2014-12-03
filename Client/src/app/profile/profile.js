@@ -18,6 +18,18 @@ angular.module('meshApp.profile', [
                 });
         };
 
+        $scope.getFollowers = function () {
+            meshApi.getFollowers($scope.user.username).success(function (data) {
+                $scope.user.followers = data;
+            });
+        };
+
+        $scope.getFollowing = function () {
+            meshApi.getFollowing($scope.user.username).success(function (data) {
+                $scope.user.following = data;
+            });
+        };
+
         var models = function (g) { return _.range(10).map(function (i) { return { name: "Model " + g + "-" + i }; }); };
         $scope.galleries = _.range(10).map(function (i) { return { name: "Gallery " + i, models: models(i) }; });
 

@@ -73,6 +73,12 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
+        getFollowers: function (username) {
+            return $http.get(server.url + '/users/' + username + '/followers');
+        },
+        getFollowing: function (username) {
+            return $http.get(server.url + '/users/' + username + '/following');
+        },
         followUser: function (otheruser) {
             return $http.post(server.url + '/users/' + getLoggedToken().username + '/followers', {otheruser: otheruser}, {
                 headers: getHeaders()
