@@ -13,7 +13,7 @@ angular.module('meshApp.profile', [
     .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http, server, meshApi) {
         $scope.init = function() {
             $http.get(server.url + '/users/' + $stateParams.username). // TODO: make url configurable?
-                success(function (data, status, headers, config) {
+                success(function (data) {
                     $scope.user = data;
                 });
         };
