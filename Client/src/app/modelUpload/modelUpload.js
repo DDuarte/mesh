@@ -77,7 +77,7 @@ angular.module('meshApp.modelUpload', [
         $scope.upload = function() {
             meshApi.uploadModel($scope.model.name, $scope.model.description, $scope.modelData)
                 .progress(function(evt) {
-                    console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file.name);
+                    console.log('progress: ' + parseInt(10, 100.0 * evt.loaded / evt.total) + 'file :'+ evt.config.file.name);
                 })
                 .success(function(data, status, headers, config) {
                     // file is uploaded successfully
