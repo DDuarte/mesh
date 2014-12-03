@@ -33,6 +33,23 @@ angular.module('meshApp.profile', [
         var models = function (g) { return _.range(10).map(function (i) { return { name: "Model " + g + "-" + i }; }); };
         $scope.galleries = _.range(10).map(function (i) { return { name: "Gallery " + i, models: models(i) }; });
 
+        $scope.selectedGallery = $scope.galleries[0];
+
         $scope.orderByField = 'username';
         $scope.reverseSort = false;
+
+        $scope.galleriesPaginatorMaxSize = 5;
+        $scope.galleriesPaginatorCurrentPage = 1;
+        $scope.galleriesPaginatorItemsPerPage = 6;
+        $scope.galleriesPaginatorTotalItems = $scope.selectedGallery.models.length;
+
+
+        $scope.galleriesPaginatorSetPage = function (pageNo) {
+            $scope.galleriesPaginatorCurrentPage = pageNo;
+        };
+
+        $scope.changeSelectedGallery = function (index) {
+            $scope.selectedGallery = $scope.galleries[index];
+            $scope.galleriesPaginatorCurrentPage = 1;
+        };
     });

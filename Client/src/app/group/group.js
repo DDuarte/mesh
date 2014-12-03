@@ -19,6 +19,22 @@ angular.module('meshApp.group', [
         $scope.orderByField = 'username';
         $scope.reverseSort = false;
 
+        $scope.selectedGallery = $scope.galleries[0];
+
+        $scope.galleriesPaginatorMaxSize = 5;
+        $scope.galleriesPaginatorCurrentPage = 1;
+        $scope.galleriesPaginatorItemsPerPage = 6;
+        $scope.galleriesPaginatorTotalItems = $scope.selectedGallery.models.length;
+
+        $scope.galleriesPaginatorSetPage = function (pageNo) {
+            $scope.galleriesPaginatorCurrentPage = pageNo;
+        };
+
+        $scope.changeSelectedGallery = function (index) {
+            $scope.selectedGallery = $scope.galleries[index];
+            $scope.galleriesPaginatorCurrentPage = 1;
+        };
+
         $scope.groupMembers = [
             {
                 "avatarLink": "user1.png",
