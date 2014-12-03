@@ -60,38 +60,32 @@ module.exports = function (server) {
             var password = request.payload.password;
             var rememberMe = request.payload.rememberMe ? request.payload.rememberMe : false;
             User.getByUsername(user).then(function (userData) {
-                if (userData[0]) {
-                    userData = userData[0].user;
-                    console.log(userData);
-                    if (!userData.active) {
-                        return reply(Boom.forbidden('Account is not activated'));
-                    }
-                    var insertedPasswordHash = User.generatePasswordHash(user, password);
-                    console.log(insertedPasswordHash);
-                    if (userData.passwordHash && insertedPasswordHash.toLowerCase() == userData.passwordHash.toLowerCase()) {
-                        client.get(user, function (err, tok) {
-                            if (err) return reply(Boom.badImplementation(err));
+                if (!userData.active) {
+                    return reply(Boom.forbidden('Account is not activated'));
+                }
+                var insertedPasswordHash = User.generatePasswordHash(user, password);
+                console.log(insertedPasswordHash);
+                if (userData.passwordHash && insertedPasswordHash.toLowerCase() == userData.passwordHash.toLowerCase()) {
+                    client.get(user, function (err, tok) {
+                        if (err) return reply(Boom.badImplementation(err));
 
-                            if (tok) {
-                                client.ttl(user, function (err, data) {
-                                    if (!err && data != -1) {
-                                        client.expire(user, tokenTTL);
-                                    }
-                                });
-                                return reply({username: user, token: tok, avatar: userData.avatar });
-                            } else {
-                                var token = jwt.sign({username: user}, privateKey);
-                                client.set(user, token);
-                                if (!rememberMe)
+                        if (tok) {
+                            client.ttl(user, function (err, data) {
+                                if (!err && data != -1) {
                                     client.expire(user, tokenTTL);
-                                return reply({username: user, token: token, avatar: userData.avatar });
-                            }
-                        });
-                    } else {
-                        reply(Boom.badRequest('Invalid password'));
-                    }
+                                }
+                            });
+                            return reply({username: user, token: tok, avatar: userData.avatar });
+                        } else {
+                            var token = jwt.sign({username: user}, privateKey);
+                            client.set(user, token);
+                            if (!rememberMe)
+                                client.expire(user, tokenTTL);
+                            return reply({username: user, token: token, avatar: userData.avatar });
+                        }
+                    });
                 } else {
-                    reply(Boom.badRequest('Invalid username'));
+                    reply(Boom.badRequest('Invalid password'));
                 }
             }, function () {
                 reply(Boom.badRequest('Invalid username'));
