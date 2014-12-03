@@ -65,6 +65,7 @@ module.exports = {
             'vendor/jquery/dist/jquery.min.js',
             'js/bootstrap.min.js',
             'vendor/angular/angular.js',
+            'vendor/ng-file-upload/angular-file-upload.js',
             'vendor/spin.js/spin.js',
             'vendor/angular-spinner/angular-spinner.js',
             'vendor/angular-cookie/angular-cookie.min.js',
