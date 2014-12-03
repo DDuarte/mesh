@@ -28,6 +28,11 @@
     <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
     <script type="text/javascript" src="<%= file %>"></script>
     <% }); %>
+
+    <script type="text/javascript" src="http://platform.linkedin.com/in.js">
+        api_key: 77xhpx5nrj2r68
+        authorize: true
+    </script>
 </head>
 
 <body ui-view>
