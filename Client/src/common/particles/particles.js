@@ -79,11 +79,14 @@ angular.module('meshApp').factory('particles', function () {
                 pJS_mobile();
             }
 
-            window.addEventListener('resize', function() {
-                checkOnResize();
-            }, true);
+            window.addEventListener('resize', checkOnResize, true);
 
             function checkOnResize() {
+                if (typeof pJS === 'undefined' || !pJS) {
+                    window.removeEventListener('resize', checkOnResize);
+                    return;
+                }
+
                 if (window.innerWidth > 1100) {
                     if (pJS.particles.nb != 150) {
                         pJS.fn.vendors.destroy();
