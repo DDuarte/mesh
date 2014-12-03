@@ -36,7 +36,7 @@ angular.module('meshApp.login', [
             var success = function (data) {
                 meshApi.init(data);
 
-                $state.go('home.profile');
+                $state.go('home.profile', { username: meshApi.getLoggedUsername() });
             };
 
             var error = function (err) {
