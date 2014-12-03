@@ -18,4 +18,44 @@ angular.module('meshApp.catalog', [
             $scope.loggedUsername = meshApi.getLoggedUsername();
         }
 
+        $scope.newest = {};
+
+        $scope.hasMoreNewModels = false;
+
+        $scope.init = function () {
+            meshApi.getModelsOlderThan( $scope.newest[0] ? $scope.newest[$scope.newest.length-1].date : null).
+            success( function (data, status, headers, config) {
+                $scope.newest = data;
+
+                if (data.length >= 10) {
+                    $scope.hasMoreNewModels = true;
+                }
+            }).
+            error( function (data, status, headers, config) {
+                alert('Error ' + status + ' occurred: ' + data.message);
+                $scope.hasMoreNewModels = true;
+            });
+        };
+
+        $scope.loadNewestModels = function () {
+            if (!$scope.hasMoreNewModels) {
+                return;
+            }
+            $scope.hasMoreNewModels = false;
+
+            meshApi.getModelsOlderThan( $scope.newest[0] ? $scope.newest[$scope.newest.length-1].date : null).
+                success( function (data, status, headers, config) {
+                    for (var i = 0; i < data.length; ++i) {
+                        $scope.newest.push(data[i]);
+                    }
+
+                    if (data.length >= 10) {
+                        $scope.hasMoreNewModels = true;
+                    }
+                }).
+                error( function (data, status, headers, config) {
+                    alert('Error ' + status + ' occurred: ' + data.message);
+                    $scope.hasMoreNewModels = true;
+                });
+        };
     });
