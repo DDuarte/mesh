@@ -21,7 +21,24 @@ angular.module('meshApp.login', [
                     template: 'changePasswordDialogId',
                     className: 'ngdialog-theme-default'
                 }).then(function (password) {
-                    meshApi.changePassword($stateParams.email, $stateParams.token, password);
+
+                    var openDialog = function (msg) {
+                        ngDialog.open({
+                            template: 'changePasswordDialog2Id',
+                            className: 'ngdialog-theme-default',
+                            data: msg
+                        });
+                    };
+
+                    meshApi.changePassword($stateParams.email, $stateParams.token, password).then(function () {
+                        openDialog('Password changed successfully. Login now.');
+                    }, function (err) {
+                        if (err && err.data && err.data.message) {
+                            openDialog(err.data.message);
+                        } else {
+                            openDialog('An error occurred.');
+                        }
+                    });
                 });
             }
         };
@@ -40,7 +57,6 @@ angular.module('meshApp.login', [
             };
 
             var error = function (err) {
-                console.log(JSON.stringify(err));
                 $scope.loginError = err.message ? err.message : err;
             };
 
@@ -52,7 +68,11 @@ angular.module('meshApp.login', [
                 template: 'forgotPasswordDialogId',
                 className: 'ngdialog-theme-default'
             }).then(function (email) {
-                meshApi.forgotPassword(email);
+                meshApi.forgotPassword(email).then(function () {}, function () {});
+                ngDialog.open({
+                    template: 'forgotPasswordDialog2Id',
+                    className: 'ngdialog-theme-default'
+                });
             });
         };
     });

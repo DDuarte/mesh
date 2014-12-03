@@ -86,6 +86,12 @@
     </div>
 </script>
 
+<script type="text/ng-template" id="forgotPasswordDialog2Id">
+    <div class="ngdialog-message">
+        <p>If you were previously registered on our platform you will receive an email.</p>
+    </div>
+</script>
+
 <script type="text/ng-template" id="changePasswordDialogId">
     <div class="ngdialog-message">
         <h2>Change password</h2>
@@ -96,5 +102,11 @@
     <div class="ngdialog-buttons mt">
         <button type="button" class="ngdialog-button ngdialog-button-primary btn-d" ng-disabled="changePasswordForm.$invalid" ng-click="confirm(changePasswordPassword)">Confirm</button>
         <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="changePasswordDialog2Id">
+    <div class="ngdialog-message">
+        <p>{{ngDialogData}}</p>
     </div>
 </script>

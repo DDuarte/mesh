@@ -105,6 +105,8 @@ module.exports = function (server) {
             auth: false
         },
         handler: function (request, reply) {
+            // Security: this route should always returns 200, even if the specified user
+            // does not exist.
             var email = request.payload.email;
 
             User.getByEmail(email).then(function (userData) {
@@ -121,16 +123,15 @@ module.exports = function (server) {
                     sendMail(email, 'Password change', html, function (error) {
                         if (error) {
                             console.log("routes/register/sendMail: " + error);
-                            reply(Boom.badImplementation('Internal error: failed to send email'));
-                        } else {
-                            reply().code(200);
                         }
+
+                        reply().code(200);
                     });
                 } else {
-                    reply(Boom.badRequest('Invalid username'));
+                    reply().code(200); // invalid username
                 }
             }, function () {
-                reply(Boom.badRequest('Invalid username'));
+                reply().code(200); // invalid username
             });
         }
     });
