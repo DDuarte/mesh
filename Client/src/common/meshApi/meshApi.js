@@ -114,7 +114,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
     };
 
     var getHeaders = function () {
-        return api.isLoggedIn() ? {'Authorization': 'Bearer ' + getLoggedToken().token} : {};
+        return (api.isLoggedIn() && getLoggedToken().token) ? {'Authorization': 'Bearer ' + getLoggedToken().token} : {};
     };
 
     return api;
