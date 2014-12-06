@@ -1,12 +1,11 @@
 var Fs = require('fs');
 var Boom = require('boom');
 var Model = require('../models/model');
-var ModelSchema = require('../schema/model');
+var Schema = require('../schema');
 var Joi = require('joi');
 
 module.exports = function (server) {
 
-    // Validation is a tricky business with multipart form data, do it in the handler until a better solution is found
     server.route({
         path: '/upload',
         method: 'POST',
@@ -14,9 +13,9 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 payload: {
-                    name: ModelSchema.name.required(),
-                    description: ModelSchema.description.required(),
-                    file: Joi.any()
+                    name: Schema.model.name.required(),
+                    description: Schema.model.description.required(),
+                    file: Schema.model.file.required()
                 }
             },
             payload: {

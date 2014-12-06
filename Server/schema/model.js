@@ -6,5 +6,6 @@ module.exports = {
     description: Joi.string().min(10).max(254),
     date: Joi.string().isoDate(),
     comment: Joi.string().trim().min(1).max(1024),
-    vote: Joi.string().trim().regex(/(DOWN)|(UP)/)
+    vote: Joi.string().trim().regex(/(DOWN)|(UP)/),
+    file: Joi.any()
 };
