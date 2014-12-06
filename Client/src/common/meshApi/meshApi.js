@@ -107,8 +107,8 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             return $upload.upload({
                 url: server.url + '/upload', // upload.php script, node.js route, or servlet url
                 method: 'POST',
-                headers: {'Authorization': 'Bearer ' + getLoggedToken().token}, // only for html5
-                data: {modelName: modelName, modelDescription: modelDescription},
+                headers: { 'Authorization': 'Bearer ' + getLoggedToken().token }, // only for html5
+                data: { name: modelName, description: modelDescription },
                 file: file // single file or a list of files. list is only for html5
             });
         },
