@@ -12,6 +12,13 @@ module.exports = function (server) {
         method: 'POST',
         config: {
             auth: 'token',
+            validate: {
+                payload: {
+                    name: ModelSchema.name.required(),
+                    description: ModelSchema.description.required(),
+                    file: Joi.any()
+                }
+            },
             payload: {
                 output: 'stream',
                 parse: true,
@@ -21,34 +28,6 @@ module.exports = function (server) {
         handler: function (request, reply) {
             var data = request.payload;
             var ownerName = request.auth.credentials.username;
-
-            if (!data.name)
-                return reply(Boom.badRequest("name payload parameter is missing"));
-
-            if (!data.description)
-                return reply(Boom.badRequest("description payload parameter is missing"));
-
-            if (!data.file)
-                return reply(Boom.badRequest("File is missing"));
-
-
-            var path = __dirname + "/models/" + data.file.hapi.filename;
-            var file = Fs.createWriteStream(path);
-
-            file.on('error', function (err) {
-                console.error("WritingError:", err);
-                return reply(Boom.badImplementation("Error storing file in the server"));
-            });
-
-            data.file.pipe(file);
-
-            data.file.on('end', function (err) {
-
-                if (err)
-                    return reply(Boom.badImplementation("Error saving file on the server"));
-
-                return reply("file piped successfuly").code(500);
-            });
 
             Model.getByName(data.name)
                 .then(function () {
