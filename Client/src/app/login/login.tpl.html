@@ -25,14 +25,14 @@
                     <strong>Activation failed</strong>.
                     Please try again!
                 </div>
-                
+
                 <form name="login_form">
-                    <div class="input-group mb15">
+                    <div class="input-group mb15" ng-class="{ 'has-error': login_form.username.$invalid }">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <input type="text" class="form-control" id="username" name="username" placeholder="Username" ng-model="loginInfo.username" ng-minlength="3" ng-maxlength="20" required>
                     </div>
-                    <p class="text-danger" ng-show="login_form.username.$invalid">Username field must be between 3 and 20 characters long</p>
-                    <div class="input-group mb15">
+                    <p class="text-danger" ng-show="login_form.username.$error">Username field must be between 3 and 20 characters long</p>
+                    <div class="input-group mb15" ng-class="{ 'has-error': login_form.password.$invalid }">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="loginInfo.password" ng-minlength="3" ng-maxlength="256" required>
                     </div>
