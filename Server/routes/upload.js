@@ -22,7 +22,8 @@ module.exports = function (server) {
             payload: {
                 output: 'stream',
                 parse: true,
-                allow: 'multipart/form-data'
+                allow: 'multipart/form-data',
+                maxBytes: 20000000
             }
         },
         handler: function (request, reply) {
