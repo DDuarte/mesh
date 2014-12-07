@@ -83,6 +83,8 @@ angular.module('meshApp.modelUpload', [
             ngDialog.openConfirm({
                 template: 'uploadProgressId',
                 className: 'ngdialog-theme-default',
+                showClose: false,
+                closeByEscape: false,
                 scope: $scope
             }).then(function(value) {
                 //console.log("CLOSED");
@@ -99,7 +101,7 @@ angular.module('meshApp.modelUpload', [
                 })
                 .success(function(data, status, headers, config) {
                     // file is uploaded successfully
-                    //console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
+                    // console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
                     $scope.uploadCompleted = true;
                 })
                 .error(function(data) {
