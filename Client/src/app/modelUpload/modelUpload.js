@@ -66,22 +66,48 @@ angular.module('meshApp.modelUpload', [
         };
     })
 
-    .controller('ModelUploadCtrl', function ModelUploadController($scope, meshApi) {
+    .controller('ModelUploadCtrl', function ModelUploadController($scope, meshApi, ngDialog) {
         $scope.model = {};
         $scope.modelData = {};
+        $scope.uploadError = false;
+        $scope.uploadProgress = 0;
+        $scope.uploadCompleted = false;
+
         $scope.init = function() {
             Dropzone.autoDiscover = false;
             var hiddenInput = angular.element('.dz-hidden-input').remove();
         };
 
         $scope.upload = function() {
+
+            ngDialog.openConfirm({
+                template: 'uploadProgressId',
+                className: 'ngdialog-theme-default',
+                scope: $scope
+            }).then(function(value) {
+                //console.log("CLOSED");
+                $scope.uploadProgress = 0;
+                $scope.uploadCompleted = false;
+                // TODO: change to model view
+            });
+
             meshApi.uploadModel($scope.model.name, $scope.model.description, $scope.modelData)
                 .progress(function(evt) {
-                    console.log('progress: ' + parseInt(10, 100.0 * evt.loaded / evt.total) + 'file :'+ evt.config.file.name);
+                    if (evt && evt.loaded && evt.total) {
+                        $scope.uploadProgress = 100.0 * (evt.loaded / evt.total);
+                    }
                 })
                 .success(function(data, status, headers, config) {
                     // file is uploaded successfully
-                    console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
+                    //console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
+                    $scope.uploadCompleted = true;
+                })
+                .error(function(data) {
+                    $scope.uploadError = true;
+                    $scope.uploadErrorMessage = (data && data.message) ? data.message : data;
+                    ngDialog.closeAll();
+                    $scope.uploadProgress = 0;
+                    $scope.uploadCompleted = false;
                 });
         };
     });

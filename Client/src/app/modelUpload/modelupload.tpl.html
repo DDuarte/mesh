@@ -10,6 +10,11 @@
                     <div class="panel panel-default">
                         <div class="panel-body ">
 
+                            <div ng-show="uploadError" class="alert alert-danger">
+                                <strong>Upload error: </strong> {{uploadErrorMessage}}.
+                                Please try again!
+                            </div>
+
                             <form name="uploadForm" class="form-horizontal form-bordered">
                                 <div class="form-group">
                                     <label class="control-label col-md-2 pull-left">Title</label>
@@ -75,7 +80,6 @@
                                     <br />
                                     <input type="file" ng-file-select="" accept="*.obj, *.stl" ng-model="modelData" name="file" required>
                                 </div><!-- panel-body -->
-
                             </form>
 
                             <button class="btn btn-success pull-right" ng-disabled="uploadForm.$invalid || !modelData" ng-click="upload()">Upload</button>
@@ -90,3 +94,15 @@
         <!-- col-sm-9 -->
     </div>
 </div>
+
+<script type="text/ng-template" id="uploadProgressId">
+    <div class="ngdialog-message">
+    <h5>Upload progress: </h5>
+        <progressbar class="progress-striped active" value="uploadProgress" type="info">
+        </progressbar>
+    <h5 ng-show="uploadCompleted">Upload complete</h5>
+    </div>
+    <div class="ngdialog-buttons mt">
+        <button type="button" class="ngdialog-button ngdialog-button-primary btn-d" ng-show="uploadCompleted" ng-click="confirm()">Confirm</button>
+    </div>
+</script>
