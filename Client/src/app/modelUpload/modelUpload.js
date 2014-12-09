@@ -66,7 +66,7 @@ angular.module('meshApp.modelUpload', [
         };
     })
 
-    .controller('ModelUploadCtrl', function ModelUploadController($scope, meshApi, ngDialog) {
+    .controller('ModelUploadCtrl', function ModelUploadController($scope, meshApi, ngDialog, _) {
         $scope.model = {};
         $scope.modelData = {};
         $scope.uploadError = false;
@@ -80,6 +80,7 @@ angular.module('meshApp.modelUpload', [
 
         $scope.upload = function() {
 
+            var tagsText = _.pluck($scope.model.tags, 'text');
             ngDialog.openConfirm({
                 template: 'uploadProgressId',
                 className: 'ngdialog-theme-default',
@@ -93,7 +94,7 @@ angular.module('meshApp.modelUpload', [
                 // TODO: change to model view
             });
 
-            meshApi.uploadModel($scope.model.name, $scope.model.description, $scope.modelData)
+            meshApi.uploadModel($scope.model.name, $scope.model.description, tagsText, $scope.modelData)
                 .progress(function(evt) {
                     if (evt && evt.loaded && evt.total) {
                         $scope.uploadProgress = 100.0 * (evt.loaded / evt.total);

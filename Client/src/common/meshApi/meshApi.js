@@ -103,12 +103,12 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: getHeaders()
             });
         },
-        uploadModel: function(modelName, modelDescription, file) {
+        uploadModel: function(modelName, modelDescription, tags, file) {
             return $upload.upload({
                 url: server.url + '/upload', // upload.php script, node.js route, or servlet url
                 method: 'POST',
                 headers: { 'Authorization': 'Bearer ' + getLoggedToken().token }, // only for html5
-                data: { name: modelName, description: modelDescription },
+                data: { name: modelName, description: modelDescription, tags: tags },
                 file: file // single file or a list of files. list is only for html5
             });
         },
