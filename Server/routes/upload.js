@@ -16,6 +16,7 @@ module.exports = function (server) {
                 payload: {
                     name: Schema.model.name.required(),
                     description: Schema.model.description.required(),
+                    tags: Schema.model.tags.required(),
                     file: Schema.model.file.required()
                 }
             },

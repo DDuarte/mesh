@@ -7,5 +7,6 @@ module.exports = {
     date: Joi.string().isoDate(),
     comment: Joi.string().trim().min(1).max(1024),
     vote: Joi.string().trim().regex(/(DOWN)|(UP)/),
-    file: Joi.any()
+    file: Joi.any(),
+    tags: Joi.array().includes(Joi.string())
 };
