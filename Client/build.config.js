@@ -82,7 +82,8 @@ module.exports = {
             'lib/Detector.js',
             'lib/jquery.fullscreen.js',
             'lib/OrbitControls.js',
-            'vendor/ngDialog/js/ngDialog.js'
+            'vendor/ngDialog/js/ngDialog.js',
+            'vendor/angular-growl-v2/build/angular-growl.js'
         ],
         map: [
             'vendor/jquery/dist/jquery.min.map',
@@ -92,7 +93,8 @@ module.exports = {
         css: [
             'vendor/pickadate/lib/compressed/themes/default.css',
             'vendor/pickadate/lib/compressed/themes/default.date.css',
-            'vendor/ng-tags-input/ng-tags-input.min.css'
+            'vendor/ng-tags-input/ng-tags-input.min.css',
+            'vendor/angular-growl-v2/build/angular-growl.css'
         ],
         assets: [
             'assets/weather-icons.min.css',

@@ -25,7 +25,8 @@ angular.module('meshApp', [
     'ngDialog',
     'angularSpinner',
     'infinite-scroll',
-    'angularFileUpload'
+    'angularFileUpload',
+    'angular-growl'
 ])
 
     .constant('_', window._)
