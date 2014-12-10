@@ -52,8 +52,6 @@
                                     <label class="control-label col-md-2 pull-left">Tags</label>
 
                                     <div class="col-md-10">
-                                        <input name="tags" id="tags" value="foo,bar,baz"
-                                               style="display: none;">
 
                                         <tags-input ng-model="model.tags">
                                             <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
@@ -65,8 +63,6 @@
                                     <label class="control-label col-md-2 pull-left">Galleries</label>
 
                                     <div class="col-md-10">
-                                        <input name="tags" id="tags" value="foo,bar,baz"
-                                               style="display: none;">
 
                                         <tags-input ng-model="model.galleries">
                                             <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
@@ -75,10 +71,10 @@
                                 </div>
                                 <!-- form-group -->
 
-                                <div class="panel-body">
+                                <div class="form-group">
                                     <p>Upload the model files here. <b>Only .obj and .stl files are allowed</b></p>
                                     <br />
-                                    <input type="file" ng-file-select="" accept="*.obj, *.stl" ng-model="modelData" name="file" required>
+                                    <input type="file" ng-file-select="" accept="*.obj, *.stl" ng-model="modelData" name="file" ng-required="true">
                                 </div><!-- panel-body -->
                             </form>
 
