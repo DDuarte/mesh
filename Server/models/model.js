@@ -6,17 +6,18 @@ var model = {};
  * Creates a model
  * @param {String} name Name of the model
  * @param {String} description Description of the model
+ * @param {String} originalFilename Original name of the model file
  * @param {String} filePath Path of the model file in the server
  * @param {String} ownerName Name of the owner of the model
  */
-model.create = function (name, description, filePath, ownerName) {
+model.create = function (name, description, originalFilename, filePath, ownerName) {
     var query = [
         // get unique id
         'MERGE (id:UniqueId{name:\'Model\'})',
         'ON CREATE SET id.count = 1',
         'ON MATCH SET id.count = id.count + 1',
         'WITH id.count AS uid',
-        'CREATE (m:Model{id:uid,name:{name}, description: {description}, filePath: {filePath}, publicationDate: {currentDate}})', //TODO possibly add thumbnail
+        'CREATE (m:Model{id:uid,name:{name}, originalFilename: {originalFilename}, description: {description}, filePath: {filePath}, publicationDate: {currentDate}})', //TODO possibly add thumbnail
         'WITH m',
         'MATCH (user:User {username: {ownerName}})',
         'CREATE user-[:OWNS]->(m)',
@@ -30,13 +31,14 @@ model.create = function (name, description, filePath, ownerName) {
         description: description,
         filePath: filePath,
         ownerName: ownerName,
-        currentDate: timestamp.toISOString()
+        currentDate: timestamp.toISOString(),
+        originalFilename: originalFilename
     };
 
     return new Promise(function(resolve, reject) {
         db.query(query, params, function(error, results) {
             if (error) throw new Error('Internal database error');
-            resolve(results[0]);
+            resolve(results[0]['model']);
         });
     });
 };
