@@ -543,6 +543,8 @@ module.exports = function (grunt) {
      */
     grunt.renameTask('watch', 'delta');
     grunt.registerTask('watch', [ 'build', 'delta' ]);
+    // grunt.renameTask('local-watch', 'local-delta');
+    grunt.registerTask('local-watch', [ 'local-build', 'delta' ]);
 
     /**
      * The default task is to build and compile.
