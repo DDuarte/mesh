@@ -4,6 +4,7 @@ var Path = require('path');
 var Model = require('../models/model');
 var Schema = require('../schema');
 var Joi = require('joi');
+var Uid = require('rand-token').uid;
 
 module.exports = function (server) {
 
