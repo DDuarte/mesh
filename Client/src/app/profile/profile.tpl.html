@@ -431,7 +431,10 @@
                                 <label class="control-label col-md-2 pull-left">First name</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" ng-model=user.firstName class="form-control">
+                                    <input type="text" ng-required="true" name="firstName" ng-model=user.firstName class="form-control" ng-maxlength="20">
+                                    <p class="text-danger" ng-show="userInfo.firstName.$invalid && userInfo.firstName.$dirty">
+                                        First Name field must be at most 20 characters long
+                                    </p>
                                 </div>
                             </div>
                             <!-- form-group -->
@@ -440,7 +443,10 @@
                                 <label class="control-label col-md-2 pull-left">Last name</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" ng-model=user.lastName class="form-control">
+                                    <input type="text" ng-required="true" name="lastName" ng-model=user.lastName class="form-control" ng-maxlength="20">
+                                    <p class="text-danger" ng-show="userInfo.lastName.$invalid && userInfo.lastName.$dirty">
+                                        Last Name field must be at most 20 characters long
+                                    </p>
                                 </div>
                             </div>
                             <!-- form-group -->
@@ -459,11 +465,15 @@
                                 <label class="control-label col-md-2 pull-left">About</label>
 
                                 <div class="col-md-10">
-                                    <textarea ng-model="user.about" id="autoResizeTA" class="form-control" rows="5" style="height: 90px;"></textarea>
+                                    <textarea ng-model="user.about" id="autoResizeTA" name="about" ng-maxlength="1024" class="form-control" rows="5" style="height: 90px;"></textarea>
+                                    <p class="text-danger" ng-show="userInfo.about.$invalid && userInfo.about.$dirty">
+                                        Last Name field must be at most 1024 characters long
+                                    </p>
                                 </div>
                             </div>
                             <!-- form-group -->
 
+                            <!--
                             <div class="form-group">
                                 <label class="control-label col-md-2 pull-left">Interests</label>
 
@@ -476,7 +486,7 @@
                                     </tags-input>
                                 </div>
                             </div>
-                            <!-- form-group -->
+                            -->
 
                         </form>
                         <button type="submit" ng-click="submit()" ng-disabled="userInfo.$invalid" class="btn btn-success pull-right">Save changes</button>
