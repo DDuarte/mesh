@@ -32,13 +32,11 @@ module.exports = function (server) {
             var data = request.payload;
             var ownerName = request.auth.credentials.username;
             Model.getByName(data.name)
-                .then(function () {
-                    reply(Boom.badRequest('A model with that name already exists'));
-                })
-                .catch(Error, function (error) {
-                    reply(Boom.badImplementation(error.message));
-                })
-                .catch(function () {
+                .then(function (results) {
+
+                    if (results.length > 0)
+                        return reply(Boom.badRequest('A model with that name already exists'));
+
                     var originalFilename = data.file.hapi.filename;
                     var uid = Uid(64);
                     var path = Path.join((process.env['MESH_MODELS_PATH'] || (process.cwd() + "/models")), uid.toString() + '_' + data.file.hapi.filename);
@@ -65,6 +63,9 @@ module.exports = function (server) {
                             });
                     });
 
+                })
+                .catch(Error, function (error) {
+                    reply(Boom.badImplementation(error.message));
                 });
         }
     });
