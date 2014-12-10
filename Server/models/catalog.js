@@ -1,7 +1,8 @@
-var Promise = require('bluebird');
-var db = require('../common/neo4jDatabase');
-var catalog = {};
-
+var Promise = require('bluebird'),
+    db = require('../common/neo4jDatabase'),
+    redis = require('redis'),
+    client = redis.createClient(),
+    catalog = {};
 
 /**
  * Fetches models older than a given date
@@ -37,7 +38,7 @@ catalog.getModelsOlderThan = function (startdate) {
 };
 
 /**
- * Fetches models ordered by score (upvotes - downvotes)
+ * Fetches models ids ordered by score (upvotes - downvotes) from the _database_
  *
  * @returns {Promise} returns resolved content, rejects to error otherwise
  */
@@ -50,12 +51,26 @@ catalog.getTopRatedModelIds = function () {
             'OPTIONAL MATCH m<-[rd: VOTED {type: "DOWN"}]-u',
             'WITH m, modelUpvotes, count(rd) as modelDownvotes',
             'WITH * ORDER BY (modelUpvotes - modelDownvotes) DESC',
-            'RETURN collect({id: m.id}) as models'
+            'RETURN collect(m.id) as models'
         ].join('\n');
 
         db.query(query, {}, function (err, results) {
             if (err) return reject(err);
             return resolve(results[0] ? results[0].models : results);
+        });
+    });
+};
+
+/**
+ * Fetches models ids ordered by score (upvotes - downvotes) from _Redis_
+ *
+ * @returns {Promise} returns resolved content, rejects to error otherwise
+ */
+catalog.getTopRatedModelIdsRedis = function () {
+    return new Promise(function (resolve, reject) {
+        client.lrange('topRated', 0, 100, function (err, reply) {
+            if (err) return  reject(err);
+            return resolve(reply.map(function (e) { return parseInt(e); }));
         });
     });
 };
