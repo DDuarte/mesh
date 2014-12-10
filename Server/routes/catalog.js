@@ -14,12 +14,12 @@ module.exports = function (server) {
         config: {
             validate: {
                 query: {
-                    startdate: schema.model.date.optional()
+                    startDate: schema.model.date.optional()
                 }
             }
         },
         handler: function (request, reply) {
-            Catalog.getModelsOlderThan(request.query.startdate).then(function (result) {
+            Catalog.getModelsOlderThan(request.query.startDate).then(function (result) {
                 reply(result);
             }, function (error) {
                 reply(Boom.badImplementation('Internal error: ' + error));

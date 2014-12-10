@@ -28,7 +28,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         },
         getModelsOlderThan: function (date) {
             return $http.get(server.url + '/catalog/newest', {
-                params: {startdate: date},
+                params: {startDate: date},
                 headers: getHeaders()
             });
         },
