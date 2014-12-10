@@ -32,6 +32,11 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: getHeaders()
             });
         },
+        getTopRatedModelIds: function () {
+            return $http.get(server.url + '/catalog/topRated', {
+                headers: getHeaders()
+            });
+        },
         getModel: function (id) {
             return $http.get(server.url + '/models/' + id, {headers: getHeaders()});
         },
