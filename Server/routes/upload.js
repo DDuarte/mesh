@@ -38,7 +38,9 @@ module.exports = function (server) {
                     reply(Boom.badImplementation(error.message));
                 })
                 .catch(function () {
-                    var path = Path.join((process.env['MESH_MODELS_PATH'] || (process.cwd() + "/models")), data.file.hapi.filename);
+                    var originalFilename = data.file.hapi.filename;
+                    var uid = Uid(64);
+                    var path = Path.join((process.env['MESH_MODELS_PATH'] || (process.cwd() + "/models")), uid.toString() + '_' + data.file.hapi.filename);
                     var file = Fs.createWriteStream(path);
 
                     file.on('error', function (err) {
@@ -53,7 +55,7 @@ module.exports = function (server) {
                         if (err)
                             return reply(Boom.badImplementation("Error saving file on the server"));
 
-                        Model.create(data.name, data.description, path, ownerName)
+                        Model.create(data.name, data.description, originalFilename, path, ownerName)
                             .then(function (model) {
                                 reply(model).code(200);
                             })
