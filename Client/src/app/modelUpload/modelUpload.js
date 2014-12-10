@@ -68,10 +68,25 @@ angular.module('meshApp.modelUpload', [
 
     .controller('ModelUploadCtrl', function ModelUploadController($scope, meshApi, ngDialog, _, $state) {
         $scope.model = {};
-        $scope.modelData = {};
+        // $scope.modelData = {};
         $scope.uploadError = false;
         $scope.uploadProgress = 0;
         $scope.uploadCompleted = false;
+
+        $scope.validFilename = false;
+        $scope.filenameDirty = false;
+
+        $scope.$watch('modelData', function(newData, oldData) {
+            if (newData !== oldData && newData.length > 0) {
+                var match =  newData[0].name.match(/.*\.obj|stl$/);
+                if (match != null && match.length == 1) {
+                    $scope.validFilename = true;
+                } else {
+                    $scope.validFilename = false;
+                }
+                $scope.filenameDirty = true;
+            }
+        });
 
         $scope.init = function() {
             Dropzone.autoDiscover = false;

@@ -20,8 +20,9 @@
                                     <label class="control-label col-md-2 pull-left">Title</label>
 
                                     <div class="col-md-10">
-                                        <input type="text" ng-model="model.name" placeholder="Model Name" class="form-control col-md-10" ng-required="true">
+                                        <input type="text" ng-model="model.name" name="name" placeholder="Model Name" class="form-control col-md-10" ng-minlength="5" ng-maxlength="20" ng-required="true">
                                     </div>
+                                    <p class="text-danger" ng-show="uploadForm.name.$invalid && uploadForm.name.$dirty">Name field must be between 5 and 20 characters long</p>
                                 </div>
                                 <!-- form-group -->
 
@@ -29,8 +30,13 @@
                                     <label class="control-label col-md-2 pull-left">Description</label>
 
                                     <div class="col-md-10">
-                                        <textarea id="autoResizeTA" ng-model="model.description" class="form-control" rows="5" style="height: 90px;" ng-required="true"></textarea>
+                                        <textarea id="autoResizeTA" name="description"
+                                                  ng-model="model.description" class="form-control"
+                                                  rows="5" style="height: 90px;"
+                                                  ng-required="true" ng-minlength="10" ng-maxlength="254"></textarea>
                                     </div>
+                                    <p class="text-danger" ng-show="uploadForm.description.$invalid && uploadForm.description.$dirty">Description field must be between 10 and 254 characters long</p>
+
                                 </div>
                                 <!-- form-group -->
 
@@ -59,6 +65,7 @@
                                     </div>
                                 </div>
 
+                                <!--
                                 <div class="form-group">
                                     <label class="control-label col-md-2 pull-left">Galleries</label>
 
@@ -69,16 +76,18 @@
                                         </tags-input>
                                     </div>
                                 </div>
+                                --->
                                 <!-- form-group -->
 
                                 <div class="form-group">
                                     <p>Upload the model files here. <b>Only .obj and .stl files are allowed</b></p>
                                     <br />
-                                    <input type="file" ng-file-select="" accept="*.obj, *.stl" ng-model="modelData" name="file" ng-required="true">
+                                    <input type="file" ng-file-select="" accept="*.obj" ng-model="modelData" name="file" ng-required="true">
                                 </div><!-- panel-body -->
+                                <p class="text-danger" ng-show="!validFilename && filenameDirty">Invalid file format!</p>
                             </form>
 
-                            <button class="btn btn-success pull-right" ng-disabled="uploadForm.$invalid || !modelData" ng-click="upload()">Upload</button>
+                            <button class="btn btn-success pull-right" ng-disabled="uploadForm.$invalid || !modelData || !validFilename" ng-click="upload()">Upload</button>
 
                         </div><!--panel-body-->
 
