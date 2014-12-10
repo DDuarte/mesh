@@ -25,16 +25,18 @@
                     <strong>Activation failed</strong>.
                     Please try again!
                 </div>
-                
+
                 <form name="login_form">
-                    <div class="input-group mb15">
+                    <div class="input-group mb15" ng-class="{ 'has-error': login_form.username.$invalid }">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" ng-model="loginInfo.username" required>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" ng-model="loginInfo.username" ng-minlength="3" ng-maxlength="20" required>
                     </div>
-                    <div class="input-group mb15">
+                    <p class="text-danger" ng-show="login_form.username.$invalid && login_form.username.$dirty">Username field must be between 3 and 20 characters long</p>
+                    <div class="input-group mb15" ng-class="{ 'has-error': login_form.password.$invalid }">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="loginInfo.password" required>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="loginInfo.password" ng-minlength="3" ng-maxlength="256" required>
                     </div>
+                    <p class="text-danger" ng-show="login_form.password.$invalid && login_form.password.$dirty">Password must be between 3 and 256 characters long</p>
 
                     <div class="clearfix">
                         <div class="pull-left">
@@ -56,8 +58,19 @@
 
                 <div class="text-center mb30 mt20">OR</div>
 
-                <a ui-sref="register" class="btn btn-default btn-block"><i class="fa fa-linkedin"></i> &nbsp Sign in with LinkedIn </a>
+                <script type="text/javascript">
+                    function onLinkedInAuth() {
+                        IN.API.Profile("me")
+                                .result( function(me) {
+                                    var id = me.values[0].id;
+                                    console.log(JSON.stringify(me));
+                                    // TODO: AJAX call to pass back id to your server
+                                });
+                    }
+                </script>
 
+                <!-- <a ui-sref="register" class="btn btn-default btn-block"><i class="fa fa-linkedin"></i> &nbsp Sign in with LinkedIn </a> -->
+                <script type="IN/Login" data-onAuth="onLinkedInAuth"></script>
             </div>
             <!-- panel-body -->
             <div class="panel-footer">
@@ -69,6 +82,8 @@
 
     </section>
 </div>
+
+<div id="particles-js"></div>
 
 <script type="text/ng-template" id="forgotPasswordDialogId">
     <div class="ngdialog-message">
@@ -84,6 +99,12 @@
     </div>
 </script>
 
+<script type="text/ng-template" id="forgotPasswordDialog2Id">
+    <div class="ngdialog-message">
+        <p>If you were previously registered on our platform you will receive an email.</p>
+    </div>
+</script>
+
 <script type="text/ng-template" id="changePasswordDialogId">
     <div class="ngdialog-message">
         <h2>Change password</h2>
@@ -94,5 +115,11 @@
     <div class="ngdialog-buttons mt">
         <button type="button" class="ngdialog-button ngdialog-button-primary btn-d" ng-disabled="changePasswordForm.$invalid" ng-click="confirm(changePasswordPassword)">Confirm</button>
         <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="changePasswordDialog2Id">
+    <div class="ngdialog-message">
+        <p>{{ngDialogData}}</p>
     </div>
 </script>

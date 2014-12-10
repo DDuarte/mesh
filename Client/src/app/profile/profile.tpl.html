@@ -6,12 +6,12 @@
 
 <div class="col-sm-4 col-md-3">
     <div class="text-center">
-        <img src="http://placehold.it/590x590" class="img-circle img-offline img-responsive img-profile" alt=""/>
-        <h4 class="profile-name mb5">{{user.id}}</h4>
+        <img src="{{user.avatar}}" class="img-circle img-offline img-responsive img-profile" alt=""/>
+        <h4 class="profile-name mb5">{{user.username}}</h4>
 
         <div><i class="fa fa-certificate"></i> Page views: <b>{{user.counter}}</b></div>
         <div><i class="fa fa-map-marker"></i> San Francisco, California, USA</div>
-        <div><i class="fa fa-envelope-o"></i> <a href=""> elenDarna@gmail.com </a></div>
+        <div><i class="fa fa-envelope-o"></i> <a href=""> {{user.email}} </a></div>
 
         <div class="mb20"></div>
     </div>
@@ -21,8 +21,7 @@
 
     <h5 class="md-title">About</h5>
 
-    <p class="mb30">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitat... <a href="#">Show More</a></p>
+    <p class="mb30">{{user.about}}</p>
 
     <h5 class="md-title">Interests</h5>
 
@@ -242,324 +241,40 @@
 
     <button class="btn btn-white btn-block">Show More</button>
 </tab>
-<tab>
+<tab select="getFollowers()">
     <tab-heading><strong>Followers</strong></tab-heading>
     <div class="follower-list">
-        <div class="media">
+        <div class="media" ng-repeat="follower in user.followers">
             <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="http://placehold.it/100x100" alt=""/>
+                <img class="media-object img-circle" src="{{follower.avatar}}" alt=""/>
             </a>
 
             <div class="media-body">
-                <h3 class="follower-name">Ray Sin</h3>
+                <h3 class="follower-name">{{follower.username}}</h3>
 
-                <div><i class="fa fa-map-marker"></i> San Francisco, California, USA</div>
-                <div><i class="fa fa-briefcase"></i> Software Engineer at <a href="#">SomeCompany, Inc.</a></div>
-
-                <div class="mb20"></div>
-
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-dark btn-xs"><i class="fa fa-envelope-o"></i> Send Message</button>
-                    </div>
-                    <!-- btn-group -->
-                    <div class="btn-group">
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Following</button>
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Followers</button>
-                    </div>
-                    <!-- btn-group -->
-
-                </div>
-                <!-- btn-toolbar -->
+                <div><i class="fa fa-envelope"></i> {{follower.email}}</div>
             </div>
-            <!-- media-body -->
         </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="http://placehold.it/100x100" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <h3 class="follower-name">Weno Carasbong</h3>
-
-                <div><i class="fa fa-map-marker"></i> Cebu City, Philippines</div>
-                <div><i class="fa fa-briefcase"></i> Software Engineer at <a href="#">ITCompany, Inc.</a></div>
-
-                <div class="mb20"></div>
-
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-dark btn-xs"><i class="fa fa-envelope-o"></i> Send Message</button>
-                    </div>
-                    <!-- btn-group -->
-                    <div class="btn-group">
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Following</button>
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Followers</button>
-                    </div>
-                    <!-- btn-group -->
-                </div>
-                <!-- btn-toolbar -->
-            </div>
-            <!-- media-body -->
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="http://placehold.it/100x100" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <h3 class="follower-name">Nusja Nawancali</h3>
-
-                <div class="profile-location"><i class="fa fa-map-marker"></i> Madrid, Spain</div>
-                <div class="profile-position"><i class="fa fa-briefcase"></i> CEO at <a href="#">SomeCompany, Inc.</a>
-                </div>
-
-                <div class="mb20"></div>
-
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-dark btn-xs"><i class="fa fa-envelope-o"></i> Send Message</button>
-                    </div>
-                    <!-- btn-group -->
-                    <div class="btn-group">
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Following</button>
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Followers</button>
-                    </div>
-                    <!-- btn-group -->
-                </div>
-                <!-- btn-toolbar -->
-            </div>
-            <!-- media-body -->
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="http://placehold.it/100x100" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <h3 class="follower-name">Zaham Sindilmaca</h3>
-
-                <div><i class="fa fa-map-marker"></i> Bangkok, Thailand</div>
-                <div><i class="fa fa-briefcase"></i> Java Developer at <a href="#">ITCompany, Inc.</a></div>
-
-                <div class="mb20"></div>
-
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-dark btn-xs"><i class="fa fa-envelope-o"></i> Send Message</button>
-                    </div>
-                    <!-- btn-group -->
-                    <div class="btn-group">
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Following</button>
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Followers</button>
-                    </div>
-                    <!-- btn-group -->
-                </div>
-                <!-- btn-toolbar -->
-            </div>
-            <!-- media-body -->
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="http://placehold.it/100x100" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <h3 class="follower-name">Christopher Atam</h3>
-
-                <div class="profile-location"><i class="fa fa-map-marker"></i> Tokyo, Japan</div>
-                <div class="profile-position"><i class="fa fa-briefcase"></i> QA Engineer at <a href="#">SomeCompany,
-                    Inc.</a></div>
-
-                <div class="mb20"></div>
-
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-dark btn-xs"><i class="fa fa-envelope-o"></i> Send Message</button>
-                    </div>
-                    <!-- btn-group -->
-                    <div class="btn-group">
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Following</button>
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Followers</button>
-                    </div>
-                    <!-- btn-group -->
-                </div>
-                <!-- btn-toolbar -->
-            </div>
-            <!-- media-body -->
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="http://placehold.it/100x100" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <h3 class="follower-name">Venro Leonga</h3>
-
-                <div class="profile-location"><i class="fa fa-map-marker"></i> Paris, France</div>
-                <div class="profile-position"><i class="fa fa-briefcase"></i> UX Designer at <a href="#">ITCompany,
-                    Inc.</a></div>
-
-                <div class="mb20"></div>
-
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-dark btn-xs"><i class="fa fa-envelope-o"></i> Send Message</button>
-                    </div>
-                    <!-- btn-group -->
-                    <div class="btn-group">
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Following</button>
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Followers</button>
-                    </div>
-                    <!-- btn-group -->
-                </div>
-                <!-- btn-toolbar -->
-            </div>
-            <!-- media-body -->
-        </div>
-        <!-- media -->
     </div>
     <!--follower-list -->
 </tab>
-<tab>
+<tab select="getFollowing()">
     <tab-heading><strong>Following</strong></tab-heading>
 
     <div class="follower-list">
-        <div class="media">
+        <div class="media" ng-repeat="followed in user.following">
             <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="http://placehold.it/100x100" alt=""/>
+                <img class="media-object img-circle" src="{{followed.avatar}}" alt=""/>
             </a>
 
             <div class="media-body">
-                <h3 class="follower-name">Ray Sin</h3>
+                <h3 class="follower-name">{{followed.username}}</h3>
 
-                <div><i class="fa fa-map-marker"></i> San Francisco, California, USA</div>
-                <div><i class="fa fa-briefcase"></i> Software Engineer at <a href="#">SomeCompany, Inc.</a></div>
-
-                <div class="mb20"></div>
-
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-dark btn-xs"><i class="fa fa-envelope-o"></i> Send Message</button>
-                    </div>
-                    <!-- btn-group -->
-                    <div class="btn-group">
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Following</button>
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Followers</button>
-                    </div>
-                    <!-- btn-group -->
-
-                </div>
-                <!-- btn-toolbar -->
+                <div><i class="fa fa-envelope"></i> {{followed.email}}</div>
             </div>
-            <!-- media-body -->
         </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="http://placehold.it/100x100" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <h3 class="follower-name">Weno Carasbong</h3>
-
-                <div><i class="fa fa-map-marker"></i> Cebu City, Philippines</div>
-                <div><i class="fa fa-briefcase"></i> Software Engineer at <a href="#">ITCompany, Inc.</a></div>
-
-                <div class="mb20"></div>
-
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-dark btn-xs"><i class="fa fa-envelope-o"></i> Send Message</button>
-                    </div>
-                    <!-- btn-group -->
-                    <div class="btn-group">
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Following</button>
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Followers</button>
-                    </div>
-                    <!-- btn-group -->
-                </div>
-                <!-- btn-toolbar -->
-            </div>
-            <!-- media-body -->
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="http://placehold.it/100x100" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <h3 class="follower-name">Nusja Nawancali</h3>
-
-                <div class="profile-location"><i class="fa fa-map-marker"></i> Madrid, Spain</div>
-                <div class="profile-position"><i class="fa fa-briefcase"></i> CEO at <a href="#">SomeCompany, Inc.</a>
-                </div>
-
-                <div class="mb20"></div>
-
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-dark btn-xs"><i class="fa fa-envelope-o"></i> Send Message</button>
-                    </div>
-                    <!-- btn-group -->
-                    <div class="btn-group">
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Following</button>
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Followers</button>
-                    </div>
-                    <!-- btn-group -->
-                </div>
-                <!-- btn-toolbar -->
-            </div>
-            <!-- media-body -->
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="http://placehold.it/100x100" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <h3 class="follower-name">Zaham Sindilmaca</h3>
-
-                <div><i class="fa fa-map-marker"></i> Bangkok, Thailand</div>
-                <div><i class="fa fa-briefcase"></i> Java Developer at <a href="#">ITCompany, Inc.</a></div>
-
-                <div class="mb20"></div>
-
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button class="btn btn-dark btn-xs"><i class="fa fa-envelope-o"></i> Send Message</button>
-                    </div>
-                    <!-- btn-group -->
-                    <div class="btn-group">
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Following</button>
-                        <button class="btn btn-white btn-xs"><i class="fa fa-check"></i> Followers</button>
-                    </div>
-                    <!-- btn-group -->
-                </div>
-                <!-- btn-toolbar -->
-            </div>
-            <!-- media-body -->
-        </div>
-        <!-- media -->
     </div>
     <!--follower-list -->
-
-    <button class="btn btn-white btn-block">Show More</button>
 </tab>
 <tab>
     <tab-heading><strong>Groups</strong></tab-heading>
@@ -662,6 +377,39 @@
     </div>
 </tab>
 <tab>
+    <tab-heading><strong>Galleries</strong></tab-heading>
+    <div class="row">
+        <div class="col-md-12">
+            <pagination total-items="galleriesPaginatorTotalItems" ng-model="galleriesPaginatorCurrentPage" max-size="galleriesPaginatorMaxSize" items-per-page="galleriesPaginatorItemsPerPage" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <v-tabset>
+                <v-tab ng-repeat="gallery in galleries" select="changeSelectedGallery($index)">
+                    <tab-heading>{{gallery.name}}</tab-heading>
+                    <modelthumbnail ng-repeat="model in gallery.models | startFrom: (galleriesPaginatorCurrentPage-1)*galleriesPaginatorItemsPerPage | limitTo: galleriesPaginatorItemsPerPage"
+                                    model-id="1"
+                                    image-url="http://i.imgur.com/zL9XlUY.jpg"
+                                    title="{{model.name}}"
+                                    author="Donatello"
+                                    author-avatar="http://i.imgur.com/KgKyXqN.jpg"
+                                    date="2010-04-05T12:38:20.000Z"
+                                    num-comments="2"
+                                    upvotes="20"
+                                    downvotes="2">
+                    </modelthumbnail>
+                </v-tab>
+            </v-tabset>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pagination total-items="galleriesPaginatorTotalItems" ng-model="galleriesPaginatorCurrentPage" max-size="galleriesPaginatorMaxSize" items-per-page="galleriesPaginatorItemsPerPage" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+        </div>
+    </div>
+</tab>
+<tab>
     <tab-heading><strong>My Account</strong></tab-heading>
         <div class="row">
             <div class="col-md-12">
@@ -669,12 +417,12 @@
 
                     <div class="panel-body ">
 
-                        <form class="form-horizontal form-bordered">
+                        <form name="userInfo" class="form-horizontal form-bordered">
                             <div class="form-group">
                                 <label class="control-label col-md-2 pull-left">Username</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" placeholder={{user.username}} class="form-control col-md-10" disabled>
+                                    <input type="text" ng-model=user.username class="form-control col-md-10" disabled>
                                 </div>
                             </div>
                             <!-- form-group -->
@@ -683,7 +431,10 @@
                                 <label class="control-label col-md-2 pull-left">First name</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" placeholder={{user.firstName}} class="form-control" disabled>
+                                    <input type="text" ng-required="true" name="firstName" ng-model=user.firstName class="form-control" ng-maxlength="20">
+                                    <p class="text-danger" ng-show="userInfo.firstName.$invalid && userInfo.firstName.$dirty">
+                                        First Name field must be at most 20 characters long
+                                    </p>
                                 </div>
                             </div>
                             <!-- form-group -->
@@ -692,7 +443,10 @@
                                 <label class="control-label col-md-2 pull-left">Last name</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" placeholder={{user.lastName}} class="form-control" disabled>
+                                    <input type="text" ng-required="true" name="lastName" ng-model=user.lastName class="form-control" ng-maxlength="20">
+                                    <p class="text-danger" ng-show="userInfo.lastName.$invalid && userInfo.lastName.$dirty">
+                                        Last Name field must be at most 20 characters long
+                                    </p>
                                 </div>
                             </div>
                             <!-- form-group -->
@@ -701,7 +455,7 @@
                                 <label class="control-label col-md-2 pull-left" for="userEmail">Email</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" placeholder="{{user.email}}" class="form-control" id="userEmail"
+                                    <input type="text" ng-model="user.email" class="form-control" id="userEmail"
                                            disabled>
                                 </div>
                             </div>
@@ -711,11 +465,15 @@
                                 <label class="control-label col-md-2 pull-left">About</label>
 
                                 <div class="col-md-10">
-                                    <textarea id="autoResizeTA" class="form-control" rows="5" style="height: 90px;">{{user.about}}</textarea>
+                                    <textarea ng-model="user.about" id="autoResizeTA" name="about" ng-maxlength="1024" class="form-control" rows="5" style="height: 90px;"></textarea>
+                                    <p class="text-danger" ng-show="userInfo.about.$invalid && userInfo.about.$dirty">
+                                        Last Name field must be at most 1024 characters long
+                                    </p>
                                 </div>
                             </div>
                             <!-- form-group -->
 
+                            <!--
                             <div class="form-group">
                                 <label class="control-label col-md-2 pull-left">Interests</label>
 
@@ -728,10 +486,10 @@
                                     </tags-input>
                                 </div>
                             </div>
-                            <!-- form-group -->
+                            -->
 
                         </form>
-                        <button class="btn btn-success pull-right">Save changes</button>
+                        <button type="submit" ng-click="submit()" ng-disabled="userInfo.$invalid" class="btn btn-success pull-right">Save changes</button>
                     </div>
                     <!-- panel-body -->
 

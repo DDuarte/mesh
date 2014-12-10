@@ -66,9 +66,68 @@ angular.module('meshApp.modelUpload', [
         };
     })
 
-    .controller('ModelUploadCtrl', function ModelUploadController($scope, $stateParams, $http) {
+    .controller('ModelUploadCtrl', function ModelUploadController($scope, meshApi, ngDialog, _, $state) {
+        $scope.model = {};
+        // $scope.modelData = {};
+        $scope.uploadError = false;
+        $scope.uploadProgress = 0;
+        $scope.uploadCompleted = false;
+
+        $scope.validFilename = false;
+        $scope.filenameDirty = false;
+
+        $scope.$watch('modelData', function(newData, oldData) {
+            if (newData !== oldData && newData && newData.length > 0) {
+                var match =  newData[0].name.match(/.*\.obj|stl$/);
+                if (match != null && match.length == 1) {
+                    $scope.validFilename = true;
+                } else {
+                    $scope.validFilename = false;
+                }
+                $scope.filenameDirty = true;
+            }
+        });
+
         $scope.init = function() {
             Dropzone.autoDiscover = false;
             var hiddenInput = angular.element('.dz-hidden-input').remove();
+        };
+
+        $scope.upload = function() {
+
+            var tagsText = _.pluck($scope.model.tags, 'text');
+            ngDialog.openConfirm({
+                template: 'uploadProgressId',
+                className: 'ngdialog-theme-default',
+                showClose: false,
+                closeByEscape: false,
+                scope: $scope
+            }).then(function(value) {
+                //console.log("CLOSED");
+                $scope.uploadProgress = 0;
+                $scope.uploadCompleted = false;
+                $state.go('home.model', { id: $scope.modelId });
+            });
+
+            meshApi.uploadModel($scope.model.name, $scope.model.description, tagsText, $scope.modelData)
+                .progress(function(evt) {
+                    if (evt && evt.loaded && evt.total) {
+                        $scope.uploadProgress = 100.0 * (evt.loaded / evt.total);
+                    }
+                })
+                .success(function(data) {
+                    // file is uploaded successfully
+                    // console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
+                    $scope.uploadCompleted = true;
+                    $scope.modelId = data.id;
+
+                })
+                .error(function(data) {
+                    $scope.uploadError = true;
+                    $scope.uploadErrorMessage = (data && data.message) ? data.message : data;
+                    ngDialog.closeAll();
+                    $scope.uploadProgress = 0;
+                    $scope.uploadCompleted = false;
+                });
         };
     });

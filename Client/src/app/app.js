@@ -23,7 +23,10 @@ angular.module('meshApp', [
     'ngTagsInput',
     'ipCookie',
     'ngDialog',
-    'angularSpinner'
+    'angularSpinner',
+    'infinite-scroll',
+    'angularFileUpload',
+    'angular-growl'
 ])
 
     .constant('_', window._)
@@ -59,6 +62,5 @@ angular.module('meshApp', [
                 };
             }
         });
-    })
-;
+    });
 

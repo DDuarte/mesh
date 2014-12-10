@@ -65,6 +65,8 @@ module.exports = {
             'vendor/jquery/dist/jquery.min.js',
             'js/bootstrap.min.js',
             'vendor/angular/angular.js',
+            'vendor/ng-file-upload/angular-file-upload-shim.min.js',
+            'vendor/ng-file-upload/angular-file-upload.min.js',
             'vendor/spin.js/spin.js',
             'vendor/angular-spinner/angular-spinner.js',
             'vendor/angular-cookie/angular-cookie.min.js',
@@ -75,11 +77,13 @@ module.exports = {
             'vendor/angular-moment/angular-moment.min.js',
             'vendor/ng-tags-input/ng-tags-input.min.js',
             'vendor/dropzone/downloads/dropzone.min.js',
+            'vendor/ngInfiniteScroll/build/ng-infinite-scroll.min.js',
             'lib/three.js',
             'lib/Detector.js',
             'lib/jquery.fullscreen.js',
             'lib/OrbitControls.js',
-            'vendor/ngDialog/js/ngDialog.js'
+            'vendor/ngDialog/js/ngDialog.js',
+            'vendor/angular-growl-v2/build/angular-growl.js'
         ],
         map: [
             'vendor/jquery/dist/jquery.min.map',
@@ -89,7 +93,8 @@ module.exports = {
         css: [
             'vendor/pickadate/lib/compressed/themes/default.css',
             'vendor/pickadate/lib/compressed/themes/default.date.css',
-            'vendor/ng-tags-input/ng-tags-input.min.css'
+            'vendor/ng-tags-input/ng-tags-input.min.css',
+            'vendor/angular-growl-v2/build/angular-growl.css'
         ],
         assets: [
             'assets/weather-icons.min.css',

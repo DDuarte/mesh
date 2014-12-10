@@ -1,4 +1,4 @@
-angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) {
+angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, $upload) {
     var api = {
         init: function (data) {
             ipCookie('token', data);
@@ -8,7 +8,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 ipCookie.remove('token');
             });
         },
-        validateAccount: function(username, activationToken) {
+        validateAccount: function (username, activationToken) {
             return $http.post(server.url + '/activateToken', { username: username, token: activationToken });
         },
         forgotPassword: function (email) {
@@ -26,17 +26,23 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
         getLoggedAvatar: function () {
             return getLoggedToken().avatar;
         },
+        getModelsOlderThan: function (date) {
+            return $http.get(server.url + '/catalog/newest', {
+                params: {startDate: date},
+                headers: getHeaders()
+            });
+        },
         getModel: function (id) {
             return $http.get(server.url + '/models/' + id, {headers: getHeaders()});
         },
         addModelVote: function (modelId, vote) {
-            return $http.post(server.url + '/models/' + modelId + '/votes', {vote: vote},{headers: getHeaders()});
+            return $http.post(server.url + '/models/' + modelId + '/votes', {vote: vote}, {headers: getHeaders()});
         },
         deleteModelVote: function (modelId) {
             return $http({
                 url: server.url + '/models/' + modelId + '/votes',
                 method: 'DELETE',
-                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
         register: function (registerInfo) {
@@ -57,7 +63,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 url: server.url + '/models/' + modelId + '/comments',
                 method: 'DELETE',
                 data: {date: date},
-                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
         addModelToFavourites: function (modelId) {
@@ -70,8 +76,14 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 url: server.url + '/users/' + getLoggedToken().username + '/favourites',
                 method: 'DELETE',
                 data: {modelid: modelId},
-                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
+        },
+        getFollowers: function (username) {
+            return $http.get(server.url + '/users/' + username + '/followers');
+        },
+        getFollowing: function (username) {
+            return $http.get(server.url + '/users/' + username + '/following');
         },
         followUser: function (otheruser) {
             return $http.post(server.url + '/users/' + getLoggedToken().username + '/followers', {otheruser: otheruser}, {
@@ -83,21 +95,42 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie) 
                 url: server.url + '/users/' + getLoggedToken().username + '/followers',
                 method: 'DELETE',
                 data: {otheruser: otheruser},
-                headers:  {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
-        createGroup: function(groupName) {
+        createGroup: function (groupName) {
             return $http.post(server.url + '/groups', {name: groupName}, {
                 headers: getHeaders()
+            });
+        },
+        uploadModel: function(modelName, modelDescription, tags, file) {
+            return $upload.upload({
+                url: server.url + '/upload', // upload.php script, node.js route, or servlet url
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + getLoggedToken().token }, // only for html5
+                data: { name: modelName, description: modelDescription, tags: tags },
+                file: file // single file or a list of files. list is only for html5
+            });
+        },
+        updateUser: function(user) {
+            return $http({
+                url: server.url + '/users/' + getLoggedToken().username,
+                method: 'PATCH',
+                data: user,
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         }
     };
 
     var getLoggedToken = function () {
-        return ipCookie('token');
+        if (ipCookie('token')) {
+            return ipCookie('token');
+        } else {
+            return { token: null };
+        }
     };
 
-    var getHeaders = function() {
+    var getHeaders = function () {
         return api.isLoggedIn() ? {'Authorization': 'Bearer ' + getLoggedToken().token} : {};
     };
 

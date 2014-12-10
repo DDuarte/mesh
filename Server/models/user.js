@@ -7,6 +7,9 @@ var user = {};
 /**
  *
  * Returns a user by it's name
+/**
+ *
+ * Returns a user by it's name
  * @param username string identifier of the user
  * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
  *
@@ -15,7 +18,7 @@ user.getByUsername = function (username) {
     return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u: User{username: { username }})',
-            'RETURN { username: u.username, passwordHash: u.passwordHash, name: u.name, avatar: u.avatar, email: u.email, active: u.active } as user'
+            'RETURN { firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active, about: u.about } as user'
         ].join('\n');
 
         var params = {
@@ -26,7 +29,7 @@ user.getByUsername = function (username) {
             if (err) return reject(err);
 
             if (results.length > 0)
-                return resolve(results);
+                return resolve(results[0]['user']);
             else
                 return reject('No users were found');
         });
@@ -58,6 +61,54 @@ user.getByEmail = function (email) {
                 return resolve(results);
             else
                 return reject('No user was found');
+        });
+    });
+};
+
+user.getFollowers = function (username) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (user:User{username: { username }})<-[:FOLLOWING]-(follower:User)',
+            'RETURN collect({username: follower.username, avatar: follower.avatar, email: follower.email}) as followers'
+        ].join('\n');
+
+        var params = {
+            username: username
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+
+            console.log(results);
+
+            if (results.length > 0)
+                return resolve(results[0]['followers']);
+            else
+                return reject('No users were found');
+        });
+    });
+};
+
+user.getFollowing = function (username) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (user:User{username: { username }})-[:FOLLOWING]->(followed:User)',
+            'RETURN collect({username: followed.username, avatar: followed.avatar, email: followed.email}) as following'
+        ].join('\n');
+
+        var params = {
+            username: username
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+
+            console.log(results);
+
+            if (results.length > 0)
+                return resolve(results[0]['following']);
+            else
+                return reject('No users were found');
         });
     });
 };
@@ -281,6 +332,38 @@ user.generatePasswordHash = function (username, password) {
     var hash = crypto.createHash('sha256');
     hash.update(username + '+' + password);
     return hash.digest('hex');
+};
+
+/**
+ *
+ * Updates a user based on the registerInfo
+ * @param {String} username User identifier
+ * @param {Object} fields The user fields with respective values to update
+ * @returns {Promise} Returns a promise with the updated user, rejects to error otherwise
+ *
+ */
+user.update = function (username, fields) {
+    return new Promise(function (resolve, reject) {
+        var query = ['MATCH (u:User {username: {username}})',
+            'SET ',
+            'RETURN u'
+        ];
+
+        for(var field in fields) {
+            query[1] += 'u.' + field + '={' + field + '},';
+        }
+        query[1] = query[1].substring(0, query[1].length - 1);
+
+        query = query.join('\n');
+
+        fields.username = username;
+
+        db.query(query, fields, function (err, results) {
+            if (err) return reject(err);
+
+            return resolve(results);
+        });
+    });
 };
 
 module.exports = user;

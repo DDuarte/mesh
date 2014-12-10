@@ -11,9 +11,10 @@ angular.module('meshApp.register', [
         });
     })
 
-    .controller('RegisterCtrl', function RegisterController($scope, meshApi, ngDialog, usSpinnerService) {
+    .controller('RegisterCtrl', function RegisterController($scope, meshApi, ngDialog, usSpinnerService, particles) {
         $scope.init = function () {
             angular.element('body').css("background-color","#428bca");
+            particles.init();
         };
 
         $scope.registerPending = false;

@@ -47,8 +47,9 @@ module.exports = {
     lastName: Joi.string().max(20),
     username: Joi.string().min(3).max(20),
     email: Joi.string().email(),
-    password: Joi.string().max(256),
+    password: Joi.string().min(3).max(256),
     birthdate: Joi.date().format('YYYY-MM-DD'),
     country: Joi.any().allow(countries),
-    rememberMe: Joi.boolean()
+    rememberMe: Joi.boolean(),
+    about: Joi.string().max(1024)
 };

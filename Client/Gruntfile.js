@@ -550,6 +550,16 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [ 'build', 'compile' ]);
 
     /**
+     * The `test` task gets your app ready for testing.
+     */
+    grunt.registerTask( 'test', [
+        'clean', 'html2js', 'jshint', 'less:build',
+        'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+        'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_dev_config', 'index:buildDev', 'karmaconfig',
+        'karma:continuous'
+    ]);
+
+    /**
      * The `build` task gets your app ready to run for development and testing.
      */
     grunt.registerTask('build', [ 'dev-build' ]);

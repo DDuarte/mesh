@@ -1,5 +1,5 @@
 module.exports = function ( karma ) {
-  karma.set({
+  var configuration = {
     /** 
      * From where to look for files, starting with the location of this file.
      */
@@ -54,7 +54,19 @@ module.exports = function ( karma ) {
      */
     browsers: [
       'Chrome'
-    ]
-  });
-};
+    ],
 
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
+  };
+
+  if (process.env.TRAVIS) {
+    configuration.browsers = ['Chrome_travis_ci'];
+  }
+
+  karma.set(configuration);
+};
