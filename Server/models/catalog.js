@@ -21,7 +21,7 @@ catalog.getModelsOlderThan = function (startdate) {
             'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
             'WITH m, author, upvotes, count(rd) as downvotes',
             'OPTIONAL MATCH (User)-[cm:COMMENTED]->m',
-            'WITH m, author, upvotes, downvotes, count(cm) as comments',
+            'WITH m, author, upvotes, downvotes, count(cm) as comments ORDER BY m.publicationDate DESC',
             'RETURN collect({ modelId: m.id, title: m.name, thumbnail: m.thumbnail, author: author.username, authorAvatar: author.avatar, date: m.publicationDate, numComments: comments, upvotes: upvotes, downvotes: downvotes}) as models'
         ].join('\n');
 
