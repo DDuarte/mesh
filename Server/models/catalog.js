@@ -36,4 +36,28 @@ catalog.getModelsOlderThan = function (startdate) {
     });
 };
 
+/**
+ * Fetches models ordered by score (upvotes - downvotes)
+ *
+ * @returns {Promise} returns resolved content, rejects to error otherwise
+ */
+catalog.getTopRatedModelIds = function () {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (m: Model)',
+            'OPTIONAL MATCH m<-[ru: VOTED {type: "UP"}]-u',
+            'WITH m, count(ru) as modelUpvotes',
+            'OPTIONAL MATCH m<-[rd: VOTED {type: "DOWN"}]-u',
+            'WITH m, modelUpvotes, count(rd) as modelDownvotes',
+            'WITH * ORDER BY (modelUpvotes - modelDownvotes) DESC',
+            'RETURN collect({id: m.id) as models'
+        ].join('\n');
+
+        db.query(query, {}, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results[0] ? results[0].models : results);
+        });
+    });
+};
+
 module.exports = catalog;

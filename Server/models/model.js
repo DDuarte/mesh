@@ -210,7 +210,6 @@ model.getCommentsOlderThan = function (modelId, startdate) {
     });
 };
 
-
 /**
  *
  * Adds a vote to a specified model
