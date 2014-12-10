@@ -50,7 +50,7 @@ catalog.getTopRatedModelIds = function () {
             'OPTIONAL MATCH m<-[rd: VOTED {type: "DOWN"}]-u',
             'WITH m, modelUpvotes, count(rd) as modelDownvotes',
             'WITH * ORDER BY (modelUpvotes - modelDownvotes) DESC',
-            'RETURN collect({id: m.id) as models'
+            'RETURN collect({id: m.id}) as models'
         ].join('\n');
 
         db.query(query, {}, function (err, results) {
