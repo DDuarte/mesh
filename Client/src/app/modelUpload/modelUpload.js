@@ -66,7 +66,7 @@ angular.module('meshApp.modelUpload', [
         };
     })
 
-    .controller('ModelUploadCtrl', function ModelUploadController($scope, meshApi, ngDialog, _) {
+    .controller('ModelUploadCtrl', function ModelUploadController($scope, meshApi, ngDialog, _, $state) {
         $scope.model = {};
         $scope.modelData = {};
         $scope.uploadError = false;
@@ -91,7 +91,7 @@ angular.module('meshApp.modelUpload', [
                 //console.log("CLOSED");
                 $scope.uploadProgress = 0;
                 $scope.uploadCompleted = false;
-                // TODO: change to model view
+                $state.go('home.model', { id: $scope.modelId });
             });
 
             meshApi.uploadModel($scope.model.name, $scope.model.description, tagsText, $scope.modelData)
@@ -100,10 +100,12 @@ angular.module('meshApp.modelUpload', [
                         $scope.uploadProgress = 100.0 * (evt.loaded / evt.total);
                     }
                 })
-                .success(function(data, status, headers, config) {
+                .success(function(data) {
                     // file is uploaded successfully
                     // console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
                     $scope.uploadCompleted = true;
+                    $scope.modelId = data.id;
+
                 })
                 .error(function(data) {
                     $scope.uploadError = true;
