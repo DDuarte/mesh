@@ -54,7 +54,7 @@ module.exports = function (server) {
                         if (err)
                             return reply(Boom.badImplementation("Error saving file on the server"));
 
-                        Model.create(data.name, data.description, originalFilename, path, ownerName)
+                        Model.create(data.name, data.description, originalFilename, path, ownerName, 'http://placehold.it/500&text=' + data.name)
                             .then(function (model) {
                                 reply(model).code(200);
                             })

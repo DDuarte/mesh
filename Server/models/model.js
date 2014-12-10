@@ -9,15 +9,16 @@ var model = {};
  * @param {String} originalFilename Original name of the model file
  * @param {String} filePath Path of the model file in the server
  * @param {String} ownerName Name of the owner of the model
+ * @param {String} thumbnail Url to thumbnail image
  */
-model.create = function (name, description, originalFilename, filePath, ownerName) {
+model.create = function (name, description, originalFilename, filePath, ownerName, thumbnail) {
     var query = [
         // get unique id
         'MERGE (id:UniqueId{name:\'Model\'})',
         'ON CREATE SET id.count = 1',
         'ON MATCH SET id.count = id.count + 1',
         'WITH id.count AS uid',
-        'CREATE (m:Model{id:uid,name:{name}, originalFilename: {originalFilename}, description: {description}, filePath: {filePath}, publicationDate: {currentDate}})', //TODO possibly add thumbnail
+        'CREATE (m:Model{id:uid,name:{name}, thumbnail: {thumbnail}, originalFilename: {originalFilename}, description: {description}, filePath: {filePath}, publicationDate: {currentDate}})',
         'WITH m',
         'MATCH (user:User {username: {ownerName}})',
         'CREATE user-[:OWNS]->(m)',
@@ -29,6 +30,7 @@ model.create = function (name, description, originalFilename, filePath, ownerNam
     var params = {
         name: name,
         description: description,
+        thumbnail: thumbnail,
         filePath: filePath,
         ownerName: ownerName,
         currentDate: timestamp.toISOString(),
@@ -63,7 +65,7 @@ model.getById = function (id, loggedUser) {
             'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
             'WITH m, author, modelComments, modelTags, count(ru) as modelUpvotes',
             'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
-            'WITH m, author, { id: m.id, name: m.name, description: m.description, files: m.files, downvotes: count(rd), upvotes: modelUpvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: modelTags, author: { name: author.username, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model',
+            'WITH m, author, { id: m.id, name: m.name, thumbnail: m.thumbnail, description: m.description, files: m.files, downvotes: count(rd), upvotes: modelUpvotes, publicationDate: m.publicationDate, visibility: m.visibility, tags: modelTags, author: { name: author.username, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model',
             'OPTIONAL MATCH (u:User{username: {username}})',
             'WITH m, u, author, model',
             'OPTIONAL MATCH (u)-[v:VOTED]->(m)',
