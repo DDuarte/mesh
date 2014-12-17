@@ -262,6 +262,7 @@ angular.module('meshApp.model', [
                     $scope.favourited = data.favourited;
                     $scope.userVote = data.uservote;
                     $scope.followingAuthor = data.followingAuthor;
+                    $scope.ownsModel = data.ownsModel;
 
                     $scope.hasMoreComments = $scope.model.comments.length > 9;
 
