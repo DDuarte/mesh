@@ -450,7 +450,8 @@ angular.module('meshApp.model', [
                 });
         };
         $scope.downloadModel = function () {
-            alert('Download not yet implemented');
+            console.log(meshApi.getDownloadModelUrl($scope.model.id));
+            window.open(meshApi.getDownloadModelUrl($scope.model.id), "_blank");
         };
         $scope.exportModel = function () {
             alert('Export to dropbox not yet implemented');
