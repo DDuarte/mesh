@@ -163,4 +163,38 @@ module.exports = function (server) {
             });
         }
     });
+
+    server.route({
+        method: 'DELETE',
+        path: '/models/{id}',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.model.id.required()
+                }
+            }
+        },
+        handler: function(request, reply) {
+            Model.getById(request.params.id, request.auth.credentials ? request.auth.credentials.username : '')
+                .then(function(results) {
+                    
+                    if (results.length == 0)
+                        return reply(Boom.notFound('Model does not exist'));
+
+                    var ownsModel = results[0].ownsModel;
+
+                    if (!ownsModel)
+                        return reply(Boom.unauthorized('User is not owner of the model'));
+
+                    Model.delete(request.params.id)
+                        .then(function() {
+                            return reply().code(200);
+                        })
+                        .catch(function() {
+                            return reply(Boom.badImplementation('Error deleting model'));
+                        })
+                });
+        }
+    });
 };
