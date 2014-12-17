@@ -197,4 +197,32 @@ module.exports = function (server) {
                 });
         }
     });
+
+    server.route({
+        method: 'GET',
+        path: '/models/{id}/files',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.model.id.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Model.getById(request.params.id, request.auth.credentials ? request.auth.credentials.username : '')
+                .then(function(results) {
+                    if (results.length == 0)
+                        return reply(Boom.notFound('Model does not exist'));
+
+                    var model = results[0].model;
+                    var filePath = model.filePath;
+
+                    return reply.file(filePath);
+                })
+                .catch(Error, function(error) {
+                    reply(Boom.badImplementation(error.message ? error.message : error));
+                });
+        }
+    });
 };
