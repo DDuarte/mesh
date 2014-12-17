@@ -187,7 +187,7 @@ module.exports = function (server) {
                     if (!ownsModel)
                         return reply(Boom.unauthorized('User is not owner of the model'));
 
-                    Model.delete(request.params.id)
+                    Model.deleteById(request.params.id)
                         .then(function() {
                             return reply().code(200);
                         })
