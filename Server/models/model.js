@@ -73,7 +73,8 @@ model.getById = function (id, loggedUser) {
             'OPTIONAL MATCH (u)-[f:FAVOURITED]->(m)',
             'WITH model, u, author, uservote, (f IS NOT NULL ) as favourited',
             'OPTIONAL MATCH (u)-[fol:FOLLOWING]->(author)',
-            'RETURN model, uservote, favourited, (fol IS NOT NULL) as followingAuthor'
+            'OPTIONAL MATCH (u)-[owns:OWNS]->(m)',
+            'RETURN model, uservote, favourited, (fol IS NOT NULL) as followingAuthor, (owns IS NOT NULL) as ownsModel'
         ].join('\n');
 
         var params = {
