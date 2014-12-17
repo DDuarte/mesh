@@ -255,6 +255,7 @@ angular.module('meshApp.model', [
         $scope.isLoggedIn = meshApi.isLoggedIn();
         if ($scope.isLoggedIn) {
             $scope.loggedUsername = meshApi.getLoggedUsername();
+            $scope.loggedAvatar = meshApi.getLoggedAvatar();
         }
 
         $scope.init = function () {
