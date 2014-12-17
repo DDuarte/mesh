@@ -104,7 +104,7 @@ model.deleteById = function (id) {
         ].join('\n');
 
         var params = {
-            modelId: Number(id),
+            modelId: Number(id)
         };
 
         db.query(query, params, function (err) {
