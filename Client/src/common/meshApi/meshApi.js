@@ -52,7 +52,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         },
         deleteModel: function (modelId) {
             return $http({
-                url: server.url + 'models/' + modelId,
+                url: server.url + '/models/' + modelId,
                 method: 'DELETE',
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
