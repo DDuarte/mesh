@@ -63,10 +63,10 @@ angular.module('meshApp.model', [
                     angular.element(document).bind('fullscreenchange', $scope.onFullScreenChange);
 
                     var jsonLoader = new THREE.JSONLoader();
-                    jsonLoader.load( "assets/android.json", $scope.addModelToScene );
+                    jsonLoader.load("assets/android.json", $scope.addModelToScene);
 
                     var light = new THREE.PointLight(0xffffff);
-                    light.position.set(-100,200,100);
+                    light.position.set(-100, 200, 100);
                     $scope.scene.add(light);
 
                     var ambientLight = new THREE.AmbientLight(0x111111);
@@ -76,35 +76,35 @@ angular.module('meshApp.model', [
                     // $scope.scene.add(axes);
                 };
 
-                function buildAxes( length ) {
+                function buildAxes(length) {
                     var axes = new THREE.Object3D();
 
-                    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
-                    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
-                    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
-                    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
-                    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
-                    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
+                    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(length, 0, 0), 0xFF0000, false)); // +X
+                    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(-length, 0, 0), 0xFF0000, true)); // -X
+                    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, length, 0), 0x00FF00, false)); // +Y
+                    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, -length, 0), 0x00FF00, true)); // -Y
+                    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, length), 0x0000FF, false)); // +Z
+                    axes.add(buildAxis(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -length), 0x0000FF, true)); // -Z
 
                     return axes;
 
                 }
 
-                function buildAxis( src, dst, colorHex, dashed ) {
+                function buildAxis(src, dst, colorHex, dashed) {
                     var geom = new THREE.Geometry(),
                         mat;
 
-                    if(dashed) {
+                    if (dashed) {
                         mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
                     } else {
                         mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
                     }
 
-                    geom.vertices.push( src.clone() );
-                    geom.vertices.push( dst.clone() );
+                    geom.vertices.push(src.clone());
+                    geom.vertices.push(dst.clone());
                     geom.computeLineDistances(); // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
 
-                    var axis = new THREE.Line( geom, mat, THREE.LinePieces );
+                    var axis = new THREE.Line(geom, mat, THREE.LinePieces);
 
                     return axis;
 
@@ -112,11 +112,13 @@ angular.module('meshApp.model', [
 
                 $scope.addModelToScene = function (geometry, materials) {
 
-                    var material = new THREE.MeshFaceMaterial( materials );
+                    var material = new THREE.MeshFaceMaterial(materials);
                     material.overdraw = true;
-                    _.forEach(material.materials, function (mat) { mat.overdraw = true; });
+                    _.forEach(material.materials, function (mat) {
+                        mat.overdraw = true;
+                    });
 
-                    $scope.mesh = new THREE.Mesh( geometry, material );
+                    $scope.mesh = new THREE.Mesh(geometry, material);
 
                     geometry.computeBoundingBox();
                     geometry.computeBoundingSphere();
@@ -124,7 +126,7 @@ angular.module('meshApp.model', [
                     var box = geometry.boundingBox;
                     console.log(box);
                     var size = box.size();
-                    $scope.mesh.position.set(0, -size.y/2, 0);
+                    $scope.mesh.position.set(0, -size.y / 2, 0);
 
                     var radius = geometry.boundingSphere.radius * 3;
 
@@ -203,7 +205,9 @@ angular.module('meshApp.model', [
 
                     $scope.mesh.geometry.dispose();
                     if ($scope.mesh.material instanceof THREE.MeshFaceMaterial) {
-                        _.forEach($scope.mesh.material.materials, function (mat) { mat.dispose(); });
+                        _.forEach($scope.mesh.material.materials, function (mat) {
+                            mat.dispose();
+                        });
                     } else {
                         $scope.mesh.material.dispose();
                     }
@@ -246,18 +250,18 @@ angular.module('meshApp.model', [
         });
     })
 
-    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi, ngDialog) {
+    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi, ngDialog, $state) {
 
         $scope.isLoggedIn = meshApi.isLoggedIn();
         if ($scope.isLoggedIn) {
             $scope.loggedUsername = meshApi.getLoggedUsername();
         }
 
-        $scope.init = function() {
+        $scope.init = function () {
             $scope.newModel = {};
 
             meshApi.getModel($stateParams.id). // TODO: make url configurable?
-                success( function (data, status, headers, config) {
+                success(function (data, status, headers, config) {
                     $scope.model = data.model;
                     $scope.favourited = data.favourited;
                     $scope.userVote = data.uservote;
@@ -270,7 +274,7 @@ angular.module('meshApp.model', [
                     $scope.newModel.tags = $scope.model.tags.slice(0); //clone
                     $scope.newModel.visibility = $scope.model.visibility;
                 }).
-            error( function (err) {
+                error(function (err) {
                     alert("The model could not be retrieved: " + err.message); //TODO redirect to error page
                 });
         };
@@ -285,12 +289,12 @@ angular.module('meshApp.model', [
             }
             elem.addClass('disabled');
             meshApi.addComment($stateParams.id, $scope.newComment).
-                success( function (data, status, headers, config) {
+                success(function (data, status, headers, config) {
                     $scope.model.comments.unshift(data);
                     $scope.newComment = '';
                     elem.removeClass('disabled');
                 }).
-                error( function (data, status, headers, config) {
+                error(function (data, status, headers, config) {
                     alert('Error ' + status + ' occurred: ' + data.message);
                     elem.removeClass('disabled');
                 });
@@ -301,8 +305,8 @@ angular.module('meshApp.model', [
                 return;
             }
             elem.addClass('hidden');
-            meshApi.getComments($stateParams.id, $scope.model.comments[$scope.model.comments.length-1].date).
-                success( function (data, status, headers, config) {
+            meshApi.getComments($stateParams.id, $scope.model.comments[$scope.model.comments.length - 1].date).
+                success(function (data, status, headers, config) {
                     console.log(data);
                     for (var i = 0; i < data.length; ++i) {
                         $scope.model.comments.push(data[i]);
@@ -311,7 +315,7 @@ angular.module('meshApp.model', [
                         elem.removeClass('hidden');
                     }
                 }).
-                error( function (data, status, headers, config) {
+                error(function (data, status, headers, config) {
                     alert('Error ' + status + ' occurred: ' + data.message);
                     elem.removeClass('hidden');
                 });
@@ -328,10 +332,10 @@ angular.module('meshApp.model', [
                     }
                 }
                 meshApi.removeComment($scope.model.id, date).
-                    success( function (data, status, headers, config) {
+                    success(function (data, status, headers, config) {
 
                     }).
-                    error( function (data, status, headers, config) {
+                    error(function (data, status, headers, config) {
                         alert('Error ' + status + ' occurred: ' + data.message);
                     });
             });
@@ -344,21 +348,21 @@ angular.module('meshApp.model', [
             processingVote = true;
             if ($scope.userVote == 'UP') {
                 meshApi.deleteModelVote($scope.model.id).
-                    success( function () {
+                    success(function () {
                         if ($scope.userVote == 'UP') {
                             $scope.model.upvotes--;
                         }
                         $scope.userVote = '';
                         processingVote = false;
                     }).
-                    error( function (data, status, headers, config) {
+                    error(function (data, status, headers, config) {
                         alert('Error ' + status + ' occurred: ' + data.message);
                         processingVote = false;
                     });
             }
             else {
                 meshApi.addModelVote($scope.model.id, 'UP').
-                    success( function (data, status, headers, config) {
+                    success(function (data, status, headers, config) {
                         if ($scope.userVote == 'DOWN') {
                             $scope.model.downvotes--;
                         }
@@ -366,7 +370,7 @@ angular.module('meshApp.model', [
                         $scope.model.upvotes++;
                         processingVote = false;
                     }).
-                    error( function (data, status, headers, config) {
+                    error(function (data, status, headers, config) {
                         alert('Error ' + status + ' occurred: ' + data.message);
                         processingVote = false;
                     });
@@ -380,21 +384,21 @@ angular.module('meshApp.model', [
             processingVote = true;
             if ($scope.userVote == 'DOWN') {
                 meshApi.deleteModelVote($scope.model.id).
-                    success( function (data, status, headers, config) {
+                    success(function (data, status, headers, config) {
                         if ($scope.userVote == 'UP') {
                             $scope.model.upvotes--;
                         }
                         $scope.userVote = '';
                         processingVote = false;
                     }).
-                    error( function (data, status, headers, config) {
+                    error(function (data, status, headers, config) {
                         alert('Error ' + status + ' occurred: ' + data.message);
                         processingVote = false;
                     });
             }
             else {
                 meshApi.addModelVote($scope.model.id, 'DOWN').
-                    success( function (data, status, headers, config) {
+                    success(function (data, status, headers, config) {
                         if ($scope.userVote == 'UP') {
                             $scope.model.upvotes--;
                         }
@@ -402,7 +406,7 @@ angular.module('meshApp.model', [
                         $scope.model.downvotes++;
                         processingVote = false;
                     }).
-                    error( function (data, status, headers, config) {
+                    error(function (data, status, headers, config) {
                         alert('Error ' + status + ' occurred: ' + data.message);
                         processingVote = false;
                     });
@@ -417,11 +421,11 @@ angular.module('meshApp.model', [
             processingFavouriteRequest = true;
             var apiCall = $scope.favourited ? meshApi.removeModelFromFavourites : meshApi.addModelToFavourites;
             apiCall($scope.model.id).
-                success( function (data, status, headers, config) {
+                success(function (data, status, headers, config) {
                     $scope.favourited = !$scope.favourited;
                     processingFavouriteRequest = false;
                 }).
-                error( function (data, status, headers, config) {
+                error(function (data, status, headers, config) {
                     alert('Error ' + status + ' occurred: ' + data.message);
                     processingFavouriteRequest = false;
                 });
@@ -435,11 +439,11 @@ angular.module('meshApp.model', [
             processingFollowingRequest = true;
             var fapiCall = $scope.followingAuthor ? meshApi.unfollowUser : meshApi.followUser;
             fapiCall($scope.model.author.name).
-                success( function (data, status, headers, config) {
+                success(function (data, status, headers, config) {
                     $scope.followingAuthor = !$scope.followingAuthor;
                     processingFollowingRequest = false;
                 }).
-                error( function (data, status, headers, config) {
+                error(function (data, status, headers, config) {
                     alert('Error ' + status + ' occurred: ' + data.message);
                     processingFollowingRequest = false;
                 });
@@ -454,6 +458,30 @@ angular.module('meshApp.model', [
             alert('Save model not yet implemented');
         };
         $scope.deleteModel = function () {
-            alert('Delete model not yet implemented');
+
+            ngDialog.openConfirm({
+                template: 'deleteModelDialogId',
+                className: 'ngdialog-theme-default'
+            }).then(function () {
+                meshApi.deleteModel($scope.model.id)
+                    .success(function () {
+                        ngDialog.openConfirm({
+                            template: 'deleteSuccessModelDialogId',
+                            className: 'ngdialog-theme-default'
+                        }).then(function () {
+                            $state.go('home.catalog');
+                        });
+                    })
+                    .error(function (data) {
+                        $scope.modelDeleteErrorMessage = data.message ? data.message : data;
+                        ngDialog.openConfirm({
+                            template: 'deleteErrorModelDialogId',
+                            className: 'ngdialog-theme-default',
+                            scope: $scope
+                        }).then(function () {
+                            // do nothing
+                        });
+                    });
+            });
         };
     });

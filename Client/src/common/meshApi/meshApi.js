@@ -50,6 +50,13 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
+        deleteModel: function (modelId) {
+            return $http({
+                url: server.url + 'models/' + modelId,
+                method: 'DELETE',
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+            });
+        },
         register: function (registerInfo) {
             return $http.post(server.url + '/register', registerInfo);
         },
