@@ -202,7 +202,6 @@ module.exports = function (server) {
         method: 'GET',
         path: '/models/{id}/files',
         config: {
-            auth: 'token',
             validate: {
                 params: {
                     id: schema.model.id.required()
