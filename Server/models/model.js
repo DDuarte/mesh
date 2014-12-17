@@ -92,6 +92,32 @@ model.getById = function (id, loggedUser) {
 
 /**
  *
+ * Deletes a model
+ * @param {Number} id
+ * @returns {Promise} Returns a promise that resolves to true if successful, rejects otherwise
+ */
+model.deleteById = function (id) {
+    return new Promise( function (resolve, reject) {
+        var query = [
+            'MATCH (m:Model {id: {modelId}})-[r]-()',
+            'DELETE m, r'
+        ].join('\n');
+
+        var params = {
+            modelId: Number(id),
+        };
+
+        db.query(query, params, function (err) {
+            if (err) return reject(err);
+            return resolve(true);
+        });
+    });
+};
+
+
+
+/**
+ *
  * Returns a model by it's name
  * @param name
  * @returns {Promise} Returns a promise with the resolved model, rejects to error otherwise
