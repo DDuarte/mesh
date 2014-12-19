@@ -64,7 +64,7 @@ group.getById = function (id) {
     ].join('\n');
 
     var params = {
-        id: id
+        id: Number(id)
     };
 
     return new Promise(function (resolve, reject) {
