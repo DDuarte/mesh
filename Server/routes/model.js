@@ -246,11 +246,15 @@ module.exports = function (server) {
                     var filePath = model.filePath;
                     var originalFilename = model.originalFilename;
 
-                    Fs.exists(filePath, function (exists) {
+                    Fs.stat(filePath, function(err, stats) {
+
+                        if (err)
+                            return reply(err).code(500);
+
                         return reply({
                             filePath: filePath,
                             originalFilename: originalFilename,
-                            exists: exists
+                            size: stats['size'] // file size in bytes
                         });
                     });
                 })
