@@ -366,6 +366,11 @@ user.update = function (username, fields) {
     });
 };
 
+/**
+ * Returns all the owned models of a user
+ * @param {String} username Username of the target user
+ * @returns {Promise} Resolves to the owned models if successful, rejects otherwise
+ */
 user.getAllModels = function (username) {
     var query = [
         'MATCH (user:User {username: {name}})-[:OWNS]->(m:Model)',
@@ -387,6 +392,80 @@ user.getAllModels = function (username) {
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(results[0] ? results[0].models : results);
+        });
+    });
+};
+
+/**
+ * Adds an interest to a User
+ * @param {String} username Username of the target user
+ * @param {String} interest Name of the interest
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+user.addInterest = function(username, interest) {
+    return new Promise(function(resolve, reject) {
+        var query = [
+            'MATCH (user:User {username: {userName}})',
+            'MERGE (tag:Tag {name: {interest}})',
+            'CREATE (user)-[:INTERESTED]->(tag)'
+        ].join('\n');
+
+        var params = {
+            userName: username,
+            tagName: interest
+        };
+
+        db.query(query, params, function(err) {
+            if (err) throw err;
+            return resolve(true);
+        });
+    });
+};
+
+/**
+ * Removes an interest from a User
+ * @param {String} username Username of the target user
+ * @param {String} interest Name of the interest to be removed
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+user.removeInterest = function(username, interest) {
+    return new Promise(function(resolve, reject) {
+        var query = [
+            'MATCH (user:User {username: {userName}})-[relation:INTERESTED]->(tag:Tag {name: {tagName}})',
+            'DELETE relation'
+        ].join('\n');
+
+        var params = {
+            userName: username,
+            tagName: interest
+        };
+
+        db.query(query, params, function(err) {
+            if (err) throw err;
+            return resolve(true);
+        });
+    });
+};
+
+/**
+ * Adds an interest to a User
+ * @param {String} username Username of the target user
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+user.removeAllInterests = function(username) {
+    return new Promise(function(resolve, reject) {
+        var query = [
+            'MATCH (user:User {username: {userName}})-[relations:INTERESTED]->(:Tag)',
+            'DELETE relations'
+        ].join('\n');
+
+        var params = {
+            userName: username
+        };
+
+        db.query(query, params, function(err) {
+            if (err) throw err;
+            return resolve(true);
         });
     });
 };
