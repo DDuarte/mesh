@@ -5,7 +5,6 @@ var User = require('../models/user'),
     client = require('../common/redisClient'),
     schema = require('../schema'),
     Boom = require('boom');
-
 module.exports = function (server) {
 
 
@@ -246,7 +245,8 @@ module.exports = function (server) {
                     lastName: schema.user.lastName,
                     birthdate: schema.user.birthdate,
                     country: schema.user.country,
-                    about: schema.user.about
+                    about: schema.user.about,
+                    interests: schema.user.interests
                 }
             }
         },
@@ -258,7 +258,24 @@ module.exports = function (server) {
                 if (!result) {
                     reply('No such user.').code(404);
                 } else {
-                    reply(result);
+
+                    User.removeAllInterests(request.auth.credentials.username)
+                        .then(function () {
+
+                            Promise.map(request.payload.interests, function (interest) {
+                                return User.addInterest(request.auth.credentials.username, interest);
+                            })
+                                .then(function () {
+                                    return reply(result);
+                                })
+                                .catch(function () {
+                                    reply(Boom.badImplementation('Internal server error'));
+                                });
+
+                        })
+                        .catch(function () {
+                            reply(Boom.badImplementation('Internal server error'));
+                        });
                 }
             }, function (error) {
                 reply('Internal error').code(500);
