@@ -51,5 +51,6 @@ module.exports = {
     birthdate: Joi.date().format('YYYY-MM-DD'),
     country: Joi.any().allow(countries),
     rememberMe: Joi.boolean(),
-    about: Joi.string().max(1024)
+    about: Joi.string().max(1024),
+    interests: Joi.array().includes(Joi.string())
 };
