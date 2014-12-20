@@ -542,7 +542,7 @@ module.exports = function (grunt) {
                 html5Mode: true,
                 startPage: '/api',
                 titleLink: "/api",
-                bestMatch: true,
+                bestMatch: true
             },
             api: {
                 src: ['src/app/**/*.js', '!src/app/**/*.spec.js', 'src/common/**/*.js'],
@@ -683,5 +683,6 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('doc', ['ngdocs']);
+    grunt.registerTask('doc:serve', ['ngdocs']);
 
 };
