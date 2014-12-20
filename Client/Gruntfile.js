@@ -16,6 +16,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-ngmin');
     grunt.loadNpmTasks('grunt-html2js');
+    grunt.loadNpmTasks('grunt-ngdocs');
+
 
     /**
      * Load in our build configuration file.
@@ -529,6 +531,27 @@ module.exports = function (grunt) {
                     livereload: false
                 }
             }
+        },
+
+        /**
+         * Documentation plugin
+         */
+        ngdocs: {
+            options: {
+                dest: 'docs',
+                html5Mode: true,
+                startPage: '/api',
+                titleLink: "/api",
+                bestMatch: true,
+            },
+            tutorial: {
+                src: ['content/tutorial/*.ngdoc'],
+                title: 'Tutorial'
+            },
+            api: {
+                src: ['src/app/**/*.js', '!src/app/**/*.spec.js'],
+                title: 'API Documentation'
+            }
         }
     };
 
@@ -662,5 +685,7 @@ module.exports = function (grunt) {
             }
         });
     });
+
+    grunt.registerTask('doc', ['ngdocs']);
 
 };
