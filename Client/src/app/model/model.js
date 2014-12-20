@@ -46,7 +46,7 @@ angular.module('meshApp.model', [
                     var args = { antialias: true };
 
                     $scope.renderer = Detector.webgl ? new THREE.WebGLRenderer(args) : new THREE.CanvasRenderer(args);
-                    $scope.renderer.setClearColor(0xffffff, 1);
+                    $scope.renderer.setClearColor(0xf8f8f8 /* light gray */, 1);
 
                     $scope.size = { width: angular.element('#rendererContainer').innerWidth(), height: angular.element('#rendererContainer').innerWidth() * 9 / 16 };
 
