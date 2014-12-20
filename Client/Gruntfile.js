@@ -544,12 +544,8 @@ module.exports = function (grunt) {
                 titleLink: "/api",
                 bestMatch: true,
             },
-            tutorial: {
-                src: ['content/tutorial/*.ngdoc'],
-                title: 'Tutorial'
-            },
             api: {
-                src: ['src/app/**/*.js', '!src/app/**/*.spec.js'],
+                src: ['src/app/**/*.js', '!src/app/**/*.spec.js', 'src/common/**/*.js'],
                 title: 'API Documentation'
             }
         }
