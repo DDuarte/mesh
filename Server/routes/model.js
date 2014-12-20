@@ -1,5 +1,6 @@
 'use strict';
 
+var Fs = require('fs');
 var Model = require('../models/model.js');
 var Promise = require('bluebird');
 var Boom = require('boom');
@@ -175,10 +176,10 @@ module.exports = function (server) {
                 }
             }
         },
-        handler: function(request, reply) {
+        handler: function (request, reply) {
             Model.getById(request.params.id, request.auth.credentials ? request.auth.credentials.username : '')
-                .then(function(results) {
-                    
+                .then(function (results) {
+
                     if (results.length == 0)
                         return reply(Boom.notFound('Model does not exist'));
 
@@ -188,10 +189,10 @@ module.exports = function (server) {
                         return reply(Boom.unauthorized('User is not owner of the model'));
 
                     Model.deleteById(request.params.id)
-                        .then(function() {
+                        .then(function () {
                             return reply().code(200);
                         })
-                        .catch(function() {
+                        .catch(function () {
                             return reply(Boom.badImplementation('Error deleting model'));
                         })
                 });
@@ -210,7 +211,7 @@ module.exports = function (server) {
         },
         handler: function (request, reply) {
             Model.getById(request.params.id, request.auth.credentials ? request.auth.credentials.username : '')
-                .then(function(results) {
+                .then(function (results) {
                     if (results.length == 0)
                         return reply(Boom.notFound('Model does not exist'));
 
@@ -219,7 +220,41 @@ module.exports = function (server) {
 
                     return reply.file(filePath);
                 })
-                .catch(Error, function(error) {
+                .catch(Error, function (error) {
+                    reply(Boom.badImplementation(error.message ? error.message : error));
+                });
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/models/{id}/filesInfo',
+        config: {
+            validate: {
+                params: {
+                    id: schema.model.id.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Model.getById(request.params.id, request.auth.credentials ? request.auth.credentials.username : '')
+                .then(function (results) {
+                    if (results.length == 0)
+                        return reply(Boom.notFound('Model does not exist'));
+
+                    var model = results[0].model;
+                    var filePath = model.filePath;
+                    var originalFilename = model.originalFilename;
+
+                    Fs.exists(filePath, function (exists) {
+                        return reply({
+                            filePath: filePath,
+                            originalFilename: originalFilename,
+                            exists: exists
+                        });
+                    });
+                })
+                .catch(Error, function (error) {
                     reply(Boom.badImplementation(error.message ? error.message : error));
                 });
         }
