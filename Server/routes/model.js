@@ -217,8 +217,12 @@ module.exports = function (server) {
 
                     var model = results[0].model;
                     var filePath = model.filePath;
+                    var originalFilename = model.originalFilename;
 
-                    return reply.file(filePath);
+                    return reply.file(filePath, {
+                        filename: originalFilename,
+                        mode: 'attachment'
+                    });
                 })
                 .catch(Error, function (error) {
                     reply(Boom.badImplementation(error.message ? error.message : error));
