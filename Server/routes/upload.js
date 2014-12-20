@@ -64,8 +64,8 @@ module.exports = function (server) {
                                     .then(function() {
                                         return reply(model).code(200);
                                     })
-                                    .catch(function() {
-                                        return reply(Boom.badImplementation('Internal Server Error'));
+                                    .catch(function(err) {
+                                        return reply(Boom.badImplementation(err));
                                     });
                             })
                             .catch(Error, function (error) {
