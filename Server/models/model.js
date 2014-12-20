@@ -309,7 +309,7 @@ model.addTag = function(modelId, tag) {
     return new Promise(function(resolve, reject) {
         var query = [
             'MATCH (model:Model {id: {id}})',
-            'MERGE (tag:Tag {name: {tagName})',
+            'MERGE (tag:Tag {name: {tagName}})',
             'CREATE (model)-[:TAGGED]->(tag)'
         ].join('\n');
 
@@ -353,7 +353,7 @@ model.removeTag = function(modelId, tag) {
 
 /**
  * Removes all tags from a model
- * 
+ *
  * @param {Number} modelId Id of the model
  * @returns {Promise} Resolves to true if successful, rejects otherwise
  */
