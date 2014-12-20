@@ -40,4 +40,6 @@ server.pack.register({plugin: require('hapi-routes-status'), options: {path: '/s
 });
 
 // Start the server
-server.start();
+server.start(function() {
+    console.log('Server running at:', server.info.uri);
+});
