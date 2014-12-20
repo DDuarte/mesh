@@ -377,15 +377,25 @@
     </div>
 </tab>
 <tab>
-    <tab-heading><strong>Galleries</strong></tab-heading>
-    <div class="row">
-        <div class="col-md-12">
-            <pagination total-items="galleriesPaginatorTotalItems" ng-model="galleriesPaginatorCurrentPage" max-size="galleriesPaginatorMaxSize" items-per-page="galleriesPaginatorItemsPerPage" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
-        </div>
-    </div>
+    <tab-heading><strong>Models</strong></tab-heading>
     <div class="row">
         <div class="col-md-12">
             <v-tabset>
+                <v-tab select="getAllModels()">
+                    <tab-heading>All Models</tab-heading>
+                    <modelthumbnail ng-repeat="model in all.models"
+                                    model-id={{model.modelId}}
+                                    image-url={{model.thumbnail}}
+                                    title={{model.title}}
+                                    author={{model.author}}
+                                    author-avatar={{model.authorAvatar}}
+                                    date={{model.date}}
+                                    num-comments={{model.numComments}}
+                                    upvotes={{model.upvotes}}
+                                    downvotes={{model.downvotes}}>
+                    </modelthumbnail>
+                    <button class="btn btn-white btn-block">Show More</button>
+                </v-tab>
                 <v-tab ng-repeat="gallery in galleries" select="changeSelectedGallery($index)">
                     <tab-heading>{{gallery.name}}</tab-heading>
                     <modelthumbnail ng-repeat="model in gallery.models | startFrom: (galleriesPaginatorCurrentPage-1)*galleriesPaginatorItemsPerPage | limitTo: galleriesPaginatorItemsPerPage"
@@ -399,13 +409,9 @@
                                     upvotes="20"
                                     downvotes="2">
                     </modelthumbnail>
+                    <button class="btn btn-white btn-block">Show More</button>
                 </v-tab>
             </v-tabset>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <pagination total-items="galleriesPaginatorTotalItems" ng-model="galleriesPaginatorCurrentPage" max-size="galleriesPaginatorMaxSize" items-per-page="galleriesPaginatorItemsPerPage" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
         </div>
     </div>
 </tab>

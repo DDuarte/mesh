@@ -97,6 +97,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         getFollowing: function (username) {
             return $http.get(server.url + '/users/' + username + '/following');
         },
+        getAllModels: function(username) {
+            return $http.get(server.url  + '/users/' + username + '/models');
+        },
         followUser: function (otheruser) {
             return $http.post(server.url + '/users/' + getLoggedToken().username + '/followers', {otheruser: otheruser}, {
                 headers: getHeaders()
