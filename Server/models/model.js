@@ -298,4 +298,81 @@ model.deleteVote = function (modelId, username) {
     });
 };
 
+/**
+ * Adds a tag to a model
+ *
+ * @param {Number} modelId Id of the model to be tagged
+ * @param {String} tag Tag name
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+model.addTag = function(modelId, tag) {
+    return new Promise(function(resolve, reject) {
+        var query = [
+            'MATCH (model:Model {id: {id}})',
+            'MERGE (tag:Tag {name: {tagName})',
+            'CREATE (model)-[:TAGGED]->(tag)'
+        ].join('\n');
+
+        var params = {
+            id: Number(modelId),
+            tagName: tag
+        };
+
+        db.query(query, params, function(err) {
+            if (err) throw err;
+            return resolve(true);
+        });
+    });
+};
+
+/**
+ * Removes a specific tag from a model
+ *
+ * @param {Number} modelId Id of the model whose tag will be removed
+ * @param {String} tag Tag name
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+model.removeTag = function(modelId, tag) {
+    return new Promise(function(resolve, reject) {
+        var query = [
+            'MATCH (model:Model {id: {id}})-[relation:TAGGED]->(tag:Tag {name: {tagName}})',
+            'DELETE relation'
+        ].join('\n');
+
+        var params = {
+            id: Number(modelId),
+            tagName: tag
+        };
+
+        db.query(query, params, function(err) {
+            if (err) throw err;
+            return resolve(true);
+        });
+    });
+};
+
+/**
+ * Removes all tags from a model
+ * 
+ * @param {Number} modelId Id of the model
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+model.removeAllTags = function(modelId) {
+    return new Promise(function(resolve, reject) {
+        var query = [
+            'MATCH (model:Model {id: {id}})-[relations:TAGGED]->(:Tag)',
+            'DELETE relations'
+        ].join('\n');
+
+        var params = {
+            id: Number(modelId)
+        };
+
+        db.query(query, params, function(err) {
+            if (err) throw err;
+            return resolve(true);
+        });
+    });
+};
+
 module.exports = model;
