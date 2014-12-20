@@ -211,6 +211,26 @@ module.exports = function (server) {
         }
     });
 
+    server.route({
+        method: 'GET',
+        path: '/users/{username}/models',
+        config: {
+            auth: false,
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            User.getAllModels(request.params.username).then(function (models) {
+                reply(models);
+            }, function (error) {
+                reply('Internal error').code(500);
+            });
+        }
+    });
+
 
     server.route({
         method: 'PATCH',
