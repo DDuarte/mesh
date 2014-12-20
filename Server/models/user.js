@@ -7,7 +7,7 @@ var user = {};
 /**
  *
  * Returns a user by it's name
-/**
+ /**
  *
  * Returns a user by it's name
  * @param username string identifier of the user
@@ -316,7 +316,7 @@ user.changePassword = function (username, newPassword) {
 user.generateGravatarUrl = function (email) {
     var hash = crypto.createHash('md5');
     hash.update(email);
-    return 'http://www.gravatar.com/avatar/' +  hash.digest('hex') + '?d=identicon';
+    return 'http://www.gravatar.com/avatar/' + hash.digest('hex') + '?d=identicon';
 };
 
 
@@ -349,7 +349,7 @@ user.update = function (username, fields) {
             'RETURN u'
         ];
 
-        for(var field in fields) {
+        for (var field in fields) {
             query[1] += 'u.' + field + '={' + field + '},';
         }
         query[1] = query[1].substring(0, query[1].length - 1);
@@ -362,6 +362,31 @@ user.update = function (username, fields) {
             if (err) return reject(err);
 
             return resolve(results);
+        });
+    });
+};
+
+user.getAllModels = function (username) {
+    var query = [
+        'MATCH (user:User {username: {name}})-[:OWNS]->(m:Model)',
+        'WITH * ORDER BY m.publicationDate DESC',
+        'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
+        'WITH m, user, count(ru) as upvotes',
+        'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
+        'WITH m, user, upvotes, count(rd) as downvotes',
+        'OPTIONAL MATCH (User)-[cm:COMMENTED]->m',
+        'WITH m, user, upvotes, downvotes, count(cm) as comments ORDER BY m.publicationDate DESC',
+        'RETURN collect({ modelId: m.id, title: m.name, thumbnail: m.thumbnail, author: user.username, authorAvatar: user.avatar, date: m.publicationDate, numComments: comments, upvotes: upvotes, downvotes: downvotes}) as models'
+    ].join('\n');
+
+    var params = {
+        name: username,
+    };
+
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results[0] ? results[0].models : results);
         });
     });
 };
