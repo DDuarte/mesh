@@ -1,6 +1,7 @@
 var Boom = require('boom');
 var Fs = require('fs');
 var Path = require('path');
+var Promise = require('bluebird');
 var Model = require('../models/model');
 var Schema = require('../schema');
 var Joi = require('joi');
@@ -56,7 +57,16 @@ module.exports = function (server) {
 
                         Model.create(data.name, data.description, originalFilename, path, ownerName, 'http://placehold.it/500&text=' + data.name)
                             .then(function (model) {
-                                reply(model).code(200);
+
+                                Promise.map(data.tags, function(tag) {
+                                    return Model.addTag(model.id, tag);
+                                })
+                                    .then(function() {
+                                        return reply(model).code(200);
+                                    })
+                                    .catch(function() {
+                                        return reply(Boom.badImplementation('Internal Server Error'));
+                                    });
                             })
                             .catch(Error, function (error) {
                                 reply(Boom.badImplementation(error.message));
