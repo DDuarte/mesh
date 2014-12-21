@@ -326,6 +326,45 @@ model.addTag = function(modelId, tag) {
 };
 
 /**
+ * Replace the tags of a models by the ones given as a parameter
+ *
+ * @param {Number} modelId Id of the model to be tagged
+ * @param {Array<String>} tags Tag names
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+model.replaceTags = function(modelId, tags) {
+    return new Promise(function(resolve, reject) {
+        var tagsClause = '[';
+        for (var i = 0; i < tags.length; ++i) {
+            tagsClause += ('"' + tags[i] + '"');
+            if (i < (tags.length - 1)) // last element is not separated by a comma
+                tagsClause += ', '
+        }
+        tagsClause += ']';
+
+        var query = [
+            'MATCH (m: Model { id: {id}})',
+            'OPTIONAL MATCH (m)-[tg:TAGGED]->(t)',
+            'WHERE NOT t.name IN ' + tagsClause,
+            'DELETE tg',
+            'FOREACH (tagName IN ' + tagsClause + ' |',
+            'MERGE (tag:Tag{name: tagName})',
+            'MERGE m-[:TAGGED]->tag',
+            ')'
+        ].join('\n');
+
+        var params = {
+            id: Number(modelId)
+        };
+
+        db.query(query, params, function(err) {
+            if (err) throw err;
+            return resolve(true);
+        });
+    });
+};
+
+/**
  * Removes a specific tag from a model
  *
  * @param {Number} modelId Id of the model whose tag will be removed
