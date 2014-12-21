@@ -426,7 +426,9 @@ model.updateById = function (modelId, description, isPublic, tags) {
         var query = [
             'MATCH (model:Model {id: {id}})',
             'SET model.description = {description}, model.isPublic = {isPublic}',
-            'RETURN model'
+            'OPTIONAL MATCH m-[:TAGGED]->(modelTag:Tag)',
+            'WITH {id: model.id, name: model.name, description: model.description, isPublic: model.isPublic, tags: collect(modelTag.name)} as ModelInfo',
+            'RETURN modelInfo'
         ].join('\n');
 
         var params = {
@@ -440,7 +442,7 @@ model.updateById = function (modelId, description, isPublic, tags) {
 
             model.replaceTags(modelId, tags)
                 .then(function () {
-                    return resolve(results[0]['model'].data);
+                    return resolve(results[0]['modelInfo']);
                 })
                 .catch(function (err) {
                     return reject(err);
