@@ -37,8 +37,8 @@ model.create = function (name, description, originalFilename, filePath, ownerNam
         originalFilename: originalFilename
     };
 
-    return new Promise(function(resolve, reject) {
-        db.query(query, params, function(error, results) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (error, results) {
             if (error) throw new Error('Internal database error');
             resolve(results[0]['model']['data']);
         });
@@ -54,7 +54,7 @@ model.create = function (name, description, originalFilename, filePath, ownerNam
  * @returns {Promise} Returns a promise with the resolved model, rejects to error otherwise
  */
 model.getById = function (id, loggedUser) {
-    return new Promise( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (m:Model{id : {modelId}})<-[:OWNS]-(author)',
             'OPTIONAL MATCH m<-[c:COMMENTED]-(cAuthor)',
@@ -97,7 +97,7 @@ model.getById = function (id, loggedUser) {
  * @returns {Promise} Returns a promise that resolves to true if successful, rejects otherwise
  */
 model.deleteById = function (id) {
-    return new Promise( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (m:Model {id: {modelId}})-[r]-()',
             'DELETE m, r'
@@ -115,7 +115,6 @@ model.deleteById = function (id) {
 };
 
 
-
 /**
  *
  * Returns a model by it's name
@@ -124,7 +123,7 @@ model.deleteById = function (id) {
  *
  */
 model.getByName = function (name) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (m:Model{name : {modelName}})<-[:OWNS]-(author)',
             'OPTIONAL MATCH m<-[c:COMMENTED]-(cAuthor)',
@@ -160,7 +159,7 @@ model.getByName = function (name) {
  *
  */
 model.addComment = function (modelId, username, content) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u:User {username:{author}}), (m:Model {id:{id}})',
             'CREATE (u)-[c:COMMENTED {date:{date}, content:{comment}}]->(m)',
@@ -193,7 +192,7 @@ model.addComment = function (modelId, username, content) {
  *
  */
 model.removeComment = function (modelId, username, date) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u:User {username: {username}})-[c:COMMENTED {date: {date}}]->(m:Model {id: {modelId}})',
             'DELETE c'
@@ -220,7 +219,7 @@ model.removeComment = function (modelId, username, date) {
  * @returns {Promise} returns resolved content, rejects to error otherwise
  */
 model.getCommentsOlderThan = function (modelId, startdate) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u:User)-[c:COMMENTED]->(m:Model {id: {id}})',
             startdate ? 'WHERE c.date < {date}' : '',
@@ -250,7 +249,7 @@ model.getCommentsOlderThan = function (modelId, startdate) {
  *
  */
 model.addVote = function (modelId, username, vote) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u:User {username: {username}}), (m:Model {id: {id}})',
             'MERGE (u)-[v:VOTED]->(m)',
@@ -280,7 +279,7 @@ model.addVote = function (modelId, username, vote) {
  *
  */
 model.deleteVote = function (modelId, username) {
-    return new Promise ( function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u:User {username: {username}})-[v:VOTED]->(m:Model {id: {id}})',
             'DELETE v'
@@ -305,8 +304,8 @@ model.deleteVote = function (modelId, username) {
  * @param {String} tag Tag name
  * @returns {Promise} Resolves to true if successful, rejects otherwise
  */
-model.addTag = function(modelId, tag) {
-    return new Promise(function(resolve, reject) {
+model.addTag = function (modelId, tag) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (model:Model {id: {id}})',
             'MERGE (tag:Tag {name: {tagName}})',
@@ -318,7 +317,7 @@ model.addTag = function(modelId, tag) {
             tagName: tag
         };
 
-        db.query(query, params, function(err) {
+        db.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -332,8 +331,8 @@ model.addTag = function(modelId, tag) {
  * @param {Array<String>} tags Tag names
  * @returns {Promise} Resolves to true if successful, rejects otherwise
  */
-model.replaceTags = function(modelId, tags) {
-    return new Promise(function(resolve, reject) {
+model.replaceTags = function (modelId, tags) {
+    return new Promise(function (resolve, reject) {
         var tagsClause = '[';
         for (var i = 0; i < tags.length; ++i) {
             tagsClause += ('"' + tags[i] + '"');
@@ -345,9 +344,9 @@ model.replaceTags = function(modelId, tags) {
         var query = [
             'MATCH (m: Model { id: {id}})',
             'OPTIONAL MATCH (m)-[tg:TAGGED]->(t)',
-            'WHERE NOT t.name IN ' + tagsClause,
+                'WHERE NOT t.name IN ' + tagsClause,
             'DELETE tg',
-            'FOREACH (tagName IN ' + tagsClause + ' |',
+                'FOREACH (tagName IN ' + tagsClause + ' |',
             'MERGE (tag:Tag{name: tagName})',
             'MERGE m-[:TAGGED]->tag',
             ')'
@@ -357,7 +356,7 @@ model.replaceTags = function(modelId, tags) {
             id: Number(modelId)
         };
 
-        db.query(query, params, function(err) {
+        db.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -371,8 +370,8 @@ model.replaceTags = function(modelId, tags) {
  * @param {String} tag Tag name
  * @returns {Promise} Resolves to true if successful, rejects otherwise
  */
-model.removeTag = function(modelId, tag) {
-    return new Promise(function(resolve, reject) {
+model.removeTag = function (modelId, tag) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (model:Model {id: {id}})-[relation:TAGGED]->(tag:Tag {name: {tagName}})',
             'DELETE relation'
@@ -383,7 +382,7 @@ model.removeTag = function(modelId, tag) {
             tagName: tag
         };
 
-        db.query(query, params, function(err) {
+        db.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -396,8 +395,8 @@ model.removeTag = function(modelId, tag) {
  * @param {Number} modelId Id of the model
  * @returns {Promise} Resolves to true if successful, rejects otherwise
  */
-model.removeAllTags = function(modelId) {
-    return new Promise(function(resolve, reject) {
+model.removeAllTags = function (modelId) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (model:Model {id: {id}})-[relations:TAGGED]->(:Tag)',
             'DELETE relations'
@@ -407,9 +406,45 @@ model.removeAllTags = function(modelId) {
             id: Number(modelId)
         };
 
-        db.query(query, params, function(err) {
+        db.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
+        });
+    });
+};
+
+/**
+ * Updates a model's information
+ * @param {Number} modelId Id of the model to be updated
+ * @param {String} description Model description
+ * @param {Boolean} isPublic Model visibility
+ * @param {Array<String>} tags Model tags
+ * @returns {Promise} Resolves to the model is successful, rejects otherwise
+ */
+model.updateById = function (modelId, description, isPublic, tags) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (model:Model {id: {id}})',
+            'SET model.description = {description}, model.isPublic = {isPublic}',
+            'RETURN model'
+        ].join('\n');
+
+        var params = {
+            id: Number(modelId),
+            description: description,
+            isPublic: isPublic
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) throw err;
+
+            model.replaceTags(modelId, tags)
+                .then(function () {
+                    return resolve(results[0].data);
+                })
+                .catch(function (err) {
+                    return reject(err);
+                });
         });
     });
 };
