@@ -8,5 +8,6 @@ module.exports = {
     comment: Joi.string().trim().min(1).max(1024),
     vote: Joi.string().trim().regex(/(DOWN)|(UP)/),
     file: Joi.any(),
-    tags: Joi.array().includes(Joi.string())
+    tags: Joi.array().includes(Joi.string()),
+    isPublic: Joi.boolean()
 };

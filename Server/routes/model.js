@@ -166,6 +166,48 @@ module.exports = function (server) {
     });
 
     server.route({
+        method: 'PATCH',
+        path: '/models/{id}',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.model.id.required()
+                },
+                payload: {
+                    description: schema.model.description.required(),
+                    tags: schema.model.tags.required(),
+                    isPublic: schema.model.isPublic.required()
+                }
+            }
+        },
+        handler: function(request, reply) {
+            Model.getById(request.params.id, request.auth.credentials ? request.auth.credentials.username : '')
+                .then(function (results) {
+                    if (results.length == 0)
+                        return reply(Boom.notFound('Model does not exist'));
+
+                    var ownsModel = results[0].ownsModel;
+
+                    if (!ownsModel)
+                        return reply(Boom.unauthorized('User is not owner of the model'));
+
+                    var modelData = request.payload;
+                    Model.updateById(request.params.id, modelData.description, modelData.isPublic, modelData.tags)
+                        .then(function(model) {
+                            reply(model).code(200);
+                        })
+                        .catch(function() {
+                            reply(Boom.badImplementation('Internal server error'));
+                        })
+                })
+                .catch(function() {
+                    reply(Boom.badImplementation('Internal server error'));
+                })
+        }
+    });
+
+    server.route({
         method: 'DELETE',
         path: '/models/{id}',
         config: {
