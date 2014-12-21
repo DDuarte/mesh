@@ -440,7 +440,7 @@ model.updateById = function (modelId, description, isPublic, tags) {
 
             model.replaceTags(modelId, tags)
                 .then(function () {
-                    return resolve(results[0]['model']);
+                    return resolve(results[0]['model'].data);
                 })
                 .catch(function (err) {
                     return reject(err);
