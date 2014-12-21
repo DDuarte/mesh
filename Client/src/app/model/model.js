@@ -273,7 +273,7 @@ angular.module('meshApp.model', [
 
                     $scope.newModel.description = $scope.model.description;
                     $scope.newModel.tags = $scope.model.tags.slice(0); //clone
-                    $scope.newModel.visibility = $scope.model.visibility;
+                    $scope.newModel.visibility = $scope.model.isPublic ? 'public' : 'private';
                 }).
                 error(function (err) {
                     alert("The model could not be retrieved: " + err.message); //TODO redirect to error page
@@ -457,7 +457,28 @@ angular.module('meshApp.model', [
             alert('Export to dropbox not yet implemented');
         };
         $scope.updateModel = function () {
-            alert('Save model not yet implemented');
+            var tagsText = _.pluck($scope.newModel.tags, 'text');
+            var isPublic = $scope.newModel.visibility == 'public';
+            meshApi.updateModel($scope.model.id, $scope.newModel.description, isPublic, tagsText)
+                .success(function(model) {
+                    $scope.model.description = model.description;
+                    $scope.newModel.description = model.description;
+                    $scope.newModel.visibility = model.isPublic ? 'public' : 'private';
+                    $scope.model.tags = model.tags.slice(0);
+                    $scope.newModel.tags = model.tags;
+
+                    ngDialog.openConfirm({
+                        template: 'updateSuccessModelDialogId',
+                        className: 'ngdialog-theme-default'
+                    }).then(function() {
+                        // do nothing
+                    });
+                })
+                .error(function(error) {
+                    console.log("error:", error);
+                });
+            //console.log("update model", $scope.newModel);
+            //alert('Save model not yet implemented');
         };
         $scope.deleteModel = function () {
 
