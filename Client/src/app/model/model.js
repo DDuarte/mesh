@@ -55,7 +55,13 @@ angular.module('meshApp.model', [
                     $element.append(angular.element($scope.renderer.domElement));
 
                     $scope.controls = new THREE.OrbitControls($scope.camera, $scope.renderer.domElement);
-                    $scope.controls.addEventListener('change', $scope.render);
+
+                    // update the light position with the camera movement
+                    $scope.controls.addEventListener('change', function() {
+                        light.position.set($scope.camera.position.x, $scope.camera.position.y, $scope.camera.position.z);
+                        $scope.render();
+                    });
+                    
                     $scope.controls.noPan = true;
 
                     window.addEventListener('resize', $scope.onWindowResize, false);
