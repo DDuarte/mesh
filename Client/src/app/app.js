@@ -13,6 +13,7 @@ angular.module('meshApp', [
     'meshApp.group',
     'meshApp.search',
     'meshApp.modelUpload',
+    'meshApp.notifications',
     'meshApp.groupCreate',
     'ui.router',
     'ui.bootstrap',
