@@ -32,8 +32,8 @@ group.create = function(groupInfo) {
  */
 group.getByName = function (name) {
     var query = [
-        'MATCH (group:Group {lowerName: lower({ name })})',
-        'RETURN group'
+        'MATCH (g:Group {lowerName: lower({ name })})',
+        'RETURN {name: g.name, description: g.description} as group'
     ].join('\n');
 
     var params = {
@@ -43,9 +43,6 @@ group.getByName = function (name) {
     return new Promise(function (resolve, reject) {
         db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
-
-            console.log(name);
-            console.log(results);
             if (results.length > 0)
                 return resolve(results[0]);
             else

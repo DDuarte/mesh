@@ -28,7 +28,7 @@ angular.module('meshApp.groupCreate', [
                     }).closePromise.then(function() {
                         console.log(data);
                         $state.go('home.group', {
-                            id: data.id
+                            id: data.name
                         });
                     });
 
