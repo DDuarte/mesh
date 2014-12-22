@@ -5,7 +5,7 @@
 THREE.OBJLoader = function ( manager, baseUrl ) {
 
 	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
-	this.baseUrl = baseUrl;
+	this.baseUrl = baseUrl + (baseUrl[baseUrl.length - 1] == "/" ? "" : "/");
 
 };
 
@@ -329,7 +329,7 @@ THREE.OBJLoader.prototype = {
 
 				var mtlLoader = new THREE.MTLLoader(scope.baseUrl);
 				materialsLoading += 1;
-				mtlLoader.load(line.substring(7).trim(), function (materialsCreator) {
+				mtlLoader.load(scope.baseUrl + line.substring(7).trim(), function (materialsCreator) {
 					console.log("onLoad");
 					materialsCreator.preload();
 					var mats = materialsCreator.materials;
