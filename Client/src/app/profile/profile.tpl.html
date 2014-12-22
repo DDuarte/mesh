@@ -395,6 +395,8 @@
                     </modelthumbnail>
                     <button class="btn btn-white btn-block">Show More</button>
                 </v-tab>
+                <div class="mb30"></div>
+                <h5 class="lg-title">Galleries</h5>
                 <v-tab ng-repeat="gallery in galleries" select="changeSelectedGallery($index)">
                     <tab-heading>{{gallery.name}}</tab-heading>
                     <modelthumbnail ng-repeat="model in gallery.models | startFrom: (galleriesPaginatorCurrentPage-1)*galleriesPaginatorItemsPerPage | limitTo: galleriesPaginatorItemsPerPage"
