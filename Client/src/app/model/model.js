@@ -91,8 +91,8 @@ angular.module('meshApp.model', [
                     angular.element(document).bind('fullscreenchange', $scope.onFullScreenChange);
 
                     /*var jsonLoader = new THREE.JSONLoader();
-                    jsonLoader.load("assets/android.json", $scope.addModelToScene);
-                    */
+                     jsonLoader.load("assets/android.json", $scope.addModelToScene);
+                     */
 
                     var light = new THREE.PointLight(0xffffff);
                     light.position.set(-100, 200, 100);
@@ -111,7 +111,7 @@ angular.module('meshApp.model', [
                     if (stlMatches != null && stlMatches.length == 1) {
                         console.log("stl matches");
                         loader = new THREE.STLLoader();
-                        loader.addEventListener('load', function(event) {
+                        loader.addEventListener('load', function (event) {
                             var geometry = event.content;
                             $scope.camera.position.x = 200 / 2;
                             $scope.camera.position.y = 200 / 4;
@@ -315,7 +315,7 @@ angular.module('meshApp.model', [
         });
     })
 
-    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi, ngDialog, $state) {
+    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi, ngDialog, $state, $modal) {
 
         $scope.isLoggedIn = meshApi.isLoggedIn();
         if ($scope.isLoggedIn) {
@@ -545,6 +545,36 @@ angular.module('meshApp.model', [
             //console.log("update model", $scope.newModel);
             //alert('Save model not yet implemented');
         };
+
+        $scope.galleries = [
+            "Foo",
+            "Bar",
+            "Baz"
+        ];
+
+        $scope.publishToGalleries = function () {
+
+            console.log("publishToGalleries");
+            var modalInstance = $modal.open({
+                templateUrl: 'galleriesSelectiondId',
+                controller: 'GalleryPublishModalInstanceCtrl',
+                size: 'lg',
+                resolve: {
+                    galleries: function () {
+                        meshApi.getUserGalleries($scope.model.author.name)
+                            .success(function (galleries) {
+                                return galleries;
+                            });
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedGalleries) {
+                console.log($scope.model);
+            }, function () {
+            });
+        };
+
         $scope.deleteModel = function () {
 
             ngDialog.openConfirm({
@@ -571,5 +601,25 @@ angular.module('meshApp.model', [
                         });
                     });
             });
+        };
+    })
+    .controller('GalleryPublishModalInstanceCtrl', function ($scope, $modalInstance, galleries, _) {
+        $scope.galleries = galleries;
+        console.log("galleries", galleries);
+        $scope.selection = {
+            galleries: {}
+        };
+
+        $scope.ok = function () {
+
+            var selectedGalleries = Object.keys(_.pick($scope.selection.galleries, function (value, key) {
+                return value;
+            }));
+
+            $modalInstance.close(selectedGalleries);
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
         };
     });

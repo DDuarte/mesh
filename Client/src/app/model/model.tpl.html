@@ -8,11 +8,15 @@
             <div class="col-md-8">
                 <div id="rendererContainer">
                     <!--<span us-spinner="{radius:60, width:8, length: 16}" spinner-key="spinner-1" spinner-start-active="true"></span> -->
-                    <visualizer ng-if="model" modelId="{{model.id}}" filename="{{model.originalFilename}}" ng-dblclick="toggleFullScreen()"></visualizer>
+                    <visualizer ng-if="model" modelId="{{model.id}}" filename="{{model.originalFilename}}"
+                                ng-dblclick="toggleFullScreen()"></visualizer>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
                     <span class="btn-toolbar pull-right">
+                            <button class="btn btn-primary" ng-click="publishToGalleries()">
+                                Publish to galleries
+                            </button>
                         <button ng-hide="favourited" ng-click="favouriteModel();" class="btn btn-bordered"
                                 tooltip-append-to-body="true" tooltip="Add to favourites">
                             <i class="glyphicon glyphicon-heart-empty"></i>
@@ -26,7 +30,8 @@
                             <i class="fa fa-thumbs-up"></i>
                             <span>{{model.upvotes}}</span>
                         </button>
-                        <button ng-click="downvote();" class="btn btn-bordered" ng-class="{'voted': userVote === 'DOWN'}"
+                        <button ng-click="downvote();" class="btn btn-bordered"
+                                ng-class="{'voted': userVote === 'DOWN'}"
                                 tooltip-append-to-body="true" tooltip="I don't like this">
                             <i class="fa fa-thumbs-down"></i>
                             <span>{{model.downvotes}}</span>
@@ -50,10 +55,12 @@
                                  alt="{{model.author.name}}">
                         </div>
                         <div class="media-heading ml10">
-                            <a ui-sref="home.profile({id: model.author.name})"><h3 class="mt0 mb0">{{model.author.name}}</h3></a>
+                            <a ui-sref="home.profile({id: model.author.name})"><h3 class="mt0 mb0">
+                                {{model.author.name}}</h3></a>
                         </div>
                         <div class="media-body m0 ml10">
-                            <button ng-show="isLoggedIn && model.author.name != loggedUsername" ng-click="followAuthor();" class="btn btn-primary">
+                            <button ng-show="isLoggedIn && model.author.name != loggedUsername"
+                                    ng-click="followAuthor();" class="btn btn-primary">
                                 <span ng-show="followingAuthor">Unfollow</span>
                                 <span ng-hide="followingAuthor">Follow</span>
                             </button>
@@ -136,6 +143,11 @@
                                 <i class="fa fa-dropbox"></i>
                                 <span>Export</span>
                             </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+                                ...
+                                <li role="presentation" class="dropdown-header">Dropdown header</li>
+                                ...
+                            </ul>
                         </div>
                     </div>
                 </tab>
@@ -150,7 +162,7 @@
                             <form name="new_comment">
                                 <textarea ng-model="$parent.$parent.newComment" id="new-comment-area" ng-minlength="1" name="content"
                                           ng-maxlength="1024" class="form-control" placeholder="Comment on this model"
-                                          style="border-color: #cccccc; -webkit-box-shadow: none; box-shadow: none;" required></textarea>
+                                          style="border-color: #cccccc; -webkit-box-shadow: none; box-shadow: none;"
                                 <small class="nc-charcount" ng-hide="new_comment.content.$error.maxlength">{{1024-$parent.$parent.newComment.length}} characters
                                     remaining.
                                 </small>
@@ -172,7 +184,8 @@
                                        remove-comment="removeComment(date)">
                             {{comment.content}}
                         </model-comment>
-                        <div id="load-more-comments" class="media" ng-hide="!$parent.$parent.hasMoreComments" ng-click="loadMoreComments($event);">
+                        <div id="load-more-comments" class="media" ng-hide="!$parent.$parent.hasMoreComments"
+                             ng-click="loadMoreComments($event);">
                             Load more comments
                         </div>
                     </div>
@@ -185,22 +198,28 @@
 <script type="text/ng-template" id="modalDialogId">
     <div class="ngdialog-message">
         <h3>Delete Comment</h3>
+
         <p>Are you sure you want to remove this comment?</p>
     </div>
     <div class="ngdialog-buttons">
         <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>
-        <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">Cancel</button>
+        <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">
+            Cancel
+        </button>
     </div>
 </script>
 
 <script type="text/ng-template" id="deleteModelDialogId">
     <div class="ngdialog-message">
         <h3>Delete Model</h3>
+
         <p>Are you sure you want to delete this model?</p>
     </div>
     <div class="ngdialog-buttons">
         <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>
-        <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">Cancel</button>
+        <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog('button')">
+            Cancel
+        </button>
     </div>
 </script>
 
@@ -228,5 +247,22 @@
     </div>
     <div class="ngdialog-buttons">
         <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="galleriesSelectiondId">
+    <div class="modal-header">
+        <h3 class="modal-title">Publish to galleries</h3>
+    </div>
+    <div class="modal-body">
+        <div ng-repeat="gallery in galleries" class="ckbox ckbox-primary">
+            <input type="checkbox" value="1" id="{{gallery}}" ng-model="selection.galleries[gallery]" checked="checked">
+            <label for="{{gallery}}">{{gallery}}</label>
+        </div>
+        <pre ng-bind="selection.galleries | json"></pre>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
     </div>
 </script>
