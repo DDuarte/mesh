@@ -27,9 +27,8 @@
 
     <div class="media-manager-sidebar">
         <ul class="tag-list mb30">
-            <li><a ui-sref="home.search({q: 'Animation' })">Animation</a></li>
-            <li><a ui-sref="home.search({q: 'Design' })">Design</a></li>
-            <li><a ui-sref="home.search({q: 'Trailer' })">Trailer</a></li>
+            <li ng-repeat="interest in user.interests"><a>{{interest}}</a></li>
+            <!--<li><a ui-sref="home.search({q: 'Design' })">Design</a></li> -->
         </ul>
     </div>
     <br>
@@ -479,20 +478,17 @@
                             </div>
                             <!-- form-group -->
 
-                            <!--
+
                             <div class="form-group">
                                 <label class="control-label col-md-2 pull-left">Interests</label>
 
                                 <div class="col-md-10">
-                                    <input name="tags" id="tags" class="form-control" value="foo,bar,baz"
-                                           style="display: none;">
-
-                                    <tags-input ng-model="newModel.tags">
+                                    <tags-input ng-model="newUser.interests">
                                         <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
                                     </tags-input>
                                 </div>
                             </div>
-                            -->
+
 
                         </form>
                         <button type="submit" ng-click="submit()" ng-disabled="userInfo.$invalid" class="btn btn-success pull-right">Save changes</button>

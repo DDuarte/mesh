@@ -12,11 +12,13 @@ angular.module('meshApp.profile', [
 
     .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http, server, meshApi) {
         $scope.all = {};
+        $scope.newUser = {};
 
         $scope.init = function () {
             $http.get(server.url + '/users/' + $stateParams.username). // TODO: make url configurable?
                 success(function (data) {
                     $scope.user = data;
+                    $scope.newUser.interests = data.interests.slice(0); // clone the interests array
                 });
         };
 
@@ -33,7 +35,6 @@ angular.module('meshApp.profile', [
         };
 
         $scope.getAllModels = function() {
-            console.log("getAllModels");
             meshApi.getAllModels($scope.user.username).success(function (data) {
                 $scope.all.models = data;
             });
@@ -80,6 +81,9 @@ angular.module('meshApp.profile', [
                 return !fields[key];
             });
 
+            var interestsText = _.pluck($scope.newUser.interests, 'text');
+
+            updatedUser.interests = interestsText;
             meshApi.updateUser(updatedUser).success(function (data) {
                 angular.element('#form-message').remove();
                 angular.element('form[name=userInfo]').prepend(
@@ -87,6 +91,13 @@ angular.module('meshApp.profile', [
                         '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
                         'Your profile has been updated successfully.' +
                         '</div>');
+
+                $scope.user.interests = data.interests;
+                $scope.newUser.interests = data.interests.slice(0);
+
+                $scope.user.about = data.about;
+                $scope.user.firstName = data.firstName;
+                $scope.user.lastName = data.lastName;
             }).error(function (data) {
                 angular.element('#form-message').remove();
                 angular.element('form[name=userInfo]').prepend(
