@@ -561,10 +561,11 @@ angular.module('meshApp.model', [
                 size: 'lg',
                 resolve: {
                     galleries: function () {
-                        meshApi.getUserGalleries($scope.model.author.name)
+                        /*meshApi.getUserGalleries($scope.model.author.name)
                             .success(function (galleries) {
                                 return galleries;
-                            });
+                            });*/
+                        return $scope.galleries;
                     }
                 }
             });

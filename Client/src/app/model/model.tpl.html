@@ -162,7 +162,7 @@
                             <form name="new_comment">
                                 <textarea ng-model="$parent.$parent.newComment" id="new-comment-area" ng-minlength="1" name="content"
                                           ng-maxlength="1024" class="form-control" placeholder="Comment on this model"
-                                          style="border-color: #cccccc; -webkit-box-shadow: none; box-shadow: none;"
+                                          style="border-color: #cccccc; -webkit-box-shadow: none; box-shadow: none;"></textarea>
                                 <small class="nc-charcount" ng-hide="new_comment.content.$error.maxlength">{{1024-$parent.$parent.newComment.length}} characters
                                     remaining.
                                 </small>
