@@ -19,7 +19,6 @@ group.create = function(groupInfo) {
 
     return new Promise (function (resolve) {
         db.query(query, groupInfo, function (err, results) {
-            console.log(groupInfo);
             if (err) throw new Error('Internal database error');
             return resolve(results[0]);
         });

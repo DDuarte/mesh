@@ -25,7 +25,8 @@ angular.module('meshApp.groupCreate', [
                     ngDialog.open({
                         template: 'groupCreateSuccessId',
                         className: 'ngdialog-theme-default'
-                    }).then(function() {
+                    }).closePromise.then(function() {
+                        console.log(data);
                         $state.go('home.group', {
                             id: data.id
                         });
