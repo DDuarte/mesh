@@ -15,14 +15,15 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 payload: {
-                    name: schema.group.name.required()
+                    name: schema.group.name.required(),
+                    description: schema.group.description.required()
                 }
             }
         },
         handler: function (request, reply) {
             var groupInfo = request.payload;
             groupInfo.adminName = request.auth.credentials.username;
-            groupInfo.creationDate = new Date();
+            groupInfo.creationDate = (new Date()).toISOString();
             // check if group already exists
             Group.getByName(groupInfo.name)
                 .then(function () {

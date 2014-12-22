@@ -10,14 +10,16 @@ var group = {};
  */
 group.create = function(groupInfo) {
     var query = [
-        'CREATE (group:Group {name: {name}, creationDate: {creationDate}})',
-        'MATCH (user:User {name: {adminName}})',
+        'MATCH (user:User {username: {adminName}})',
+        'CREATE (group:Group {name: {name}, description: {description}, creationDate: {creationDate}})',
+        'WITH group, user',
         'CREATE (group)<-[:IS_ADMIN]-(user)',
         'RETURN group'
     ].join('\n');
 
     return new Promise (function (resolve) {
         db.query(query, groupInfo, function (err, results) {
+            console.log(groupInfo);
             if (err) throw new Error('Internal database error');
             return resolve(results[0]);
         });
