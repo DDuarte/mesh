@@ -425,6 +425,45 @@ user.addInterest = function(username, interest) {
 };
 
 /**
+ * Adds an interest to a User
+ * @param {String} username Username of the target user
+ * @param {String} interests Name of the interests
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+user.replaceInterests = function(username, interests) {
+    return new Promise(function(resolve) {
+        var tagsClause = '[';
+        for (var i = 0; i < interests.length; ++i) {
+            tagsClause += ('"' + interests[i] + '"');
+            if (i < (interests.length - 1)) // last element is not separated by a comma
+                tagsClause += ', '
+        }
+        tagsClause += ']';
+
+        var query = [
+            'MATCH (u:User { username: {username}})',
+            'OPTIONAL MATCH (u)-[tg:INTERESTED]->(t)',
+                'WHERE NOT t.name IN ' + tagsClause,
+            'DELETE tg',
+                'FOREACH (tagName IN ' + tagsClause + ' |',
+            'MERGE (tag:Tag{name: tagName})',
+            'MERGE u-[:INTERESTED]->tag',
+            ')'
+        ].join('\n');
+
+        console.log("query", query);
+        var params = {
+            username: username
+        };
+
+        db.query(query, params, function(err) {
+            if (err) throw err;
+            return resolve(true);
+        });
+    });
+};
+
+/**
  * Removes an interest from a User
  * @param {String} username Username of the target user
  * @param {String} interest Name of the interest to be removed
