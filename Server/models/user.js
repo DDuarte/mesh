@@ -18,7 +18,9 @@ user.getByUsername = function (username) {
     return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u: User{username: { username }})',
-            'RETURN { firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active, about: u.about } as user'
+            'with u',
+            'OPTIONAL MATCH (u)-[:INTERESTED]->(userInterest:Tag)',
+            'RETURN { firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active, about: u.about, interests: collect(userInterest.name) } as user'
         ].join('\n');
 
         var params = {
@@ -385,7 +387,7 @@ user.getAllModels = function (username) {
     ].join('\n');
 
     var params = {
-        name: username,
+        name: username
     };
 
     return new Promise(function (resolve, reject) {
