@@ -29,14 +29,17 @@
                 <form name="login_form">
                     <div class="input-group mb15" ng-class="{ 'has-error': login_form.username.$invalid && login_form.username.$dirty }">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" ng-model="loginInfo.username" ng-minlength="3" ng-maxlength="20" required>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" ng-focus="nameFocused = true;" ng-blur="nameFocused = false;"
+                               ng-model="loginInfo.username" ng-minlength="3" ng-maxlength="20" required>
                     </div>
-                    <p class="text-danger" ng-show="login_form.username.$invalid && login_form.username.$dirty">Username field must be between 3 and 20 characters long</p>
+                    <p class="text-danger" ng-show="login_form.username.$invalid && login_form.username.$dirty && !nameFocused">Username field must be between 3 and 20 characters long</p>
+
                     <div class="input-group mb15" ng-class="{ 'has-error': login_form.password.$invalid && login_form.password.$dirty }">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-model="loginInfo.password" ng-minlength="3" ng-maxlength="256" required>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" ng-focus="passFocused = true;" ng-blur="passFocused = false;"
+                               ng-model="loginInfo.password" ng-minlength="3" ng-maxlength="256" required>
                     </div>
-                    <p class="text-danger" ng-show="login_form.password.$invalid && login_form.password.$dirty">Password must be between 3 and 256 characters long</p>
+                    <p class="text-danger" ng-show="login_form.password.$invalid && login_form.password.$dirty && !passFocused">Password must be between 3 and 256 characters long</p>
 
                     <div class="clearfix">
                         <div class="pull-left">

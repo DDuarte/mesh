@@ -19,9 +19,9 @@
                                     <label class="control-label col-md-2 pull-left">Name</label>
 
                                     <div class="col-md-10">
-                                        <input type="text" placeholder="Group Name" class="form-control col-md-10" name="group_name"
+                                        <input type="text" placeholder="Group Name" class="form-control col-md-10" name="group_name" ng-focus="nameFocused = true;" ng-blur="nameFocused = false;"
                                                ng-minlength="5" ng-maxlength="20" ng-model="group.name">
-                                        <p class="text-danger" ng-show="group_form.group_name.$invalid && group_form.group_name.$dirty">Group name field must be between 5 and 20 characters long</p>
+                                        <p class="text-danger" ng-show="group_form.group_name.$invalid && group_form.group_name.$dirty && !nameFocused">Group name field must be between 5 and 20 characters long</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -29,17 +29,17 @@
 
                                     <div class="col-md-10">
                                         <textarea ng-model="group.description" style="resize:vertical;" ng-minlength="10" ng-maxlength="254" name="group_desc"
-                                                  class="form-control" placeholder="Write a description"></textarea>
+                                                  ng-focus="descFocused = true;" ng-blur="descFocused = false;" class="form-control" placeholder="Write a description"></textarea>
                                         <small class="nc-charcount">{{254-group.description.length}} characters remaining.</small>
                                         <!--input type="text" placeholder="Group Description" name="group_desc"
                                                class="form-control col-md-10" ng-minlength="10" ng-maxlength="254"
                                                ng-model="group.description"-->
-                                        <p class="text-danger" ng-show="group_form.group_desc.$invalid && group_form.group_desc.$dirty">Group description field must be between 10 and 254 characters long</p>
+                                        <p class="text-danger" ng-show="group_form.group_desc.$invalid && group_form.group_desc.$dirty && !descFocused">Group description field must be between 10 and 254 characters long</p>
                                     </div>
                                 </div>
                                 <!-- form-group -->
                                 <button class="btn btn-success pull-right"
-                                        data-ng-disabled="!group_form.$dirty || group_form.$invalid || registerPending"
+                                        data-ng-disabled="!group_form.group_name.$dirty || !group_form.group_desc.$dirty || group_form.$invalid || registerPending"
                                         ng-click="createGroup(group)">Create group
                                 </button>
                             </form>
