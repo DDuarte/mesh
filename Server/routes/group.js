@@ -49,15 +49,18 @@ module.exports = function (server) {
         method: 'GET',
         path: '/groups/{id}',
         config: {
-            auth: 'token',
+            auth: {
+                mode: 'optional',
+                strategy: 'token'
+            },
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 }
             }
         },
         handler: function (request, reply) {
-            Group.getById(request.params.id)
+            Group.getByName(request.params.id)
                 .then(function (group) {
                     reply(group);
                 })
@@ -104,7 +107,7 @@ module.exports = function (server) {
     });
 
     server.route({
-        path: '/group/{id}/members',
+        path: '/groups/{id}/members',
         method: 'GET',
         config: {
             auth: 'token',
