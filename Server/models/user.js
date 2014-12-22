@@ -531,4 +531,31 @@ user.getAllGalleries = function(username) {
     });
 };
 
+/**
+ * Returns the models of a gallery owned by a user
+ * @param {String} username Username of the user
+ * @param {String} galleryName Name of the target gallery
+ * @returns {Promise} Resolves to the models if successful, rejects otherwise
+ */
+user.getGalleryModels = function(username, galleryName) {
+    return new Promise(function(resolve, reject) {
+        var query = [
+            'MATCH (user:User {username: {username}})',
+            'MATCH (user)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
+            'MATCH (gallery)<-[:PUBLISHED_IN]-(models:Model)',
+            'RETURN models'
+        ].join('\n');
+
+        var params = {
+            username: username,
+            galleryName: galleryName
+        };
+
+        db.query(query, params, function(err, results) {
+            if (err) throw err;
+            return resolve(results);
+        });
+    });
+};
+
 module.exports = user;
