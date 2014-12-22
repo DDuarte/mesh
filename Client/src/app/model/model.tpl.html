@@ -72,10 +72,14 @@
                         <i class="fa fa-cog"></i>
                     </tab-heading>
                     <h3>Description</h3>
-                    <textarea ng-model="newModel.description" style="resize:vertical;" ng-maxlength="1024"
+                    <form name="new_desc">
+                    <textarea ng-model="newModel.description" style="resize:vertical;" ng-maxlength="1024" name="content"
                               class="form-control" placeholder="Write a description"></textarea>
-                    <small class="nc-charcount">{{1024-newModel.description.length}} characters remaining.
+                    <small class="nc-charcount" ng-hide="new_desc.content.$error.maxlength">{{1024-newModel.description.length}} characters remaining.
                     </small>
+                    <small class="text-danger" ng-show="new_desc.content.$error.maxlength" style="display:block;">Description too long!</small>
+                    </form>
+
                     <h3>Tags</h3>
                     <tags-input ng-model="newModel.tags">
                         <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
@@ -144,12 +148,14 @@
 
                         <div class="media-body">
                             <form name="new_comment">
-                                <textarea ng-model="$parent.$parent.newComment" id="new-comment-area" ng-minlength="1"
+                                <textarea ng-model="$parent.$parent.newComment" id="new-comment-area" ng-minlength="1" name="content"
                                           ng-maxlength="1024" class="form-control" placeholder="Comment on this model"
                                           style="border-color: #cccccc; -webkit-box-shadow: none; box-shadow: none;" required></textarea>
-                                <small class="nc-charcount">{{1024-$parent.$parent.newComment.length}} characters
+                                <small class="nc-charcount" ng-hide="new_comment.content.$error.maxlength">{{1024-$parent.$parent.newComment.length}} characters
                                     remaining.
                                 </small>
+                                <small class="text-danger" ng-show="new_comment.content.$error.maxlength" style="display:block;">Comment too long!</small>
+
                                 <button class="btn btn-primary btn-sm mt10" ng-click="submitNewComment($event);"
                                         data-ng-disabled="new_comment.$invalid">
                                     <i class="fa fa-plus mr5"></i> Add Comment
