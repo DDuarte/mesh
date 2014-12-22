@@ -81,8 +81,6 @@ user.getFollowers = function (username) {
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
 
-            console.log(results);
-
             if (results.length > 0)
                 return resolve(results[0]['followers']);
             else
@@ -104,8 +102,6 @@ user.getFollowing = function (username) {
 
         db.query(query, params, function (err, results) {
             if (err) return reject(err);
-
-            console.log(results);
 
             if (results.length > 0)
                 return resolve(results[0]['following']);
@@ -348,7 +344,9 @@ user.update = function (username, fields) {
     return new Promise(function (resolve, reject) {
         var query = ['MATCH (u:User {username: {username}})',
             'SET ',
-            'RETURN u'
+            'WITH u',
+            'OPTIONAL MATCH (u)-[:INTERESTED]->(tag:Tag)',
+            'RETURN {firstName: u.firstName, lastName: u.lastName, about: u.about, interests: collect(tag.name)} as userInfo'
         ];
 
         for (var field in fields) {
@@ -362,7 +360,6 @@ user.update = function (username, fields) {
 
         db.query(query, fields, function (err, results) {
             if (err) return reject(err);
-
             return resolve(results);
         });
     });
@@ -451,7 +448,6 @@ user.replaceInterests = function(username, interests) {
             ')'
         ].join('\n');
 
-        console.log("query", query);
         var params = {
             username: username
         };
