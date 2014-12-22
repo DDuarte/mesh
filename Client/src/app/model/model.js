@@ -31,17 +31,39 @@ var placeholderModel = {
 angular.module('meshApp.model', [
     'ui.router', 'ui.bootstrap'
 ])
-    .directive('visualizer', function () {
+    .directive('visualizer', function (meshApi) {
         return {
             restrict: 'AE',
             // replace: 'true',
             link: function postLink($scope, $element, $attrs) {
                 var done = false;
 
+                console.log($attrs.filename);
+                var objMatches = $attrs.filename.match(/.*\.obj$/);
+                var stlMatches = $attrs.filename.match(/.*\.stl$/);
+                console.log(stlMatches);
                 $scope.init = function () {
                     $scope.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 
                     $scope.scene = new THREE.Scene();
+
+                    var manager = new THREE.LoadingManager();
+                    manager.onProgress = function (item, loaded, total) {
+
+                        console.log(item, loaded, total);
+
+                    };
+
+                    var onProgress = function (xhr) {
+                        if (xhr.lengthComputable) {
+                            var percentComplete = xhr.loaded / xhr.total * 100;
+                            console.log(Math.round(percentComplete, 2) + '% downloaded');
+                        }
+                    };
+
+                    var onError = function (xhr) {
+                        console.log("Error");
+                    };
 
                     var args = { antialias: true };
 
@@ -57,19 +79,20 @@ angular.module('meshApp.model', [
                     $scope.controls = new THREE.OrbitControls($scope.camera, $scope.renderer.domElement);
 
                     // update the light position with the camera movement
-                    $scope.controls.addEventListener('change', function() {
+                    $scope.controls.addEventListener('change', function () {
                         light.position.set($scope.camera.position.x, $scope.camera.position.y, $scope.camera.position.z);
                         $scope.render();
                     });
-                    
+
                     $scope.controls.noPan = true;
 
                     window.addEventListener('resize', $scope.onWindowResize, false);
                     window.addEventListener("orientationchange", $scope.onOrientationChange, false);
                     angular.element(document).bind('fullscreenchange', $scope.onFullScreenChange);
 
-                    var jsonLoader = new THREE.JSONLoader();
+                    /*var jsonLoader = new THREE.JSONLoader();
                     jsonLoader.load("assets/android.json", $scope.addModelToScene);
+                    */
 
                     var light = new THREE.PointLight(0xffffff);
                     light.position.set(-100, 200, 100);
@@ -77,6 +100,26 @@ angular.module('meshApp.model', [
 
                     var ambientLight = new THREE.AmbientLight(0x111111);
                     $scope.scene.add(ambientLight);
+
+                    var loader;
+                    if (objMatches != null && objMatches.length == 1) {
+                        loader = new THREE.OBJLoader(manager);
+                        loader.load(meshApi.getDownloadModelUrl($attrs.modelid), $scope.addObjectToScene, onProgress, onError);
+                    }
+
+                    if (stlMatches != null && stlMatches.length == 1) {
+                        console.log("stl matches");
+                        loader = new THREE.STLLoader();
+                        loader.addEventListener('load', function(event) {
+                            var geometry = event.content;
+                            $scope.camera.position.x = 200 / 2;
+                            $scope.camera.position.y = 200 / 4;
+                            $scope.camera.position.z = 200;
+
+                            $scope.scene.add(new THREE.Mesh(geometry, new THREE.MeshPhongMaterial()));
+                        });
+                        loader.load(meshApi.getDownloadModelUrl($attrs.modelid));
+                    }
 
                     // var axes = buildAxes(1000);
                     // $scope.scene.add(axes);
@@ -141,6 +184,21 @@ angular.module('meshApp.model', [
                     $scope.camera.position.z = radius;
 
                     $scope.scene.add($scope.mesh);
+                };
+
+                $scope.addObjectToScene = function (object) {
+
+                    console.log("Object", object);
+                    var boundingBox = new THREE.Box3().setFromObject(object);
+                    console.log(boundingBox);
+                    var size = boundingBox.size();
+
+                    $scope.camera.position.x = 200 / 2;
+                    $scope.camera.position.y = 200 / 4;
+                    $scope.camera.position.z = 200;
+
+                    $scope.scene.add(object);
+
                 };
 
                 $scope.updateSizeAndCamera = function () {
@@ -466,7 +524,7 @@ angular.module('meshApp.model', [
             var tagsText = _.pluck($scope.newModel.tags, 'text');
             var isPublic = $scope.newModel.visibility == 'public';
             meshApi.updateModel($scope.model.id, $scope.newModel.description, isPublic, tagsText)
-                .success(function(model) {
+                .success(function (model) {
                     $scope.model.description = model.description;
                     $scope.newModel.description = model.description;
                     $scope.newModel.visibility = model.isPublic ? 'public' : 'private';
@@ -476,11 +534,11 @@ angular.module('meshApp.model', [
                     ngDialog.openConfirm({
                         template: 'updateSuccessModelDialogId',
                         className: 'ngdialog-theme-default'
-                    }).then(function() {
+                    }).then(function () {
                         // do nothing
                     });
                 })
-                .error(function(error) {
+                .error(function (error) {
                     console.log("error:", error);
                 });
             //console.log("update model", $scope.newModel);
