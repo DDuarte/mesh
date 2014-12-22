@@ -4,7 +4,8 @@ var User = require('../models/user'),
     Promise = require('bluebird'),
     client = require('../common/redisClient'),
     schema = require('../schema'),
-    Boom = require('boom');
+    Boom = require('boom'),
+    _ = require('lodash');
 module.exports = function (server) {
 
 
@@ -254,32 +255,24 @@ module.exports = function (server) {
             if (request.params.username != request.auth.credentials.username)
                 reply('Permission denied').code(403);
 
-            User.update(request.auth.credentials.username, request.payload).then(function (result) {
-                if (!result) {
-                    reply('No such user.').code(404);
-                } else {
-
-                    User.removeAllInterests(request.auth.credentials.username)
-                        .then(function () {
-
-                            Promise.map(request.payload.interests, function (interest) {
-                                return User.addInterest(request.auth.credentials.username, interest);
-                            })
-                                .then(function () {
-                                    return reply(result);
-                                })
-                                .catch(function () {
-                                    reply(Boom.badImplementation('Internal server error'));
-                                });
-
-                        })
-                        .catch(function () {
-                            reply(Boom.badImplementation('Internal server error'));
-                        });
-                }
-            }, function (error) {
-                reply('Internal error').code(500);
+            var fields = _.pick(request.payload, function (value, key) {
+                return key != 'interests';
             });
+            User.replaceInterests(request.auth.credentials.username, request.payload.interests)
+                .then(function () {
+                    User.update(request.auth.credentials.username, fields).then(function (results) {
+                        if (results.length == 0) {
+                            reply('No such user.').code(404);
+                        } else {
+                            return reply(results[0]['userInfo']);
+                        }
+                    }, function (error) {
+                        reply('Internal error').code(500);
+                    });
+                })
+                .catch(function() {
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
         }
     });
 };
