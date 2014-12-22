@@ -24,7 +24,6 @@ angular.module('meshApp.group', [
             meshApi.getGroup($stateParams.name).
                 success(function (data, status, headers, config) {
                     $scope.group = data.group;
-                    console.log(data);
 
                 }).
                 error(function (err) {

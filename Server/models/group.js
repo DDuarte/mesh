@@ -14,7 +14,7 @@ group.create = function(groupInfo) {
         'CREATE (group:Group {name: {name}, lowerName: lower({ name }), description: {description}, creationDate: {creationDate}})',
         'WITH group, user',
         'CREATE (group)<-[:IS_ADMIN]-(user)',
-        'RETURN group'
+        'RETURN group.name as name'
     ].join('\n');
 
     return new Promise (function (resolve) {

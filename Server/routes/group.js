@@ -35,8 +35,8 @@ module.exports = function (server) {
                 // If group doesn't exist, create it
                 .catch(function () {
                     Group.create(groupInfo)
-                        .then(function () {
-                            reply().code(200);
+                        .then(function (group) {
+                            reply(group);
                         })
                         .catch(function (error) {
                             return reply(Boom.badImplementation('Internal server error'));
