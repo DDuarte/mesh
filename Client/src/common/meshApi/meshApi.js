@@ -121,8 +121,8 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
-        createGroup: function (groupName) {
-            return $http.post(server.url + '/groups', {name: groupName}, {
+        createGroup: function (groupName, groupDescription) {
+            return $http.post(server.url + '/groups', {name: groupName, description: groupDescription}, {
                 headers: getHeaders()
             });
         },

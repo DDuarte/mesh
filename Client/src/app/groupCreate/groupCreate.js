@@ -22,10 +22,9 @@ angular.module('meshApp.groupCreate', [
                     usSpinnerService.stop('spinner');
                     $scope.registerPending = false;
 
-                    ngDialog.openConfirm({
+                    ngDialog.open({
                         template: 'groupCreateSuccessId',
-                        className: 'ngdialog-theme-default',
-                        showClose: false
+                        className: 'ngdialog-theme-default'
                     }).then(function() {
                         $state.go('home.group', {
                             id: data.id
