@@ -85,6 +85,7 @@ module.exports = {
             'lib/Loader.js',
             'lib/LoadingManager.js',
             'lib/OBJLoader.js',
+            'lib/MTLLoader.js',
             'lib/STLLoader.js',
             'vendor/ngDialog/js/ngDialog.js',
             'vendor/angular-growl-v2/build/angular-growl.js'

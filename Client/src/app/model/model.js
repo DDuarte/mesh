@@ -103,8 +103,9 @@ angular.module('meshApp.model', [
 
                     var loader;
                     if (objMatches != null && objMatches.length == 1) {
-                        loader = new THREE.OBJLoader(manager);
-                        loader.load(meshApi.getDownloadModelUrl($attrs.modelid), $scope.addObjectToScene, onProgress, onError);
+                        var url = meshApi.getDownloadModelUrl($attrs.modelid);
+                        loader = new THREE.OBJLoader(manager, url);
+                        loader.load(url, $scope.addObjectToScene, onProgress, onError);
                     }
 
                     if (stlMatches != null && stlMatches.length == 1) {

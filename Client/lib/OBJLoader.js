@@ -2,9 +2,10 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.OBJLoader = function ( manager ) {
+THREE.OBJLoader = function ( manager, baseUrl ) {
 
 	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+	this.baseUrl = baseUrl;
 
 };
 
@@ -32,6 +33,9 @@ THREE.OBJLoader.prototype = {
 
 		var object, objects = [];
 		var geometry, material;
+		var materials = { };
+		var materialsLoading = 0;
+		var scope = this;
 
 		function parseVertexIndex( value ) {
 
@@ -210,6 +214,8 @@ THREE.OBJLoader.prototype = {
 
 		var lines = text.split( '\n' );
 
+		var container = new THREE.Object3D();
+
 		for ( var i = 0; i < lines.length; i ++ ) {
 
 			var line = lines[ i ];
@@ -261,7 +267,7 @@ THREE.OBJLoader.prototype = {
 			} else if ( ( result = face_pattern2.exec( line ) ) !== null ) {
 
 				// ["f 1/1 2/2 3/3", " 1/1", "1", "1", " 2/2", "2", "2", " 3/3", "3", "3", undefined, undefined, undefined]
-				
+
 				addFace(
 					result[ 2 ], result[ 5 ], result[ 8 ], result[ 11 ],
 					result[ 3 ], result[ 6 ], result[ 9 ], result[ 12 ]
@@ -321,6 +327,50 @@ THREE.OBJLoader.prototype = {
 
 				// mtl file
 
+				var mtlLoader = new THREE.MTLLoader(scope.baseUrl);
+				materialsLoading += 1;
+				mtlLoader.load(line.substring(7).trim(), function (materialsCreator) {
+					console.log("onLoad");
+					materialsCreator.preload();
+					var mats = materialsCreator.materials;
+					console.log(mats);
+					for (var matName in mats) {
+						console.log(matName);
+						materials[matName] = mats[matName];
+					}
+
+					if (materialsLoading <= 0) {
+						var c = container.children;
+						for (var i = 0; i < c.length; i++) {
+							if (c[i].material && c[i].material.name && materials[c[i].material.name]) {
+								c[i].material = materials[c[i].material.name];
+							}
+						}
+					}
+				}, function ( xhr ) {
+					console.log("onProgress");
+					if ( xhr.lengthComputable ) {
+						var percentComplete = xhr.loaded / xhr.total * 100;
+						console.log(percentComplete);
+						if (percentComplete >= 100) {
+							materialsLoading -= 1;
+
+							if (materialsLoading <= 0) {
+								var c = container.children;
+								for (var i = 0; i < c.length; i++) {
+									if (c[i].material && c[i].material.name && materials[c[i].material.name]) {
+										c[i].material = materials[c[i].material.name];
+									}
+								}
+							}
+						}
+					}
+				}, function (xhr) {
+					console.log("onError");
+					materialsLoading -= 1;
+				});
+
+
 			} else if ( /^s /.test( line ) ) {
 
 				// smooth shading
@@ -332,8 +382,6 @@ THREE.OBJLoader.prototype = {
 			}
 
 		}
-
-		var container = new THREE.Object3D();
 
 		for ( var i = 0, l = objects.length; i < l; i ++ ) {
 
@@ -360,6 +408,15 @@ THREE.OBJLoader.prototype = {
 
 			container.add( mesh );
 
+		}
+
+		if (materialsLoading <= 0) {
+			var c = container.children;
+			for (var i = 0; i < c.length; i++) {
+				if (c[i].material && c[i].material.name && materials[c[i].material.name]) {
+					c[i].material = materials[c[i].material.name];
+				}
+			}
 		}
 
 		console.timeEnd( 'OBJLoader' );
