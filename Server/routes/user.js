@@ -231,6 +231,29 @@ module.exports = function (server) {
         }
     });
 
+    server.route({
+        method: 'GET',
+        path: '/users/{username}/galleries',
+        config: {
+            //auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            if (request.auth.credentials.username != request.params.username)
+                return reply(Boom.forbidden('No permissions'));
+            User.getAllGalleries(request.params.username)
+                .then(function (galleries) {
+                    return reply(galleries);
+                })
+                .catch(function () {
+                    return reply(Boom.badImplementation('Internal server error'));
+                })
+        }
+    });
 
     server.route({
         method: 'PATCH',
@@ -270,7 +293,7 @@ module.exports = function (server) {
                         reply('Internal error').code(500);
                     });
                 })
-                .catch(function() {
+                .catch(function () {
                     return reply(Boom.badImplementation('Internal server error'));
                 });
         }

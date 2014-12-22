@@ -507,4 +507,28 @@ user.removeAllInterests = function(username) {
     });
 };
 
+/**
+ * Returns all the galleries owned by the user
+ * @param {String} username Username of the user
+ * @returns {Promise} Resolves to the galleries if successful, rejects otherwise
+ */
+user.getAllGalleries = function(username) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (user:User {username: {username}})',
+            'MATCH (user)-[:OWNS]-(galleries:Gallery)',
+            'RETURN galleries'
+        ].join('\n');
+
+        var params = {
+            username: username
+        };
+
+        db.query(query, params, function(err, results) {
+            if (err) throw err;
+            return resolve(results);
+        });
+    });
+};
+
 module.exports = user;
