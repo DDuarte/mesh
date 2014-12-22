@@ -11,7 +11,7 @@ var group = {};
 group.create = function(groupInfo) {
     var query = [
         'MATCH (user:User {username: {adminName}})',
-        'CREATE (group:Group {name: {name}, description: {description}, creationDate: {creationDate}})',
+        'CREATE (group:Group {name: {name}, lowerName: lower({ name }), description: {description}, creationDate: {creationDate}})',
         'WITH group, user',
         'CREATE (group)<-[:IS_ADMIN]-(user)',
         'RETURN group'
@@ -32,7 +32,7 @@ group.create = function(groupInfo) {
  */
 group.getByName = function (name) {
     var query = [
-        'MATCH (group:Group {name: {name}})',
+        'MATCH (group:Group {lowerName: lower({ name })})',
         'RETURN group'
     ].join('\n');
 
@@ -44,6 +44,8 @@ group.getByName = function (name) {
         db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
 
+            console.log(name);
+            console.log(results);
             if (results.length > 0)
                 return resolve(results[0]);
             else
