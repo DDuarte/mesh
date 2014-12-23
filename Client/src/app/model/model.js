@@ -1,39 +1,14 @@
-var placeholderModel = {
-    "name": "My horse",
-    "files": "http://www.nowhereatall.com",
-    "upvotes": 20,
-    "downvotes": 2,
-    "authorName": "Donatello",
-    "authorAvatar": "http://i.imgur.com/KgKyXqN.jpg",
-    "authorAbout": "I like pizza and my amazing horse.",
-    "publicationDate": "2010-04-05T12:38:20.000Z",
-    "description": "Look at my horse, my horse is amazing!",
-    "visibility": "public",
-    "tags": [
-        "horse", "amazing"
-    ],
-    "comments": [
-        {
-            "author": "Michelangelo",
-            "avatar": "http://i.imgur.com/PbgQGd1.png",
-            "date": "2011-10-05T14:45:00.000Z",
-            "content": "It tastes just like raisins!"
-        },
-        {
-            "author": "Leonardo",
-            "avatar": "http://i.imgur.com/EYi19tc.png",
-            "date": "2011-10-05T14:48:00.000Z",
-            "content": "That doesn't look like a horse..."
-        }
-    ]
-};
-
 angular.module('meshApp.model', [
     'ui.router', 'ui.bootstrap'
 ])
-    .directive('visualizer', function (meshApi) {
+    .directive('visualizer', function (meshApi, usSpinnerService) {
         return {
             restrict: 'AE',
+            scope: {
+                modelId: '@modelId',
+                filename: '@filename',
+                modelLoaded: '=modelLoaded'
+            },
             // replace: 'true',
             link: function postLink($scope, $element, $attrs) {
                 var done = false;
@@ -112,6 +87,8 @@ angular.module('meshApp.model', [
                         console.log("stl matches");
                         loader = new THREE.STLLoader();
                         loader.addEventListener('load', function (event) {
+                            $scope.modelLoaded = true;
+                            usSpinnerService.stop('spinner-1');
                             var geometry = event.content;
                             $scope.camera.position.x = 200 / 2;
                             $scope.camera.position.y = 200 / 4;
@@ -189,7 +166,8 @@ angular.module('meshApp.model', [
 
                 $scope.addObjectToScene = function (object) {
 
-                    console.log("Object", object);
+                    $scope.modelLoaded = true;
+                    usSpinnerService.stop('spinner-1');
                     var boundingBox = new THREE.Box3().setFromObject(object);
                     console.log(boundingBox);
                     var size = boundingBox.size();
@@ -317,6 +295,7 @@ angular.module('meshApp.model', [
 
     .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi, ngDialog, $state, $modal) {
 
+        $scope.modelLoaded = false;
         $scope.isLoggedIn = meshApi.isLoggedIn();
         if ($scope.isLoggedIn) {
             $scope.loggedUsername = meshApi.getLoggedUsername();
