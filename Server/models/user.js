@@ -558,4 +558,61 @@ user.getGalleryModels = function(username, galleryName) {
     });
 };
 
+/**
+ * Creates a user gallery
+ * @param {String} username Username of the target user
+ * @param {String} galleryName Name of the gallery to be created
+ * @returns {Promise} Resolves to the gallery information if successful, rejects otherwise.
+ */
+user.createGallery = function (username, galleryName) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (user:User {username: {username}})',
+            'CREATE (gallery:Gallery {name: {galleryName}})',
+            'CREATE (user)-[:OWNS]->(gallery)',
+            'RETURN gallery'
+        ].join('\n');
+
+        var params = {
+            username: username,
+            galleryName: galleryName
+        };
+
+        db.query(query, params, function(err, results) {
+            if (err) throw err;
+            return resolve(results);
+        });
+    });
+};
+
+/**
+ * Adds a model to a user's gallery
+ * @param {String} username Username of the target user
+ * @param {String} galleryName Name of the target gallery
+ * @param {Number} modelId Id of the target model
+ * @returns {Promise} Resolves to the gallery information if successful, rejects otherwise
+ */
+user.addModelToGallery = function(username, galleryName, modelId) {
+    return new Promise(function(resolve, reject) {
+        var query = [
+            'MATCH (user:User {username: {username}})',
+            'MATCH (user)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
+            'MATCH (user)-[:OWNS]->(model:Model {id: {modelId}})',
+            'CREATE (gallery)<-[:PUBLISHED_IN]-(model)',
+            'RETURN gallery'
+        ].join('\n');
+
+        var params = {
+            username: username,
+            galleryName: galleryName,
+            modelId: Number(modelId)
+        };
+
+        db.query(query, params, function(err, results) {
+            if (err) throw err;
+            resolve(results);
+        });
+    });
+};
+
 module.exports = user;
