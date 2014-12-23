@@ -532,6 +532,36 @@ user.getAllGalleries = function(username) {
 };
 
 /**
+ * Checks whether a user already owns a gallery with the same name
+ * @param {String} username Username of the target user
+ * @param {String} galleryName Name of the target gallery
+ * @returns {Promise} Resolves to true if gallery exists, false if it does not
+ */
+user.galleryExists = function(username, galleryName) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (user:User {username: {username}})',
+            'MATCH (user)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
+            'RETURN gallery'
+        ].join('\n');
+
+        var params = {
+            username: username,
+            galleryName: galleryName
+        };
+
+        db.query(query, params, function(err, results) {
+            if (err) throw err;
+
+            if (results.length > 0)
+                return resolve(true);
+            else
+                return resolve(false);
+        });
+    });
+};
+
+/**
  * Returns the models of a gallery owned by a user
  * @param {String} username Username of the user
  * @param {String} galleryName Name of the target gallery

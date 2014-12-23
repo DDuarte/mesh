@@ -3,5 +3,6 @@ module.exports = {
     model: require('./model'),
     tag: require('./tag'),
     token: require('./token'),
-    group: require('./group')
+    group: require('./group'),
+    gallery: require('./gallery')
 };

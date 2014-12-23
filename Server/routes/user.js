@@ -251,7 +251,44 @@ module.exports = function (server) {
                 })
                 .catch(function () {
                     return reply(Boom.badImplementation('Internal server error'));
+                });
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/users/{username}/galleries',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                },
+                payload: {
+                    galleryName: schema.gallery.name.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            if (request.auth.credentials.username != request.params.username)
+                return reply(Boom.forbidden('No permissions'));
+
+            User.galleryExists(request.params.username, request.payload.galleryName)
+                .then(function (exists) {
+                    if (exists)
+                        return reply(Boom.badRequest('A gallery with that name already exists'));
+
+                    User.createGallery(request.params.username, request.payload.galleryName)
+                        .then(function (gallery) {
+                            return reply(gallery);
+                        })
+                        .catch(function () {
+                            return reply(Boom.badImplementation('Internal server error'));
+                        });
                 })
+                .catch(function () {
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
         }
     });
 
