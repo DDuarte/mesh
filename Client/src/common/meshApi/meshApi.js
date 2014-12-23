@@ -121,6 +121,19 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
+        createGallery: function(galleryName) {
+            return $http.post(server.url + '/users/' + getLoggedToken().username + '/galleries', { galleryName: galleryName }, {
+                headers: getHeaders()
+            });
+        },
+        deleteGallery: function(galleryName) {
+            return $http['delete'](server.url + '/users/' + getLoggedToken().username + '/galleries/' + galleryName, {
+                headers: getHeaders()
+            });
+        },
+        getAllGalleries: function(username) {
+            return $http.get(server.url + '/users/' + username + '/galleries', { headers: getHeaders() });
+        },
         getGroup: function (id) {
             return $http.get(server.url + '/groups/' + id, {headers: getHeaders()});
         },

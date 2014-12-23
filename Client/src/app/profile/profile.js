@@ -10,7 +10,7 @@ angular.module('meshApp.profile', [
         });
     })
 
-    .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http, server, meshApi) {
+    .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http, server, meshApi, $modal, _, ngDialog) {
         $scope.all = {};
         $scope.newUser = {};
 
@@ -34,33 +34,48 @@ angular.module('meshApp.profile', [
             });
         };
 
-        $scope.getAllModels = function() {
+        $scope.getAllModels = function () {
+            $scope.isAllModelsSelected = true;
+            $scope.selectedGallery = null;
             meshApi.getAllModels($scope.user.username).success(function (data) {
-                $scope.all.models = data;
+                $scope.models = data;
             });
         };
 
-
-        var models = function (g) {
-            return _.range(10).map(function (i) {
-                return { name: "Model " + g + "-" + i };
-            });
+        $scope.getAllGalleries = function () {
+            meshApi.getAllGalleries($scope.user.username)
+                .then(function (response) {
+                    console.log("Galleries", response.data);
+                    $scope.galleries = response.data;
+                });
         };
-        $scope.galleries = _.range(10).map(function (i) {
-            return { name: "Gallery " + i, models: models(i) };
-        });
 
-        $scope.selectedGallery = $scope.galleries[0];
+        $scope.deleteGallery = function () {
+            var galleryToDelete = $scope.selectedGallery;
+            meshApi.deleteGallery(galleryToDelete.name)
+                .success(function () {
+                    ngDialog.openConfirm({
+                        template: 'deleteGallerySuccessId',
+                        className: 'ngdialog-theme-default'
+                    }).then(function() {
+                        // do nothing
+                    });
+                    _.remove($scope.galleries, function(gallery) {
+                        return gallery.name == galleryToDelete.name;
+                    });
+                })
+                .error(function () {
+                    ngDialog.openConfirm({
+                        template: 'deleteGalleryErrorId',
+                        className: 'ngdialog-theme-default'
+                    }).then(function() {
+                        // do nothing
+                    });
+                });
 
-        $scope.orderByField = 'username';
-        $scope.reverseSort = false;
+        };
 
-        $scope.galleriesPaginatorMaxSize = 5;
-        $scope.galleriesPaginatorCurrentPage = 1;
-        $scope.galleriesPaginatorItemsPerPage = 6;
-        $scope.galleriesPaginatorTotalItems = $scope.selectedGallery.models.length;
-
-
+        $scope.selectedGallery = null;
         $scope.galleriesPaginatorSetPage = function (pageNo) {
             $scope.galleriesPaginatorCurrentPage = pageNo;
         };
@@ -68,6 +83,49 @@ angular.module('meshApp.profile', [
         $scope.changeSelectedGallery = function (index) {
             $scope.selectedGallery = $scope.galleries[index];
             $scope.galleriesPaginatorCurrentPage = 1;
+        };
+
+        $scope.selectGallery = function (gallery) {
+            $scope.isAllModelsSelected = false;
+            $scope.selectedGallery = gallery;
+        };
+
+        $scope.isGallerySelected = function (gallery) {
+            return $scope.selectedGallery === gallery;
+        };
+
+        $scope.addNewGallery = function () {
+            var modalInstance = $modal.open({
+                templateUrl: 'createNewGalleryId',
+                controller: 'CreateNewGalleryModalCtrl',
+                resolve: {
+                    galleries: function () {
+                        return $scope.galleries;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (gallery) {
+                console.log("gallery", gallery.name);
+                meshApi.createGallery(gallery.name)
+                    .success(function (response) {
+                        ngDialog.openConfirm({
+                            template: 'addGallerySuccessId',
+                            className: 'ngdialog-theme-default'
+                        }).then(function() {
+                            // do nothing
+                        });
+                        $scope.galleries.push(response);
+                    })
+                    .error(function () {
+                        ngDialog.openConfirm({
+                            template: 'addGalleryErrorId',
+                            className: 'ngdialog-theme-default'
+                        }).then(function() {
+                            // do nothing
+                        });
+                    });
+            });
         };
 
         $scope.submit = function () {
@@ -107,4 +165,23 @@ angular.module('meshApp.profile', [
                         '</div>');
             });
         };
+    })
+    .controller('CreateNewGalleryModalCtrl', function ($scope, $modalInstance, galleries, _) {
+
+        $scope.galleries = galleries;
+        $scope.ok = function () {
+            var isPublic = $scope.visibility == 'public';
+            $modalInstance.close({name: $scope.galleryName, isPublic: isPublic});
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+
+        $scope.galleryExists = function() {
+            return _.some($scope.galleries, function(gallery) {
+                return gallery.name == $scope.galleryName;
+            });
+        };
+
     });

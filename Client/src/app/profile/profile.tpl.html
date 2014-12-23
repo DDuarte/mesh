@@ -375,132 +375,145 @@
 
     </div>
 </tab>
-<tab>
+<tab select="getAllGalleries()">
     <tab-heading><strong>Models</strong></tab-heading>
     <div class="row">
+        <div class="media-options">
+            <div class="pull-right">
+                Gallery Options:
+                <div class="btn-group">
+                    <button ng-disabled="!selectedGallery" class="btn btn-default btn-sm" type="button"><i
+                            class="fa fa-pencil mr5"></i> Edit
+                    </button>
+                    <button ng-disabled="!selectedGallery" ng-click="deleteGallery()" class="btn btn-default btn-sm"
+                            type="button"><i class="fa fa-trash-o mr5"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+        <hr>
         <div class="col-md-12">
-            <v-tabset>
-                <v-tab select="getAllModels()">
-                    <tab-heading>All Models</tab-heading>
-                    <modelthumbnail ng-repeat="model in all.models"
-                                    model-id={{model.modelId}}
-                                    image-url={{model.thumbnail}}
-                                    title={{model.title}}
-                                    author={{model.author}}
-                                    author-avatar={{model.authorAvatar}}
-                                    date={{model.date}}
-                                    num-comments={{model.numComments}}
-                                    upvotes={{model.upvotes}}
-                                    downvotes={{model.downvotes}}>
-                    </modelthumbnail>
-                    <button class="btn btn-white btn-block">Show More</button>
-                </v-tab>
-                <div class="mb30"></div>
-                <h5 class="lg-title">Galleries</h5>
-                <v-tab ng-repeat="gallery in galleries" select="changeSelectedGallery($index)">
-                    <tab-heading>{{gallery.name}}</tab-heading>
-                    <modelthumbnail ng-repeat="model in gallery.models | startFrom: (galleriesPaginatorCurrentPage-1)*galleriesPaginatorItemsPerPage | limitTo: galleriesPaginatorItemsPerPage"
-                                    model-id="1"
-                                    image-url="http://i.imgur.com/zL9XlUY.jpg"
-                                    title="{{model.name}}"
-                                    author="Donatello"
-                                    author-avatar="http://i.imgur.com/KgKyXqN.jpg"
-                                    date="2010-04-05T12:38:20.000Z"
-                                    num-comments="2"
-                                    upvotes="20"
-                                    downvotes="2">
-                    </modelthumbnail>
-                    <button class="btn btn-white btn-block">Show More</button>
-                </v-tab>
-            </v-tabset>
+            <div class="col-sm-3">
+                <h5 class="lg-title">Galleries <a ng-click="addNewGallery()" href="" class="pull-right">+ Add New
+                    Gallery</a></h5>
+                <ul class="folder-list">
+                    <li ng-class="{selected: isAllModelsSelected}"><a href="" ng-init="getAllModels()"
+                                                                      ng-click="getAllModels()"> All Models</a></li>
+                    <li ng-repeat="gallery in galleries" ng-class="{selected : isGallerySelected(gallery)}">
+                        <a href="" ng-click="selectGallery(gallery)"><i class="fa fa-folder-o"></i>{{gallery.name}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-9">
+                <modelthumbnail ng-repeat="model in models"
+                                model-id={{model.modelId}}
+                                image-url={{model.thumbnail}}
+                                title={{model.title}}
+                                author={{model.author}}
+                                author-avatar={{model.authorAvatar}}
+                                date={{model.date}}
+                                num-comments={{model.numComments}}
+                                upvotes={{model.upvotes}}
+                                downvotes={{model.downvotes}}>
+                </modelthumbnail>
+            </div>
         </div>
     </div>
 </tab>
 <tab>
     <tab-heading><strong>My Account</strong></tab-heading>
-        <div class="row">
-            <div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
             <div class="panel panel-default">
 
-                    <div class="panel-body ">
+                <div class="panel-body ">
 
-                        <form name="userInfo" class="form-horizontal form-bordered">
-                            <div class="form-group">
-                                <label class="control-label col-md-2 pull-left">Username</label>
+                    <form name="userInfo" class="form-horizontal form-bordered">
+                        <div class="form-group">
+                            <label class="control-label col-md-2 pull-left">Username</label>
 
-                                <div class="col-md-10">
-                                    <input type="text" ng-model=user.username class="form-control col-md-10" disabled>
-                                </div>
+                            <div class="col-md-10">
+                                <input type="text" ng-model=user.username class="form-control col-md-10" disabled>
                             </div>
-                            <!-- form-group -->
+                        </div>
+                        <!-- form-group -->
 
-                            <div class="form-group">
-                                <label class="control-label col-md-2 pull-left">First name</label>
+                        <div class="form-group">
+                            <label class="control-label col-md-2 pull-left">First name</label>
 
-                                <div class="col-md-10">
-                                    <input type="text" ng-required="true" name="firstName" ng-model=user.firstName class="form-control" ng-maxlength="20">
-                                    <p class="text-danger" ng-show="userInfo.firstName.$invalid && userInfo.firstName.$dirty">
-                                        First Name field must be at most 20 characters long
-                                    </p>
-                                </div>
+                            <div class="col-md-10">
+                                <input type="text" ng-required="true" name="firstName" ng-model=user.firstName
+                                       class="form-control" ng-maxlength="20">
+
+                                <p class="text-danger"
+                                   ng-show="userInfo.firstName.$invalid && userInfo.firstName.$dirty">
+                                    First Name field must be at most 20 characters long
+                                </p>
                             </div>
-                            <!-- form-group -->
+                        </div>
+                        <!-- form-group -->
 
-                            <div class="form-group">
-                                <label class="control-label col-md-2 pull-left">Last name</label>
+                        <div class="form-group">
+                            <label class="control-label col-md-2 pull-left">Last name</label>
 
-                                <div class="col-md-10">
-                                    <input type="text" ng-required="true" name="lastName" ng-model=user.lastName class="form-control" ng-maxlength="20">
-                                    <p class="text-danger" ng-show="userInfo.lastName.$invalid && userInfo.lastName.$dirty">
-                                        Last Name field must be at most 20 characters long
-                                    </p>
-                                </div>
+                            <div class="col-md-10">
+                                <input type="text" ng-required="true" name="lastName" ng-model=user.lastName
+                                       class="form-control" ng-maxlength="20">
+
+                                <p class="text-danger" ng-show="userInfo.lastName.$invalid && userInfo.lastName.$dirty">
+                                    Last Name field must be at most 20 characters long
+                                </p>
                             </div>
-                            <!-- form-group -->
+                        </div>
+                        <!-- form-group -->
 
-                            <div class="form-group">
-                                <label class="control-label col-md-2 pull-left" for="userEmail">Email</label>
+                        <div class="form-group">
+                            <label class="control-label col-md-2 pull-left" for="userEmail">Email</label>
 
-                                <div class="col-md-10">
-                                    <input type="text" ng-model="user.email" class="form-control" id="userEmail"
-                                           disabled>
-                                </div>
+                            <div class="col-md-10">
+                                <input type="text" ng-model="user.email" class="form-control" id="userEmail"
+                                       disabled>
                             </div>
-                            <!-- form-group -->
+                        </div>
+                        <!-- form-group -->
 
-                            <div class="form-group">
-                                <label class="control-label col-md-2 pull-left">About</label>
+                        <div class="form-group">
+                            <label class="control-label col-md-2 pull-left">About</label>
 
-                                <div class="col-md-10">
-                                    <textarea ng-model="user.about" id="autoResizeTA" name="about" ng-maxlength="1024" class="form-control" rows="5" style="height: 90px;"></textarea>
-                                    <p class="text-danger" ng-show="userInfo.about.$invalid && userInfo.about.$dirty">
-                                        Last Name field must be at most 1024 characters long
-                                    </p>
-                                </div>
+                            <div class="col-md-10">
+                                <textarea ng-model="user.about" id="autoResizeTA" name="about" ng-maxlength="1024"
+                                          class="form-control" rows="5" style="height: 90px;"></textarea>
+
+                                <p class="text-danger" ng-show="userInfo.about.$invalid && userInfo.about.$dirty">
+                                    Last Name field must be at most 1024 characters long
+                                </p>
                             </div>
-                            <!-- form-group -->
+                        </div>
+                        <!-- form-group -->
 
 
-                            <div class="form-group">
-                                <label class="control-label col-md-2 pull-left">Interests</label>
+                        <div class="form-group">
+                            <label class="control-label col-md-2 pull-left">Interests</label>
 
-                                <div class="col-md-10">
-                                    <tags-input ng-model="newUser.interests">
-                                        <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
-                                    </tags-input>
-                                </div>
+                            <div class="col-md-10">
+                                <tags-input ng-model="newUser.interests">
+                                    <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
+                                </tags-input>
                             </div>
+                        </div>
 
 
-                        </form>
-                        <button type="submit" ng-click="submit()" ng-disabled="userInfo.$invalid" class="btn btn-success pull-right">Save changes</button>
-                    </div>
-                    <!-- panel-body -->
-
+                    </form>
+                    <button type="submit" ng-click="submit()" ng-disabled="userInfo.$invalid"
+                            class="btn btn-success pull-right">Save changes
+                    </button>
                 </div>
+                <!-- panel-body -->
 
             </div>
-            </div>
+
+        </div>
+    </div>
 </tab>
 </tabset>
 
@@ -510,3 +523,72 @@
 </div>
 <!-- col-sm-9 -->
 </div>
+
+<script type="text/ng-template" id="createNewGalleryId">
+    <div class="modal-header">
+        <h3 class="modal-title">Create new Gallery</h3>
+    </div>
+    <div class="modal-body">
+        <form name="createGalleryForm">
+            Name: <input name="galleryName" type="text" ng-model="galleryName" ng-minlength="5" ng-maxlength="20">
+
+            <p class="text-danger" ng-show="galleryExists()"> Gallery name already exists! </p>
+
+            <p class="text-danger" ng-show="createGalleryForm.galleryName.$invalid"> Gallery name must be between 5 and 20 characters long! </p>
+            <br> <br>
+            Visibility:
+            <div>
+          <span class="rdio rdio-primary">
+              <input type="radio" id="rdioPublic" ng-model="visibility" value="public"/>
+              <label for="rdioPublic">Public</label>
+          </span>
+          <span class="rdio rdio-primary ml10">
+              <input type="radio" id="rdioPrivate" ng-model="visibility" value="private"/>
+              <label for="rdioPrivate">Private</label>
+          </span>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="!galleryName || !visibility || galleryExists() || createGalleryForm.$invalid" ng-click="ok()">
+            Create
+        </button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="deleteGallerySuccessId">
+    <div class="ngdialog-message">
+        <h3>Gallery was successfully deleted</h3>
+    </div>
+    <div class="ngdialog-buttons">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="deleteGalleryErrorId">
+    <div class="ngdialog-message">
+        <h3>Error deleting gallery</h3>
+    </div>
+    <div class="ngdialog-buttons">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="addGalleryErrorId">
+    <div class="ngdialog-message">
+        <h3>Error creating gallery</h3>
+    </div>
+    <div class="ngdialog-buttons">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="addGallerySuccessId">
+    <div class="ngdialog-message">
+        <h3>Gallery was successfully created</h3>
+    </div>
+    <div class="ngdialog-buttons">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>
+    </div>
+</script>
