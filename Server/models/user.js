@@ -510,14 +510,15 @@ user.removeAllInterests = function(username) {
 /**
  * Returns all the galleries owned by the user
  * @param {String} username Username of the user
+ * @param {Boolean} isOwner true if the private galleries should be returned as well, false otherwise
  * @returns {Promise} Resolves to the galleries if successful, rejects otherwise
  */
-user.getAllGalleries = function(username) {
+user.getAllGalleries = function(username, isOwner) {
     return new Promise(function(resolve) {
         var query = [
             'MATCH (user:User {username: {username}})',
-            'MATCH (user)-[:OWNS]-(galleries:Gallery)',
-            'RETURN galleries'
+            'MATCH (user)-[:OWNS]-(gallery:Gallery' + (isOwner ? '' : '{isPublic: true}') + ')',
+            'RETURN collect({name: gallery.name}) as galleries'
         ].join('\n');
 
         var params = {
@@ -526,7 +527,7 @@ user.getAllGalleries = function(username) {
 
         db.query(query, params, function(err, results) {
             if (err) throw err;
-            return resolve(results);
+            return resolve(results[0] ? results[0].galleries: results);
         });
     });
 };
@@ -600,7 +601,7 @@ user.createGallery = function (username, galleryName) {
             'MATCH (user:User {username: {username}})',
             'CREATE (gallery:Gallery {name: {galleryName}})',
             'CREATE (user)-[:OWNS]->(gallery)',
-            'RETURN gallery'
+            'RETURN {name: gallery.name, isPublic: gallery.isPublic} as galleryInfo'
         ].join('\n');
 
         var params = {
@@ -610,7 +611,35 @@ user.createGallery = function (username, galleryName) {
 
         db.query(query, params, function(err, results) {
             if (err) throw err;
-            return resolve(results);
+            return resolve(results[0]['galleryInfo']);
+        });
+    });
+};
+
+/**
+ * Deletes a user gallery
+ * @param {String} username Username of the target user
+ * @param {String} galleryName Name of the gallery to be deleted
+ * @returns {Promise} Resolves to true if successful, rejects otherwise.
+ */
+user.removeGallery = function (username, galleryName) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (user:User {username: {username}})',
+            'MATCH (user)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
+            'WITH gallery',
+            'OPTIONAL MATCH (gallery)-[r]-()',
+            'DELETE gallery, r'
+        ].join('\n');
+
+        var params = {
+            username: username,
+            galleryName: galleryName
+        };
+
+        db.query(query, params, function(err) {
+            if (err) throw err;
+            return resolve(true);
         });
     });
 };

@@ -235,7 +235,7 @@ module.exports = function (server) {
         method: 'GET',
         path: '/users/{username}/galleries',
         config: {
-            //auth: 'token',
+            auth: 'token',
             validate: {
                 params: {
                     username: schema.user.username.required()
@@ -243,9 +243,11 @@ module.exports = function (server) {
             }
         },
         handler: function (request, reply) {
-            if (request.auth.credentials.username != request.params.username)
-                return reply(Boom.forbidden('No permissions'));
-            User.getAllGalleries(request.params.username)
+            var isOwner = false;
+            if (request.auth.credentials.username == request.params.username)
+                isOwner = true;
+
+            User.getAllGalleries(request.params.username, isOwner)
                 .then(function (galleries) {
                     return reply(galleries);
                 })
@@ -287,6 +289,34 @@ module.exports = function (server) {
                         });
                 })
                 .catch(function () {
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
+        }
+    });
+
+    server.route({
+        method: 'DELETE',
+        path: '/users/{username}/galleries/{galleryName}',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required(),
+                    galleryName: schema.gallery.name.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            console.log("here");
+            if (request.auth.credentials.username != request.params.username)
+                return reply(Boom.forbidden('No permissions'));
+
+            User.removeGallery(request.params.username, request.params.galleryName)
+                .then(function() {
+                    console.log("Success");
+                    return reply().code(200);
+                })
+                .catch(function(){
                     return reply(Boom.badImplementation('Internal server error'));
                 });
         }
