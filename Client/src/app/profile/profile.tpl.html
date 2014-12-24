@@ -378,7 +378,7 @@
 <tab select="getAllGalleries()">
     <tab-heading><strong>Models</strong></tab-heading>
     <div class="row">
-        <div class="media-options">
+        <div class="media-options" ng-if="user.username == ownUsername">
             <div class="pull-right">
                 Gallery Options:
                 <div class="btn-group">
@@ -394,7 +394,7 @@
         <hr>
         <div class="col-md-12">
             <div class="col-sm-3">
-                <h5 class="lg-title">Galleries <a ng-click="addNewGallery()" href="" class="pull-right">+ Add New
+                <h5 class="lg-title">Galleries <a ng-if="user.username == ownUsername" ng-click="addNewGallery()" href="" class="pull-right">+ Add New
                     Gallery</a></h5>
                 <ul class="folder-list">
                     <li ng-class="{selected: isAllModelsSelected}"><a href="" ng-init="getAllModels()"

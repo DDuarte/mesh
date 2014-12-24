@@ -134,6 +134,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         getAllGalleries: function(username) {
             return $http.get(server.url + '/users/' + username + '/galleries', { headers: getHeaders() });
         },
+        getModelsFromGallery: function(username, galleryName) {
+            return $http.get(server.url + '/users/' + username + '/galleries/' + galleryName, { headers: getHeaders() });
+        },
         getGroup: function (id) {
             return $http.get(server.url + '/groups/' + id, {headers: getHeaders()});
         },

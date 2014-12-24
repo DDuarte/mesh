@@ -13,6 +13,7 @@ angular.module('meshApp.profile', [
     .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http, server, meshApi, $modal, _, ngDialog) {
         $scope.all = {};
         $scope.newUser = {};
+        $scope.ownUsername = meshApi.getLoggedUsername();
 
         $scope.init = function () {
             $http.get(server.url + '/users/' + $stateParams.username). // TODO: make url configurable?
@@ -88,11 +89,19 @@ angular.module('meshApp.profile', [
         $scope.selectGallery = function (gallery) {
             $scope.isAllModelsSelected = false;
             $scope.selectedGallery = gallery;
+            meshApi.getModelsFromGallery($scope.user.username, gallery.name)
+                .success(function(response) {
+                    console.log("response", response);
+                })
+                .error(function(response) {
+                    console.log("response", response);
+                });
         };
 
         $scope.isGallerySelected = function (gallery) {
             return $scope.selectedGallery === gallery;
         };
+
 
         $scope.addNewGallery = function () {
             var modalInstance = $modal.open({
