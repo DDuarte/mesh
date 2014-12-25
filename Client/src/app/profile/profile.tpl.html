@@ -382,7 +382,7 @@
             <div class="pull-right">
                 Gallery Options:
                 <div class="btn-group">
-                    <button ng-disabled="!selectedGallery" class="btn btn-default btn-sm" type="button"><i
+                    <button ng-disabled="!selectedGallery" ng-click="editGallery()" class="btn btn-default btn-sm" type="button"><i
                             class="fa fa-pencil mr5"></i> Edit
                     </button>
                     <button ng-disabled="!selectedGallery" ng-click="deleteGallery()" class="btn btn-default btn-sm"
@@ -557,6 +557,33 @@
     </div>
 </script>
 
+<script type="text/ng-template" id="editGalleryId">
+    <div class="modal-header">
+        <h3 class="modal-title">Edit Gallery: {{gallery.name}}</h3>
+    </div>
+    <div class="modal-body">
+        <form name="createGalleryForm">
+            Visibility:
+            <div>
+          <span class="rdio rdio-primary">
+              <input type="radio" id="rdioPublic2" ng-model="visibility" value="public"/>
+              <label for="rdioPublic2">Public</label>
+          </span>
+          <span class="rdio rdio-primary ml10">
+              <input type="radio" id="rdioPrivate2" ng-model="visibility" value="private"/>
+              <label for="rdioPrivate2">Private</label>
+          </span>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="!visibility || createGalleryForm.$invalid" ng-click="ok()">
+            Update
+        </button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
 <script type="text/ng-template" id="deleteGallerySuccessId">
     <div class="ngdialog-message">
         <h3>Gallery was successfully deleted</h3>
@@ -587,6 +614,24 @@
 <script type="text/ng-template" id="addGallerySuccessId">
     <div class="ngdialog-message">
         <h3>Gallery was successfully created</h3>
+    </div>
+    <div class="ngdialog-buttons">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="editGallerySuccessId">
+    <div class="ngdialog-message">
+        <h3>Gallery was successfully edited</h3>
+    </div>
+    <div class="ngdialog-buttons">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="editGalleryErrorId">
+    <div class="ngdialog-message">
+        <h3>Error editing gallery</h3>
     </div>
     <div class="ngdialog-buttons">
         <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>

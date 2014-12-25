@@ -126,6 +126,11 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: getHeaders()
             });
         },
+        updateGallery: function(galleryName, isPublic) {
+            return $http.patch(server.url + '/users/' + getLoggedToken().username + '/galleries/' + galleryName, { isPublic: isPublic }, {
+                headers: getHeaders()
+            });
+        },
         deleteGallery: function(galleryName) {
             return $http['delete'](server.url + '/users/' + getLoggedToken().username + '/galleries/' + galleryName, {
                 headers: getHeaders()
