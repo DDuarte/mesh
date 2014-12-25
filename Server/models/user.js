@@ -518,7 +518,7 @@ user.getAllGalleries = function(username, isOwner) {
         var query = [
             'MATCH (user:User {username: {username}})',
             'MATCH (user)-[:OWNS]-(gallery:Gallery' + (isOwner ? '' : '{isPublic: true}') + ')',
-            'RETURN collect({name: gallery.name}) as galleries'
+            'RETURN collect({name: gallery.name, isPublic: gallery.isPublic}) as galleries'
         ].join('\n');
 
         var params = {
@@ -607,6 +607,34 @@ user.createGallery = function (username, galleryName) {
         var params = {
             username: username,
             galleryName: galleryName
+        };
+
+        db.query(query, params, function(err, results) {
+            if (err) throw err;
+            return resolve(results[0]['galleryInfo']);
+        });
+    });
+};
+
+/**
+ * Updates a user gallery
+ * @param {String} username Username of the target user
+ * @param {String} galleryName Name of the gallery to be created
+ * @param {Boolean} isPublic New gallery visibility
+ * @returns {Promise} Resolves to the gallery information if successful, rejects otherwise.
+ */
+user.updateGallery = function (username, galleryName, isPublic) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (user:User {username: {username}})-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
+            'SET gallery.isPublic = {isPublic}',
+            'RETURN {name: gallery.name, isPublic: gallery.isPublic} as galleryInfo'
+        ].join('\n');
+
+        var params = {
+            username: username,
+            galleryName: galleryName,
+            isPublic: isPublic
         };
 
         db.query(query, params, function(err, results) {

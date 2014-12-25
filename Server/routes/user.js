@@ -295,6 +295,36 @@ module.exports = function (server) {
     });
 
     server.route({
+        method: 'PATCH',
+        path: '/users/{username}/galleries/{galleryName}',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required(),
+                    galleryName: schema.gallery.name.required()
+                },
+                payload: {
+                    isPublic: schema.gallery.isPublic.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            if (request.auth.credentials.username != request.params.username)
+                return reply(Boom.forbidden('No permissions'));
+
+            User.updateGallery(request.params.username, request.params.galleryName, request.payload.isPublic)
+                .then(function() {
+                    console.log("Success");
+                    return reply().code(200);
+                })
+                .catch(function(){
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
+        }
+    });
+
+    server.route({
         method: 'DELETE',
         path: '/users/{username}/galleries/{galleryName}',
         config: {
@@ -307,7 +337,6 @@ module.exports = function (server) {
             }
         },
         handler: function (request, reply) {
-            console.log("here");
             if (request.auth.credentials.username != request.params.username)
                 return reply(Boom.forbidden('No permissions'));
 
