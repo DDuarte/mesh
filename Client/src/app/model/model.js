@@ -78,7 +78,7 @@ angular.module('meshApp.model', [
 
                     var loader;
                     if (objMatches != null && objMatches.length == 1) {
-                        var url = meshApi.getDownloadModelUrl($attrs.modelid);
+                        var url = meshApi.getMainFileUrl($attrs.modelid);
                         loader = new THREE.OBJLoader(manager, url);
                         loader.load(url, $scope.addObjectToScene, onProgress, onError);
                     }
@@ -96,7 +96,7 @@ angular.module('meshApp.model', [
 
                             $scope.scene.add(new THREE.Mesh(geometry, new THREE.MeshPhongMaterial()));
                         });
-                        loader.load(meshApi.getDownloadModelUrl($attrs.modelid));
+                        loader.load(meshApi.getMainFileUrl($attrs.modelid));
                     }
 
                     // var axes = buildAxes(1000);
@@ -308,6 +308,7 @@ angular.module('meshApp.model', [
             meshApi.getModel($stateParams.id). // TODO: make url configurable?
                 success(function (data, status, headers, config) {
                     $scope.model = data.model;
+                    console.log("MODEL:", $scope.model);
                     $scope.favourited = data.favourited;
                     $scope.userVote = data.uservote;
                     $scope.followingAuthor = data.followingAuthor;

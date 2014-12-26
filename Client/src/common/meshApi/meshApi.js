@@ -167,8 +167,11 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
-        getDownloadModelUrl: function (modelId) {
+        getMainFileUrl: function(modelId) {
             return server.url + '/models/' + modelId + '/files';
+        },
+        getDownloadModelUrl: function (modelId) {
+            return server.url + '/models/' + modelId + '/download';
         }
     };
 
