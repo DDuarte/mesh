@@ -46,7 +46,7 @@ model.create = function (name, description, mainFilename, originalFilename, main
 
     return new Promise(function (resolve, reject) {
         db.query(query, params, function (error, results) {
-            if (error) throw new Error('Internal database error');
+            if (error) throw error;
             resolve(results[0]['model']['data']);
         });
     });

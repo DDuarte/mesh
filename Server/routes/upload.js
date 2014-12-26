@@ -103,8 +103,8 @@ module.exports = function (server) {
                     });
 
                 })
-                .catch(Error, function (error) {
-                    reply(Boom.badImplementation(error.message));
+                .catch(function () {
+                    reply(Boom.badImplementation('Internal Server Error'));
                 });
         }
     });
