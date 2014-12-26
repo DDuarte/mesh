@@ -5,6 +5,7 @@ var Model = require('../models/model.js');
 var Promise = require('bluebird');
 var Boom = require('boom');
 var Path = require('path');
+var Joi = require('joi');
 
 var schema = require('../schema');
 
@@ -300,7 +301,8 @@ module.exports = function (server) {
         config: {
             validate: {
                 params: {
-                    id: schema.model.id.required()
+                    id: schema.model.id.required(),
+                    filename: Joi.string().required()
                 }
             }
         },
