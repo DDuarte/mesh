@@ -6,14 +6,15 @@ var model = {};
  * Creates a model
  * @param {String} name Name of the model
  * @param {String} description Description of the model
- * @param {String} originalFilename Original name of the model file
+ * @param {String} mainFilename Name of the main file (.obj or .stl)
+ * @param {String} originalFilename Original name of the model folder
  * @param {String} mainfilePath Path of the model file in the server
  * @param {String} compressedFolderPath Path of the compressed folder for download
  * @param {String} uncompressedFolderPath Path of the uncompressed folder
  * @param {String} ownerName Name of the owner of the model
  * @param {String} thumbnail Url to thumbnail image
  */
-model.create = function (name, description, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, thumbnail) {
+model.create = function (name, description, mainFilename, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, thumbnail) {
     var query = [
         // get unique id
         'MERGE (id:UniqueId{name:\'Model\'})',
@@ -21,7 +22,7 @@ model.create = function (name, description, originalFilename, mainfilePath, comp
         'ON MATCH SET id.count = id.count + 1',
         'WITH id.count AS uid',
             'CREATE (m:Model{id:uid,name:{name}, thumbnail: {thumbnail}, originalFilename: {originalFilename}, description: {description}, ' +
-            'filePath: {filePath}, compressedFolderPath: {compressedFolderPath}, uncompressedFolderPath: {uncompressedFolderPath}, publicationDate: {currentDate}})',
+            'mainFilename: {mainFilename}, filePath: {filePath}, compressedFolderPath: {compressedFolderPath}, uncompressedFolderPath: {uncompressedFolderPath}, publicationDate: {currentDate}})',
         'WITH m',
         'MATCH (user:User {username: {ownerName}})',
         'CREATE user-[:OWNS]->(m)',
@@ -34,6 +35,7 @@ model.create = function (name, description, originalFilename, mainfilePath, comp
         name: name,
         description: description,
         thumbnail: thumbnail,
+        mainFilename: mainFilename,
         filePath: mainfilePath,
         compressedFolderPath: compressedFolderPath,
         uncompressedFolderPath: uncompressedFolderPath,
@@ -71,7 +73,7 @@ model.getById = function (id, loggedUser) {
             'WITH m, author, modelComments, modelTags, count(ru) as modelUpvotes',
             'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
                 'WITH m, author, { id: m.id, name: m.name, thumbnail: m.thumbnail, description: m.description, ' +
-                'filePath: m.filePath, uncompressedFolderPath: m.uncompressedFolderPath, compressedFolderPath: m.compressedFolderPath, ' +
+                'mainFilename: m.mainFilename, filePath: m.filePath, uncompressedFolderPath: m.uncompressedFolderPath, compressedFolderPath: m.compressedFolderPath, ' +
                 'originalFilename: m.originalFilename, downvotes: count(rd), upvotes: modelUpvotes, publicationDate: m.publicationDate, ' +
                 'isPublic: m.isPublic, tags: modelTags, author: { name: author.username, avatar: author.avatar, about: author.about }, ' +
                 'comments:  modelComments, tags: modelTags} AS model',
