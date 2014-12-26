@@ -77,7 +77,7 @@ module.exports = function (server) {
                                     return reply(Boom.badRequest('More than one .obj or .stl file was uploaded'));
 
                                 var mainfilePath = res.files[0].fullPath;
-                                var mainFilename = res.files[0].filename;
+                                var mainFilename = res.files[0].name;
                                 Model.create(data.name, data.description, mainFilename, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, 'http://placehold.it/500&text=' + data.name)
                                     .then(function (model) {
 
