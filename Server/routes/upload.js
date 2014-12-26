@@ -94,11 +94,7 @@ module.exports = function (server) {
                                     .catch(Error, function (error) {
                                         reply(Boom.badImplementation(error.message));
                                     });
-
-                                return reply().code(200);
                             });
-
-
                         });
                     });
 
