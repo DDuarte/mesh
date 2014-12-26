@@ -6,6 +6,9 @@ var Model = require('../models/model');
 var Schema = require('../schema');
 var Joi = require('joi');
 var Uid = require('rand-token').uid;
+var unzip = require('unzip');
+var readdirp = require('readdirp');
+
 
 module.exports = function (server) {
 
@@ -40,37 +43,62 @@ module.exports = function (server) {
 
                     var originalFilename = data.file.hapi.filename;
                     var uid = Uid(64);
-                    var path = Path.join((process.env['MESH_MODELS_PATH'] || (process.cwd() + "/models")), uid.toString() + '_' + data.file.hapi.filename);
-                    var file = Fs.createWriteStream(path);
+                    var uncompressedFolderPath = Path.join((process.env['MESH_MODELS_PATH'] || (process.cwd() + "/models")), uid.toString());
+                    var compressedFolderPath = uncompressedFolderPath + '.zip';
+                    var storeFile = Fs.createWriteStream(compressedFolderPath);
 
-                    file.on('error', function (err) {
-                        console.error("WritingError:", err);
+                    storeFile.on('error', function (err) {
+                        //console.error("WritingError:", err);
                         return reply(Boom.badImplementation("Error storing file in the server"));
                     });
 
-                    data.file.pipe(file);
-
+                    data.file.pipe(storeFile);
+                    //
                     data.file.on('end', function (err) {
-
                         if (err)
-                            return reply(Boom.badImplementation("Error saving file on the server"));
+                            return reply().code(500);
 
-                        Model.create(data.name, data.description, originalFilename, path, ownerName, 'http://placehold.it/500&text=' + data.name)
-                            .then(function (model) {
+                        var readFile = Fs.createReadStream(compressedFolderPath);
+                        readFile.pipe(unzip.Extract({ path: uncompressedFolderPath }));
 
-                                Promise.map(data.tags, function(tag) {
-                                    return Model.addTag(model.id, tag);
-                                })
-                                    .then(function() {
-                                        return reply(model).code(200);
+                        readFile.on('end', function (err) {
+                            if (err)
+                                return reply(Boom.badImplementation('Error decompressing file'));
+
+                            readdirp({root: uncompressedFolderPath, fileFilter: ['*.obj', '*.stl']}, function (errors, res) {
+
+                                if (errors)
+                                    console.log("Errors", errors);
+
+                                if (res.files.length == 0)
+                                    return reply(Boom.badRequest('No .obj or .stl file was uploaded'));
+
+                                if (res.files.length > 1)
+                                    return reply(Boom.badRequest('More than one .obj or .stl file was uploaded'));
+
+                                var mainfilePath = res.files[0].fullPath;
+                                Model.create(data.name, data.description, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, 'http://placehold.it/500&text=' + data.name)
+                                    .then(function (model) {
+
+                                        Promise.map(data.tags, function (tag) {
+                                            return Model.addTag(model.id, tag);
+                                        })
+                                            .then(function () {
+                                                return reply(model).code(200);
+                                            })
+                                            .catch(function (err) {
+                                                return reply(Boom.badImplementation(err));
+                                            });
                                     })
-                                    .catch(function(err) {
-                                        return reply(Boom.badImplementation(err));
+                                    .catch(Error, function (error) {
+                                        reply(Boom.badImplementation(error.message));
                                     });
-                            })
-                            .catch(Error, function (error) {
-                                reply(Boom.badImplementation(error.message));
+
+                                return reply().code(200);
                             });
+
+
+                        });
                     });
 
                 })

@@ -4,6 +4,7 @@ var Fs = require('fs');
 var Model = require('../models/model.js');
 var Promise = require('bluebird');
 var Boom = require('boom');
+var Path = require('path');
 
 var schema = require('../schema');
 
@@ -243,6 +244,27 @@ module.exports = function (server) {
 
     server.route({
         method: 'GET',
+        path: '/models/{id}/galleries',
+        config: {
+            validate: {
+                params: {
+                    id: schema.model.id.required()
+                }
+            }
+        },
+        handler: function(request, reply) {
+            Model.getPublishedGalleries(request.params.id)
+                .then(function(galleries) {
+                    return reply(galleries);
+                })
+                .catch(function() {
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
+        }
+    });
+
+    server.route({
+        method: 'GET',
         path: '/models/{id}/files',
         config: {
             validate: {
@@ -259,6 +281,68 @@ module.exports = function (server) {
 
                     var model = results[0].model;
                     var filePath = model.filePath;
+                    var originalFilename = model.originalFilename;
+
+                    return reply.file(filePath, {
+                        filename: originalFilename,
+                        mode: 'attachment'
+                    });
+                })
+                .catch(Error, function (error) {
+                    reply(Boom.badImplementation(error.message ? error.message : error));
+                });
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/models/{id}/files/{filename}',
+        config: {
+            validate: {
+                params: {
+                    id: schema.model.id.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Model.getById(request.params.id, request.auth.credentials ? request.auth.credentials.username : '')
+                .then(function (results) {
+                    if (results.length == 0)
+                        return reply(Boom.notFound('Model does not exist'));
+
+                    var model = results[0].model;
+                    var filePath = model.uncompressedFolderPath;
+                    var originalFilename = model.originalFilename;
+                    var fullPath = Path.join(filePath, request.params.filename);
+                    return reply.file(fullPath, {
+                        filename: request.params.filename,
+                        mode: 'attachment'
+                    });
+                })
+                .catch(Error, function (error) {
+                    reply(Boom.badImplementation(error.message ? error.message : error));
+                });
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/models/{id}/download',
+        config: {
+            validate: {
+                params: {
+                    id: schema.model.id.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Model.getById(request.params.id, request.auth.credentials ? request.auth.credentials.username : '')
+                .then(function (results) {
+                    if (results.length == 0)
+                        return reply(Boom.notFound('Model does not exist'));
+
+                    var model = results[0].model;
+                    var filePath = model.compressedFolderPath;
                     var originalFilename = model.originalFilename;
 
                     return reply.file(filePath, {

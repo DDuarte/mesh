@@ -7,18 +7,21 @@ var model = {};
  * @param {String} name Name of the model
  * @param {String} description Description of the model
  * @param {String} originalFilename Original name of the model file
- * @param {String} filePath Path of the model file in the server
+ * @param {String} mainfilePath Path of the model file in the server
+ * @param {String} compressedFolderPath Path of the compressed folder for download
+ * @param {String} uncompressedFolderPath Path of the uncompressed folder
  * @param {String} ownerName Name of the owner of the model
  * @param {String} thumbnail Url to thumbnail image
  */
-model.create = function (name, description, originalFilename, filePath, ownerName, thumbnail) {
+model.create = function (name, description, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, thumbnail) {
     var query = [
         // get unique id
         'MERGE (id:UniqueId{name:\'Model\'})',
         'ON CREATE SET id.count = 1',
         'ON MATCH SET id.count = id.count + 1',
         'WITH id.count AS uid',
-        'CREATE (m:Model{id:uid,name:{name}, thumbnail: {thumbnail}, originalFilename: {originalFilename}, description: {description}, filePath: {filePath}, publicationDate: {currentDate}})',
+            'CREATE (m:Model{id:uid,name:{name}, thumbnail: {thumbnail}, originalFilename: {originalFilename}, description: {description}, ' +
+            'filePath: {filePath}, compressedFolderPath: {compressedFolderPath}, uncompressedFolderPath: {uncompressedFolderPath}, publicationDate: {currentDate}})',
         'WITH m',
         'MATCH (user:User {username: {ownerName}})',
         'CREATE user-[:OWNS]->(m)',
@@ -31,7 +34,9 @@ model.create = function (name, description, originalFilename, filePath, ownerNam
         name: name,
         description: description,
         thumbnail: thumbnail,
-        filePath: filePath,
+        filePath: mainfilePath,
+        compressedFolderPath: compressedFolderPath,
+        uncompressedFolderPath: uncompressedFolderPath,
         ownerName: ownerName,
         currentDate: timestamp.toISOString(),
         originalFilename: originalFilename
@@ -65,7 +70,11 @@ model.getById = function (id, loggedUser) {
             'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
             'WITH m, author, modelComments, modelTags, count(ru) as modelUpvotes',
             'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
-            'WITH m, author, { id: m.id, name: m.name, thumbnail: m.thumbnail, description: m.description, filePath: m.filePath, originalFilename: m.originalFilename, downvotes: count(rd), upvotes: modelUpvotes, publicationDate: m.publicationDate, isPublic: m.isPublic, tags: modelTags, author: { name: author.username, avatar: author.avatar, about: author.about }, comments:  modelComments, tags: modelTags} AS model',
+                'WITH m, author, { id: m.id, name: m.name, thumbnail: m.thumbnail, description: m.description, ' +
+                'filePath: m.filePath, uncompressedFolderPath: m.uncompressedFolderPath, compressedFolderPath: m.compressedFolderPath, ' +
+                'originalFilename: m.originalFilename, downvotes: count(rd), upvotes: modelUpvotes, publicationDate: m.publicationDate, ' +
+                'isPublic: m.isPublic, tags: modelTags, author: { name: author.username, avatar: author.avatar, about: author.about }, ' +
+                'comments:  modelComments, tags: modelTags} AS model',
             'OPTIONAL MATCH (u:User{username: {username}})',
             'WITH m, u, author, model',
             'OPTIONAL MATCH (u)-[v:VOTED]->(m)',
@@ -451,4 +460,18 @@ model.updateById = function (modelId, description, isPublic, tags) {
     });
 };
 
+model.getPublishedGalleries = function (modelId) {
+    return new Promise(function (resolve) {
+        var query = [
+            'MATCH (model:Model {id: {modelId}})',
+            'OPTIONAL MATCH (gallery:Gallery)<-[published:PUBLISHED_IN]-(model)',
+            'RETURN collect({name: gallery.name, '
+        ].join('\n');
+
+        var params = {
+            modelId: modelId,
+
+        };
+    });
+};
 module.exports = model;
