@@ -5,6 +5,9 @@ var Hapi = require('hapi');
 // Create a server with a host and port
 var server = Hapi.createServer(process.argv[2] || 8001, { cors: true });
 
+// Setup mongodb
+require('./common/mongoDBClient')('mongodb://localhost:27017/mesh');
+
 require('./routes/')(server);
 
 // Hacks
