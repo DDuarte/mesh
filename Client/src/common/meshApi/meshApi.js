@@ -22,7 +22,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             });
         },
         isLoggedIn: function () {
-            return !!getLoggedToken();
+            return !!getLoggedToken().token;
         },
         getLoggedUsername: function () {
             return getLoggedToken().username;
