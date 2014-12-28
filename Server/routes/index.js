@@ -10,4 +10,5 @@ module.exports = function (server) {
     require('./group')(server);
     require('./upload')(server);
     require('./catalog')(server);
+    require('./search')(server);
 };
