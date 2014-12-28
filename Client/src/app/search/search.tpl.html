@@ -19,10 +19,6 @@
 
     <div class="row search">
         <div class="col-sm-8 col-md-9">
-            <pagination boundary-links="true" total-items="filtered.length" ng-model="currentPage"
-                        class="pagination pagination-search" items-per-page="pageSize"
-                        previous-text="&lsaquo;" next-text="&rsaquo;"
-                        first-text="&laquo;" last-text="&raquo;"></pagination>
 
             <div class="panel panel-dark-head">
                 <div class="panel-heading">
@@ -33,7 +29,7 @@
 
                     <div class="results-list">
 
-                        <div class="media row" ng-repeat="result in filtered = (results | filter: searchType) | startFrom: (currentPage-1)*pageSize | limitTo: pageSize">
+                        <div class="media row" ng-repeat="result in results">
                             <div class="col-xs-6">
                                 <a href="#/model" class="pull-left">
                                     <img alt="" ng-src="{{result.image}}" class="img-responsive thumbnail">
@@ -45,17 +41,11 @@
                                 <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
                             </div>
                         </div>
-
+                        <button class="btn btn-primary col-md-9 col-md-offset-1 col-sm-8 col-sm-offset-2">Load more</button>
                     </div><!-- results-list -->
                 </div><!-- panel-body -->
             </div><!-- panel -->
-
-            <pagination boundary-links="true" total-items="filtered.length" ng-model="currentPage"
-                        class="pagination pagination-search" items-per-page="pageSize"
-                        previous-text="&lsaquo;" next-text="&rsaquo;"
-                        first-text="&laquo;" last-text="&raquo;"></pagination>
-
-        </div><!-- col-sm-8 -->
+</div><!-- col-sm-8 -->
 
         <div class="col-sm-4 col-md-3">
             <h4 class="md-title mb5">Refine Results</h4>
@@ -81,28 +71,11 @@
             </div>
 
             <div class="mb20"></div>
-
-            <h4 class="md-title mb5">Location</h4>
-            <select id="location" data-placeholder="Choose a Country..." class="width100p">
-                <option value="">Choose One</option>
-                <option value="United States">United States</option>
-                <option value="United Kingdom">United Kingdom</option>
-                <option value="Portugal">Portugal</option>
-            </select>
-
-            <div class="mb20"></div>
-
-            <h4 class="md-title mb5">File Size</h4>
-            <div id="slider" class="slider-primary mb20"></div>
-
-            <div class="mb20"></div>
             <h4 class="md-title mb5">Filter by</h4>
             <ul class="nav nav-pills nav-stacked nav-file-type">
-                <li id="all"><a ng-click="changeSearchType('')"><i class="fa fa-list"></i> All Results</a></li>
-                <li id="model"><a ng-click="changeSearchType('model')"><i class="fa fa-file"></i> Models</a></li>
-                <li id="group"><a ng-click="changeSearchType('group')"><i class="fa fa-group"></i> Groups</a></li>
-                <li id="gallery"><a ng-click="changeSearchType('gallery')"><i class="fa fa-folder"></i> Galleries</a></li>
-                <li id="user"><a ng-click="changeSearchType('user')"><i class="fa fa-user"></i> Users</a></li>
+                <li id="model" ng-class="{active: searchType == 'model'}"><a ng-click="changeSearchType('model')"><i class="fa fa-file"></i> Models</a></li>
+                <li id="group" ng-class="{active: searchType == 'group'}"><a ng-click="changeSearchType('group')"><i class="fa fa-group"></i> Groups</a></li>
+                <li id="user" ng-class="{active: searchType == 'user'}"><a ng-click="changeSearchType('user')"><i class="fa fa-user"></i> Users</a></li>
             </ul>
 
             <div class="mb20"></div>

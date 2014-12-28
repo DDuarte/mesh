@@ -4,18 +4,22 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             ipCookie('token', data);
         },
         logout: function () {
-            return $http.post(server.url + '/logout', {}, { headers: getHeaders() }).success(function () {
+            return $http.post(server.url + '/logout', {}, {headers: getHeaders()}).success(function () {
                 ipCookie.remove('token');
             });
         },
         validateAccount: function (username, activationToken) {
-            return $http.post(server.url + '/activateToken', { username: username, token: activationToken });
+            return $http.post(server.url + '/activateToken', {username: username, token: activationToken});
         },
         forgotPassword: function (email) {
-            return $http.post(server.url + '/forgotPassword', { email: email });
+            return $http.post(server.url + '/forgotPassword', {email: email});
         },
         changePassword: function (email, tokenUser, password) {
-            return $http.post(server.url + '/changePassword', { email: email, token: tokenUser.split('-')[0], password: password });
+            return $http.post(server.url + '/changePassword', {
+                email: email,
+                token: tokenUser.split('-')[0],
+                password: password
+            });
         },
         isLoggedIn: function () {
             return !!getLoggedToken();
@@ -47,7 +51,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             return $http({
                 url: server.url + '/models/' + modelId + '/votes',
                 method: 'DELETE',
-                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
         },
         updateModel: function (modelId, description, isPublic, tags) {
@@ -62,7 +66,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             return $http({
                 url: server.url + '/models/' + modelId,
                 method: 'DELETE',
-                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
         },
         register: function (registerInfo) {
@@ -83,7 +87,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 url: server.url + '/models/' + modelId + '/comments',
                 method: 'DELETE',
                 data: {date: date},
-                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
         },
         addModelToFavourites: function (modelId) {
@@ -96,7 +100,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 url: server.url + '/users/' + getLoggedToken().username + '/favourites',
                 method: 'DELETE',
                 data: {modelid: modelId},
-                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
         },
         getFollowers: function (username) {
@@ -118,29 +122,29 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 url: server.url + '/users/' + getLoggedToken().username + '/followers',
                 method: 'DELETE',
                 data: {otheruser: otheruser},
-                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
         },
-        createGallery: function(galleryName) {
-            return $http.post(server.url + '/users/' + getLoggedToken().username + '/galleries', { galleryName: galleryName }, {
+        createGallery: function (galleryName) {
+            return $http.post(server.url + '/users/' + getLoggedToken().username + '/galleries', {galleryName: galleryName}, {
                 headers: getHeaders()
             });
         },
-        updateGallery: function(galleryName, isPublic) {
-            return $http.patch(server.url + '/users/' + getLoggedToken().username + '/galleries/' + galleryName, { isPublic: isPublic }, {
+        updateGallery: function (galleryName, isPublic) {
+            return $http.patch(server.url + '/users/' + getLoggedToken().username + '/galleries/' + galleryName, {isPublic: isPublic}, {
                 headers: getHeaders()
             });
         },
-        deleteGallery: function(galleryName) {
+        deleteGallery: function (galleryName) {
             return $http['delete'](server.url + '/users/' + getLoggedToken().username + '/galleries/' + galleryName, {
                 headers: getHeaders()
             });
         },
-        getAllGalleries: function(username) {
-            return $http.get(server.url + '/users/' + username + '/galleries', { headers: getHeaders() });
+        getAllGalleries: function (username) {
+            return $http.get(server.url + '/users/' + username + '/galleries', {headers: getHeaders()});
         },
-        getModelsFromGallery: function(username, galleryName) {
-            return $http.get(server.url + '/users/' + username + '/galleries/' + galleryName, { headers: getHeaders() });
+        getModelsFromGallery: function (username, galleryName) {
+            return $http.get(server.url + '/users/' + username + '/galleries/' + galleryName, {headers: getHeaders()});
         },
         getGroup: function (id) {
             return $http.get(server.url + '/groups/' + id, {headers: getHeaders()});
@@ -154,8 +158,8 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             return $upload.upload({
                 url: server.url + '/upload', // upload.php script, node.js route, or servlet url
                 method: 'POST',
-                headers: { 'Authorization': 'Bearer ' + getLoggedToken().token }, // only for html5
-                data: { name: modelName, description: modelDescription, tags: tags },
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token}, // only for html5
+                data: {name: modelName, description: modelDescription, tags: tags},
                 file: file // single file or a list of files. list is only for html5
             });
         },
@@ -164,14 +168,17 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 url: server.url + '/users/' + getLoggedToken().username,
                 method: 'PATCH',
                 data: user,
-                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
         },
-        getMainFileUrl: function(modelId) {
+        getMainFileUrl: function (modelId) {
             return server.url + '/models/' + modelId + '/files';
         },
         getDownloadModelUrl: function (modelId) {
             return server.url + '/models/' + modelId + '/download';
+        },
+        search: function (term) {
+            return $http.get(server.url + '/search/' + term, {headers: getHeaders()});
         }
     };
 
@@ -179,7 +186,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         if (ipCookie('token')) {
             return ipCookie('token');
         } else {
-            return { token: null };
+            return {token: null};
         }
     };
 

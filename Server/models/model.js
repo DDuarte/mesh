@@ -103,6 +103,31 @@ model.getById = function (id, loggedUser) {
 
 /**
  *
+ * Searches a model by name
+ * @param {Number} name Name of the model to search
+ * @param {String} loggedUser username of the current autenticated user (if null, empty string will be used)
+ * @returns {Promise} Returns a promise with the resolved models, rejects to error otherwise
+ */
+model.searchByName = function (name) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (m:Model{name : {name}, isPublic: true})',
+            'RETURN collect({name: m.name, description: m.description, publicationDate: m.publicationDate}) as models'
+        ].join('\n');
+
+        var params = {
+            name: name
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results['models']);
+        });
+    });
+};
+
+/**
+ *
  * Deletes a model
  * @param {Number} id
  * @returns {Promise} Returns a promise that resolves to true if successful, rejects otherwise
