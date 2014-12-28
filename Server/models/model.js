@@ -105,14 +105,13 @@ model.getById = function (id, loggedUser) {
  *
  * Searches a model by name
  * @param {Number} name Name of the model to search
- * @param {String} loggedUser username of the current autenticated user (if null, empty string will be used)
  * @returns {Promise} Returns a promise with the resolved models, rejects to error otherwise
  */
 model.searchByName = function (name) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         var query = [
-            'MATCH (m:Model{name : {name}, isPublic: true})',
-            'RETURN collect({name: m.name, description: m.description, publicationDate: m.publicationDate}) as models'
+            'MATCH (m:Model {name: {name}, isPublic: true})',
+            'RETURN collect({id: m.id, name: m.name, thumbnail: m.thumbnail, description: m.description, publicationDate: m.publicationDate}) as models'
         ].join('\n');
 
         var params = {
@@ -120,8 +119,9 @@ model.searchByName = function (name) {
         };
 
         db.query(query, params, function (err, results) {
-            if (err) return reject(err);
-            return resolve(results['models']);
+            if (err) throw err;
+            console.log("modelResults", results);
+            return resolve(results[0]['models']);
         });
     });
 };

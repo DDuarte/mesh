@@ -8,7 +8,7 @@ var group = {};
  * @param groupInfo Group information to be persisted in the database
  * @returns {Promise} Resolves to the group information if successful, rejects otherwise
  */
-group.create = function(groupInfo) {
+group.create = function (groupInfo) {
     var query = [
         'MATCH (user:User {username: {adminName}})',
         'CREATE (group:Group {name: {name}, lowerName: lower({ name }), description: {description}, creationDate: {creationDate}})',
@@ -17,7 +17,7 @@ group.create = function(groupInfo) {
         'RETURN group.name as name'
     ].join('\n');
 
-    return new Promise (function (resolve) {
+    return new Promise(function (resolve) {
         db.query(query, groupInfo, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results[0]);
@@ -47,6 +47,29 @@ group.getByName = function (name) {
                 return resolve(results[0]);
             else
                 return reject(false);
+        });
+    });
+};
+
+/**
+ * Returns a group identified by it's name
+ * @param {String} name Name of the group
+ * @returns {Promise} Resolves to the group if successful, rejects otherwise
+ */
+group.searchByName = function (name) {
+    var query = [
+        'MATCH (g:Group {lowerName: lower({ name })})',
+        'RETURN collect({name: g.name, description: g.description}) as groups'
+    ].join('\n');
+
+    var params = {
+        name: name
+    };
+
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err, results) {
+            if (err) throw new Error('Internal database error');
+            return resolve(results[0]['groups']);
         });
     });
 };
@@ -85,7 +108,7 @@ group.getById = function (id) {
  * @param {String} userName Name of the user
  * @returns {Promise} Resolves to true if the user is the administrator, rejects otherwise
  */
-group.isAdmin = function(groupName, userName) {
+group.isAdmin = function (groupName, userName) {
     var query = [
         'MATCH (group:group {name: {groupName})<-[:IS_ADMIN]-(user:User {name: {userName}})',
         'RETURN user'
@@ -96,8 +119,8 @@ group.isAdmin = function(groupName, userName) {
         userName: userName
     };
 
-    return new Promise (function(resolve, reject) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
 
             if (results.length > 0)
@@ -114,7 +137,7 @@ group.isAdmin = function(groupName, userName) {
  * @param {String} userName Name of the user
  * @returns {Promise} Resolves to true if the user if a member of the group, rejects otherwise
  */
-group.isMember = function(groupName, userName) {
+group.isMember = function (groupName, userName) {
     var query = [
         'MATCH (group:group {name: {groupName})<-[:IS_MEMBER]-(user:User {name: {userName}})',
         'RETURN user'
@@ -125,8 +148,8 @@ group.isMember = function(groupName, userName) {
         userName: userName
     };
 
-    return new Promise (function(resolve, reject) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
 
             if (results.length > 0)
@@ -155,8 +178,8 @@ group.addMember = function (groupName, memberName) {
         memberName: memberName
     };
 
-    return new Promise (function(resolve, reject) {
-        db.query(query, params, function(err) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err) {
             if (err) throw new Error('Internal Database error');
             return resolve(true);
         });
@@ -181,8 +204,8 @@ group.addAdmin = function (groupName, adminName) {
         adminName: adminName
     };
 
-    return new Promise(function(resolve, reject) {
-        db.query(query, params, function(err) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err) {
             if (err) throw new Error('Internal database error');
             return resolve(true);
         });
@@ -205,8 +228,8 @@ group.getAdministrators = function (groupId) {
         id: groupId
     };
 
-    return new Promise(function(resolve, reject) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -229,8 +252,8 @@ group.getMembers = function (groupId) {
         id: groupId
     };
 
-    return new Promise(function(resolve, reject) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -242,7 +265,7 @@ group.getMembers = function (groupId) {
  * @param {Integer} groupId Id of the group
  * @returns {Promise} Resolves to the group galleries if successful, throws an exception in case of a database error
  */
-group.getAllGalleries = function(groupId) {
+group.getAllGalleries = function (groupId) {
     var query = [
         'MATCH (group:Group)-[:OWNS]->(galleries:Gallery)',
         'WHERE id(group) = {id}',
@@ -253,8 +276,8 @@ group.getAllGalleries = function(groupId) {
         id: groupId
     };
 
-    return new Promise(function(resolve, reject) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -266,7 +289,7 @@ group.getAllGalleries = function(groupId) {
  * @param {Integer} groupId Id of the given group
  * @returns {Promise} Resolves to the galleries if successful, throws exception in case of database error
  */
-group.getPublicGalleries = function(groupId) {
+group.getPublicGalleries = function (groupId) {
     var query = [
         'MATCH (group:Group)-[:OWNS]->(galleries:Gallery {public: true})',
         'WHERE id(group) = {id}',
@@ -277,8 +300,8 @@ group.getPublicGalleries = function(groupId) {
         id: groupId
     };
 
-    return new Promise(function(resolve, reject) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -290,7 +313,7 @@ group.getPublicGalleries = function(groupId) {
  * @param {Integer} groupId Id of the given group
  * @returns {Promise} Resolves to the galleries if successful, throws exception in case of database error
  */
-group.getPrivateGalleries = function(groupId) {
+group.getPrivateGalleries = function (groupId) {
     var query = [
         'MATCH (group:Group)-[:OWNS]->(galleries:Gallery {public: false})',
         'WHERE id(group) = {id}',
@@ -301,8 +324,8 @@ group.getPrivateGalleries = function(groupId) {
         id: groupId
     };
 
-    return new Promise(function(resolve, reject) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -314,7 +337,7 @@ group.getPrivateGalleries = function(groupId) {
  * @param {Integer} groupId Id of the group
  * @returns {Promise} Resolves to the published models if successful, throws an exception in case of database error
  */
-group.getAllModels = function(groupId) {
+group.getAllModels = function (groupId) {
     var query = [
         'MATCH (group:Group)-[:OWNS]->(galleries:Gallery)<-[:PUBLISHED]-(models:Model)',
         'WHERE id(group) = {id}',
@@ -325,8 +348,8 @@ group.getAllModels = function(groupId) {
         id: groupId
     };
 
-    return new Promise(function(resolve) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -338,7 +361,7 @@ group.getAllModels = function(groupId) {
  * @param {Integer} groupId
  * @returns {Promise} Resolves to the models published in the group if successful, throws an exception in case of database error
  */
-group.getPublicModels = function(groupId) {
+group.getPublicModels = function (groupId) {
     var query = [
         'MATCH (group:Group)-[:OWNS]->(galleries:Gallery {public: true})<-[:PUBLISHED]-(models:Model)',
         'WHERE id(group) = {id}',
@@ -349,8 +372,8 @@ group.getPublicModels = function(groupId) {
         id: groupId
     };
 
-    return new Promise(function(resolve) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -362,7 +385,7 @@ group.getPublicModels = function(groupId) {
  * @param {Integer} groupId
  * @returns {Promise} Resolves to the models published in the group if successful, throws an exception in case of database error
  */
-group.getPrivateModels = function(groupId) {
+group.getPrivateModels = function (groupId) {
     var query = [
         'MATCH (group:Group)-[:OWNS]->(galleries:Gallery {public: false})<-[:PUBLISHED]-(models:Model)',
         'WHERE id(group) = {id}',
@@ -373,8 +396,8 @@ group.getPrivateModels = function(groupId) {
         id: groupId
     };
 
-    return new Promise(function(resolve) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -387,7 +410,7 @@ group.getPrivateModels = function(groupId) {
  * @param {String} galleryName Name of the gallery
  * @returns {Promise} Resolves to the gallery information if successful, rejects otherwise, throws exception in case of database error
  */
-group.getGallery = function(groupId, galleryName) {
+group.getGallery = function (groupId, galleryName) {
     var query = [
         'MATCH (group:Group)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
         'WHERE id(group) = {id}',
@@ -399,8 +422,8 @@ group.getGallery = function(groupId, galleryName) {
         galleryName: galleryName
     };
 
-    return new Promise(function(resolve, reject) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve, reject) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal Server Error');
 
             if (results.length > 0)
@@ -417,7 +440,7 @@ group.getGallery = function(groupId, galleryName) {
  * @param {String} galleryName Name of the gallery
  * @returns {Promise} Resolves to the published models in the gallery, throws an exception in case of a database error
  */
-group.getModels = function(groupId, galleryName) {
+group.getModels = function (groupId, galleryName) {
     var query = [
         'MATCH (group:Group)-[:OWNS]->(galleries:Gallery {name: {galleryName}, public: false})<-[:PUBLISHED]-(models:Model)',
         'WHERE id(group) = {id}',
@@ -429,8 +452,8 @@ group.getModels = function(groupId, galleryName) {
         galleryName: galleryName
     };
 
-    return new Promise(function(resolve) {
-        db.query(query, params, function(err, results) {
+    return new Promise(function (resolve) {
+        db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });

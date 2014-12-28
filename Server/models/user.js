@@ -7,9 +7,6 @@ var user = {};
 /**
  *
  * Returns a user by it's name
- /**
- *
- * Returns a user by it's name
  * @param username string identifier of the user
  * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
  *
@@ -34,6 +31,32 @@ user.getByUsername = function (username) {
                 return resolve(results[0]['user']);
             else
                 return reject('No users were found');
+        });
+    });
+};
+
+/**
+ *
+ * Searches a user by username
+ * @param username Username to search
+ * @returns {Promise} Returns a promise with the resolved users, rejects to error otherwise
+ *
+ */
+user.searchByUsername = function (username) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (u: User{username: { username }})',
+            'RETURN collect({ firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active, ' +
+            'about: u.about}) as users'
+        ].join('\n');
+
+        var params = {
+            username: username
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) throw err;
+            return resolve(results[0]['users']);
         });
     });
 };
@@ -401,8 +424,8 @@ user.getAllModels = function (username) {
  * @param {String} interest Name of the interest
  * @returns {Promise} Resolves to true if successful, rejects otherwise
  */
-user.addInterest = function(username, interest) {
-    return new Promise(function(resolve, reject) {
+user.addInterest = function (username, interest) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (user:User {username: {userName}})',
             'MERGE (tag:Tag {name: {interest}})',
@@ -414,7 +437,7 @@ user.addInterest = function(username, interest) {
             tagName: interest
         };
 
-        db.query(query, params, function(err) {
+        db.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -427,8 +450,8 @@ user.addInterest = function(username, interest) {
  * @param {String} interests Name of the interests
  * @returns {Promise} Resolves to true if successful, rejects otherwise
  */
-user.replaceInterests = function(username, interests) {
-    return new Promise(function(resolve) {
+user.replaceInterests = function (username, interests) {
+    return new Promise(function (resolve) {
         var tagsClause = '[';
         for (var i = 0; i < interests.length; ++i) {
             tagsClause += ('"' + interests[i] + '"');
@@ -440,9 +463,9 @@ user.replaceInterests = function(username, interests) {
         var query = [
             'MATCH (u:User { username: {username}})',
             'OPTIONAL MATCH (u)-[tg:INTERESTED]->(t)',
-                'WHERE NOT t.name IN ' + tagsClause,
+            'WHERE NOT t.name IN ' + tagsClause,
             'DELETE tg',
-                'FOREACH (tagName IN ' + tagsClause + ' |',
+            'FOREACH (tagName IN ' + tagsClause + ' |',
             'MERGE (tag:Tag{name: tagName})',
             'MERGE u-[:INTERESTED]->tag',
             ')'
@@ -452,7 +475,7 @@ user.replaceInterests = function(username, interests) {
             username: username
         };
 
-        db.query(query, params, function(err) {
+        db.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -465,8 +488,8 @@ user.replaceInterests = function(username, interests) {
  * @param {String} interest Name of the interest to be removed
  * @returns {Promise} Resolves to true if successful, rejects otherwise
  */
-user.removeInterest = function(username, interest) {
-    return new Promise(function(resolve, reject) {
+user.removeInterest = function (username, interest) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (user:User {username: {userName}})-[relation:INTERESTED]->(tag:Tag {name: {tagName}})',
             'DELETE relation'
@@ -477,7 +500,7 @@ user.removeInterest = function(username, interest) {
             tagName: interest
         };
 
-        db.query(query, params, function(err) {
+        db.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -489,8 +512,8 @@ user.removeInterest = function(username, interest) {
  * @param {String} username Username of the target user
  * @returns {Promise} Resolves to true if successful, rejects otherwise
  */
-user.removeAllInterests = function(username) {
-    return new Promise(function(resolve, reject) {
+user.removeAllInterests = function (username) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (user:User {username: {userName}})-[relations:INTERESTED]->(:Tag)',
             'DELETE relations'
@@ -500,7 +523,7 @@ user.removeAllInterests = function(username) {
             userName: username
         };
 
-        db.query(query, params, function(err) {
+        db.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -513,8 +536,8 @@ user.removeAllInterests = function(username) {
  * @param {Boolean} isOwner true if the private galleries should be returned as well, false otherwise
  * @returns {Promise} Resolves to the galleries if successful, rejects otherwise
  */
-user.getAllGalleries = function(username, isOwner) {
-    return new Promise(function(resolve) {
+user.getAllGalleries = function (username, isOwner) {
+    return new Promise(function (resolve) {
         var query = [
             'MATCH (user:User {username: {username}})',
             'MATCH (user)-[:OWNS]-(gallery:Gallery' + (isOwner ? '' : '{isPublic: true}') + ')',
@@ -525,9 +548,9 @@ user.getAllGalleries = function(username, isOwner) {
             username: username
         };
 
-        db.query(query, params, function(err, results) {
+        db.query(query, params, function (err, results) {
             if (err) throw err;
-            return resolve(results[0] ? results[0].galleries: results);
+            return resolve(results[0] ? results[0].galleries : results);
         });
     });
 };
@@ -538,8 +561,8 @@ user.getAllGalleries = function(username, isOwner) {
  * @param {String} galleryName Name of the target gallery
  * @returns {Promise} Resolves to true if gallery exists, false if it does not
  */
-user.galleryExists = function(username, galleryName) {
-    return new Promise(function(resolve) {
+user.galleryExists = function (username, galleryName) {
+    return new Promise(function (resolve) {
         var query = [
             'MATCH (user:User {username: {username}})',
             'MATCH (user)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
@@ -551,7 +574,7 @@ user.galleryExists = function(username, galleryName) {
             galleryName: galleryName
         };
 
-        db.query(query, params, function(err, results) {
+        db.query(query, params, function (err, results) {
             if (err) throw err;
 
             if (results.length > 0)
@@ -568,8 +591,8 @@ user.galleryExists = function(username, galleryName) {
  * @param {String} galleryName Name of the target gallery
  * @returns {Promise} Resolves to the models if successful, rejects otherwise
  */
-user.getGalleryModels = function(username, galleryName) {
-    return new Promise(function(resolve, reject) {
+user.getGalleryModels = function (username, galleryName) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (user:User {username: {username}})',
             'MATCH (user)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
@@ -582,7 +605,7 @@ user.getGalleryModels = function(username, galleryName) {
             galleryName: galleryName
         };
 
-        db.query(query, params, function(err, results) {
+        db.query(query, params, function (err, results) {
             if (err) throw err;
             return resolve(results);
         });
@@ -596,7 +619,7 @@ user.getGalleryModels = function(username, galleryName) {
  * @returns {Promise} Resolves to the gallery information if successful, rejects otherwise.
  */
 user.createGallery = function (username, galleryName) {
-    return new Promise(function(resolve) {
+    return new Promise(function (resolve) {
         var query = [
             'MATCH (user:User {username: {username}})',
             'CREATE (gallery:Gallery {name: {galleryName}})',
@@ -609,7 +632,7 @@ user.createGallery = function (username, galleryName) {
             galleryName: galleryName
         };
 
-        db.query(query, params, function(err, results) {
+        db.query(query, params, function (err, results) {
             if (err) throw err;
             return resolve(results[0]['galleryInfo']);
         });
@@ -624,7 +647,7 @@ user.createGallery = function (username, galleryName) {
  * @returns {Promise} Resolves to the gallery information if successful, rejects otherwise.
  */
 user.updateGallery = function (username, galleryName, isPublic) {
-    return new Promise(function(resolve) {
+    return new Promise(function (resolve) {
         var query = [
             'MATCH (user:User {username: {username}})-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
             'SET gallery.isPublic = {isPublic}',
@@ -637,7 +660,7 @@ user.updateGallery = function (username, galleryName, isPublic) {
             isPublic: isPublic
         };
 
-        db.query(query, params, function(err, results) {
+        db.query(query, params, function (err, results) {
             if (err) throw err;
             return resolve(results[0]['galleryInfo']);
         });
@@ -651,7 +674,7 @@ user.updateGallery = function (username, galleryName, isPublic) {
  * @returns {Promise} Resolves to true if successful, rejects otherwise.
  */
 user.removeGallery = function (username, galleryName) {
-    return new Promise(function(resolve) {
+    return new Promise(function (resolve) {
         var query = [
             'MATCH (user:User {username: {username}})',
             'MATCH (user)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
@@ -665,7 +688,7 @@ user.removeGallery = function (username, galleryName) {
             galleryName: galleryName
         };
 
-        db.query(query, params, function(err) {
+        db.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -679,8 +702,8 @@ user.removeGallery = function (username, galleryName) {
  * @param {Number} modelId Id of the target model
  * @returns {Promise} Resolves to the gallery information if successful, rejects otherwise
  */
-user.addModelToGallery = function(username, galleryName, modelId) {
-    return new Promise(function(resolve, reject) {
+user.addModelToGallery = function (username, galleryName, modelId) {
+    return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (user:User {username: {username}})',
             'MATCH (user)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
@@ -695,7 +718,7 @@ user.addModelToGallery = function(username, galleryName, modelId) {
             modelId: Number(modelId)
         };
 
-        db.query(query, params, function(err, results) {
+        db.query(query, params, function (err, results) {
             if (err) throw err;
             resolve(results);
         });
