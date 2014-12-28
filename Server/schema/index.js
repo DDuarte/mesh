@@ -4,5 +4,6 @@ module.exports = {
     tag: require('./tag'),
     token: require('./token'),
     group: require('./group'),
-    gallery: require('./gallery')
+    gallery: require('./gallery'),
+    message: require('./message')
 };
