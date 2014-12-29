@@ -14,7 +14,7 @@
                 <img ng-src="{{authorAvatar}}" class="img-circle" alt="User Image" />
             </div>
             <div class="pull-left info" style="padding-right: 0; padding-left: 10px;">
-                <p><a ui-sref="home.profile({id: author})">{{author}}</a></p>
+                <p><a ui-sref="home.profile({username: author})">{{author}}</a></p>
                 <p>
                     <span class="fa fa-clock-o"></span> <span am-time-ago="date" title="{{date | amDateFormat:'dddd, MMMM Do YYYY'}}"></span>
                 </p>
