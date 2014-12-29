@@ -93,7 +93,7 @@
                         </div>
                     </div>
 
-                    <div class="navbar-button btn-group btn-group-list btn-group-notification" ng-controller="NotificationsCtrl">
+                    <div class="navbar-button btn-group btn-group-list btn-group-notification" ng-controller="NotificationsCtrl" ng-init="getLatestNotifications()">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
                             <span class="badge"> {{ pendingNotifications.length }} </span>
@@ -102,7 +102,7 @@
                             <a href="#" class="link-right"><i class="fa fa-search"></i></a>
                             <h5>Notification</h5>
                             <ul class="media-list dropdown-list">
-                                <li class="media" ng-repeat="notification in getLatestNotifications()">
+                                <li class="media" ng-repeat="notification in notifications | limitTo: 5">
                                     <img class="img-circle pull-left noti-thumb" ng-src="{{notification.image}}" alt="">
 
                                     <div class="media-body">

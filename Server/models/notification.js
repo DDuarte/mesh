@@ -2,8 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Promise = require('bluebird');
 
-var exports = {};
-
 var notificationsSchema = new mongoose.Schema({
     userFrom: String,
     userTo: String,
@@ -14,14 +12,12 @@ var notificationsSchema = new mongoose.Schema({
     date: Date
 });
 
-var Notification = mongoose.model('Notification', notificationsSchema);
-
-exports.notifyFollowers = function(user, message, url, image) {
+notificationsSchema.statics.notifyFollowers = function(user, message, url, image) {
     
 };
 
-exports.notifyUser = function(userTo, userFrom, message, url, image) {
-    var notification = new Notification({
+notificationsSchema.statics.notifyUser = function(userTo, userFrom, message, url, image) {
+    var notification = new this({
         userFrom: userFrom.username,
         userTo: userTo.username,
         url: url,
@@ -39,17 +35,16 @@ exports.notifyUser = function(userTo, userFrom, message, url, image) {
     });
 };
 
-exports.notifyGroup = function(group, userFrom, message, url, image) {
+notificationsSchema.statics.notifyGroup = function(group, userFrom, message, url, image) {
     
 };
 
-exports.remove = function(exports) {
+notificationsSchema.statics.remove = function(exports) {
     
 };
 
-exports.update = function(updatedNotification) {
+notificationsSchema.statics.update = function(updatedNotification) {
     
 };
 
-// module.exports = mongoose.model('Notification', notificationsSchema);
-module.exports = exports;
+module.exports = mongoose.model('Notification', notificationsSchema);

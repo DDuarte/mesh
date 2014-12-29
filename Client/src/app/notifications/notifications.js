@@ -10,12 +10,15 @@ angular.module('meshApp.notifications', [
         });
     })
 
-    .controller('NotificationsCtrl', function NotificationsCtrl ($scope) {
+    .controller('NotificationsCtrl', function NotificationsCtrl ($scope, meshApi) {
 
         $scope.moment = moment;
 
         $scope.getLatestNotifications = function() {
-            return _.first($scope.notifications, 5);
+            meshApi.getNotifications({limit: 5})
+                .success(function(notifications) {
+                    $scope.notifications = notifications;
+                });
         };
 
         // placeholder for the notifications
