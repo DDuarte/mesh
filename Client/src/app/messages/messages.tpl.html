@@ -36,6 +36,12 @@
 
                             <p><a href="view_message.html"><strong class="subject">{{message.title}}</strong>
                                 <span ng-if="message.isCollapsed">{{message.content}}</span></a></p>
+
+                            <div class="panel panel-default" collapse="message.isCollapsed">
+                                <div class="panel-body">
+                                    {{message.content}}
+                                </div>
+                            </div>
                         </div>
                     </li>
                 </ul>
