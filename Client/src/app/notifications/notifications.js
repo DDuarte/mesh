@@ -10,57 +10,108 @@ angular.module('meshApp.notifications', [
         });
     })
 
-    .controller('NotificationsCtrl', function NotificationsCtrl ($scope, meshApi) {
+    .controller('NotificationsCtrl', function NotificationsCtrl ($scope, meshApi, $state, $interval) {
 
         $scope.moment = moment;
 
-        $scope.getLatestNotifications = function() {
+        var notificationTypes = {
+            upload: {
+                getMessage: function(notification) {
+                    return notification.uploader + ' has just uploaded a new model: ' + notification.modelName;
+                },
+                getImage: function(notification) {
+                    return notification.modelThumbnail;
+                },
+                getStateAndParams: function(notification) {
+                    return { state: 'home.model', params: {id: notification.modelId} };
+                }
+            },
+            newFollower: {
+                getMessage: function(notification) {
+                    return notification.follower + ' is now following you';
+                },
+                getImage: function(notification) {
+                    return notification.followerAvatar;
+                },
+                getStateAndParams: function(notification) {
+                    return { state: 'home.profile', params: {username: notification.follower} };
+                }
+            },
+            newGroupPublication: {
+                getMessage: function(notification) {
+                    return notification.publisher + ' has published a model in ' + notification.groupName;
+                },
+                getImage: function(notification) {
+                    return notification.publishedModelThumbnail;
+                },
+                getStateAndParams: function(notification) {
+                    return { state: 'home.model', params: {id: notification.publishedModelId} };
+                }
+            }
+        };
+
+        var getMessage = function(notification) {
+            return notificationTypes[notification.type].getMessage(notification);
+        };
+        var getImage = function(notification) {
+            return notificationTypes[notification.type].getImage(notification);
+        };
+        var getStateAndParams = function(notification) {
+            return notificationTypes[notification.type].getStateAndParams(notification);
+        };
+
+        var refreshNotifications = function() {
             meshApi.getNotifications({limit: 5})
                 .success(function(notifications) {
+                    _.each(notifications, function(notification) {
+                        notification.message = getMessage(notification);
+                        notification.image = getImage(notification);
+                    });
                     $scope.notifications = notifications;
                 });
         };
 
-        // placeholder for the notifications
-        $scope.notifications = [
-            {
-                image: "images/photos/user1.png",
-                message: "Nusja Nawancali likes a photo of you",
-                url: "#",
-                seen: false,
-                date: moment().subtract(1, 'minute').toDate()
-            },
-            {
-                image: "images/photos/user2.png",
-                message: "Weno Carasbong shared a photo of you in your Mobile",
-                url: "#",
-                seen: true,
-                date: moment().subtract(1, 'hour').toDate()
-            },
-            {
-                image: "images/photos/user3.png",
-                message: "Venro Leonga likes a photo of you",
-                url: "#",
-                seen: true,
-                date: moment().subtract(1, 'day').toDate()
-            },
-            {
-                image: "images/photos/user4.png",
-                message: "Nanterey Reslaba shared a photo of you in your Mobile",
-                url: "#",
-                seen: true,
-                date: moment().subtract(1, 'month').toDate()
-            },
-            {
-                image: "images/photos/user1.png",
-                message: "Nusja Nawancali shared a photo of you in your Mobile",
-                url: "#",
-                seen: true,
-                date: moment().subtract(1, 'year').toDate()
-            }
-        ];
+        var refreshRate = 30000;
+        var refreshNotificationPromise = $interval(refreshNotifications, refreshRate);
 
-        $scope.pendingNotifications = _.filter($scope.notifications, function(notification) {
-            return !notification.seen;
+        // Cancel interval on page changes
+        $scope.$on('$destroy', function(){
+            if (angular.isDefined(refreshNotificationPromise)) {
+                $interval.cancel(refreshNotificationPromise);
+                refreshNotificationPromise = undefined;
+            }
         });
+
+        $scope.getLatestNotifications = function() {
+            meshApi.getNotifications({limit: 5})
+                .success(function(notifications) {
+                    _.each(notifications, function(notification) {
+                        notification.message = getMessage(notification);
+                        notification.image = getImage(notification);
+                    });
+                    $scope.notifications = notifications;
+                });
+        };
+
+        $scope.goToNotificationUrl = function(notification) {
+            var stateAndParams = getStateAndParams(notification);
+            $state.go(stateAndParams.state, stateAndParams.params);
+            notification.seen = true;
+            updatePendingNotifications();
+            meshApi.setNotificationAsSeen(notification);
+        };
+
+        $scope.notifications = [];
+
+        $scope.$watch('notifications', function(newNotifications, oldNotifications) {
+            if (newNotifications !== oldNotifications && newNotifications != null) {
+                updatePendingNotifications();
+            }
+        });
+
+        var updatePendingNotifications = function() {
+            $scope.pendingNotifications = _.filter($scope.notifications, function(notification) {
+                return !notification.seen;
+            });
+        };
     });
