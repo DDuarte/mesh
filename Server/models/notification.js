@@ -17,6 +17,12 @@ notificationsSchema.statics.notifyFollowers = function(user, message, url, image
 };
 
 notificationsSchema.statics.notifyUser = function(userTo, userFrom, message, url, image) {
+    image = image || null;
+
+    if (image == null && userFrom != null) {
+        image = userFrom.avatar;
+    }
+
     var notification = new this({
         userFrom: userFrom.username,
         userTo: userTo.username,
