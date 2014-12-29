@@ -5,5 +5,6 @@ module.exports = {
     token: require('./token'),
     group: require('./group'),
     gallery: require('./gallery'),
-    message: require('./message')
+    message: require('./message'),
+    notification: require('./notification')
 };

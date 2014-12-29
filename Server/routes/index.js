@@ -11,4 +11,5 @@ module.exports = function (server) {
     require('./upload')(server);
     require('./catalog')(server);
     require('./search')(server);
+    require('./notification')(server);
 };

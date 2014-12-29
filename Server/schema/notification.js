@@ -41,7 +41,7 @@ module.exports = {
     userTo: Joi.string().min(3).max(20),
     url: Joi.string().regex(regexWebURL),
     image: Joi.string().regex(regexWebURL),
-    message: Joi.string().min(5).max(256),
+    message: Joi.string().min(1).max(256),
     seen: Joi.boolean(),
-    date: Joi.date.iso()
+    date: Joi.string().isoDate()
 };
