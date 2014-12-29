@@ -20,9 +20,6 @@ angular.module('meshApp.createMessage', [
         $scope.message.to = $stateParams.toUsername;
 
         $scope.sendMessage = function () {
-            console.log("send");
-            growl.success("Message sent with success");
-/*
             meshApi.sendMessage($scope.message.to, $scope.message.title, $scope.message.content)
                 .success(function () {
                     $scope.message = {
@@ -30,10 +27,10 @@ angular.module('meshApp.createMessage', [
                         title: "",
                         content: ""
                     };
+                    alert("Message sent successfuly");
                 })
                 .error(function (data) {
-                    growl.error("Error:" + JSON.stringify(data));
+                    alert("Error:" + JSON.stringify(data));
                 });
-                */
         };
     });
