@@ -179,6 +179,15 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         },
         search: function (term) {
             return $http.get(server.url + '/search/' + term, {headers: getHeaders()});
+        },
+        sendMessage: function(toUsername, title, content) {
+            return $http.post(server.url + '/messages', {userTo: toUsername, title: title, content: content}, { headers: getHeaders() });
+        },
+        getReceivedMessages: function() {
+            return $http.get(server.url + '/users/' + getLoggedToken().username + '/messages/received', { headers: getHeaders() });
+        },
+        getSentMessages: function() {
+            return $http.get(server.url + '/users/' + getLoggedToken().username + '/messages/sent', { headers: getHeaders() });
         }
     };
 

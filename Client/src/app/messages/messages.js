@@ -10,7 +10,31 @@ angular.module('meshApp.messages', [
         });
     })
 
-    .controller('MessagesCtrl', function MessagesCtrl ($scope) {
+    .controller('MessagesCtrl', function MessagesCtrl ($scope, meshApi, _) {
+
+        $scope.getReceivedMessages = function() {
+            meshApi.getReceivedMessages()
+                .success(function(messages) {
+                    _.forEach(messages, function(message) {
+                        message.isCollapsed = true;
+                    });
+                    $scope.messages.inbox = messages;
+                });
+        };
+
+        $scope.getSentMessages = function() {
+            meshApi.getSentMessages()
+                .success(function(messages) {
+                    _.forEach(messages, function(message) {
+                        message.isCollapsed = true;
+                    });
+                    $scope.messages.sent = messages;
+                });
+        };
+
+        $scope.selectMessage = function(message) {
+            message.isCollapsed = !message.isCollapsed;
+        };
 
         // placeholder for message deletion
         $scope.deleteMessages = function (messages) {
