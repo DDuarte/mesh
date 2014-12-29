@@ -1,0 +1,21 @@
+<div>
+    <breadcrum icon="fa fa-envelope" title="Create Message" path="Pages"></breadcrum>
+    <div class="contentpanel">
+        <div class="row col-md-12">
+            <form name="sendMessageForm" class="form-horizontal form-bordered">
+                <div class="input-group mb15">
+                    <span class="input-group-addon">To:</span>
+                    <input type="text" placeholder="Username" ng-model="message.to" class="form-control" ng-required>
+                </div>
+                <div class="form-group mb15">
+                    <input type="text" placeholder="Message title" ng-model="message.title" class="form-control" ng-minlength="5" ng-maxlength="20" ng-required>
+                </div>
+                <div class="form-group mb15">
+                    <textarea id="autoResizeTA" ng-model="message.content" ng-minlength="10" ng-maxlength="1024" placeholder="Write the message contents here" class="form-control" rows="5" ng-required></textarea>
+                </div>
+            </form>
+            <button ng-click="sendMessage()"class="btn btn-primary" ng-disabled="sendMessageForm.$invalid">Send message</button>
+        </div>
+    </div>
+    <!-- contentpanel -->
+</div>

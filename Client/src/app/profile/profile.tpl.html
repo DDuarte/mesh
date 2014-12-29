@@ -13,6 +13,7 @@
         <div><i class="fa fa-map-marker"></i> San Francisco, California, USA</div>
         <div><i class="fa fa-envelope-o"></i> <a href=""> {{user.email}} </a></div>
 
+        <a ng-if="user.username != ownUsername" ui-sref="home.createMessage({toUsername: user.username})" class="btn btn-primary">Send message to user</a>
         <div class="mb20"></div>
     </div>
     <!-- text-center -->

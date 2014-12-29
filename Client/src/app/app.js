@@ -15,6 +15,7 @@ angular.module('meshApp', [
     'meshApp.modelUpload',
     'meshApp.notifications',
     'meshApp.groupCreate',
+    'meshApp.createMessage',
     'ui.router',
     'ui.bootstrap',
     'ui.mesh.verticalTabs',
