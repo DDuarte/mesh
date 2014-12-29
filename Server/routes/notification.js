@@ -20,7 +20,9 @@ module.exports = function (server) {
                 payload: {
                     userFrom: schema.notification.userFrom.required(),
                     userTo: schema.notification.userTo.required(),
-                    message: schema.notification.message.required()
+                    message: schema.notification.message.required(),
+                    url: schema.notification.url,
+                    image: schema.notification.image
                 }
             }
         },
@@ -29,7 +31,7 @@ module.exports = function (server) {
 
             Promise.join(User.getByUsername(request.payload.userFrom), User.getByUsername(request.payload.userTo),
                 function(userFrom, userTo) {
-                    Notification.notifyUser(userTo,userFrom, request.payload.message)
+                    Notification.notifyUser(userTo,userFrom, request.payload.message, request.payload.url, request.payload.image)
                         .then(function(notification) {
                             console.log("Success");
                             return reply(notification).code(200);
