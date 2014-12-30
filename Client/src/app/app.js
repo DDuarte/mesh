@@ -28,7 +28,8 @@ angular.module('meshApp', [
     'angularSpinner',
     'infinite-scroll',
     'angularFileUpload',
-    'angular-growl'
+    'toaster',
+    'ngAnimate'
 ])
 
     .constant('_', window._)
