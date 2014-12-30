@@ -10,7 +10,7 @@ angular.module('meshApp.createMessage', [
         });
     })
 
-    .controller('CreateMessageCtrl', function MessagesCtrl($scope, $stateParams, meshApi, growl) {
+    .controller('CreateMessageCtrl', function MessagesCtrl($scope, $stateParams, meshApi) {
         $scope.message = {
             to: "",
             title: "",
