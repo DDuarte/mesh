@@ -78,6 +78,8 @@ module.exports = {
             'vendor/ng-tags-input/ng-tags-input.min.js',
             'vendor/dropzone/downloads/dropzone.min.js',
             'vendor/ngInfiniteScroll/build/ng-infinite-scroll.min.js',
+            'vendor/angularjs-toaster/toaster.js',
+            'vendor/angular-animate/angular-animate.min.js',
             'lib/three.js',
             'lib/Detector.js',
             'lib/jquery.fullscreen.js',
@@ -93,13 +95,15 @@ module.exports = {
         map: [
             'vendor/jquery/dist/jquery.min.map',
             'vendor/angular-moment/angular-moment.min.js.map',
-            'vendor/angular-cookies/angular-cookies.min.js.map'
+            'vendor/angular-cookies/angular-cookies.min.js.map',
+            'vendor/angular-animate/angular-animate.min.js.map'
         ],
         css: [
             'vendor/pickadate/lib/compressed/themes/default.css',
             'vendor/pickadate/lib/compressed/themes/default.date.css',
             'vendor/ng-tags-input/ng-tags-input.min.css',
             'vendor/angular-growl-v2/build/angular-growl.css'
+            'vendor/angularjs-toaster/toaster.css'
         ],
         assets: [
             'assets/weather-icons.min.css',
