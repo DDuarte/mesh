@@ -94,32 +94,10 @@
                     </div>
 
                     <div class="navbar-button btn-group btn-group-list btn-group-notification" ng-controller="NotificationsCtrl" ng-init="getLatestNotifications()">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <button ui-sref="home.notifications" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
                             <span ng-show="pendingNotifications.length" class="badge"> {{ pendingNotifications.length }} </span>
                         </button>
-                        <div class="dropdown-menu pull-right">
-                            <a href="#" class="link-right"><i class="fa fa-search"></i></a>
-                            <h5>Notification</h5>
-                            <ul class="media-list dropdown-list">
-                                <li class="media" ng-repeat="notification in notifications | limitTo: 5" ng-click="goToNotificationUrl(notification)" ng-class="notification.seen ? '' : 'light-background'">
-                                    <span ng-if="!notification.seen" class="badge badge-success">New</span>
-
-                                    <img class="img-circle pull-left noti-thumb" ng-src="{{notification.image}}" alt="">
-
-                                    <div class="media-body">
-                                        {{ notification.message }}
-                                        <small class="date"><i class="fa fa-clock-o"></i>{{ moment(notification.date).fromNow() }}
-                                            <span ng-if="notification.userFrom">from {{notification.userFrom}} </span>
-                                        </small>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="dropdown-footer text-center">
-                                <a ui-sref='home.notifications' class="link">See All Notifications</a>
-                            </div>
-                        </div>
-                        <!-- dropdown-menu -->
                     </div>
                 </div>
 
