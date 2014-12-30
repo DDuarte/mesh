@@ -5,8 +5,8 @@ module.exports = function (receiverEmail, subject, html, callback) {
     var transporter = Nodemailer.createTransport({
         service: 'Gmail',
         auth: {
-            user: 'noreply@meshdev.ddns.net',
-            pass: 'B4nanalol'
+            user: 'meshdevfeup@gmail.com',
+            pass: 'B4nanaB4nana'
         }
     });
 
