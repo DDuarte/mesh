@@ -6,7 +6,8 @@ var User = require('../models/user'),
     schema = require('../schema'),
     Boom = require('boom'),
     _ = require('lodash'),
-    Message = require('../models/message');
+    Message = require('../models/message'),
+    Notifications = require('../models/notifications');
 module.exports = function (server) {
 
 
@@ -154,7 +155,21 @@ module.exports = function (server) {
                 if (result.length == 0) {
                     reply('No such user.').code(404);
                 } else {
-                    reply(result);
+
+                    var newFollowerNotification = new Notifications.NewFollowerNotification({
+                        seen: false,
+                        date: new Date(),
+                        userTo: request.payload.otheruser,
+                        follower: request.auth.credentials.username
+                    });
+
+                    newFollowerNotification.save(function(err) {
+                        if (err)
+                            return reply(Boom.badImplementation("Error generating notifications"));
+
+                        reply(result);
+                    });
+
                 }
             }, function (error) {
                 reply('Internal error').code(500);

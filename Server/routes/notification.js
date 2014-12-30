@@ -7,7 +7,7 @@ var User = require('../models/user'),
     Boom = require('boom'),
     _ = require('lodash'),
     Joi = require('joi'),
-    Notification = require('../models/notification');
+    Notification = require('../models/notifications').Notification;
 
 module.exports = function (server) {
 
