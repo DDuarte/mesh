@@ -3,11 +3,13 @@ var Fs = require('fs');
 var Path = require('path');
 var Promise = require('bluebird');
 var Model = require('../models/model');
+var User = require('../models/user');
 var Schema = require('../schema');
 var Joi = require('joi');
 var Uid = require('rand-token').uid;
 var unzip = require('unzip');
 var readdirp = require('readdirp');
+var UploadNotification = require('../models/notifications').UploadNotification;
 
 
 module.exports = function (server) {
@@ -78,14 +80,41 @@ module.exports = function (server) {
 
                                 var mainfilePath = res.files[0].fullPath;
                                 var mainFilename = res.files[0].name;
-                                Model.create(data.name, data.description, mainFilename, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, 'http://placehold.it/500&text=' + data.name)
+                                var thumbnail = 'http://placehold.it/500&text=' + data.name;
+                                Model.create(data.name, data.description, mainFilename, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, thumbnail)
                                     .then(function (model) {
 
                                         Promise.map(data.tags, function (tag) {
                                             return Model.addTag(model.id, tag);
                                         })
                                             .then(function () {
-                                                return reply(model).code(200);
+
+                                                User.getFollowers(ownerName)
+                                                    .then(function(users) {
+                                                        Promise.map(users, function(user){
+                                                            return new Promise(function(resolve) {
+                                                                var uploadNotification = new UploadNotification({
+                                                                    userTo: user.username,
+                                                                    seen: false,
+                                                                    date: new Date(),
+                                                                    modelId: model.id,
+                                                                    modelTitle: data.name,
+                                                                    modelThumbnail: thumbnail,
+                                                                    uploader: ownerName
+                                                                });
+
+                                                                uploadNotification.save(function(err, notification) {
+                                                                    if (err) throw err;
+                                                                    resolve(notification);
+                                                                });
+                                                            });
+                                                        }).then(function() {
+                                                            return reply(model).code(200);
+                                                        });
+                                                    })
+                                                    .catch(function() {
+                                                        return reply(Boom.badImplementation('Internal server error: generating notifications'));
+                                                    });
                                             })
                                             .catch(function (err) {
                                                 return reply(Boom.badImplementation(err));
