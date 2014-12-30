@@ -1,5 +1,5 @@
 <div>
-    <breadcrum icon="fa fa-bell" title="Notifications" path="Pages"></breadcrum>
+    <breadcrum icon="fa fa-bell" title="Notifications" path="Pages" ng-init="refreshNotifications()"></breadcrum>
     <div class="contentpanel">
         <v-tabset>
             <v-tab>
@@ -13,8 +13,9 @@
                             <input ng-model="notification.selected" type="checkbox" id="checkbox{{$index+1}}">
                             <label for="checkbox{{$index+1}}"></label>
                         </div>
-                        <a class="pull-left" href="#">
-                            <img class="media-object img-circle img-online" ng-src="{{notification.image}}" alt="...">
+
+                        <a ng-if="notification._type == 'NewFollowerNotification'" class="pull-left" href="#">
+                            <img class="media-object img-circle img-online" ng-src="{{notification.followerAvatar}}" alt="...">
                         </a>
 
                         <div class="media-body">
@@ -23,7 +24,14 @@
                             </div>
                             <h4 class="sender">{{ moment(notification.date).fromNow()}}</h4>
 
-                            <p><a href="view_notification.html"><strong class="subject">{{notification.message}}</strong></a></p>
+                            <p ng-if="notification._type == 'NewFollowerNotification'">
+                                <strong class="subject"><a ui-sref="home.profile({username: notification.follower})">{{notification.follower}}</a> is now following you</strong>
+                            </p>
+
+                            <p ng-if="notification._type == 'UploadNotification'">
+                                <strong class="subject"> <a>{{notification.uploader}}</a> has just uploaded a new model: <a ui-sref="home.model({id: notification.modelId})">{{notification.modelName}}</a></strong>
+                            </p>
+
                         </div>
                     </li>
                 </ul>
