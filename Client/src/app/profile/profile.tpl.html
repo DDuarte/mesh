@@ -245,12 +245,12 @@
     <tab-heading><strong>Followers</strong></tab-heading>
     <div class="follower-list">
         <div class="media" ng-repeat="follower in user.followers">
-            <a class="pull-left" href="#">
+            <a class="pull-left" ui-sref="home.profile({username: follower.username})">
                 <img class="media-object img-circle" src="{{follower.avatar}}" alt=""/>
             </a>
 
             <div class="media-body">
-                <h3 class="follower-name">{{follower.username}}</h3>
+                <h3 class="follower-name"><a ui-sref="home.profile({username: follower.username})">{{follower.username}}</a></h3>
 
                 <div><i class="fa fa-envelope"></i> {{follower.email}}</div>
             </div>
@@ -263,12 +263,12 @@
 
     <div class="follower-list">
         <div class="media" ng-repeat="followed in user.following">
-            <a class="pull-left" href="#">
+            <a class="pull-left" ui-sref="home.profile({username: followed.username})">
                 <img class="media-object img-circle" src="{{followed.avatar}}" alt=""/>
             </a>
 
             <div class="media-body">
-                <h3 class="follower-name">{{followed.username}}</h3>
+                <h3 class="follower-name"><a ui-sref="home.profile({username: followed.username})">{{followed.username}}</a></h3>
 
                 <div><i class="fa fa-envelope"></i> {{followed.email}}</div>
             </div>
