@@ -21,14 +21,13 @@ angular.module('meshApp.groupCreate', [
                 .success(function (data) {
                     usSpinnerService.stop('spinner');
                     $scope.registerPending = false;
-
-                    ngDialog.openConfirm({
+                    ngDialog.open({
                         template: 'groupCreateSuccessId',
-                        className: 'ngdialog-theme-default',
-                        showClose: false
-                    }).then(function() {
+                        className: 'ngdialog-theme-default'
+                    }).closePromise.then(function() {
+
                         $state.go('home.group', {
-                            id: data.id
+                            name: data.name
                         });
                     });
 

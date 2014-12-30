@@ -1,7 +1,8 @@
-<div ng-controller="GroupCtrl">
+<div ng-controller="GroupCtrl" ng-init="init()">
 
     <breadcrum icon="fa fa-user" title="Group Page" path="Pages"></breadcrum>
 
+    <h1>{{group.name}}</h1>
     <tabset>
         <tab heading="Members">
             <div class="col-md-12">

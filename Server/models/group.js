@@ -10,10 +10,11 @@ var group = {};
  */
 group.create = function(groupInfo) {
     var query = [
-        'CREATE (group:Group {name: {name}, creationDate: {creationDate}})',
-        'MATCH (user:User {name: {adminName}})',
+        'MATCH (user:User {username: {adminName}})',
+        'CREATE (group:Group {name: {name}, lowerName: lower({ name }), description: {description}, creationDate: {creationDate}})',
+        'WITH group, user',
         'CREATE (group)<-[:IS_ADMIN]-(user)',
-        'RETURN group'
+        'RETURN group.name as name'
     ].join('\n');
 
     return new Promise (function (resolve) {
@@ -31,8 +32,8 @@ group.create = function(groupInfo) {
  */
 group.getByName = function (name) {
     var query = [
-        'MATCH (group:Group {name: {name}})',
-        'RETURN group'
+        'MATCH (g:Group {lowerName: lower({ name })})',
+        'RETURN {name: g.name, description: g.description} as group'
     ].join('\n');
 
     var params = {
@@ -42,7 +43,6 @@ group.getByName = function (name) {
     return new Promise(function (resolve, reject) {
         db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
-
             if (results.length > 0)
                 return resolve(results[0]);
             else
@@ -64,7 +64,7 @@ group.getById = function (id) {
     ].join('\n');
 
     var params = {
-        id: id
+        id: Number(id)
     };
 
     return new Promise(function (resolve, reject) {

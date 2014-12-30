@@ -1,3 +1,11 @@
+/**
+ * @ngdoc directive
+ * @name meshApp.modelthumbnail
+ *
+ * @description
+ * Model thumbnail directive
+ *
+ */
 angular.module('ui.mesh.modelthumbnail', [])
 
     .directive('modelthumbnail', function () {

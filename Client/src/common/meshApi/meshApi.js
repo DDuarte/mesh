@@ -32,6 +32,11 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: getHeaders()
             });
         },
+        getTopRatedModelIds: function () {
+            return $http.get(server.url + '/catalog/topRated', {
+                headers: getHeaders()
+            });
+        },
         getModel: function (id) {
             return $http.get(server.url + '/models/' + id, {headers: getHeaders()});
         },
@@ -41,6 +46,21 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         deleteModelVote: function (modelId) {
             return $http({
                 url: server.url + '/models/' + modelId + '/votes',
+                method: 'DELETE',
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
+            });
+        },
+        updateModel: function (modelId, description, isPublic, tags) {
+            return $http.patch(server.url + '/models/' + modelId, {
+                    description: description,
+                    isPublic: isPublic,
+                    tags: tags
+                },
+                {headers: getHeaders()});
+        },
+        deleteModel: function (modelId) {
+            return $http({
+                url: server.url + '/models/' + modelId,
                 method: 'DELETE',
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
@@ -85,6 +105,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         getFollowing: function (username) {
             return $http.get(server.url + '/users/' + username + '/following');
         },
+        getAllModels: function (username) {
+            return $http.get(server.url + '/users/' + username + '/models');
+        },
         followUser: function (otheruser) {
             return $http.post(server.url + '/users/' + getLoggedToken().username + '/followers', {otheruser: otheruser}, {
                 headers: getHeaders()
@@ -98,12 +121,36 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
         },
-        createGroup: function (groupName) {
-            return $http.post(server.url + '/groups', {name: groupName}, {
+        createGallery: function(galleryName) {
+            return $http.post(server.url + '/users/' + getLoggedToken().username + '/galleries', { galleryName: galleryName }, {
                 headers: getHeaders()
             });
         },
-        uploadModel: function(modelName, modelDescription, tags, file) {
+        updateGallery: function(galleryName, isPublic) {
+            return $http.patch(server.url + '/users/' + getLoggedToken().username + '/galleries/' + galleryName, { isPublic: isPublic }, {
+                headers: getHeaders()
+            });
+        },
+        deleteGallery: function(galleryName) {
+            return $http['delete'](server.url + '/users/' + getLoggedToken().username + '/galleries/' + galleryName, {
+                headers: getHeaders()
+            });
+        },
+        getAllGalleries: function(username) {
+            return $http.get(server.url + '/users/' + username + '/galleries', { headers: getHeaders() });
+        },
+        getModelsFromGallery: function(username, galleryName) {
+            return $http.get(server.url + '/users/' + username + '/galleries/' + galleryName, { headers: getHeaders() });
+        },
+        getGroup: function (id) {
+            return $http.get(server.url + '/groups/' + id, {headers: getHeaders()});
+        },
+        createGroup: function (groupName, groupDescription) {
+            return $http.post(server.url + '/groups', {name: groupName, description: groupDescription}, {
+                headers: getHeaders()
+            });
+        },
+        uploadModel: function (modelName, modelDescription, tags, file) {
             return $upload.upload({
                 url: server.url + '/upload', // upload.php script, node.js route, or servlet url
                 method: 'POST',
@@ -112,13 +159,19 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 file: file // single file or a list of files. list is only for html5
             });
         },
-        updateUser: function(user) {
+        updateUser: function (user) {
             return $http({
                 url: server.url + '/users/' + getLoggedToken().username,
                 method: 'PATCH',
                 data: user,
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json' }
             });
+        },
+        getMainFileUrl: function(modelId) {
+            return server.url + '/models/' + modelId + '/files';
+        },
+        getDownloadModelUrl: function (modelId) {
+            return server.url + '/models/' + modelId + '/download';
         }
     };
 

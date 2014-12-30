@@ -5,14 +5,33 @@ angular.module('meshApp.group', [
 
 .config(function config($stateProvider) {
     $stateProvider.state('home.group', {
-        url: '/group',
+        url: '/group/:name',
         controller: 'GroupCtrl',
         templateUrl: 'group/group.tpl.html',
         data: { pageTitle: 'Group | Mesh' }
     });
 })
 
-.controller('GroupCtrl', function GroupController($scope) {
+.controller('GroupCtrl', function GroupController($scope, $stateParams, meshApi) {
+        $scope.isLoggedIn = meshApi.isLoggedIn();
+        if ($scope.isLoggedIn) {
+            $scope.loggedUsername = meshApi.getLoggedUsername();
+            $scope.loggedAvatar = meshApi.getLoggedAvatar();
+        }
+
+        $scope.init = function() {
+            $scope.group = {};
+            meshApi.getGroup($stateParams.name).
+                success(function (data, status, headers, config) {
+                    $scope.group = data.group;
+
+                }).
+                error(function (err) {
+                    alert("The group could not be retrieved: " + err.message); //TODO redirect to error page
+                });
+        };
+
+
         var models = function (g) { return _.range(10).map(function (i) { return { name: "Model " + g + "-" + i }; }); };
         $scope.galleries = _.range(10).map(function (i) { return { name: "Gallery " + i, models: models(i) }; });
 

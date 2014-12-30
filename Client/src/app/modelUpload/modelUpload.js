@@ -78,7 +78,7 @@ angular.module('meshApp.modelUpload', [
 
         $scope.$watch('modelData', function(newData, oldData) {
             if (newData !== oldData && newData && newData.length > 0) {
-                var match =  newData[0].name.match(/.*\.obj|stl$/);
+                var match =  newData[0].name.match(/.*\.zip$/);
                 if (match != null && match.length == 1) {
                     $scope.validFilename = true;
                 } else {

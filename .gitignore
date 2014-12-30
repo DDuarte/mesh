@@ -2,3 +2,6 @@
 npm-debug.log
 *.orig
 dump.rdb
+
+Server/models/*.obj
+Server/models/*.stl

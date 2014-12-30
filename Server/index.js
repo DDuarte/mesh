@@ -7,6 +7,19 @@ var server = Hapi.createServer(process.argv[2] || 8001, { cors: true });
 
 require('./routes/')(server);
 
+// Hacks
+Object.defineProperty(Error.prototype, 'toJSON', { // make Error JSON.stringify-able
+    configurable: true,
+    value: function() {
+        var alt = {};
+        var storeKey = function(key) {
+            alt[key] = this[key];
+        };
+        Object.getOwnPropertyNames(this).forEach(storeKey, this);
+        return alt;
+    }
+});
+
 // Test route
 server.route({
     method: 'GET',
@@ -27,4 +40,6 @@ server.pack.register({plugin: require('hapi-routes-status'), options: {path: '/s
 });
 
 // Start the server
-server.start();
+server.start(function() {
+    console.log('Server running at:', server.info.uri);
+});

@@ -15,14 +15,15 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 payload: {
-                    name: schema.group.name.required()
+                    name: schema.group.name.required(),
+                    description: schema.group.description.required()
                 }
             }
         },
         handler: function (request, reply) {
             var groupInfo = request.payload;
             groupInfo.adminName = request.auth.credentials.username;
-            groupInfo.creationDate = new Date();
+            groupInfo.creationDate = (new Date()).toISOString();
             // check if group already exists
             Group.getByName(groupInfo.name)
                 .then(function () {
@@ -34,8 +35,8 @@ module.exports = function (server) {
                 // If group doesn't exist, create it
                 .catch(function () {
                     Group.create(groupInfo)
-                        .then(function () {
-                            reply().code(200);
+                        .then(function (group) {
+                            reply(group);
                         })
                         .catch(function (error) {
                             return reply(Boom.badImplementation('Internal server error'));
@@ -48,15 +49,18 @@ module.exports = function (server) {
         method: 'GET',
         path: '/groups/{id}',
         config: {
-            auth: 'token',
+            auth: {
+                mode: 'optional',
+                strategy: 'token'
+            },
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 }
             }
         },
         handler: function (request, reply) {
-            Group.getById(request.params.id)
+            Group.getByName(request.params.id)
                 .then(function (group) {
                     reply(group);
                 })
@@ -103,7 +107,7 @@ module.exports = function (server) {
     });
 
     server.route({
-        path: '/group/{id}/members',
+        path: '/groups/{id}/members',
         method: 'GET',
         config: {
             auth: 'token',

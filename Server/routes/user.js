@@ -4,8 +4,8 @@ var User = require('../models/user'),
     Promise = require('bluebird'),
     client = require('../common/redisClient'),
     schema = require('../schema'),
-    Boom = require('boom');
-
+    Boom = require('boom'),
+    _ = require('lodash');
 module.exports = function (server) {
 
 
@@ -211,6 +211,145 @@ module.exports = function (server) {
         }
     });
 
+    server.route({
+        method: 'GET',
+        path: '/users/{username}/models',
+        config: {
+            auth: false,
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            User.getAllModels(request.params.username).then(function (models) {
+                reply(models);
+            }, function (error) {
+                reply('Internal error').code(500);
+            });
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/users/{username}/galleries',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            var isOwner = false;
+            if (request.auth.credentials.username == request.params.username)
+                isOwner = true;
+
+            User.getAllGalleries(request.params.username, isOwner)
+                .then(function (galleries) {
+                    return reply(galleries);
+                })
+                .catch(function () {
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/users/{username}/galleries',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                },
+                payload: {
+                    galleryName: schema.gallery.name.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            if (request.auth.credentials.username != request.params.username)
+                return reply(Boom.forbidden('No permissions'));
+
+            User.galleryExists(request.params.username, request.payload.galleryName)
+                .then(function (exists) {
+                    if (exists)
+                        return reply(Boom.badRequest('A gallery with that name already exists'));
+
+                    User.createGallery(request.params.username, request.payload.galleryName)
+                        .then(function (gallery) {
+                            return reply(gallery);
+                        })
+                        .catch(function () {
+                            return reply(Boom.badImplementation('Internal server error'));
+                        });
+                })
+                .catch(function () {
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
+        }
+    });
+
+    server.route({
+        method: 'PATCH',
+        path: '/users/{username}/galleries/{galleryName}',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required(),
+                    galleryName: schema.gallery.name.required()
+                },
+                payload: {
+                    isPublic: schema.gallery.isPublic.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            if (request.auth.credentials.username != request.params.username)
+                return reply(Boom.forbidden('No permissions'));
+
+            User.updateGallery(request.params.username, request.params.galleryName, request.payload.isPublic)
+                .then(function() {
+                    console.log("Success");
+                    return reply().code(200);
+                })
+                .catch(function(){
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
+        }
+    });
+
+    server.route({
+        method: 'DELETE',
+        path: '/users/{username}/galleries/{galleryName}',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required(),
+                    galleryName: schema.gallery.name.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            if (request.auth.credentials.username != request.params.username)
+                return reply(Boom.forbidden('No permissions'));
+
+            User.removeGallery(request.params.username, request.params.galleryName)
+                .then(function() {
+                    console.log("Success");
+                    return reply().code(200);
+                })
+                .catch(function(){
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
+        }
+    });
 
     server.route({
         method: 'PATCH',
@@ -226,7 +365,8 @@ module.exports = function (server) {
                     lastName: schema.user.lastName,
                     birthdate: schema.user.birthdate,
                     country: schema.user.country,
-                    about: schema.user.about
+                    about: schema.user.about,
+                    interests: schema.user.interests
                 }
             }
         },
@@ -234,15 +374,24 @@ module.exports = function (server) {
             if (request.params.username != request.auth.credentials.username)
                 reply('Permission denied').code(403);
 
-            User.update(request.auth.credentials.username, request.payload).then(function (result) {
-                if (!result) {
-                    reply('No such user.').code(404);
-                } else {
-                    reply(result);
-                }
-            }, function (error) {
-                reply('Internal error').code(500);
+            var fields = _.pick(request.payload, function (value, key) {
+                return key != 'interests';
             });
+            User.replaceInterests(request.auth.credentials.username, request.payload.interests)
+                .then(function () {
+                    User.update(request.auth.credentials.username, fields).then(function (results) {
+                        if (results.length == 0) {
+                            reply('No such user.').code(404);
+                        } else {
+                            return reply(results[0]['userInfo']);
+                        }
+                    }, function (error) {
+                        reply('Internal error').code(500);
+                    });
+                })
+                .catch(function () {
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
         }
     });
 };

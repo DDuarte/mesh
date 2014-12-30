@@ -1,0 +1,36 @@
+<div>
+    <breadcrum icon="fa fa-bell" title="Notifications" path="Pages"></breadcrum>
+    <div class="contentpanel">
+        <v-tabset>
+            <v-tab>
+                <tab-heading>
+                    <span class="badge pull-right">2</span>
+                    <i class="fa fa-bell"></i> Latest
+                </tab-heading>
+                <ul class="media-list msg-list">
+                    <li class="media unread" ng-repeat="notification in notifications" ng-class="{unread: notification.seen}">
+                        <div class="ckbox ckbox-primary pull-left">
+                            <input ng-model="notification.selected" type="checkbox" id="checkbox{{$index+1}}">
+                            <label for="checkbox{{$index+1}}"></label>
+                        </div>
+                        <a class="pull-left" href="#">
+                            <img class="media-object img-circle img-online" ng-src="{{notification.image}}" alt="...">
+                        </a>
+
+                        <div class="media-body">
+                            <div class="pull-right media-option">
+                                <small>{{notification.date | date}}</small>
+                            </div>
+                            <h4 class="sender">{{ moment(notification.date).fromNow()}}</h4>
+
+                            <p><a href="view_notification.html"><strong class="subject">{{notification.message}}</strong></a></p>
+                        </div>
+                    </li>
+                </ul>
+                <button class="btn btn-primary center-block"> Load more notifications</button>
+            </v-tab>
+        </v-tabset>
+
+
+    </div><!-- contentpanel -->
+</div>
