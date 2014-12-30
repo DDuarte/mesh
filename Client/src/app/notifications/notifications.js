@@ -50,26 +50,19 @@ angular.module('meshApp.notifications', [
             }
         };
 
-        var getMessage = function(notification) {
-            return notificationTypes[notification.type].getMessage(notification);
-        };
-        var getImage = function(notification) {
-            return notificationTypes[notification.type].getImage(notification);
-        };
-        var getStateAndParams = function(notification) {
-            return notificationTypes[notification.type].getStateAndParams(notification);
-        };
-
         var refreshNotifications = function() {
             meshApi.getNotifications({limit: 5})
                 .success(function(notifications) {
-                    _.each(notifications, function(notification) {
+                    console.log("Notifications:", notifications);
+                   /* _.each(notifications, function(notification) {
                         notification.message = getMessage(notification);
                         notification.image = getImage(notification);
-                    });
+                    });*/
                     $scope.notifications = notifications;
                 });
         };
+
+        $scope.refreshNotifications = refreshNotifications;
 
         var refreshRate = 30000;
         var refreshNotificationPromise = $interval(refreshNotifications, refreshRate);
@@ -85,10 +78,10 @@ angular.module('meshApp.notifications', [
         $scope.getLatestNotifications = function() {
             meshApi.getNotifications({limit: 5})
                 .success(function(notifications) {
-                    _.each(notifications, function(notification) {
+                   /* _.each(notifications, function(notification) {
                         notification.message = getMessage(notification);
                         notification.image = getImage(notification);
-                    });
+                    });*/
                     $scope.notifications = notifications;
                 });
         };
