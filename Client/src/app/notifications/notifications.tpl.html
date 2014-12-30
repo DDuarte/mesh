@@ -29,7 +29,7 @@
                             </p>
 
                             <p ng-if="notification._type == 'UploadNotification'">
-                                <strong class="subject"> <a>{{notification.uploader}}</a> has just uploaded a new model: <a ui-sref="home.model({id: notification.modelId})">{{notification.modelName}}</a></strong>
+                                <strong class="subject"> <a ui-sref="home.profile({username: notification.uploader})">{{notification.uploader}}</a> has just uploaded a new model: <a ui-sref="home.model({id: notification.modelId})">{{notification.modelTitle}}</a></strong>
                             </p>
 
                         </div>
