@@ -26,71 +26,10 @@
                         </ul>
                     </div>
                     <div class="navbar-button btn-group btn-group-list btn-group-messages">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <button type="button" class="btn btn-default dropdown-toggle" ui-sref="home.messages">
                             <i class="fa fa-envelope-o"></i>
                             <span class="badge">2</span>
                         </button>
-                        <div class="dropdown-menu pull-right">
-                            <a href="#" class="link-right"><i class="fa fa-plus"></i></a>
-                            <h5>New Messages</h5>
-                            <ul class="media-list dropdown-list">
-                                <li class="media">
-                                    <span class="badge badge-success">New</span>
-                                    <img class="img-circle pull-left noti-thumb" src="images/photos/user1.png" alt="">
-
-                                    <div class="media-body">
-                                        <strong>Nusja Nawancali</strong>
-
-                                        <p>Hi! How are you?...</p>
-                                        <small class="date"><i class="fa fa-clock-o"></i> 15 minutes ago</small>
-                                    </div>
-                                </li>
-                                <li class="media">
-                                    <span class="badge badge-success">New</span>
-                                    <img class="img-circle pull-left noti-thumb" src="images/photos/user2.png" alt="">
-
-                                    <div class="media-body">
-                                        <strong>Weno Carasbong</strong>
-
-                                        <p>Lorem ipsum dolor sit amet...</p>
-                                        <small class="date"><i class="fa fa-clock-o"></i> July 04, 2014</small>
-                                    </div>
-                                </li>
-                                <li class="media">
-                                    <img class="img-circle pull-left noti-thumb" src="images/photos/user3.png" alt="">
-
-                                    <div class="media-body">
-                                        <strong>Venro Leonga</strong>
-
-                                        <p>Do you have the time to listen to me...</p>
-                                        <small class="date"><i class="fa fa-clock-o"></i> July 03, 2014</small>
-                                    </div>
-                                </li>
-                                <li class="media">
-                                    <img class="img-circle pull-left noti-thumb" src="images/photos/user4.png" alt="">
-
-                                    <div class="media-body">
-                                        <strong>Nanterey Reslaba</strong>
-
-                                        <p>It might seem crazy what I'm about to say...</p>
-                                        <small class="date"><i class="fa fa-clock-o"></i> July 03, 2014</small>
-                                    </div>
-                                </li>
-                                <li class="media">
-                                    <img class="img-circle pull-left noti-thumb" src="images/photos/user1.png" alt="">
-
-                                    <div class="media-body">
-                                        <strong>Nusja Nawancali</strong>
-
-                                        <p>Hey I just met you and this is crazy...</p>
-                                        <small class="date"><i class="fa fa-clock-o"></i> July 02, 2014</small>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="dropdown-footer text-center">
-                                <a ui-sref='home.messages' class="link">See All Messages</a>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="navbar-button btn-group btn-group-list btn-group-notification" ng-controller="NotificationsCtrl" ng-init="getLatestNotifications()">
