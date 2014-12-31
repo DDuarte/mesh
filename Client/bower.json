@@ -20,7 +20,9 @@
     "particles.js": "~1.0.3",
     "angular-spinner": "~0.5.1",
     "ng-file-upload": "~2.0.2",
-    "angular-growl-v2": "~0.7.2"
+    "angular-growl-v2": "~0.7.2",
+    "ui-select": "*",
+    "socket.io-client": "~1.2.1",
     "angularjs-toaster": "~0.4.9"
   },
   "resolutions": {
