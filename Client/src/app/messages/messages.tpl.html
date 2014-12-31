@@ -34,8 +34,7 @@
                             </div>
                             <h4 class="sender">{{message.userFrom}}</h4>
 
-                            <p><a href="view_message.html"><strong class="subject">{{message.title}}</strong>
-                                <span ng-if="message.isCollapsed">{{message.content}}</span></a></p>
+                            <p><a><strong class="subject">{{message.title}}</strong></a></p>
 
                             <div class="panel panel-default" collapse="message.isCollapsed">
                                 <div class="panel-body">
@@ -64,8 +63,7 @@
                             </div>
                             <h4 class="sender">{{message.userTo}}</h4>
 
-                            <p><a><strong class="subject">{{message.title}}</strong>
-                                <span ng-if="message.isCollapsed">{{message.content}}</span></a></p>
+                            <p><a><strong class="subject">{{message.title}}</strong></a></p>
                         </div>
 
                         <div class="panel panel-default" collapse="message.isCollapsed">
