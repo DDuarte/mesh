@@ -90,7 +90,7 @@ module.exports = {
             'lib/MTLLoader.js',
             'lib/STLLoader.js',
             'vendor/ngDialog/js/ngDialog.js',
-            'vendor/angular-growl-v2/build/angular-growl.js'
+            'vendor/socket.io-client/socket.io.js'
         ],
         map: [
             'vendor/jquery/dist/jquery.min.map',
@@ -102,7 +102,7 @@ module.exports = {
             'vendor/pickadate/lib/compressed/themes/default.css',
             'vendor/pickadate/lib/compressed/themes/default.date.css',
             'vendor/ng-tags-input/ng-tags-input.min.css',
-            'vendor/angular-growl-v2/build/angular-growl.css'
+            'vendor/bootstrap/dist/css/bootstrap.min.css',
             'vendor/angularjs-toaster/toaster.css'
         ],
         assets: [
