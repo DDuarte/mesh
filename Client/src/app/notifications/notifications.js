@@ -10,54 +10,47 @@ angular.module('meshApp.notifications', [
         });
     })
 
-    .controller('NotificationsCtrl', function NotificationsCtrl ($scope, meshApi, $state, $interval) {
+    .factory('NotificationsSharedVariables', function NotificationsSharedVariables () {
+        return {
+            numberOfPendingNotifications: 0
+        };
+    })
+
+    .controller('NotificationsCtrl', function NotificationsCtrl ($scope, meshApi, $state, $interval, NotificationsSharedVariables) {
 
         $scope.moment = moment;
 
-        var notificationTypes = {
-            upload: {
-                getMessage: function(notification) {
-                    return notification.uploader + ' has just uploaded a new model: ' + notification.modelName;
-                },
-                getImage: function(notification) {
-                    return notification.modelThumbnail;
-                },
-                getStateAndParams: function(notification) {
-                    return { state: 'home.model', params: {id: notification.modelId} };
-                }
+        var notificationTypesStateParams = {
+            UploadNotification:  function(notification) {
+                return { state: 'home.model', params: {id: notification.modelId} };
             },
-            newFollower: {
-                getMessage: function(notification) {
-                    return notification.follower + ' is now following you';
-                },
-                getImage: function(notification) {
-                    return notification.followerAvatar;
-                },
-                getStateAndParams: function(notification) {
-                    return { state: 'home.profile', params: {username: notification.follower} };
-                }
+            NewFollowerNotification: function(notification) {
+                return { state: 'home.profile', params: {username: notification.follower} };
             },
-            newGroupPublication: {
-                getMessage: function(notification) {
-                    return notification.publisher + ' has published a model in ' + notification.groupName;
-                },
-                getImage: function(notification) {
-                    return notification.publishedModelThumbnail;
-                },
-                getStateAndParams: function(notification) {
-                    return { state: 'home.model', params: {id: notification.publishedModelId} };
-                }
+            NewGroupPublication: function(notification) {
+                return { state: 'home.model', params: {id: notification.publishedModelId} };
             }
+        };
+
+        var getStateAndParams = function(notification) {
+            return notificationTypesStateParams[notification._type](notification);
+        };
+
+        $scope.redirectToNotificationUrl = function(notification) {
+            var stateAndParams = getStateAndParams(notification);
+            $state.go(stateAndParams.state, stateAndParams.params);
+            notification.seen = true;
+            meshApi.updateNotification(notification).success(function() {
+                updatePendingNotifications();
+            }).error(function(error) {
+                console.log(error);
+                // TODO notify error
+            });
         };
 
         var refreshNotifications = function() {
             meshApi.getNotifications({limit: 5})
                 .success(function(notifications) {
-                    console.log("Notifications:", notifications);
-                   /* _.each(notifications, function(notification) {
-                        notification.message = getMessage(notification);
-                        notification.image = getImage(notification);
-                    });*/
                     $scope.notifications = notifications;
                 });
         };
@@ -75,26 +68,8 @@ angular.module('meshApp.notifications', [
             }
         });
 
-        $scope.getLatestNotifications = function() {
-            meshApi.getNotifications({limit: 5})
-                .success(function(notifications) {
-                   /* _.each(notifications, function(notification) {
-                        notification.message = getMessage(notification);
-                        notification.image = getImage(notification);
-                    });*/
-                    $scope.notifications = notifications;
-                });
-        };
-
-        $scope.goToNotificationUrl = function(notification) {
-            var stateAndParams = getStateAndParams(notification);
-            $state.go(stateAndParams.state, stateAndParams.params);
-            notification.seen = true;
-            updatePendingNotifications();
-            meshApi.setNotificationAsSeen(notification);
-        };
-
         $scope.notifications = [];
+        $scope.notificationsSharedVariables = NotificationsSharedVariables;
 
         $scope.$watch('notifications', function(newNotifications, oldNotifications) {
             if (newNotifications !== oldNotifications && newNotifications != null) {
@@ -103,8 +78,12 @@ angular.module('meshApp.notifications', [
         });
 
         var updatePendingNotifications = function() {
-            $scope.pendingNotifications = _.filter($scope.notifications, function(notification) {
-                return !notification.seen;
-            });
+            $scope.notificationsSharedVariables.numberOfPendingNotifications =
+                _.reduce($scope.notifications, function(acc, notification) {
+                    if (!notification.seen) {
+                        acc += 1;
+                    }
+                    return acc;
+                }, 0);
         };
     });

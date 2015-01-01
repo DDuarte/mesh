@@ -29,7 +29,7 @@ angular.module('meshApp.home', [
         });
     })
 
-    .controller("HomeCtrl", function ($scope, $state, meshApi) {
+    .controller("HomeCtrl", function ($scope, $state, meshApi, NotificationsSharedVariables) {
 
         if (!meshApi.isLoggedIn()) {
             $state.go('login');
@@ -38,6 +38,8 @@ angular.module('meshApp.home', [
         $scope.user = {};
 
         $scope.user.username = meshApi.getLoggedUsername();
+
+        $scope.notificationsSharedVariables = NotificationsSharedVariables;
 
         var navMain = angular.element("#nav-main");
         navMain.on("click", "a", null, function () {

@@ -81,5 +81,45 @@ module.exports = function (server) {
                 return reply(notifications);
             });
         }
-    })
+    });
+
+    server.route({
+        method: 'PATCH',
+        path: '/notifications/{_id}',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    _id: Joi.string().min(24).max(24)
+                },
+                payload: {
+                    seen: schema.notification.seen
+                }
+            }
+        },
+        handler: function(request, reply) {
+            var username = request.auth.credentials.username;
+
+            var query = {
+                userTo: username,
+                _id: request.params._id
+            };
+
+            var updatedData = {
+                seen: request.payload.seen
+            };
+
+            Notification.update(query, updatedData, { multi: false }, function(err, numAffected) {
+                if(err) {
+                    return reply(err).code(500);
+                }
+                else if(numAffected == 0) {
+                    return reply(Boom.badRequest('User does not have that notification')).code(500);
+                }
+                else {
+                    return reply({message: 'success'});
+                }
+            });
+        }
+    });
 };

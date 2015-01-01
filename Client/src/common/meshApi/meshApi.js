@@ -193,11 +193,11 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             options.headers = getHeaders();
             return $http.get(server.url + '/notifications', options);
         },
-        setNotificationAsSeen: function(notification) {
+        updateNotification: function(notification) {
             return $http({
                 url: server.url + '/notifications/' + notification._id,
                 method: 'PATCH',
-                data: { seen: true },
+                data: { seen: notification.seen },
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
         }
