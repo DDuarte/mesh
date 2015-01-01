@@ -32,10 +32,10 @@
                         </button>
                     </div>
 
-                    <div class="navbar-button btn-group btn-group-list btn-group-notification" ng-controller="NotificationsCtrl" ng-init="getLatestNotifications()">
+                    <div class="navbar-button btn-group btn-group-list btn-group-notification">
                         <button ui-sref="home.notifications" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
-                            <span ng-show="pendingNotifications.length" class="badge"> {{ pendingNotifications.length }} </span>
+                            <span ng-show="notificationsSharedVariables.numberOfPendingNotifications > 0" class="badge"> {{ notificationsSharedVariables.numberOfPendingNotifications }} </span>
                         </button>
                     </div>
                 </div>

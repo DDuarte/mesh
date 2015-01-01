@@ -47,14 +47,6 @@ notificationsSchema.statics.notifyGroup = function(group, userFrom, message, url
     
 };
 
-notificationsSchema.statics.remove = function(exports) {
-    
-};
-
-notificationsSchema.statics.update = function(updatedNotification) {
-    
-};
-
 module.exports.Notification = mongoose.model('Notification', notificationsSchema);
 module.exports.UploadNotification = mongoose.model('UploadNotification', uploadNotificationSchema);
 module.exports.NewFollowerNotification = mongoose.model('NewFollowerNotification', newFollowerNotificationSchema);
