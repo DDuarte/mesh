@@ -11,7 +11,7 @@ var group = {};
 group.create = function (groupInfo) {
     var query = [
         'MATCH (user:User {username: {adminName}})',
-        'CREATE (group:Group {name: {name}, lowerName: lower({ name }), description: {description}, creationDate: {creationDate}})',
+        'CREATE (group:Group {name: {name}, lowerName: lower({ name }), description: {description}, creationDate: {creationDate}, visibility: {visibility}})',
         'WITH group, user',
         'CREATE (group)<-[:IS_ADMIN]-(user)',
         'RETURN group.name as name'
