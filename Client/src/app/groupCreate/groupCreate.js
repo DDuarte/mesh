@@ -13,11 +13,13 @@ angular.module('meshApp.groupCreate', [
     .controller("GroupCreateCtrl", function ($scope, $state, meshApi, usSpinnerService, ngDialog) {
         $scope.group = {};
         $scope.registerPending = false;
+        $scope.group.visibility = 'public';
+
         $scope.createGroup = function (group) {
             usSpinnerService.spin('spinner');
             $scope.registerPending = true;
 
-            meshApi.createGroup(group.name, group.description)
+            meshApi.createGroup(group.name, group.description, group.visibility)
                 .success(function (data) {
                     usSpinnerService.stop('spinner');
                     $scope.registerPending = false;
