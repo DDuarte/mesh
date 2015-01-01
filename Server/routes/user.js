@@ -7,6 +7,7 @@ var User = require('../models/user'),
     Boom = require('boom'),
     _ = require('lodash'),
     Message = require('../models/message'),
+    Model = require('../models/model'),
     Notifications = require('../models/notifications');
 module.exports = function (server) {
 
@@ -309,6 +310,29 @@ module.exports = function (server) {
                         });
                 })
                 .catch(function () {
+                    return reply(Boom.badImplementation('Internal server error'));
+                });
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/users/{username}/galleries/{galleryName}',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required(),
+                    galleryName: schema.gallery.name.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Model.getByGallery(request.params.username, request.params.galleryName)
+                .then(function(models) {
+                    return reply(models);
+                })
+                .catch(function(){
                     return reply(Boom.badImplementation('Internal server error'));
                 });
         }

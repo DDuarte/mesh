@@ -102,6 +102,40 @@ model.getById = function (id, loggedUser) {
 };
 
 /**
+ * Gets all the models from a user gallery
+ * @param {String} username Username of the target user
+ * @param {String} galleryName Name of the target gallery
+ * @returns {Promise} Resolves to the models if successful, rejects otherwise
+ */
+model.getByGallery = function(username, galleryName) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (user:User {username: {username}})',
+            'MATCH (user)-[:OWNS]->(gallery:Gallery {name: {galleryName}})',
+            'MATCH (gallery)<-[:PUBLISHED_IN]-(m:Model)',
+            'MATCH (m)<-[:OWNS]-(author:User)',
+            'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
+            'WITH m, author, count(ru) as upvotes',
+            'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
+            'WITH m, author, upvotes, count(rd) as downvotes',
+            'OPTIONAL MATCH (User)-[cm:COMMENTED]->m',
+            'WITH m, author, upvotes, downvotes, count(cm) as comments ORDER BY m.publicationDate DESC',
+            'RETURN collect({ modelId: m.id, title: m.name, thumbnail: m.thumbnail, author: author.username, authorAvatar: author.avatar, date: m.publicationDate, numComments: comments, upvotes: upvotes, downvotes: downvotes}) as models'
+        ].join('\n');
+
+        var params = {
+            username: username,
+            galleryName: galleryName
+        };
+
+        db.query(query, params, function(err, results) {
+            if (err) throw err;
+            resolve(results[0] ? results[0].models : results);
+        });
+    });
+};
+
+/**
  *
  * Searches a model by name
  * @param {Number} name Name of the model to search
@@ -496,8 +530,7 @@ model.getPublishedGalleries = function (modelId) {
         ].join('\n');
 
         var params = {
-            modelId: modelId,
-
+            modelId: modelId
         };
     });
 };
