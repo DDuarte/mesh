@@ -10,13 +10,42 @@ angular.module('meshApp.notifications', [
         });
     })
 
-    .factory('NotificationsSharedVariables', function NotificationsSharedVariables () {
-        return {
-            numberOfPendingNotifications: 0
+    .factory('NotificationsFactory', function NotificationsSharedVariables ($interval, meshApi) {
+        var data = {
+            numberOfPendingNotifications: 0,
+            notifications: [],
+            limit: 10,
+            stopPolling: function(){
+                $interval.cancel(refreshNotificationPromise);
+                refreshNotificationPromise = undefined;
+            }
         };
+
+        data.updatePendingNotifications = function() {
+            data.numberOfPendingNotifications = _.reduce(data.notifications, function(acc, notification) {
+                if (!notification.seen) {
+                    acc += 1;
+                }
+                return acc;
+            }, 0);
+        };
+
+        var refreshNotifications = function() {
+            meshApi.getNotifications({limit: data.limit})
+                .success(function(newNotifications) {
+                    data.notifications = newNotifications;
+                    data.updatePendingNotifications();
+                });
+        };
+
+        var refreshRate = 30000;
+        refreshNotifications();
+        var refreshNotificationPromise = $interval(refreshNotifications, refreshRate);
+
+        return data;
     })
 
-    .controller('NotificationsCtrl', function NotificationsCtrl ($scope, meshApi, $state, $interval, NotificationsSharedVariables) {
+    .controller('NotificationsCtrl', function NotificationsCtrl ($scope, meshApi, $state, $interval, NotificationsFactory) {
 
         $scope.moment = moment;
 
@@ -36,54 +65,16 @@ angular.module('meshApp.notifications', [
             return notificationTypesStateParams[notification._type](notification);
         };
 
+        $scope.NotificationFactory = NotificationsFactory;
+
         $scope.redirectToNotificationUrl = function(notification) {
             var stateAndParams = getStateAndParams(notification);
             $state.go(stateAndParams.state, stateAndParams.params);
             notification.seen = true;
             meshApi.updateNotification(notification).success(function() {
-                updatePendingNotifications();
+                $scope.NotificationFactory.updatePendingNotifications();
             }).error(function(error) {
                 console.log(error);
-                // TODO notify error
             });
-        };
-
-        var refreshNotifications = function() {
-            meshApi.getNotifications({limit: 5})
-                .success(function(notifications) {
-                    $scope.notifications = notifications;
-                });
-        };
-
-        $scope.refreshNotifications = refreshNotifications;
-
-        var refreshRate = 30000;
-        var refreshNotificationPromise = $interval(refreshNotifications, refreshRate);
-
-        // Cancel interval on page changes
-        $scope.$on('$destroy', function(){
-            if (angular.isDefined(refreshNotificationPromise)) {
-                $interval.cancel(refreshNotificationPromise);
-                refreshNotificationPromise = undefined;
-            }
-        });
-
-        $scope.notifications = [];
-        $scope.notificationsSharedVariables = NotificationsSharedVariables;
-
-        $scope.$watch('notifications', function(newNotifications, oldNotifications) {
-            if (newNotifications !== oldNotifications && newNotifications != null) {
-                updatePendingNotifications();
-            }
-        });
-
-        var updatePendingNotifications = function() {
-            $scope.notificationsSharedVariables.numberOfPendingNotifications =
-                _.reduce($scope.notifications, function(acc, notification) {
-                    if (!notification.seen) {
-                        acc += 1;
-                    }
-                    return acc;
-                }, 0);
         };
     });
