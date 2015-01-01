@@ -1,4 +1,4 @@
-<div ng-controller="GroupCreateCtrl">
+<div ng-controller="GroupCreateCtrl" ng-init="init()">
 
     <breadcrum icon="fa fa-cloud-upload" title="Create Group" path="Pages"></breadcrum>
 
@@ -33,6 +33,20 @@
                                         <small class="nc-charcount" ng-show="group_form.group_desc.$valid">{{254-group.description.length}} characters remaining.</small>
                                         <small class="text-danger" ng-show="group_form.group_desc.$error.maxlength">Description too long!</small>
                                         <p class="text-danger" ng-show="group_form.group_desc.$invalid && group_form.group_desc.$dirty && !descFocused">Group description field must be between 10 and 254 characters long</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 pull-left">Visibility</label>
+                                    <div>
+                                        <span class="rdio rdio-primary">
+                                            <input type="radio" id="rdioPublic" ng-model="group.visibility" value="public"/>
+                                            <label for="rdioPublic">Public</label>
+                                        </span>
+                                        <span class="rdio rdio-primary ml10">
+                                            <input type="radio" id="rdioPrivate" ng-model="group.visibility" value="private"/>
+                                            <label for="rdioPrivate">Private</label>
+                                        </span>
                                     </div>
                                 </div>
                                 <!-- form-group -->
