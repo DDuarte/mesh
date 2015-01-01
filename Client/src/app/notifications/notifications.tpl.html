@@ -8,7 +8,7 @@
                     <i class="fa fa-bell"></i> Latest
                 </tab-heading>
                 <ul class="media-list msg-list">
-                    <li class="media" ng-repeat="notification in NotificationFactory.notifications"
+                    <li class="media notification" ng-repeat="notification in NotificationFactory.notifications"
                         ng-class="{unread: notification.seen}"
                         ng-click="redirectToNotificationUrl(notification)">
                         <!--
