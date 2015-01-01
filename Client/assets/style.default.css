@@ -799,14 +799,14 @@ a:focus {
 
 .msg-list > li {
     border: 1px solid #eee;
-    background-color: #fcfcfc;
+    background-color: #FFFFFF;
     border-bottom: 0;
     padding: 10px;
     margin: 0;
 }
 
 .msg-list > li.unread {
-    background-color: #fff;
+    background-color: #f5f5f5;
 }
 
 .msg-list > li:first-child {

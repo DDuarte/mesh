@@ -1,5 +1,5 @@
-<div ng-controller="NotificationsCtrl">
-    <breadcrum icon="fa fa-bell" title="Notifications" path="Pages" ng-init="refreshNotifications()"></breadcrum>
+<div>
+    <breadcrum icon="fa fa-bell" title="Notifications" path="Pages"></breadcrum>
     <div class="contentpanel">
         <v-tabset>
             <v-tab>
@@ -19,17 +19,18 @@
                         -->
 
                         <a ng-if="notification._type == 'NewFollowerNotification'" class="pull-left" href="#">
-                            <img class="media-object img-circle img-online" ng-src="{{notification.followerAvatar}}" alt="...">
+                            <img class="media-object img-circle" ng-src="{{notification.followerAvatar}}" alt="...">
                         </a>
 
                         <a ng-if="notification._type == 'UploadNotification'" class="pull-left" href="#">
-                            <img class="media-object img-circle img-online" ng-src="{{notification.modelThumbnail}}" alt="...">
+                            <img class="media-object img-circle" ng-src="{{notification.modelThumbnail}}" alt="...">
                         </a>
 
                         <div class="media-body">
                             <div class="pull-right media-option">
                                 <span ng-if="!notification.seen" class="badge badge-success">New</span>
-                                <small>{{notification.date | date}}</small>
+                                <a ng-click="toggleNotification(notification); $event.stopPropagation();" >Mark as <span ng-show="notification.seen">un</span>read</a>
+                                <small> | {{notification.date | date}}</small>
                             </div>
                             <h4 class="sender">{{ moment(notification.date).fromNow()}}</h4>
 

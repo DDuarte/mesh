@@ -77,4 +77,13 @@ angular.module('meshApp.notifications', [
                 console.log(error);
             });
         };
+
+        $scope.toggleNotification = function(notification) {
+            notification.seen = !notification.seen;
+            meshApi.updateNotification(notification).success(function() {
+                $scope.NotificationFactory.updatePendingNotifications();
+            }).error(function(error) {
+                console.log(error);
+            });
+        };
     });
