@@ -29,7 +29,7 @@ angular.module('meshApp.home', [
         });
     })
 
-    .controller("HomeCtrl", function ($scope, $state, meshApi, NotificationsSharedVariables) {
+    .controller("HomeCtrl", function ($scope, $state, meshApi, NotificationsFactory) {
 
         if (!meshApi.isLoggedIn()) {
             $state.go('login');
@@ -39,7 +39,10 @@ angular.module('meshApp.home', [
 
         $scope.user.username = meshApi.getLoggedUsername();
 
-        $scope.notificationsSharedVariables = NotificationsSharedVariables;
+        $scope.NotificationsFactory = NotificationsFactory;
+        $scope.$on('$destroy', function() {
+            $scope.NotificationsFactory.stopPolling();
+        });
 
         var navMain = angular.element("#nav-main");
         navMain.on("click", "a", null, function () {

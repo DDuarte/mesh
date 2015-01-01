@@ -1,14 +1,14 @@
-<div>
+<div ng-controller="NotificationsCtrl">
     <breadcrum icon="fa fa-bell" title="Notifications" path="Pages" ng-init="refreshNotifications()"></breadcrum>
     <div class="contentpanel">
         <v-tabset>
             <v-tab>
                 <tab-heading>
-                    <span class="badge pull-right">2</span>
+                    <span class="badge pull-right">{{NotificationsFactory.numberOfPendingNotifications}}</span>
                     <i class="fa fa-bell"></i> Latest
                 </tab-heading>
                 <ul class="media-list msg-list">
-                    <li class="media" ng-repeat="notification in notifications"
+                    <li class="media" ng-repeat="notification in NotificationFactory.notifications"
                         ng-class="{unread: notification.seen}"
                         ng-click="redirectToNotificationUrl(notification)">
                         <!--
@@ -46,6 +46,18 @@
                 </ul>
                 <button class="btn btn-primary center-block"> Load more notifications</button>
             </v-tab>
+            <!--
+            <v-tab>
+                <tab-heading>
+                    <span class="badge pull-right">2</span>
+                    <i class="fa fa-bell"></i> Search
+                </tab-heading>
+                <ul class="media-list msg-list">
+
+                </ul>
+                <button class="btn btn-primary center-block"> Load more notifications</button>
+            </v-tab>
+            -->
         </v-tabset>
 
 
