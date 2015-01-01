@@ -144,6 +144,31 @@ module.exports = function (server) {
     });
 
     server.route({
+        method: 'POST',
+        path: '/models/{id}/galleries',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.model.id.required()
+                },
+                payload: {
+                    galleries: Joi.array().includes(Joi.string()).required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Model.replaceGalleries(request.params.id, request.payload.galleries)
+                .then(function () {
+                    reply().code(200);
+                })
+                .catch(function (error) {
+                    reply(Boom.badImplementation('Internal error: ' + error));
+                });
+        }
+    });
+
+    server.route({
         method: 'DELETE',
         path: '/models/{id}/votes',
         config: {
@@ -183,7 +208,7 @@ module.exports = function (server) {
                 }
             }
         },
-        handler: function(request, reply) {
+        handler: function (request, reply) {
             Model.getById(request.params.id, request.auth.credentials ? request.auth.credentials.username : '')
                 .then(function (results) {
                     if (results.length == 0)
@@ -196,14 +221,14 @@ module.exports = function (server) {
 
                     var modelData = request.payload;
                     Model.updateById(request.params.id, modelData.description, modelData.isPublic, modelData.tags)
-                        .then(function(model) {
+                        .then(function (model) {
                             reply(model).code(200);
                         })
-                        .catch(function() {
+                        .catch(function () {
                             reply(Boom.badImplementation('Internal server error'));
                         })
                 })
-                .catch(function() {
+                .catch(function () {
                     reply(Boom.badImplementation('Internal server error'));
                 })
         }
@@ -253,12 +278,12 @@ module.exports = function (server) {
                 }
             }
         },
-        handler: function(request, reply) {
+        handler: function (request, reply) {
             Model.getPublishedGalleries(request.params.id)
-                .then(function(galleries) {
+                .then(function (galleries) {
                     return reply(galleries);
                 })
-                .catch(function() {
+                .catch(function () {
                     return reply(Boom.badImplementation('Internal server error'));
                 });
         }
@@ -378,7 +403,7 @@ module.exports = function (server) {
                     var filePath = model.filePath;
                     var originalFilename = model.originalFilename;
 
-                    Fs.stat(filePath, function(err, stats) {
+                    Fs.stat(filePath, function (err, stats) {
 
                         if (err)
                             return reply(err).code(500);
