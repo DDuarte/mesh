@@ -30,6 +30,10 @@ module.exports = function (server) {
         method: 'GET',
         path: '/users/{username}',
         config: {
+            auth: {
+                mode: 'optional',
+                strategy: 'token'
+            },
             validate: {
                 params: {
                     username: schema.user.username.required()
@@ -40,7 +44,7 @@ module.exports = function (server) {
             var username = request.params.username;
 
             client.incr(username + '_counter', function (err, counter) {
-                User.getByUsername(username)
+                User.getByUsername(username, request.auth.credentials ? request.auth.credentials.username : '')
                     .then(function (user) {
                         reply(user);
                     })

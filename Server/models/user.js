@@ -11,17 +11,22 @@ var user = {};
  * @returns {Promise} Returns a promise with the resolved user, rejects to error otherwise
  *
  */
-user.getByUsername = function (username) {
+user.getByUsername = function (username, loggedUsername) {
+    loggedUsername = loggedUsername || '';
     return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u: User{username: { username }})',
             'with u',
             'OPTIONAL MATCH (u)-[:INTERESTED]->(userInterest:Tag)',
-            'RETURN { firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active, about: u.about, interests: collect(userInterest.name) } as user'
+            'with u, userInterest',
+            'OPTIONAL MATCH (u)<-[fol:FOLLOWING]-(:User {username: {loggedUsername}})',
+            'WITH u, userInterest, (fol IS NOT NULL) as followingUser',
+            'RETURN { firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active, about: u.about, interests: collect(userInterest.name), followingUser: followingUser } as user'
         ].join('\n');
 
         var params = {
-            username: username
+            username: username,
+            loggedUsername: loggedUsername
         };
 
         db.query(query, params, function (err, results) {
