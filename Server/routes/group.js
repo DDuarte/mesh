@@ -16,7 +16,8 @@ module.exports = function (server) {
             validate: {
                 payload: {
                     name: schema.group.name.required(),
-                    description: schema.group.description.required()
+                    description: schema.group.description.required(),
+                    visibility: schema.group.visibility.required()
                 }
             }
         },
