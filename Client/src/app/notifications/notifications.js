@@ -58,10 +58,14 @@ angular.module('meshApp.notifications', [
             return notificationTypesStateParams[notification._type](notification);
         };
 
+        /*
         $rootScope.$on('$stateChangeStart',
             function(event, toState, toParams, fromState, fromParams){
-                //console.log(toState, fromState);
+                if (fromState.name == 'home.notifications') {
+                    $scope.NotificationFactory.limit = 10;
+                }
             });
+        */
 
         $scope.NotificationFactory = NotificationsFactory;
 
