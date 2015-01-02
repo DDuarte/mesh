@@ -38,6 +38,16 @@ var groupInviteSchema = notificationsSchema.extend({
     groupId: Number,
     inviterName: String,
     inviterAvatar: String,
+    accepted: Boolean,
+    inviteeName: String,
+    inviteeAvatar: String
+});
+
+var groupApplicationSchema = notificationsSchema.extend({
+    groupName: String,
+    groupId: Number,
+    applicantName: String,
+    applicantAvatar: String,
     accepted: Boolean
 });
 
@@ -54,3 +64,4 @@ module.exports.UploadNotification = mongoose.model('UploadNotification', uploadN
 module.exports.NewFollowerNotification = mongoose.model('NewFollowerNotification', newFollowerNotificationSchema);
 module.exports.NewGroupPublicationNotification = mongoose.model('NewGroupPublicationNotification', newGroupPublicationSchema);
 module.exports.GroupInviteNotification = mongoose.model('GroupInviteNotification', groupInviteSchema);
+module.exports.GroupApplicationNotification = mongoose.model('GroupApplicationNotification', groupApplicationSchema);
