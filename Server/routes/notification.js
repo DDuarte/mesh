@@ -52,7 +52,7 @@ module.exports = function (server) {
         config: {
             auth: 'token',
             validate: {
-                params: {
+                query: {
                     userFrom: schema.notification.userFrom,
                     url: schema.notification.url,
                     image: schema.notification.image,
@@ -67,18 +67,25 @@ module.exports = function (server) {
         handler: function(request, reply) {
             var username = request.auth.credentials.username;
 
-            var limit = request.params.limit || 10;
-            var skip = request.params.skip || 0;
+            var limit = request.query.limit || 10;
+            var skip = request.query.skip || 0;
+            delete request.query.limit;
+            delete request.query.skip;
 
-            var query = request.params;
+            var query = request.query;
             query.userTo = username;
 
             // TODO allow gte and lte's in the date
 
-            Notification.find(query).sort('-date').skip(skip).limit(limit).exec(function(err, notifications) {
+            Notification.count({userTo: username, seen: false}, function(err, pendingNotificationsCount) {
                 if (err)
                     return reply(err).code(500);
-                return reply(notifications);
+
+                Notification.find(query).sort('-date').skip(skip).limit(limit).exec(function(err, notifications) {
+                    if (err)
+                        return reply(err).code(500);
+                    return reply({notifications: notifications, pendingNotificationsCount: pendingNotificationsCount});
+                });
             });
         }
     });
@@ -117,7 +124,12 @@ module.exports = function (server) {
                     return reply(Boom.badRequest('User does not have that notification')).code(500);
                 }
                 else {
-                    return reply({message: 'success'});
+                    Notification.count({userTo: username, seen: false}, function(err, pendingNotificationsCount) {
+                        if (err)
+                            return reply(err).code(500);
+
+                        return reply({message: 'success', pendingNotificationsCount: pendingNotificationsCount});
+                    });
                 }
             });
         }
