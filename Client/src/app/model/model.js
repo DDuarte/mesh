@@ -293,7 +293,7 @@ angular.module('meshApp.model', [
         });
     })
 
-    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi, ngDialog, $state, $modal, _) {
+    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi, ngDialog, $state, $modal, _, toaster) {
 
         $scope.modelLoaded = false;
         $scope.isLoggedIn = meshApi.isLoggedIn();
@@ -544,10 +544,11 @@ angular.module('meshApp.model', [
                 console.log(selectedGalleries);
                 meshApi.updateModelGalleries($scope.model.id, selectedGalleries)
                     .success(function() {
-                        alert("Success");
+                        //alert("Success");
+                        toaster.pop('success', "", "The model was successfully published");
                     })
                     .error(function(response) {
-                        alert("Error: " + response);
+                        toaster.pop('error', "Error publishing model", JSON.stringify(response));
                     });
             }, function () {
                 // do nothing, cancelled
