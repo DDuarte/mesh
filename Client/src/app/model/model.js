@@ -293,7 +293,7 @@ angular.module('meshApp.model', [
         });
     })
 
-    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi, ngDialog, $state, $modal) {
+    .controller('ModelCtrl', function ModelController($scope, $stateParams, $http, server, meshApi, ngDialog, $state, $modal, _) {
 
         $scope.modelLoaded = false;
         $scope.isLoggedIn = meshApi.isLoggedIn();
@@ -526,33 +526,31 @@ angular.module('meshApp.model', [
             //alert('Save model not yet implemented');
         };
 
-        $scope.galleries = [
-            "Foo",
-            "Bar",
-            "Baz"
-        ];
 
         $scope.publishToGalleries = function () {
 
-            console.log("publishToGalleries");
             var modalInstance = $modal.open({
                 templateUrl: 'galleriesSelectiondId',
                 controller: 'GalleryPublishModalInstanceCtrl',
                 size: 'lg',
                 resolve: {
-                    galleries: function () {
-                        /*meshApi.getUserGalleries($scope.model.author.name)
-                            .success(function (galleries) {
-                                return galleries;
-                            });*/
-                        return $scope.galleries;
+                    authorName: function () {
+                        return $scope.model.author.name;
                     }
                 }
             });
 
             modalInstance.result.then(function (selectedGalleries) {
-                console.log($scope.model);
+                console.log(selectedGalleries);
+                meshApi.updateModelGalleries($scope.model.id, selectedGalleries)
+                    .success(function() {
+                        alert("Success");
+                    })
+                    .error(function(response) {
+                        alert("Error: " + response);
+                    });
             }, function () {
+                // do nothing, cancelled
             });
         };
 
@@ -584,9 +582,14 @@ angular.module('meshApp.model', [
             });
         };
     })
-    .controller('GalleryPublishModalInstanceCtrl', function ($scope, $modalInstance, galleries, _) {
-        $scope.galleries = galleries;
-        console.log("galleries", galleries);
+    .controller('GalleryPublishModalInstanceCtrl', function ($scope, $modalInstance, authorName, _, meshApi) {
+
+        meshApi.getAllGalleries(authorName)
+            .success(function(response) {
+                $scope.galleries = _.pluck(response, 'name');
+            });
+        //$scope.galleries = galleries;
+        console.log("galleriesModal", authorName);
         $scope.selection = {
             galleries: {}
         };

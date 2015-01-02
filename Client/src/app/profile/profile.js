@@ -131,6 +131,7 @@ angular.module('meshApp.profile', [
             meshApi.getModelsFromGallery($scope.user.username, gallery.name)
                 .success(function (response) {
                     console.log("response", response);
+                    $scope.models = response;
                 })
                 .error(function (response) {
                     console.log("response", response);
