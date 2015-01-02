@@ -35,17 +35,13 @@ var newGroupPublicationSchema = notificationsSchema.extend({
 
 var groupInviteSchema = notificationsSchema.extend({
     groupName: String,
-    groupId: Number,
     inviterName: String,
     inviterAvatar: String,
-    accepted: Boolean,
-    inviteeName: String,
-    inviteeAvatar: String
+    accepted: Boolean
 });
 
 var groupApplicationSchema = notificationsSchema.extend({
     groupName: String,
-    groupId: Number,
     applicantName: String,
     applicantAvatar: String,
     accepted: Boolean

@@ -4,7 +4,10 @@ var Group = require('../models/group'),
     User = require('../models/user'),
     Joi = require('joi'),
     schema = require('../schema'),
-    Boom = require('boom');
+    Boom = require('boom'),
+    Promise = require('bluebird'),
+    GroupApplicationNotification = require('../models/notifications').GroupApplicationNotification,
+    GroupInviteNotification = require('../models/notifications').GroupInviteNotification;
 
 module.exports = function (server) {
 
@@ -137,6 +140,184 @@ module.exports = function (server) {
                 .catch(function () {
                     reply(Boom.notFound('Group not found'));
                 });
+        }
+    });
+
+    server.route({
+        path: '/groups/{id}/invite',
+        method: 'POST',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.group.id.required()
+                },
+                payload: {
+                    inviteeName: Joi.string()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Group.isAdmin(request.params.id, request.auth.credentials.username)
+                .then(function (isAdmin) {
+                    if (isAdmin)
+                        return reply(Boom.unauthorized('User is not an administrator'));
+
+                    var notification = new GroupInviteNotification({
+                        userTo: request.payload.inviteeName,
+                        seen: false,
+                        date: new Date(),
+                        inviterName: request.auth.credentials.username
+                    });
+
+                    notification.save(function(err) {
+                        if (err)
+                            return reply(Boom.badImplementation('Internal server error'));
+
+                        return reply().code(200);
+                    });
+                })
+                .catch(function () {
+                    reply(Boom.badImplementation('Internal server error'));
+                })
+        }
+    });
+
+    server.route({
+        path: '/groups/{id}/invite/inviteid',
+        method: 'PATCH',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.group.id.required()
+                },
+                payload: {
+                    accepted: Joi.boolean()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            GroupInviteNotification.findOne({ _id: request.params.inviteid }, function(err, notification) {
+                if (err)
+                    return reply(Boom.badImplementation('Internal server error'));
+
+                if (notification.userTo != request.auth.credentials.username)
+                    return reply(Boom.forbidden('User is not the target of the invite'));
+
+                GroupInviteNotification.update({_id: request.params.inviteid }, { accepted: request.payload.accepted }, null, function(err) {
+                    if (err)
+                        return reply(Boom.badImplementation('Internal server error'));
+
+                    if (!request.payload.accepted)
+                        return reply().code(200);
+
+                    Group.addMember(request.params.id, request.auth.credentials.username)
+                        .then(function() {
+                            reply().code(200);
+                        })
+                        .catch(function() {
+                            return reply(Boom.badImplementation('Internal server error'));
+                        })
+                });
+            });
+        }
+    });
+
+    server.route({
+        path: '/groups/{id}/apply/{notificationid}',
+        method: 'PATCH',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.group.id.required()
+                },
+                payload: {
+                    accepted: Joi.boolean().required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Group.isAdmin(request.params.id, request.auth.credentials.username)
+                .then(function (isAdmin) {
+                    if (!isAdmin)
+                        return reply(Boom.badRequest('User is not administrator of the group'));
+
+                    GroupApplicationNotification.findOneAndUpdate({ _id: request.params.notificationid }, { accepted: request.payload.accepted }, null, function(err, notification) {
+                        if (err)
+                            throw err;
+
+                        GroupApplicationNotification.update({ groupName: request.params.id, applicantName: notification.applicantName }, { accepted: request.payload.accepted }, null, function(err) {
+                            if (err)
+                                throw err;
+
+                            if (!request.payload.accepted)
+                                return reply().code(200);
+
+                            Group.addMember(request.params.id, notification.applicantName)
+                                .then(function() {
+                                    reply().code(200);
+                                })
+                                .catch(function() {
+                                    reply(Boom.badImplementation('Internal server error'));
+                                });
+                        });
+                    });
+                })
+                .catch(function () {
+                    return reply(Boom.badImplementation('Internal server error'));
+                })
+        }
+    });
+
+    server.route({
+        path: '/groups/{id}/apply',
+        method: 'POST',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.group.id.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Group.isMember(request.params.id, request.auth.credentials.username)
+                .then(function (isMember) {
+                    if (isMember)
+                        return reply(Boom.badRequest('User is already a member'));
+
+                    Group.getAdministrators(request.params.id)
+                        .then(function (administrators) {
+                            Promise.map(administrators, function (administrator) {
+                                return new Promise(function (resolve) {
+                                    var notification = new GroupApplicationNotification({
+                                        userTo: administrator,
+                                        seen: false,
+                                        date: new Date(),
+                                        applicantName: request.auth.credentials.username,
+                                        groupName: request.params.id
+                                    });
+
+                                    notification.save(function (err) {
+                                        if (err)
+                                            throw err;
+                                        resolve(true);
+                                    });
+                                });
+                            })
+                                .then(function () {
+                                    reply().code(200);
+                                })
+                                .catch(function () {
+                                    reply(Boom.badImplementation('Internal server error'));
+                                });
+                        });
+                })
+                .catch(function () {
+                    reply(Boom.badImplementation('Internal server error'));
+                })
         }
     });
 
@@ -275,10 +456,10 @@ module.exports = function (server) {
                                     reply(Boom.badImplementation(error.message));
                                 });
                         })
-                        .catch(Error, function(error) {
+                        .catch(Error, function (error) {
                             return reply(error.message);
                         })
-                        .catch(function(reason) {
+                        .catch(function (reason) {
                             return reply(Boom.badRequest(reason));
                         });
                 })
