@@ -419,7 +419,8 @@ module.exports = function (server) {
                         userFrom: userFrom,
                         userFromAvatar: sourceUser.avatar,
                         content: request.payload.content,
-                        title: request.payload.title
+                        title: request.payload.title,
+                        date: new Date()
                     });
 
                     message.save(function(err, message) {
