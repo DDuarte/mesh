@@ -195,6 +195,14 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         getSentMessages: function() {
             return $http.get(server.url + '/users/' + getLoggedToken().username + '/messages/sent', { headers: getHeaders() });
         },
+        updateMessage: function(message) {
+            return $http({
+                url: server.url + '/users/' + getLoggedToken().username + '/messages/' + message._id,
+                method: 'PATCH',
+                data: { seen: message.seen },
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
+            });
+        },
         getNotifications: function(options) {
             return $http({
                 url: server.url + '/notifications',

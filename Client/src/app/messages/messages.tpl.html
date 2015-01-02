@@ -14,23 +14,29 @@
         <v-tabset>
             <v-tab select="getReceivedMessages()">
                 <tab-heading>
-                    <span class="badge pull-right">2</span>
+                    <span class="badge pull-right">{{NotificationsFactory.pendingMessagesCount}}</span>
                     <i class="glyphicon glyphicon-inbox"></i> Inbox
                 </tab-heading>
                 <ul class="media-list msg-list">
-                    <li class="media unread" ng-class="{unread: message.unread}"
+                    <li class="media message" ng-class="{unread: message.seen}"
                         ng-repeat="message in messages.inbox" ng-click="selectMessage(message)">
-                        <div class="ckbox ckbox-primary pull-left">
+                        <div class="ckbox ckbox-primary pull-left" ng-click="$event.stopPropagation()">
                             <input ng-model="message.selected" type="checkbox" id="checkbox{{$index+1}}">
                             <label for="checkbox{{$index+1}}"></label>
                         </div>
                         <a class="pull-left" ui-sref="home.profile({username: message.userFrom})">
-                            <img class="media-object img-circle img-online" src="{{message.userFromAvatar}}" alt="...">
+                            <img class="media-object img-circle img-online" ng-src="{{message.userFromAvatar}}" alt="...">
                         </a>
 
                         <div class="media-body">
                             <div class="pull-right media-option">
-                                <small>Yesterday 5:51am</small>
+                                <span ng-if="!message.seen" class="badge badge-success">New</span>
+                                <a ng-click="toggleSeen(message); $event.stopPropagation();">Mark as
+                                    <span ng-show="message.seen">un</span>read</a>
+                                <small>
+                                    | {{message.date | date}}
+                                    | {{ moment(notification.date).fromNow()}}
+                                </small>
                             </div>
                             <h4 class="sender">{{message.userFrom}}</h4>
 
@@ -51,29 +57,30 @@
                     <i class="glyphicon glyphicon-send"></i> Sent
                 </tab-heading>
                 <ul class="media-list msg-list">
-                    <li class="media unread" ng-class="{unread: !message.seen}"
-                        ng-repeat="message in messages.sent" ng-click="selectMessage(message)">
-                        <a class="pull-left" ui-sref="home.profile({username: message.userTo})">
-                            <img class="media-object img-circle img-online" src="{{message.userToAvatar}}" alt="...">
+                    <li class="media message unread"
+                        ng-repeat="message in messages.inbox" ng-click="selectMessage(message)">
+                        <a class="pull-left" ui-sref="home.profile({username: message.userFrom})">
+                            <img class="media-object img-circle img-online" ng-src="{{message.userFromAvatar}}" alt="...">
                         </a>
 
                         <div class="media-body">
                             <div class="pull-right media-option">
-                                <small>Yesterday 5:51am</small>
+                                <small>
+                                      {{message.date | date}}
+                                    | {{ moment(notification.date).fromNow()}}
+                                </small>
                             </div>
-                            <h4 class="sender">{{message.userTo}}</h4>
+                            <h4 class="sender">{{message.userFrom}}</h4>
 
                             <p><a><strong class="subject">{{message.title}}</strong></a></p>
-                        </div>
 
-                        <div class="panel panel-default" collapse="message.isCollapsed">
-                            <div class="panel-body">
-                                {{message.content}}
+                            <div class="panel panel-default" collapse="message.isCollapsed">
+                                <div class="panel-body">
+                                    {{message.content}}
+                                </div>
                             </div>
                         </div>
                     </li>
-
-                    <!--<button class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Toggle collapse</button>-->
                 </ul>
                 <button class="btn btn-primary center-block"> Load more messages</button>
             </v-tab>

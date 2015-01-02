@@ -10,30 +10,47 @@ angular.module('meshApp.messages', [
         });
     })
 
-    .controller('MessagesCtrl', function MessagesCtrl ($scope, meshApi, _) {
+    .controller('MessagesCtrl', function MessagesCtrl ($scope, meshApi, _, NotificationsFactory) {
+
+        $scope.moment = moment;
+
+        $scope.NotificationsFactory = NotificationsFactory;
 
         $scope.getReceivedMessages = function() {
             meshApi.getReceivedMessages()
-                .success(function(messages) {
-                    _.forEach(messages, function(message) {
+                .success(function(response) {
+                    _.forEach(response.messages, function(message) {
                         message.isCollapsed = true;
                     });
-                    $scope.messages.inbox = messages;
+                    $scope.messages.inbox = response.messages;
+                    NotificationsFactory.pendingMessagesCount = response.pendingMessagesCount;
                 });
         };
 
         $scope.getSentMessages = function() {
             meshApi.getSentMessages()
-                .success(function(messages) {
-                    _.forEach(messages, function(message) {
+                .success(function(response) {
+                    _.forEach(response.messages, function(message) {
                         message.isCollapsed = true;
                     });
-                    $scope.messages.sent = messages;
+                    $scope.messages.sent = response.messages;
+                    NotificationsFactory.pendingMessagesCount = response.pendingMessagesCount;
                 });
         };
 
         $scope.selectMessage = function(message) {
             message.isCollapsed = !message.isCollapsed;
+            if (!message.seen) {
+                $scope.toggleSeen(message);
+            }
+        };
+
+        $scope.toggleSeen = function(message) {
+            message.seen = !message.seen;
+            meshApi.updateMessage(message)
+                .success(function(response) {
+                    NotificationsFactory.pendingMessagesCount = response.pendingMessagesCount;
+                });
         };
 
         // placeholder for message deletion
@@ -45,45 +62,9 @@ angular.module('meshApp.messages', [
             return !_.some($scope.messages.inbox, { 'selected': true });
         };
 
-        // placeholder for the messages
         $scope.messages = {
-            inbox: [
-                {
-                    title: "New model",
-                    content: "Lorem Ipsum at adoc",
-                    sender: {
-                        username: "John Doe"
-                    },
-                    unread: true
-                },
-                {
-                    title: "Job sample",
-                    content: "Lorem Ipsum at adoc",
-                    sender: {
-                        username: "Jane Doe"
-                    },
-                    unread: true
-                },
-                {
-                    title: "Job proposal",
-                    content: "Lorem Ipsum at adoc",
-                    sender: {
-                        username: "Mary doe"
-                    },
-                    unread: true
-                },
-                {
-                    title: "Hello there",
-                    content: "Lorem Ipsum at adocs",
-                    sender: {
-                        username: "Mary doe"
-                    },
-                    unread: true
-                }
-            ],
-            sent: [
-
-            ]
+            inbox: [],
+            sent: []
         };
 
         $scope.activePane = 'inbox';

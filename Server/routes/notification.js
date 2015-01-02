@@ -7,10 +7,12 @@ var User = require('../models/user'),
     Boom = require('boom'),
     _ = require('lodash'),
     Joi = require('joi'),
-    Notification = require('../models/notifications').Notification;
+    Notification = require('../models/notifications').Notification,
+    Message = require('../models/message');
 
 module.exports = function (server) {
 
+    /*
     server.route({
         method: 'POST',
         path: '/notifications/test',
@@ -45,6 +47,7 @@ module.exports = function (server) {
                 });
         }
     });
+    */
 
     server.route({
         method: 'GET',
@@ -80,11 +83,18 @@ module.exports = function (server) {
             Notification.count({userTo: username, seen: false}, function(err, pendingNotificationsCount) {
                 if (err)
                     return reply(err).code(500);
-
-                Notification.find(query).sort('-date').skip(skip).limit(limit).exec(function(err, notifications) {
+                Message.count({userTo: username, seen: false}, function(err, pendingMessagesCount) {
                     if (err)
                         return reply(err).code(500);
-                    return reply({notifications: notifications, pendingNotificationsCount: pendingNotificationsCount});
+                    Notification.find(query).sort('-date').skip(skip).limit(limit).exec(function (err, notifications) {
+                        if (err)
+                            return reply(err).code(500);
+                        return reply({
+                            notifications: notifications,
+                            pendingNotificationsCount: pendingNotificationsCount,
+                            pendingMessagesCount: pendingMessagesCount
+                        });
+                    });
                 });
             });
         }
@@ -97,7 +107,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    _id: Joi.string().min(24).max(24)
+                    _id: Joi.string().min(24).max(24).required()
                 },
                 payload: {
                     seen: schema.notification.seen
@@ -121,7 +131,7 @@ module.exports = function (server) {
                     return reply(err).code(500);
                 }
                 else if(numAffected == 0) {
-                    return reply(Boom.badRequest('User does not have that notification')).code(500);
+                    return reply(Boom.badRequest('User does not have that notification')).code(400);
                 }
                 else {
                     Notification.count({userTo: username, seen: false}, function(err, pendingNotificationsCount) {

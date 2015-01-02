@@ -28,7 +28,7 @@
                     <div class="navbar-button btn-group btn-group-list btn-group-messages">
                         <button type="button" class="btn btn-default dropdown-toggle" ui-sref="home.messages">
                             <i class="fa fa-envelope-o"></i>
-                            <span class="badge">2</span>
+                            <span ng-show="NotificationsFactory.pendingMessagesCount > 0" class="badge"> {{ NotificationsFactory.pendingMessagesCount }} </span>
                         </button>
                     </div>
 

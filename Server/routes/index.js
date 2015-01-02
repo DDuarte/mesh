@@ -12,4 +12,5 @@ module.exports = function (server) {
     require('./catalog')(server);
     require('./search')(server);
     require('./notification')(server);
+    require('./messages')(server);
 };
