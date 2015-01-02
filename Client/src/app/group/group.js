@@ -30,6 +30,17 @@ angular.module('meshApp.group', [
                 });
         };
 
+        $scope.applied = false;
+        $scope.applyToGroup = function() {
+            meshApi.applyToGroup($scope.group.name)
+                .success(function() {
+                    $scope.applied = true;
+                    alert("Success");
+                })
+                .error(function(data) {
+                    alert("Error" + JSON.stringify(data));
+                });
+        };
 
         var models = function (g) { return _.range(10).map(function (i) { return { name: "Model " + g + "-" + i }; }); };
         $scope.galleries = _.range(10).map(function (i) { return { name: "Gallery " + i, models: models(i) }; });
