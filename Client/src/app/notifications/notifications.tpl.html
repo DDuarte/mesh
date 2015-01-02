@@ -70,7 +70,11 @@
                         </div>
                     </li>
                 </ul>
-                <button class="btn btn-primary center-block"> Load more notifications</button>
+                <div class="btn-list pull-right">
+                        <button class="btn btn-default" ng-hide="NotificationsFactory.limit <= 5" ng-click="loadMoreNotifications(-5)"> Less notifications</button>
+                        <button class="btn btn-primary" ng-click="loadMoreNotifications( 5)"> Load more notifications</button>
+                </div>
+                <br>
             </v-tab>
             <!--
             <v-tab>

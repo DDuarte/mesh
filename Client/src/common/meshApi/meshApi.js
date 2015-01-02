@@ -193,8 +193,12 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             return $http.get(server.url + '/users/' + getLoggedToken().username + '/messages/sent', { headers: getHeaders() });
         },
         getNotifications: function(options) {
-            options.headers = getHeaders();
-            return $http.get(server.url + '/notifications', options);
+            return $http({
+                url: server.url + '/notifications',
+                method: 'GET',
+                params: options,
+                headers: getHeaders()
+            });
         },
         updateNotification: function(notification) {
             return $http({
