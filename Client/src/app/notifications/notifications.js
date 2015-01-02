@@ -13,6 +13,7 @@ angular.module('meshApp.notifications', [
     .factory('NotificationsFactory', function NotificationsSharedVariables ($interval, meshApi) {
         var factory = {
             numberOfPendingNotifications: 0,
+            pendingMessagesCount: 0,
             notifications: [],
             limit: 10,
             stopPolling: function(){
@@ -24,6 +25,7 @@ angular.module('meshApp.notifications', [
                     .success(function(response) {
                         factory.notifications = response.notifications;
                         factory.numberOfPendingNotifications = response.pendingNotificationsCount;
+                        factory.pendingMessagesCount = response.pendingMessagesCount;
                     });
             }
         };
