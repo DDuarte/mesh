@@ -536,6 +536,51 @@ model.getPublishedGalleries = function (modelId) {
 };
 
 /**
+ * Publish a model to a given gallery
+ * @param {Number} modelId Id of the model to publish
+ * @param {String} galleryName Name of the gallery where the model will be published
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+model.addGallery = function (modelId, galleryName) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (model:Model {id: {id}})<-[:OWNS]-(user:User)',
+            'MATCH (gallery:Gallery {name: {galleryName}})<-[:OWNS]-(user)',
+            'CREATE (model)-[:PUBLISHED_IN]->(gallery)'
+        ].join('\n');
+
+        var params = {
+            id: Number(modelId),
+            galleryName: galleryName
+        };
+
+        db.query(query, params, function(err, results) {
+            if (err) throw err;
+            resolve(true);
+        });
+    });
+};
+
+model.removeAllGalleries = function(modelId) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (model:Model {id: {id}})',
+            'MATCH (model)-[publish:PUBLISHED_IN]->(gl:Gallery)',
+            'DELETE publish'
+        ].join('\n');
+
+        var params = {
+            id: Number(modelId)
+        };
+
+        db.query(query, params, function(err) {
+            if (err) throw err;
+            resolve(true);
+        });
+    });
+};
+
+/**
  * Replace the galleries of a model by the ones given as a parameter
  *
  * @param {Number} modelId Id of the target model
@@ -543,34 +588,25 @@ model.getPublishedGalleries = function (modelId) {
  * @returns {Promise} Resolves to true if successful, rejects otherwise
  */
 model.replaceGalleries = function (modelId, galleries) {
-    return new Promise(function (resolve, reject) {
-        var tagsClause = '[';
-        for (var i = 0; i < galleries.length; ++i) {
-            tagsClause += ('"' + galleries[i] + '"');
-            if (i < (galleries.length - 1)) // last element is not separated by a comma
-                tagsClause += ', '
-        }
-        tagsClause += ']';
+    return new Promise(function (resolve) {
+        model.removeAllGalleries(modelId)
+            .then(function() {
+                var galleryAdditions = [];
+                galleries.forEach(function(gallery) {
+                    galleryAdditions.push(model.addGallery(modelId, gallery));
+                });
 
-        var query = [
-            'MATCH (m: Model { id: {id}})<-[:OWNS]-(user:User)',
-            'OPTIONAL MATCH (m)-[g:PUBLISHED_IN]->(gl)',
-            'WHERE NOT gl.name IN ' + tagsClause,
-            'DELETE g',
-            'FOREACH (galleryName IN ' + tagsClause + ' |',
-            'MATCH (gallery:Gallery {name: galleryName})<-[:OWNS]-(user)',
-            'CREATE m-[:PUBLISHED_IN]->gallery',
-            ')'
-        ].join('\n');
-
-        var params = {
-            id: Number(modelId)
-        };
-
-        db.query(query, params, function (err) {
-            if (err) throw err;
-            return resolve(true);
-        });
+                Promise.all(galleryAdditions)
+                    .then(function() {
+                        resolve(true);
+                    })
+                    .catch(function() {
+                        throw new Error('Internal server error');
+                    });
+            })
+            .catch(function() {
+                throw new Error('Internal server error');
+            });
     });
 };
 
