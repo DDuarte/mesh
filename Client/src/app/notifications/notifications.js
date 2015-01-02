@@ -56,8 +56,11 @@ angular.module('meshApp.notifications', [
             NewFollowerNotification: function(notification) {
                 return { state: 'home.profile', params: {username: notification.follower} };
             },
-            NewGroupPublication: function(notification) {
+            NewGroupPublicationNotification: function(notification) {
                 return { state: 'home.model', params: {id: notification.publishedModelId} };
+            },
+            GroupInviteNotification: function(notification) {
+                return { state: 'home.group', params: {name: notification.groupName} };
             }
         };
 
@@ -78,10 +81,26 @@ angular.module('meshApp.notifications', [
             });
         };
 
-        $scope.toggleNotification = function(notification) {
+        $scope.toggleSeenNotification = function(notification) {
             notification.seen = !notification.seen;
             meshApi.updateNotification(notification).success(function() {
                 $scope.NotificationFactory.updatePendingNotifications();
+            }).error(function(error) {
+                console.log(error);
+            });
+        };
+
+        $scope.replyToInvite = function(reply, notification) {
+            notification.seen = true;
+            notification.accepted = reply;
+            meshApi.replyToGroupInvite(reply, notification).success(function() {
+
+                meshApi.updateNotification(notification).success(function() {
+                    $scope.NotificationFactory.updatePendingNotifications();
+                }).error(function(error) {
+                    console.log(error);
+                });
+
             }).error(function(error) {
                 console.log(error);
             });

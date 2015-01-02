@@ -11,37 +11,62 @@
                     <li class="media notification" ng-repeat="notification in NotificationFactory.notifications"
                         ng-class="{unread: notification.seen}"
                         ng-click="redirectToNotificationUrl(notification)">
-                        <!--
-                        <div class="ckbox ckbox-primary pull-left">
-                            <input ng-model="notification.selected" type="checkbox" id="checkbox{{$index+1}}">
-                            <label for="checkbox{{$index+1}}"></label>
-                        </div>
-                        -->
 
-                        <a ng-if="notification._type == 'NewFollowerNotification'" class="pull-left" href="#">
-                            <img class="media-object img-circle" ng-src="{{notification.followerAvatar}}" alt="...">
-                        </a>
+                        <a ng-switch="notification._type" class="pull-left">
+                            <img ng-switch-when="UploadNotification" class="media-object img-circle" ng-src="{{notification.modelThumbnail}}" alt="...">
 
-                        <a ng-if="notification._type == 'UploadNotification'" class="pull-left" href="#">
-                            <img class="media-object img-circle" ng-src="{{notification.modelThumbnail}}" alt="...">
+                            <img ng-switch-when="NewFollowerNotification" class="media-object img-circle" ng-src="{{notification.followerAvatar}}" alt="...">
+
+                            <img ng-switch-when="NewGroupPublicationNotification" class="media-object img-circle" ng-src="{{notification.publishedModelThumbnail}}" alt="...">
+
+                            <img ng-switch-when="GroupInviteNotification" class="media-object img-circle" ng-src="{{notification.inviterAvatar}}" alt="...">
                         </a>
 
                         <div class="media-body">
                             <div class="pull-right media-option">
                                 <span ng-if="!notification.seen" class="badge badge-success">New</span>
-                                <a ng-click="toggleNotification(notification); $event.stopPropagation();" >Mark as <span ng-show="notification.seen">un</span>read</a>
+                                <a ng-click="toggleSeenNotification(notification); $event.stopPropagation();" >Mark as <span ng-show="notification.seen">un</span>read</a>
                                 <small> | {{notification.date | date}}</small>
                             </div>
                             <h4 class="sender">{{ moment(notification.date).fromNow()}}</h4>
 
-                            <p ng-if="notification._type == 'NewFollowerNotification'">
-                                <strong class="subject"><a ui-sref="home.profile({username: notification.follower})">{{notification.follower}}</a> is now following you</strong>
-                            </p>
+                            <p ng-switch="notification._type">
+                                <strong ng-switch-when="UploadNotification" class="subject">
+                                        <a ui-sref="home.profile({username: notification.uploader})">{{notification.uploader}}</a>
+                                        has just uploaded a new model: <a ui-sref="home.model({id: notification.modelId})">{{notification.modelTitle}}</a>
+                                </strong>
 
-                            <p ng-if="notification._type == 'UploadNotification'">
-                                <strong class="subject"> <a ui-sref="home.profile({username: notification.uploader})">{{notification.uploader}}</a> has just uploaded a new model: <a ui-sref="home.model({id: notification.modelId})">{{notification.modelTitle}}</a></strong>
-                            </p>
+                                <strong ng-switch-when="NewFollowerNotification" class="subject">
+                                    <a ui-sref="home.profile({username: notification.follower})">{{notification.follower}}</a> is now following you
+                                </strong>
 
+                                <strong ng-switch-when="NewGroupPublicationNotification" class="subject">
+                                    <a ui-sref="home.profile({username: notification.publisher})">{{notification.publisher}}</a>
+                                    has just uploaded a new model: <a ui-sref="home.model({id: notification.publishedModelId})">{{notification.publishedModelTitle}}</a>
+                                    to the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
+                                </strong>
+
+                                <strong ng-switch-when="GroupInviteNotification" class="subject">
+                                    <span ng-show="notification.accepted == null">
+                                        <a ui-sref="home.profile({username: notification.inviterName})">{{notification.inviterName}}</a> has invited you
+                                        to join the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
+                                        <button class="btn btn-xs btn-rounded btn-success" ng-click="replyToInvite(true, notification); $event.stopPropagation();">Accept</button>
+                                        <button class="btn btn-xs btn-rounded btn-danger" ng-click="replyToInvite(false, notification); $event.stopPropagation();">Decline</button>
+                                    </span>
+                                    <span ng-show="notification.accepted == true">
+                                        You accepted <a ui-sref="home.profile({username: notification.inviterName})">{{notification.inviterName}}</a>'s invite
+                                        to join the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
+                                    </span>
+                                    <span ng-show="notification.accepted == false">
+                                        You declined <a ui-sref="home.profile({username: notification.inviterName})">{{notification.inviterName}}</a>'s invite
+                                        to join the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
+                                    </span>
+                                </strong>
+
+                                <strong ng-switch-default>
+                                    Unimplemented notification template
+                                </strong>
+                            </p>
                         </div>
                     </li>
                 </ul>
