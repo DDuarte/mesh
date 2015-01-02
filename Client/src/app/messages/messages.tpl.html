@@ -25,7 +25,7 @@
                             <label for="checkbox{{$index+1}}"></label>
                         </div>
                         <a class="pull-left" ui-sref="home.profile({username: message.userFrom})">
-                            <img class="media-object img-circle img-online" ng-src="{{message.userFromAvatar}}" alt="...">
+                            <img class="media-object img-circle" ng-src="{{message.userFromAvatar}}" alt="...">
                         </a>
 
                         <div class="media-body">
@@ -58,9 +58,9 @@
                 </tab-heading>
                 <ul class="media-list msg-list">
                     <li class="media message unread"
-                        ng-repeat="message in messages.inbox" ng-click="selectMessage(message)">
+                        ng-repeat="message in messages.sent" ng-click="selectMessage(message)">
                         <a class="pull-left" ui-sref="home.profile({username: message.userFrom})">
-                            <img class="media-object img-circle img-online" ng-src="{{message.userFromAvatar}}" alt="...">
+                            <img class="media-object img-circle" ng-src="{{message.userFromAvatar}}" alt="...">
                         </a>
 
                         <div class="media-body">
