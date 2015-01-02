@@ -84,7 +84,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 }
             }
         },
@@ -117,7 +117,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 }
             }
         },
@@ -150,7 +150,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 },
                 payload: {
                     inviteeName: Joi.string()
@@ -190,7 +190,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 },
                 payload: {
                     accepted: Joi.boolean()
@@ -231,7 +231,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 },
                 payload: {
                     accepted: Joi.boolean().required()
@@ -278,7 +278,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 }
             }
         },
@@ -328,7 +328,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 },
                 payload: {
                     adminName: schema.user.username.required()
@@ -361,7 +361,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 },
                 payload: {
                     adminName: schema.user.username.required()
@@ -395,7 +395,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.id.required()
+                    id: schema.group.name.required()
                 }
             }
         },
@@ -436,7 +436,7 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.id.required(),
+                    id: schema.group.name.required(),
                     galleryName: schema.group.galleryName.required()
                 }
             }
