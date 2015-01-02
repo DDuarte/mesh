@@ -24,7 +24,6 @@ angular.module('meshApp.group', [
             meshApi.getGroup($stateParams.name).
                 success(function (data, status, headers, config) {
                     $scope.group = data.group;
-
                 }).
                 error(function (err) {
                     alert("The group could not be retrieved: " + err.message); //TODO redirect to error page
