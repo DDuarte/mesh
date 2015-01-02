@@ -29,14 +29,16 @@ var newGroupPublicationSchema = notificationsSchema.extend({
     groupName: String,
     groupId: Number,
     publishedModelId: Number,
-    publishedModelThumbnail: String
+    publishedModelThumbnail: String,
+    publishedModelTitle: String
 });
 
 var groupInviteSchema = notificationsSchema.extend({
     groupName: String,
     groupId: Number,
     inviterName: String,
-    inviterAvatar: String
+    inviterAvatar: String,
+    accepted: Boolean
 });
 
 notificationsSchema.statics.notifyFollowers = function(user, message, url, image) {

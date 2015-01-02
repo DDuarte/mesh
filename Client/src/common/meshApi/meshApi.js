@@ -203,6 +203,15 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 data: { seen: notification.seen },
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
+        },
+        replyToGroupInvite: function(reply, notification) {
+            // TODO implement api request
+            return $http({
+                url: server.url + '/notifications/' + notification._id,
+                method: 'PATCH',
+                data: { seen: notification.seen },
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
+            });
         }
     };
 
