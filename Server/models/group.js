@@ -110,7 +110,7 @@ group.getById = function (id) {
  */
 group.isAdmin = function (groupName, userName) {
     var query = [
-        'MATCH (group:group {name: {groupName})<-[:IS_ADMIN]-(user:User {name: {userName}})',
+        'MATCH (group:Group {name: {groupName})<-[:IS_ADMIN]-(user:User {username: {userName}})',
         'RETURN user'
     ].join('\n');
 
@@ -121,7 +121,7 @@ group.isAdmin = function (groupName, userName) {
 
     return new Promise(function (resolve, reject) {
         db.query(query, params, function (err, results) {
-            if (err) throw new Error('Internal database error');
+            if (err) throw err;
 
             if (results.length > 0)
                 return resolve(true);
@@ -139,7 +139,7 @@ group.isAdmin = function (groupName, userName) {
  */
 group.isMember = function (groupName, userName) {
     var query = [
-        'MATCH (group:group {name: {groupName})<-[:IS_MEMBER]-(user:User {name: {userName}})',
+        'MATCH (group:Group {name: {groupName}})<-[r]-(user:User {username: {userName}})',
         'RETURN user'
     ].join('\n');
 
@@ -150,8 +150,8 @@ group.isMember = function (groupName, userName) {
 
     return new Promise(function (resolve, reject) {
         db.query(query, params, function (err, results) {
-            if (err) throw new Error('Internal database error');
-
+            if (err) throw err;
+            console.log("isMemberResults", results);
             if (results.length > 0)
                 return resolve(true);
             else
@@ -214,24 +214,23 @@ group.addAdmin = function (groupName, adminName) {
 
 /**
  * Returns the group administrators
- * @param {String} groupId Id of the group
+ * @param {String} groupName Id of the group
  * @returns {Promise} Resolves to the group administrators if successful, rejects otherwise
  */
-group.getAdministrators = function (groupId) {
+group.getAdministrators = function (groupName) {
     var query = [
-        'MATCH (group:Group)<-[:IS_ADMIN]-(admins:User)',
-        'WHERE id(group) = {id}',
-        'RETURN admins'
+        'MATCH (group:Group {name: {groupName}})<-[:IS_ADMIN]-(admins:User)',
+        'RETURN collect({ username: admins.username }) as admins'
     ].join('\n');
 
     var params = {
-        id: groupId
+        groupName: groupName
     };
 
     return new Promise(function (resolve, reject) {
         db.query(query, params, function (err, results) {
-            if (err) throw new Error('Internal database error');
-            return resolve(results);
+            if (err) throw err;
+            return resolve(results[0].admins);
         });
     });
 };

@@ -293,7 +293,7 @@ module.exports = function (server) {
                             Promise.map(administrators, function (administrator) {
                                 return new Promise(function (resolve) {
                                     var notification = new GroupApplicationNotification({
-                                        userTo: administrator,
+                                        userTo: administrator.username,
                                         seen: false,
                                         date: new Date(),
                                         applicantName: request.auth.credentials.username,
@@ -301,8 +301,10 @@ module.exports = function (server) {
                                     });
 
                                     notification.save(function (err) {
-                                        if (err)
+                                        if (err) {
+                                            console.log("saveError");
                                             throw err;
+                                        }
                                         resolve(true);
                                     });
                                 });
