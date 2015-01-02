@@ -76,29 +76,6 @@
                                     </span>
                                 </strong>
 
-                                <strong ng-switch-when="GroupInviteNotification" class="subject">
-                                    <span ng-show="notification.accepted == null">
-                                        <a ui-sref="home.profile({username: notification.inviterName})">{{notification.inviterName}}</a> has invited you
-                                        to join the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
-                                        <button class="btn btn-xs btn-rounded btn-success"
-                                                ng-click="replyToInvite(true, notification); $event.stopPropagation();">
-                                            Accept
-                                        </button>
-                                        <button class="btn btn-xs btn-rounded btn-danger"
-                                                ng-click="replyToInvite(false, notification); $event.stopPropagation();">
-                                            Decline
-                                        </button>
-                                    </span>
-                                    <span ng-show="notification.accepted == true">
-                                        You accepted <a ui-sref="home.profile({username: notification.inviterName})">{{notification.inviterName}}</a>'s invite
-                                        to join the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
-                                    </span>
-                                    <span ng-show="notification.accepted == false">
-                                        You declined <a ui-sref="home.profile({username: notification.inviterName})">{{notification.inviterName}}</a>'s invite
-                                        to join the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
-                                    </span>
-                                </strong>
-
                                 <strong ng-switch-when="GroupApplicationNotification">
                                     <span ng-show="notification.accepted == null">
                                         <a ui-sref="home.profile({username: notification.inviterName})">{{notification.applicantName}}</a> has applied
