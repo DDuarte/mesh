@@ -43,7 +43,7 @@
     "hapi-auth-jsonwebtoken": "^0.2.1",
     "hapi-route-directory": "0.0.4",
     "hapi-routes-status": "^1.0.6",
-    "joi": "^5.0.0",
+    "joi": "^4.9.0",
     "jsonwebtoken": "^1.1.2",
     "lodash": "^2.4.1",
     "moment": "^2.8.4",
