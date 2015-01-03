@@ -16,8 +16,13 @@ angular.module('meshApp.messages', [
 
         $scope.NotificationsFactory = NotificationsFactory;
 
+        $scope.limit = 5;
+
+        var selectedTab = '';
+
         $scope.getReceivedMessages = function() {
-            meshApi.getReceivedMessages()
+            selectedTab = 'received';
+            meshApi.getReceivedMessages({limit: $scope.limit})
                 .success(function(response) {
                     _.forEach(response.messages, function(message) {
                         message.isCollapsed = true;
@@ -29,7 +34,8 @@ angular.module('meshApp.messages', [
         };
 
         $scope.getSentMessages = function() {
-            meshApi.getSentMessages()
+            selectedTab = 'sent';
+            meshApi.getSentMessages({limit: $scope.limit})
                 .success(function(response) {
                     _.forEach(response.messages, function(message) {
                         message.isCollapsed = true;
@@ -39,9 +45,21 @@ angular.module('meshApp.messages', [
                 });
         };
 
+        $scope.getTrashMessages = function() {
+            selectedTab = 'trash';
+            meshApi.getTrashMessages({limit: $scope.limit})
+                .success(function(response) {
+                    _.forEach(response.messages, function(message) {
+                        message.isCollapsed = true;
+                    });
+                    $scope.messages.trash = response.messages;
+                    NotificationsFactory.pendingMessagesCount = response.pendingMessagesCount;
+                });
+        };
+
         $scope.selectMessage = function(message) {
             message.isCollapsed = !message.isCollapsed;
-            if (!message.seen) {
+            if (!message.seen && selectedTab == 'received') {
                 $scope.toggleSeen(message);
             }
         };
@@ -56,6 +74,10 @@ angular.module('meshApp.messages', [
 
         $scope.deleteMessages = function (messages) {
             var selectedMessages =  _.filter(messages, {'selected': true});
+            meshApi.deleteMessages(selectedMessages).success(function(response) {
+                NotificationsFactory.pendingMessagesCount = response.pendingMessagesCount;
+                toaster.pop('success', "", "Messages deleted successfuly");
+            });
         };
 
         $scope.noMessagesSelected = function () {
@@ -87,5 +109,14 @@ angular.module('meshApp.messages', [
                 .error(function (data) {
                     toaster.pop('error', "Error", JSON.stringify(data));
                 });
+        };
+
+        $scope.loadMoreMessages = function(more) {
+            $scope.limit += more;
+            if (selectedTab == 'received') {
+                $scope.getReceivedMessages();
+            } else if (selectedTab == 'sent') {
+                $scope.getSentMessages();
+            }
         };
     });

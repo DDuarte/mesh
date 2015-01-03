@@ -1,4 +1,4 @@
-angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, $upload) {
+angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, $upload, _) {
     var api = {
         init: function (data) {
             ipCookie('token', data);
@@ -189,17 +189,44 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         sendMessage: function(toUsername, title, content) {
             return $http.post(server.url + '/messages', {userTo: toUsername, title: title, content: content}, { headers: getHeaders() });
         },
-        getReceivedMessages: function() {
-            return $http.get(server.url + '/users/' + getLoggedToken().username + '/messages/received', { headers: getHeaders() });
+        getReceivedMessages: function(options) {
+            return $http({
+                url: server.url + '/users/' + getLoggedToken().username + '/messages/received',
+                method: 'GET',
+                params: options,
+                headers: getHeaders()
+            });
         },
-        getSentMessages: function() {
-            return $http.get(server.url + '/users/' + getLoggedToken().username + '/messages/sent', { headers: getHeaders() });
+        getSentMessages: function(options) {
+            return $http({
+                url: server.url + '/users/' + getLoggedToken().username + '/messages/sent',
+                method: 'GET',
+                params: options,
+                headers: getHeaders()
+            });
+        },
+        getTrashMessages: function(options) {
+            return $http({
+                url: server.url + '/users/' + getLoggedToken().username + '/messages/trash',
+                method: 'GET',
+                params: options,
+                headers: getHeaders()
+            });
         },
         updateMessage: function(message) {
             return $http({
                 url: server.url + '/users/' + getLoggedToken().username + '/messages/' + message._id,
                 method: 'PATCH',
                 data: { seen: message.seen },
+                headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
+            });
+        },
+        deleteMessages: function(messages) {
+            var messageIds = _.map(messages, function(message) { return message._id; });
+            return $http({
+                url: server.url + '/users/' + getLoggedToken().username + '/messages',
+                method: 'DELETE',
+                params: { _id: messageIds },
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
         },
