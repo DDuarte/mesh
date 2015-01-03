@@ -10,7 +10,7 @@ angular.module('meshApp.messages', [
         });
     })
 
-    .controller('MessagesCtrl', function MessagesCtrl ($scope, meshApi, _, NotificationsFactory) {
+    .controller('MessagesCtrl', function MessagesCtrl ($scope, meshApi, _, NotificationsFactory, toaster) {
 
         $scope.moment = moment;
 
@@ -21,6 +21,7 @@ angular.module('meshApp.messages', [
                 .success(function(response) {
                     _.forEach(response.messages, function(message) {
                         message.isCollapsed = true;
+                        message.showReplyForm = false;
                     });
                     $scope.messages.inbox = response.messages;
                     NotificationsFactory.pendingMessagesCount = response.pendingMessagesCount;
@@ -53,9 +54,8 @@ angular.module('meshApp.messages', [
                 });
         };
 
-        // placeholder for message deletion
         $scope.deleteMessages = function (messages) {
-           var selectedMessages =  _.filter(messages, {'selected': true});
+            var selectedMessages =  _.filter(messages, {'selected': true});
         };
 
         $scope.noMessagesSelected = function () {
@@ -69,4 +69,23 @@ angular.module('meshApp.messages', [
 
         $scope.activePane = 'inbox';
 
+        $scope.toggleReplying = function(message) {
+            message.showReplyForm = !message.showReplyForm;
+            message.reply = {
+                to: message.userFrom,
+                title: 'Re: ' + message.title,
+                content: ''
+            };
+        };
+
+        $scope.sendReply = function (message) {
+            meshApi.sendMessage(message.reply.to, message.reply.title, message.reply.content)
+                .success(function () {
+                    message.showReplyForm = false;
+                    toaster.pop('success', "", "Message sent successfuly");
+                })
+                .error(function (data) {
+                    toaster.pop('error', "Error", JSON.stringify(data));
+                });
+        };
     });

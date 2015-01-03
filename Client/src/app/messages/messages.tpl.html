@@ -3,11 +3,11 @@
     <div class="contentpanel">
         <div class="clearfix mb10">
             <div class="col-sm-3 col-md-3 col-lg-2 mb10">
-                <a ui-sref="home.createMessage" class="pull-left btn btn-success btn-block btn-create-msg mb10">Create Message</a>
+                <a ui-sref="home.createMessage" class="pull-left btn btn-success btn-block btn-create-msg mb10"><i class="fa fa-plus-square"></i> Create Message</a>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-8"></div>
             <div class="col-sm-3 col-md-3 col-lg-2">
-                <a href="" class="pull-right btn btn-block btn-danger btn-create-msg" ng-class="{disabled: noMessagesSelected()}" ng-click="deleteMessages(messages.inbox)">Delete messages</a>
+                <a class="pull-right btn btn-block btn-danger btn-create-msg" ng-class="{disabled: noMessagesSelected()}" ng-click="deleteMessages(messages.inbox)"><i class="fa fa-trash-o"></i> Delete messages</a>
             </div>
         </div>
 
@@ -35,16 +35,48 @@
                                     <span ng-show="message.seen">un</span>read</a>
                                 <small>
                                     | {{message.date | date}}
-                                    | {{ moment(notification.date).fromNow()}}
+                                    | {{ moment(message.date).fromNow()}}
                                 </small>
                             </div>
                             <h4 class="sender">{{message.userFrom}}</h4>
 
                             <p><a><strong class="subject">{{message.title}}</strong></a></p>
 
-                            <div class="panel panel-default" collapse="message.isCollapsed">
+                            <div style="margin-top: 10px" class="panel panel-default widget-messaging" collapse="message.isCollapsed">
                                 <div class="panel-body">
+                                    <div class="pull-right">
+                                        <a class="" ng-click="toggleReplying(message); $event.stopPropagation();"><i class="fa fa-edit"></i> Reply</a>
+                                    </div>
                                     {{message.content}}
+                                </div>
+                                <div class="panel-footer" collapse="!message.showReplyForm" ng-click="$event.stopPropagation();">
+                                    <form name="sendReplyForm" class="form-horizontal form-bordered">
+                                        <h4>Reply to {{message.userFrom}}</h4>
+                                        <div class="form-group mb15">
+                                            <p class="text-danger"
+                                               ng-show="sendReplyForm.title.$invalid && sendReplyForm.title.$dirty">
+                                                Message title must have at least 1 character and at most 64 characters
+                                            </p>
+                                            <input name="title" type="text"
+                                                   placeholder="Message title" ng-model="message.reply.title"
+                                                   class="form-control" ng-minlength="1"
+                                                   ng-maxlength="64" ng-required="true">
+                                        </div>
+                                        <div class="form-group mb15">
+                                            <p class="text-danger"
+                                               ng-show="sendReplyForm.content.$invalid && sendReplyForm.content.$dirty">
+                                                Message content must have at least 1 character and at most 1024 characters
+                                            </p>
+                                            <textarea name="content"
+                                                      id="autoResizeTA"
+                                                      ng-model="message.reply.content"
+                                                      ng-minlength="1" ng-maxlength="1024"
+                                                      placeholder="Write the message contents here"
+                                                      class="form-control" rows="5"
+                                                      ng-required="true"></textarea>
+                                        </div>
+                                    </form>
+                                    <button ng-click="sendReply(message)"class="btn btn-primary" ng-disabled="sendReplyForm.$invalid">Send message</button>
                                 </div>
                             </div>
                         </div>
@@ -66,8 +98,8 @@
                         <div class="media-body">
                             <div class="pull-right media-option">
                                 <small>
-                                      {{message.date | date}}
-                                    | {{ moment(notification.date).fromNow()}}
+                                    {{message.date | date}}
+                                    | {{ moment(message.date).fromNow()}}
                                 </small>
                             </div>
                             <h4 class="sender">{{message.userFrom}}</h4>
