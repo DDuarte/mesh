@@ -143,8 +143,9 @@
 
                         <div class="media-body">
                             <div class="pull-right media-option">
+                                <a ng-click="removeFromTrash(message); $event.stopPropagation();">Remove from trash</a>
                                 <small>
-                                    {{message.date | date}}
+                                    | {{message.date | date}}
                                     | {{ moment(message.date).fromNow()}}
                                 </small>
                             </div>

@@ -217,11 +217,15 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             return $http({
                 url: server.url + '/users/' + getLoggedToken().username + '/messages/' + message._id,
                 method: 'PATCH',
-                data: { seen: message.seen },
+                data: { seen: message.seen, userToDeleted: message.userToDeleted },
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
         },
         deleteMessages: function(messages) {
+            if (messages.length == 1) { // workaround for joi < 6.0 not validating single element as array
+                messages[0].userToDeleted = true;
+                return this.updateMessage(messages[0]);
+            }
             var messageIds = _.map(messages, function(message) { return message._id; });
             return $http({
                 url: server.url + '/users/' + getLoggedToken().username + '/messages',

@@ -180,7 +180,7 @@ module.exports = function (server) {
                     username: schema.user.username.required()
                 },
                 query: {
-                    _id: Joi.array().includes(Joi.string().min(24).max(24))
+                    _id: Joi.array().includes(Joi.string().min(24).max(24))//.single()
                 }
             }
         },
@@ -222,7 +222,8 @@ module.exports = function (server) {
                     _id: Joi.string().min(24).max(24).required()
                 },
                 payload: {
-                    seen: schema.message.seen
+                    seen: schema.message.seen,
+                    userToDeleted: Joi.boolean()
                 }
             }
         },
@@ -235,7 +236,8 @@ module.exports = function (server) {
             };
 
             var updatedData = {
-                seen: request.payload.seen
+                seen: request.payload.seen,
+                userToDeleted: request.payload.userToDeleted
             };
 
             Message.update(query, updatedData, { multi: false }, function(err, numAffected) {

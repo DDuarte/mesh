@@ -76,7 +76,8 @@ angular.module('meshApp.messages', [
             var selectedMessages =  _.filter(messages, {'selected': true});
             meshApi.deleteMessages(selectedMessages).success(function(response) {
                 NotificationsFactory.pendingMessagesCount = response.pendingMessagesCount;
-                toaster.pop('success', "", "Messages deleted successfuly");
+                toaster.pop('success', "", "Messages deleted successfully");
+                refreshMessages();
             });
         };
 
@@ -100,23 +101,38 @@ angular.module('meshApp.messages', [
             };
         };
 
+        var toasterErrorHandler = function (data) {
+            toaster.pop('error', "Error", JSON.stringify(data));
+        };
+
         $scope.sendReply = function (message) {
             meshApi.sendMessage(message.reply.to, message.reply.title, message.reply.content)
                 .success(function () {
                     message.showReplyForm = false;
-                    toaster.pop('success', "", "Message sent successfuly");
+                    toaster.pop('success', "", "Message sent successfully");
                 })
-                .error(function (data) {
-                    toaster.pop('error', "Error", JSON.stringify(data));
-                });
+                .error(toasterErrorHandler);
+        };
+
+        $scope.removeFromTrash = function(message) {
+            message.userToDeleted = false;
+            meshApi.updateMessage(message).success(function(response) {
+                refreshMessages();
+            }).error(toasterErrorHandler);
         };
 
         $scope.loadMoreMessages = function(more) {
             $scope.limit += more;
+            refreshMessages();
+        };
+
+        var refreshMessages = function() {
             if (selectedTab == 'received') {
                 $scope.getReceivedMessages();
             } else if (selectedTab == 'sent') {
                 $scope.getSentMessages();
+            } else if (selectedTab == 'trash') {
+                $scope.getTrashMessages();
             }
         };
     });
