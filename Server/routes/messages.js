@@ -38,7 +38,9 @@ module.exports = function (server) {
                         content: request.payload.content,
                         title: request.payload.title,
                         date: new Date(),
-                        seen: false
+                        seen: false,
+                        userToDeleted: false,
+                        userFromDeleted: false
                     });
 
                     message.save(function(err, message) {
@@ -76,9 +78,9 @@ module.exports = function (server) {
             var limit = request.query.limit || 10;
             var skip = request.query.skip || 0;
             var username = request.params.username;
-            var query = {userFrom: request.params.username};
+            var query = {userFrom: request.params.username, userFromDeleted: false};
 
-            Message.count({userTo: username, seen: false}, function(err, pendingMessagesCount) {
+            Message.count({userTo: username, seen: false, userToDeleted: false}, function(err, pendingMessagesCount) {
                 if (err)
                     return reply(err).code(500);
 
@@ -113,9 +115,9 @@ module.exports = function (server) {
             var limit = request.query.limit || 10;
             var skip = request.query.skip || 0;
             var username = request.params.username;
-            var query = {userTo: request.params.username};
+            var query = {userTo: request.params.username, userToDeleted: false};
 
-            Message.count({userTo: username, seen: false}, function(err, pendingMessagesCount) {
+            Message.count({userTo: username, seen: false, userToDeleted: false}, function(err, pendingMessagesCount) {
                 if (err)
                     return reply(err).code(500);
 
@@ -124,6 +126,87 @@ module.exports = function (server) {
                         return reply(err).code(500);
                     return reply({messages: messages, pendingMessagesCount: pendingMessagesCount});
                 });
+            });
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/users/{username}/messages/trash',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                },
+                query: {
+                    limit: Joi.number().greater(0),
+                    skip: Joi.number().greater(0)
+                }
+            }
+        },
+        handler: function(request, reply) {
+            if (request.params.username != request.auth.credentials.username)
+                reply('Permission denied').code(403);
+
+            var limit = request.query.limit || 10;
+            var skip = request.query.skip || 0;
+            var username = request.params.username;
+            var query = {$or: [
+                { userFrom: request.params.username, userFromDeleted: true },
+                { userTo: request.params.username, userToDeleted: true }
+            ]};
+
+            Message.count({userTo: username, seen: false, userToDeleted: false}, function(err, pendingMessagesCount) {
+                if (err)
+                    return reply(err).code(500);
+
+                Message.find(query).sort('-date').skip(skip).limit(limit).exec(function(err, messages) {
+                    if (err)
+                        return reply(err).code(500);
+                    return reply({messages: messages, pendingMessagesCount: pendingMessagesCount});
+                });
+            });
+        }
+    });
+
+    server.route({
+        method: 'DELETE',
+        path: '/users/{username}/messages',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                },
+                query: {
+                    _id: Joi.array().includes(Joi.string().min(24).max(24)).single()
+                }
+            }
+        },
+        handler: function(request, reply) {
+            if (request.params.username != request.auth.credentials.username)
+                reply('Permission denied').code(403);
+
+            var username = request.params.username;
+            var query = { _id: {$in: request.query._id}, userTo: username };
+            var updatedData = { userToDeleted: true };
+
+            Message.update(query, updatedData, { multi: true }, function(err, numAffected) {
+                if(err) {
+                    return reply(err).code(500);
+                }
+                else if(numAffected == 0) {
+                    return reply(Boom.badRequest('User does not have those messages')).code(400);
+                }
+                else {
+                    Message.count({userTo: username, seen: false}, function(err, pendingMessagesCount) {
+                        if (err)
+                            return reply(err).code(500);
+
+                        return reply({message: 'success', pendingMessagesCount: pendingMessagesCount});
+                    });
+                }
             });
         }
     });
