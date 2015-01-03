@@ -180,7 +180,7 @@ module.exports = function (server) {
                     username: schema.user.username.required()
                 },
                 query: {
-                    _id: Joi.array().includes(Joi.string().min(24).max(24)).single()
+                    _id: Joi.array().includes(Joi.string().min(24).max(24))
                 }
             }
         },
