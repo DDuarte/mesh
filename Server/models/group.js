@@ -13,7 +13,7 @@ group.create = function (groupInfo) {
         'MATCH (user:User {username: {adminName}})',
         'CREATE (group:Group {name: {name}, lowerName: lower({ name }), description: {description}, creationDate: {creationDate}, visibility: {visibility}})',
         'WITH group, user',
-        'CREATE (group)<-[:IS_ADMIN]-(user)',
+        'CREATE (group)<-[r:IS_ADMIN {joinDate: {creationDate}}]-(user)',
         'RETURN group.name as name'
     ].join('\n');
 
@@ -170,12 +170,13 @@ group.addMember = function (groupName, memberName) {
     var query = [
         'MATCH (group:Group {name: {groupName}})',
         'MATCH (user:User {username: {memberName}})',
-        'CREATE group<-[:IS_MEMBER]-user'
+        'CREATE group<-[r:IS_MEMBER {joinDate: {joinDate}}]-user'
     ].join('\n');
 
     var params = {
         groupName: groupName,
-        memberName: memberName
+        memberName: memberName,
+        joinDate: (new Date()).toISOString()
     };
 
     return new Promise(function (resolve) {
