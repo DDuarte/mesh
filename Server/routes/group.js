@@ -173,7 +173,7 @@ module.exports = function (server) {
                     id: schema.group.name.required()
                 },
                 payload: {
-                    inviteeName: Joi.string()
+                    inviteeName: Joi.string().required()
                 }
             }
         },
