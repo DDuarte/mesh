@@ -75,12 +75,19 @@ angular.module('meshApp.profile', [
 
         //$scope.getAllModels();
 
+        var firstRun = true;
         $scope.getAllGalleries = function () {
+
             meshApi.getAllGalleries($scope.user.username)
                 .then(function (response) {
                     //console.log("Galleries", response.data);
                     $scope.galleries = response.data;
                 });
+            if (firstRun) {
+                $scope.isAllModelsSelected = true;
+                $scope.getAllModels();
+                firstRun = false;
+            }
         };
 
         $scope.deleteGallery = function () {
