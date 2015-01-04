@@ -157,6 +157,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: getHeaders()
             });
         },
+        getGroupMembers: function (id) {
+            return $http.get(server.url + '/groups/' + id + '/members', {headers: getHeaders()});
+        },
         uploadModel: function (modelName, modelDescription, tags, file) {
             return $upload.upload({
                 url: server.url + '/upload', // upload.php script, node.js route, or servlet url
