@@ -81,7 +81,10 @@ module.exports = function (server) {
         path: '/groups/{id}/admins',
         method: 'GET',
         config: {
-            auth: 'token',
+            auth: {
+                mode: 'optional',
+                strategy: 'token'
+            },
             validate: {
                 params: {
                     id: schema.group.name.required()
@@ -114,7 +117,10 @@ module.exports = function (server) {
         path: '/groups/{id}/members',
         method: 'GET',
         config: {
-            auth: 'token',
+            auth: {
+                mode: 'optional',
+                strategy: 'token'
+            },
             validate: {
                 params: {
                     id: schema.group.name.required()
