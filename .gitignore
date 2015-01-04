@@ -5,3 +5,10 @@ dump.rdb
 
 Server/models/*.obj
 Server/models/*.stl
+
+.ntvs_analysis.dat
+bin
+obj
+*.sln
+*.njsproj
+*.suo
