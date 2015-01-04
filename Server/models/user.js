@@ -36,7 +36,7 @@ user.getByUsername = function (username, loggedUsername) {
             if (results.length > 0)
                 return resolve(results[0]['user']);
             else
-                return reject('No users were found');
+                return reject('User not found');
         });
     });
 };
