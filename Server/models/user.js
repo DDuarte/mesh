@@ -139,6 +139,28 @@ user.getFollowing = function (username) {
     });
 };
 
+user.getGroups = function (username, isOwnUser) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (user:User {username: { username }})-[r]->(group:Group' /*+ isOwnUser ? '' : '{isPublic: true}'*/ + ')',
+            'RETURN collect({name: group.name, about: group.about, avatar: group.avatar}) as groups'
+        ].join('\n');
+
+        var params = {
+            username: username
+        };
+
+        db.query(query, params, function (err, results) {
+            if (err) return reject(err);
+
+            if (results.length > 0)
+                return resolve(results[0]['groups']);
+            else
+                return resolve('No groups were found');
+        });
+    });
+};
+
 /**
  *
  * Creates a user based on the registerInfo
@@ -729,5 +751,6 @@ user.addModelToGallery = function (username, galleryName, modelId) {
         });
     });
 };
+
 
 module.exports = user;
