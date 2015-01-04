@@ -1,459 +1,446 @@
 <div ng-controller="ProfileCtrl" ng-init="init()">
 
-<breadcrum icon="fa fa-user" title="Profile Page" path="Pages"></breadcrum>
+    <breadcrum icon="fa fa-user" title="Profile Page" path="Pages"></breadcrum>
 
-<div class="contentpanel">
+    <div class="contentpanel">
 
-<div class="col-sm-4 col-md-3">
-    <div class="text-center">
-        <img src="{{user.avatar}}" class="img-circle img-offline img-responsive img-profile" alt=""/>
-        <h4 class="profile-name mb5">{{user.username}}</h4>
+        <div class="col-sm-4 col-md-3">
+            <div class="text-center">
+                <img src="{{user.avatar}}" class="img-circle img-offline img-responsive img-profile" alt=""/>
+                <h4 class="profile-name mb5">{{user.username}}</h4>
 
-        <div><i class="fa fa-certificate"></i> Page views: <b>{{user.counter}}</b></div>
-        <div><i class="fa fa-flag"></i> {{user.country}}</div>
-        <div><i class="fa fa-envelope-o"></i> <a href=""> {{user.email}} </a></div>
+                <div><i class="fa fa-certificate"></i> Page views: <b>{{user.counter}}</b></div>
+                <div><i class="fa fa-flag"></i> {{user.country}}</div>
+                <div><i class="fa fa-envelope-o"></i> <a href=""> {{user.email}} </a></div>
         <span ng-if="isLoggedIn && user.username != ownUsername">
             <div class="mb10"></div>
             <a ui-sref="home.createMessage({toUsername: user.username})" class="btn btn-primary">Send message to user</a> <br>
             <div class="mb10"></div>
             <a ng-click="inviteToGroup()" class="btn btn-primary">Invite to group</a>
         </span>
-        <div class="mb20"></div>
-    </div>
-    <!-- text-center -->
-
-    <br/>
-
-    <h5 class="md-title">About</h5>
-
-    <p class="mb30">{{user.about}}</p>
-
-    <h5 class="md-title">Interests</h5>
-
-    <div class="media-manager-sidebar">
-        <ul class="tag-list mb30">
-            <li ng-repeat="interest in user.interests"><a>{{interest}}</a></li>
-            <!--<li><a ui-sref="home.search({q: 'Design' })">Design</a></li> -->
-        </ul>
-    </div>
-    <br>
-    <br>
-
-    <div class="mb30"></div>
-    <h5 class="md-title">Connect</h5>
-    <ul class="list-unstyled social-list">
-        <li><i class="fa fa-linkedin"></i> <a href="#">linkedin.com/4ever-eileen</a></li>
-    </ul>
-
-    <div class="mb30"></div>
-</div>
-<!-- col-sm-4 col-md-3 -->
-
-<div class="col-sm-8 col-md-9">
-
-<tabset>
-<tab>
-    <tab-heading><strong>Activities</strong></tab-heading>
-    <div class="activity-list">
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="images/photos/user1.png" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <strong>Ray Sin</strong> started following <strong>Eileen Sideways</strong>. <br/>
-                <small class="text-muted">Yesterday at 3:30pm</small>
-            </div>
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <strong>Elen Adarna</strong> posted a new blog. <br/>
-                <small class="text-muted">Today at 3:18pm</small>
-
-                <div class="media blog-media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object thumbnail" src="images/photos/media5.png" alt=""/>
-                    </a>
-
-                    <div class="media-body">
-                        <h4 class="media-title"><a href="#">Ut Enim Ad Minim Veniam</a></h4>
-
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat... <a href="#">Read more</a></p>
-                    </div>
-                </div>
-                <!-- media -->
-            </div>
-            <!-- media-body -->
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object" src="images/photos/user2.png" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <strong>Chris Anthemum</strong> started following <strong>Eileen Sideways</strong>. <br/>
-                <small class="text-muted">2 days ago at 8:30am</small>
-            </div>
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <strong>Elen Adarna</strong> uploaded <a href="#">5 photos</a>. <br/>
-                <small class="text-muted">5 days ago at 12:30pm</small>
-
-                <ul class="uploadphoto-list">
-                    <li><a href="images/photos/media1.jpg" data-rel="prettyPhoto"><img src="images/photos/media1.jpg"
-                                                                                       class="thumbnail img-responsive"
-                                                                                       alt=""/></a></li>
-                    <li><a href="images/photos/media2.png" data-rel="prettyPhoto"><img src="images/photos/media2.png"
-                                                                                       class="thumbnail img-responsive"
-                                                                                       alt=""/></a></li>
-                    <li><a href="images/photos/media3.png" data-rel="prettyPhoto"><img src="images/photos/media3.png"
-                                                                                       class="thumbnail img-responsive"
-                                                                                       alt=""/></a></li>
-                </ul>
-            </div>
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="images/photos/user4.png" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <strong>Frank Furter</strong> started following <strong>Eileen Sideways</strong>. <br/>
-                <small class="text-muted">6 days ago at 8:15am</small>
-            </div>
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <strong>Elen Adarna</strong> posted a new note. <br/>
-                <small class="text-muted">6 days ago at 6:18am</small>
-                <h4 class="media-title"><a href="#">Consectetur Adipisicing Elit</a></h4>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat... <a href="#">Read more</a></p>
-            </div>
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <strong>Elen Adarna</strong> posted a new blog. <br/>
-                <small class="text-muted">December 25 at 3:18pm</small>
-
-                <div class="media blog-media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object thumbnail" src="images/photos/media4.png" alt=""/>
-                    </a>
-
-                    <div class="media-body">
-                        <h4 class="media-title"><a href="#">Ut Enim Ad Minim Veniam</a></h4>
-
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat... <a href="#">Read more</a></p>
-                    </div>
-                </div>
-                <!-- media -->
-            </div>
-        </div>
-        <!-- media -->
-
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <strong>Elen Adarna</strong> added new photo. <br/>
-                <small class="text-muted">December 24 at 1:30pm</small>
                 <div class="mb20"></div>
-                <a href="images/photos/media6.png" data-rel="prettyPhoto" class="img-single"><img
-                        src="images/photos/media6.png" class="thumbnail img-responsive" alt=""/></a>
             </div>
-        </div>
-        <!-- media -->
+            <!-- text-center -->
 
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="images/photos/user5.png" alt=""/>
-            </a>
+            <br/>
 
-            <div class="media-body">
-                <strong>Weno Carasbong</strong> started following <strong>Elen Adarna</strong>. <br/>
-                <small class="text-muted">December 15 at 3:30pm</small>
+            <h5 class="md-title">About</h5>
+
+            <p class="mb30">{{user.about}}</p>
+
+            <h5 class="md-title">Interests</h5>
+
+            <div class="media-manager-sidebar">
+                <ul class="tag-list mb30">
+                    <li ng-repeat="interest in user.interests"><a>{{interest}}</a></li>
+                    <!--<li><a ui-sref="home.search({q: 'Design' })">Design</a></li> -->
+                </ul>
             </div>
+            <br>
+            <br>
+
+            <div class="mb30"></div>
+            <h5 class="md-title">Connect</h5>
+            <ul class="list-unstyled social-list">
+                <li><i class="fa fa-linkedin"></i> <a href="#">linkedin.com/4ever-eileen</a></li>
+            </ul>
+
+            <div class="mb30"></div>
         </div>
-        <!-- media -->
+        <!-- col-sm-4 col-md-3 -->
 
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
-            </a>
+        <div class="col-sm-8 col-md-9">
 
-            <div class="media-body">
-                <strong>Elen Adarna</strong> posted a new blog. <br/>
-                <small class="text-muted">December 15 at 3:18pm</small>
-
-                <div class="media blog-media">
+            <tabset>
+                <!--
+            <tab>
+            <tab-heading><strong>Activities</strong></tab-heading>
+            <div class="activity-list">
+                <div class="media">
                     <a class="pull-left" href="#">
-                        <img class="media-object thumbnail" src="images/photos/media7.png" alt=""/>
+                        <img class="media-object img-circle" src="images/photos/user1.png" alt=""/>
                     </a>
 
                     <div class="media-body">
-                        <h4 class="media-title"><a href="#">Ut Enim Ad Minim Veniam</a></h4>
-
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat... <a href="#">Read more</a></p>
+                        <strong>Ray Sin</strong> started following <strong>Eileen Sideways</strong>. <br/>
+                        <small class="text-muted">Yesterday at 3:30pm</small>
                     </div>
                 </div>
-                <!-- media -->
-            </div>
-        </div>
-        <!-- media -->
-    </div>
-    <!-- activity-list -->
 
-    <button class="btn btn-white btn-block">Show More</button>
-</tab>
-<tab select="getFollowers()">
-    <tab-heading><strong>Followers</strong></tab-heading>
-    <div class="follower-list">
-        <div class="media" ng-repeat="follower in user.followers">
-            <a class="pull-left" ui-sref="home.profile({username: follower.username})">
-                <img class="media-object img-circle" src="{{follower.avatar}}" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <h3 class="follower-name"><a ui-sref="home.profile({username: follower.username})">{{follower.username}}</a></h3>
-
-                <div><i class="fa fa-envelope"></i> {{follower.email}}</div>
-            </div>
-        </div>
-    </div>
-    <!--follower-list -->
-</tab>
-<tab select="getFollowing()">
-    <tab-heading><strong>Following</strong></tab-heading>
-
-    <div class="follower-list">
-        <div class="media" ng-repeat="followed in user.following">
-            <a class="pull-left" ui-sref="home.profile({username: followed.username})">
-                <img class="media-object img-circle" src="{{followed.avatar}}" alt=""/>
-            </a>
-
-            <div class="media-body">
-                <h3 class="follower-name"><a ui-sref="home.profile({username: followed.username})">{{followed.username}}</a></h3>
-
-                <div><i class="fa fa-envelope"></i> {{followed.email}}</div>
-            </div>
-        </div>
-    </div>
-    <!--follower-list -->
-</tab>
-<tab select="getGroups()">
-    <tab-heading><strong>Groups</strong></tab-heading>
-    <div class="follower-list">
-        <div class="row">
-
-            <div class="card people" ng-repeat="group in user.groups">
-                <div class="card-top green">
-                    <a ui-sref="home.group({name: group.name})">
-                        <img src="http://placehold.it/200x200" class="img-responsive" alt=""/>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
                     </a>
+
+                    <div class="media-body">
+                        <strong>Elen Adarna</strong> posted a new blog. <br/>
+                        <small class="text-muted">Today at 3:18pm</small>
+
+                        <div class="media blog-media">
+                            <a class="pull-left" href="#">
+                                <img class="media-object thumbnail" src="images/photos/media5.png" alt=""/>
+                            </a>
+
+                            <div class="media-body">
+                                <h4 class="media-title"><a href="#">Ut Enim Ad Minim Veniam</a></h4>
+
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                                    labore et dolore magna aliqua. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                                    commodo consequat... <a href="#">Read more</a></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-info">
-                    <a class="title" ui-sref="home.group({name: group.name})">{{group.name}}</a>
 
-                    <div class="desc">{{group.description}}</div>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="images/photos/user2.png" alt=""/>
+                    </a>
+
+                    <div class="media-body">
+                        <strong>Chris Anthemum</strong> started following <strong>Eileen Sideways</strong>. <br/>
+                        <small class="text-muted">2 days ago at 8:30am</small>
+                    </div>
                 </div>
-                <!--<div class="card-bottom">
-                    <button class="btn btn-block">Join</button>
-                </div>-->
-            </div>
-        </div>
 
-    </div>
-</tab>
-<tab select="getAllGalleries()">
-    <tab-heading><strong>Models</strong></tab-heading>
-    <div class="row">
-        <div class="media-options" ng-if="user.username == ownUsername">
-            <div class="pull-right">
-                Gallery Options:
-                <div class="btn-group">
-                    <button ng-disabled="!selectedGallery" ng-click="editGallery()" class="btn btn-default btn-sm" type="button"><i
-                            class="fa fa-pencil mr5"></i> Edit
-                    </button>
-                    <button ng-disabled="!selectedGallery" ng-click="deleteGallery()" class="btn btn-default btn-sm"
-                            type="button"><i class="fa fa-trash-o mr5"></i> Delete
-                    </button>
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
+                    </a>
+
+                    <div class="media-body">
+                        <strong>Elen Adarna</strong> uploaded <a href="#">5 photos</a>. <br/>
+                        <small class="text-muted">5 days ago at 12:30pm</small>
+
+                        <ul class="uploadphoto-list">
+                            <li><a href="images/photos/media1.jpg" data-rel="prettyPhoto"><img src="images/photos/media1.jpg"
+                                                                                               class="thumbnail img-responsive"
+                                                                                               alt=""/></a></li>
+                            <li><a href="images/photos/media2.png" data-rel="prettyPhoto"><img src="images/photos/media2.png"
+                                                                                               class="thumbnail img-responsive"
+                                                                                               alt=""/></a></li>
+                            <li><a href="images/photos/media3.png" data-rel="prettyPhoto"><img src="images/photos/media3.png"
+                                                                                               class="thumbnail img-responsive"
+                                                                                               alt=""/></a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object img-circle" src="images/photos/user4.png" alt=""/>
+                    </a>
+
+                    <div class="media-body">
+                        <strong>Frank Furter</strong> started following <strong>Eileen Sideways</strong>. <br/>
+                        <small class="text-muted">6 days ago at 8:15am</small>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
+                    </a>
+
+                    <div class="media-body">
+                        <strong>Elen Adarna</strong> posted a new note. <br/>
+                        <small class="text-muted">6 days ago at 6:18am</small>
+                        <h4 class="media-title"><a href="#">Consectetur Adipisicing Elit</a></h4>
+
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                            et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                            aliquip ex ea commodo consequat... <a href="#">Read more</a></p>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
+                    </a>
+
+                    <div class="media-body">
+                        <strong>Elen Adarna</strong> posted a new blog. <br/>
+                        <small class="text-muted">December 25 at 3:18pm</small>
+
+                        <div class="media blog-media">
+                            <a class="pull-left" href="#">
+                                <img class="media-object thumbnail" src="images/photos/media4.png" alt=""/>
+                            </a>
+
+                            <div class="media-body">
+                                <h4 class="media-title"><a href="#">Ut Enim Ad Minim Veniam</a></h4>
+
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                                    labore et dolore magna aliqua. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                                    commodo consequat... <a href="#">Read more</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
+                    </a>
+
+                    <div class="media-body">
+                        <strong>Elen Adarna</strong> added new photo. <br/>
+                        <small class="text-muted">December 24 at 1:30pm</small>
+                        <div class="mb20"></div>
+                        <a href="images/photos/media6.png" data-rel="prettyPhoto" class="img-single"><img
+                                src="images/photos/media6.png" class="thumbnail img-responsive" alt=""/></a>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object img-circle" src="images/photos/user5.png" alt=""/>
+                    </a>
+
+                    <div class="media-body">
+                        <strong>Weno Carasbong</strong> started following <strong>Elen Adarna</strong>. <br/>
+                        <small class="text-muted">December 15 at 3:30pm</small>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object img-circle" src="images/photos/profile.png" alt=""/>
+                    </a>
+
+                    <div class="media-body">
+                        <strong>Elen Adarna</strong> posted a new blog. <br/>
+                        <small class="text-muted">December 15 at 3:18pm</small>
+
+                        <div class="media blog-media">
+                            <a class="pull-left" href="#">
+                                <img class="media-object thumbnail" src="images/photos/media7.png" alt=""/>
+                            </a>
+
+                            <div class="media-body">
+                                <h4 class="media-title"><a href="#">Ut Enim Ad Minim Veniam</a></h4>
+
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                                    labore et dolore magna aliqua. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                                    commodo consequat... <a href="#">Read more</a></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <hr>
-        <div class="col-md-12">
-            <div class="col-sm-3">
-                <h5 class="lg-title tab-pane">Galleries
-                </h5>
-                <button style="margin-bottom: 5px" class="btn btn-success btn-xs" ng-if="user.username == ownUsername" ng-click="addNewGallery()" href="" class="pull-right">
-                    + Add New Gallery
-                </button>
-                <ul class="folder-list">
-                    <li style="padding-left: 10px" ng-class="{selected: isAllModelsSelected}"><a href="" ng-click="getAllModels()"> All Models</a></li>
-                    </li>
-                    <li style="padding-left: 10px" ng-repeat="gallery in galleries" ng-class="{selected : isGallerySelected(gallery)}">
-                        <a href="" ng-click="selectGallery(gallery)"><i class="fa fa-folder-o"></i>{{gallery.name}}</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-sm-9">
-                <modelthumbnail ng-repeat="model in models"
-                                model-id={{model.modelId}}
-                                image-url={{model.thumbnail}}
-                                title={{model.title}}
-                                author={{model.author}}
-                                author-avatar={{model.authorAvatar}}
-                                date={{model.date}}
-                                num-comments={{model.numComments}}
-                                upvotes={{model.upvotes}}
-                                downvotes={{model.downvotes}}>
-                </modelthumbnail>
-            </div>
-        </div>
-    </div>
-</tab>
-<tab ng-if="user.username == ownUsername">
-    <tab-heading><strong>My Account</strong></tab-heading>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
 
-                <div class="panel-body ">
-
-                    <form name="userInfo" class="form-horizontal form-bordered">
-                        <div class="form-group">
-                            <label class="control-label col-md-2 pull-left">Username</label>
-
-                            <div class="col-md-10">
-                                <input type="text" ng-model=user.username class="form-control col-md-10" disabled>
+            <button class="btn btn-white btn-block">Show More</button>
+            </tab>
+            -->
+                <tab select="getAllGalleries()">
+                    <tab-heading><strong>Models</strong></tab-heading>
+                    <div class="row">
+                        <div class="media-options" ng-if="user.username == ownUsername">
+                            <div class="pull-right">
+                                Gallery Options:
+                                <div class="btn-group">
+                                    <button ng-disabled="!selectedGallery" ng-click="editGallery()" class="btn btn-default btn-sm" type="button"><i
+                                            class="fa fa-pencil mr5"></i> Edit
+                                    </button>
+                                    <button ng-disabled="!selectedGallery" ng-click="deleteGallery()" class="btn btn-default btn-sm"
+                                            type="button"><i class="fa fa-trash-o mr5"></i> Delete
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <!-- form-group -->
-
-                        <div class="form-group">
-                            <label class="control-label col-md-2 pull-left">First name</label>
-
-                            <div class="col-md-10">
-                                <input type="text" ng-required="true" name="firstName" ng-model=user.firstName
-                                       class="form-control" ng-maxlength="20">
-
-                                <p class="text-danger"
-                                   ng-show="userInfo.firstName.$invalid && userInfo.firstName.$dirty">
-                                    First Name field must be at most 20 characters long
-                                </p>
+                        <hr>
+                        <div class="col-md-12">
+                            <div class="col-sm-3">
+                                <h5 class="lg-title tab-pane">Galleries
+                                </h5>
+                                <button style="margin-bottom: 5px" class="btn btn-success btn-xs" ng-if="user.username == ownUsername" ng-click="addNewGallery()" href="" class="pull-right">
+                                    + Add New Gallery
+                                </button>
+                                <ul class="folder-list">
+                                    <li style="padding-left: 10px" ng-class="{selected: isAllModelsSelected}"><a href="" ng-click="getAllModels()"> All Models</a></li>
+                                    </li>
+                                    <li style="padding-left: 10px" ng-repeat="gallery in galleries" ng-class="{selected : isGallerySelected(gallery)}">
+                                        <a href="" ng-click="selectGallery(gallery)"><i class="fa fa-folder-o"></i>{{gallery.name}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-9">
+                                <modelthumbnail ng-repeat="model in models"
+                                                model-id={{model.modelId}}
+                                                image-url={{model.thumbnail}}
+                                                title={{model.title}}
+                                                author={{model.author}}
+                                                author-avatar={{model.authorAvatar}}
+                                                date={{model.date}}
+                                                num-comments={{model.numComments}}
+                                                upvotes={{model.upvotes}}
+                                                downvotes={{model.downvotes}}>
+                                </modelthumbnail>
                             </div>
                         </div>
-                        <!-- form-group -->
+                    </div>
+                </tab>
+                <tab select="getFollowers()">
+                    <tab-heading><strong>Followers</strong></tab-heading>
+                    <div class="follower-list">
+                        <div class="media" ng-repeat="follower in user.followers">
+                            <a class="pull-left" ui-sref="home.profile({username: follower.username})">
+                                <img class="media-object img-circle" src="{{follower.avatar}}" alt=""/>
+                            </a>
 
-                        <div class="form-group">
-                            <label class="control-label col-md-2 pull-left">Last name</label>
+                            <div class="media-body">
+                                <h3 class="follower-name"><a ui-sref="home.profile({username: follower.username})">{{follower.username}}</a></h3>
 
-                            <div class="col-md-10">
-                                <input type="text" ng-required="true" name="lastName" ng-model=user.lastName
-                                       class="form-control" ng-maxlength="20">
-
-                                <p class="text-danger" ng-show="userInfo.lastName.$invalid && userInfo.lastName.$dirty">
-                                    Last Name field must be at most 20 characters long
-                                </p>
+                                <div><i class="fa fa-envelope"></i> {{follower.email}}</div>
                             </div>
                         </div>
-                        <!-- form-group -->
+                    </div>
+                    <!--follower-list -->
+                </tab>
+                <tab select="getFollowing()">
+                    <tab-heading><strong>Following</strong></tab-heading>
 
-                        <div class="form-group">
-                            <label class="control-label col-md-2 pull-left" for="userEmail">Email</label>
+                    <div class="follower-list">
+                        <div class="media" ng-repeat="followed in user.following">
+                            <a class="pull-left" ui-sref="home.profile({username: followed.username})">
+                                <img class="media-object img-circle" src="{{followed.avatar}}" alt=""/>
+                            </a>
 
-                            <div class="col-md-10">
-                                <input type="text" ng-model="user.email" class="form-control" id="userEmail"
-                                       disabled>
+                            <div class="media-body">
+                                <h3 class="follower-name"><a ui-sref="home.profile({username: followed.username})">{{followed.username}}</a></h3>
+
+                                <div><i class="fa fa-envelope"></i> {{followed.email}}</div>
                             </div>
                         </div>
-                        <!-- form-group -->
+                    </div>
+                    <!--follower-list -->
+                </tab>
+                <tab select="getGroups()">
+                    <tab-heading><strong>Groups</strong></tab-heading>
+                    <div class="follower-list">
+                        <div class="row">
 
-                        <div class="form-group">
-                            <label class="control-label col-md-2 pull-left">About</label>
+                            <div class="card people" ng-repeat="group in user.groups">
+                                <div class="card-top green">
+                                    <a ui-sref="home.group({name: group.name})">
+                                        <img src="http://placehold.it/200x200" class="img-responsive" alt=""/>
+                                    </a>
+                                </div>
+                                <div class="card-info">
+                                    <a class="title" ui-sref="home.group({name: group.name})">{{group.name}}</a>
 
-                            <div class="col-md-10">
+                                    <div class="desc">{{group.description}}</div>
+                                </div>
+                                <!--<div class="card-bottom">
+                                    <button class="btn btn-block">Join</button>
+                                </div>-->
+                            </div>
+                        </div>
+
+                    </div>
+                </tab>
+                <tab ng-if="user.username == ownUsername">
+                    <tab-heading><strong>My Account</strong></tab-heading>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+
+                                <div class="panel-body ">
+
+                                    <form name="userInfo" class="form-horizontal form-bordered">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 pull-left">Username</label>
+
+                                            <div class="col-md-10">
+                                                <input type="text" ng-model=user.username class="form-control col-md-10" disabled>
+                                            </div>
+                                        </div>
+                                        <!-- form-group -->
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 pull-left">First name</label>
+
+                                            <div class="col-md-10">
+                                                <input type="text" ng-required="true" name="firstName" ng-model=user.firstName
+                                                       class="form-control" ng-maxlength="20">
+
+                                                <p class="text-danger"
+                                                   ng-show="userInfo.firstName.$invalid && userInfo.firstName.$dirty">
+                                                    First Name field must be at most 20 characters long
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- form-group -->
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 pull-left">Last name</label>
+
+                                            <div class="col-md-10">
+                                                <input type="text" ng-required="true" name="lastName" ng-model=user.lastName
+                                                       class="form-control" ng-maxlength="20">
+
+                                                <p class="text-danger" ng-show="userInfo.lastName.$invalid && userInfo.lastName.$dirty">
+                                                    Last Name field must be at most 20 characters long
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- form-group -->
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 pull-left" for="userEmail">Email</label>
+
+                                            <div class="col-md-10">
+                                                <input type="text" ng-model="user.email" class="form-control" id="userEmail"
+                                                       disabled>
+                                            </div>
+                                        </div>
+                                        <!-- form-group -->
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 pull-left">About</label>
+
+                                            <div class="col-md-10">
                                 <textarea ng-model="user.about" id="autoResizeTA" name="about" ng-maxlength="1024"
                                           class="form-control" rows="5" style="height: 90px;"></textarea>
 
-                                <p class="text-danger" ng-show="userInfo.about.$invalid && userInfo.about.$dirty">
-                                    Last Name field must be at most 1024 characters long
-                                </p>
+                                                <p class="text-danger" ng-show="userInfo.about.$invalid && userInfo.about.$dirty">
+                                                    Last Name field must be at most 1024 characters long
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- form-group -->
+
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2 pull-left">Interests</label>
+
+                                            <div class="col-md-10">
+                                                <tags-input ng-model="newUser.interests">
+                                                    <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
+                                                </tags-input>
+                                            </div>
+                                        </div>
+
+
+                                    </form>
+                                    <button type="submit" ng-click="submit()" ng-disabled="userInfo.$invalid"
+                                            class="btn btn-success pull-right">Save changes
+                                    </button>
+                                </div>
+                                <!-- panel-body -->
+
                             </div>
+
                         </div>
-                        <!-- form-group -->
-
-
-                        <div class="form-group">
-                            <label class="control-label col-md-2 pull-left">Interests</label>
-
-                            <div class="col-md-10">
-                                <tags-input ng-model="newUser.interests">
-                                    <auto-complete min-length="1" source="loadTags($query)"></auto-complete>
-                                </tags-input>
-                            </div>
-                        </div>
-
-
-                    </form>
-                    <button type="submit" ng-click="submit()" ng-disabled="userInfo.$invalid"
-                            class="btn btn-success pull-right">Save changes
-                    </button>
-                </div>
-                <!-- panel-body -->
-
-            </div>
+                    </div>
+                </tab>
+            </tabset>
 
         </div>
+        <!-- tab-content -->
+
     </div>
-</tab>
-</tabset>
-
-</div>
-<!-- tab-content -->
-
-</div>
-<!-- col-sm-9 -->
+    <!-- col-sm-9 -->
 </div>
 
 <script type="text/ng-template" id="createNewGalleryId">
