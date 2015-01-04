@@ -10,7 +10,7 @@ angular.module('meshApp.profile', [
         });
     })
 
-    .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http, server, meshApi, $modal, _, ngDialog, toaster) {
+    .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http, server, meshApi, $modal, _, ngDialog, toastr) {
         $scope.all = {};
         $scope.user = {};
         $scope.newUser = {};
@@ -46,10 +46,10 @@ angular.module('meshApp.profile', [
                 //console.log("scope.user.username", $scope.user.username);
                 meshApi.inviteToGroup(groupName, $scope.user.username)
                     .success(function () {
-                        toaster.pop('success', "", "Invite successful");
+                        toastr.success('Invite successful', 'Invite to Group');
                     })
                     .error(function () {
-                        toaster.pop('error', "", "Invite failed");
+                        toastr.error('Invite failed', 'Invite to Group');
                     });
             });
         };

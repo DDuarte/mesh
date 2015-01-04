@@ -10,7 +10,7 @@ angular.module('meshApp.createMessage', [
         });
     })
 
-    .controller('CreateMessageCtrl', function MessagesCtrl($scope, $stateParams, meshApi, toaster, $state) {
+    .controller('CreateMessageCtrl', function MessagesCtrl($scope, $stateParams, meshApi, $state, toastr) {
         $scope.message = {
             to: "",
             title: "",
@@ -23,10 +23,10 @@ angular.module('meshApp.createMessage', [
             meshApi.sendMessage($scope.message.to, $scope.message.title, $scope.message.content)
                 .success(function () {
                     $state.go('home.messages');
-                    toaster.pop('success', "", "Message sent successfuly");
+                    toastr.success('Message sent successfuly', 'Send Message');
                 })
                 .error(function (data) {
-                    toaster.pop('error', "Error", JSON.stringify(data));
+                    toastr.error(JSON.stringify(data), 'Error');
                 });
         };
     });

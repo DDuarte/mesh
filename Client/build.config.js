@@ -78,7 +78,7 @@ module.exports = {
             'vendor/ng-tags-input/ng-tags-input.min.js',
             'vendor/dropzone/downloads/dropzone.min.js',
             'vendor/ngInfiniteScroll/build/ng-infinite-scroll.min.js',
-            'vendor/angularjs-toaster/toaster.js',
+            'vendor/angular-toastr/dist/angular-toastr.min.js',
             'vendor/angular-animate/angular-animate.min.js',
             'lib/three.js',
             'lib/Detector.js',
@@ -103,7 +103,7 @@ module.exports = {
             'vendor/pickadate/lib/compressed/themes/default.date.css',
             'vendor/ng-tags-input/ng-tags-input.min.css',
             'vendor/bootstrap/dist/css/bootstrap.min.css',
-            'vendor/angularjs-toaster/toaster.css'
+            'vendor/angular-toastr/dist/angular-toastr.min.css'
         ],
         assets: [
             'assets/weather-icons.min.css',

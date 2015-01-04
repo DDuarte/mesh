@@ -10,7 +10,7 @@ angular.module('meshApp.messages', [
         });
     })
 
-    .controller('MessagesCtrl', function MessagesCtrl ($scope, meshApi, _, NotificationsFactory, toaster) {
+    .controller('MessagesCtrl', function MessagesCtrl ($scope, meshApi, _, NotificationsFactory, toastr) {
 
         $scope.moment = moment;
 
@@ -76,7 +76,7 @@ angular.module('meshApp.messages', [
             var selectedMessages =  _.filter(messages, {'selected': true});
             meshApi.deleteMessages(selectedMessages).success(function(response) {
                 NotificationsFactory.pendingMessagesCount = response.pendingMessagesCount;
-                toaster.pop('success', "", "Messages deleted successfully");
+                toastr.success('Messages deleted successfully', 'Delete Messages');
                 refreshMessages();
             });
         };
@@ -102,7 +102,7 @@ angular.module('meshApp.messages', [
         };
 
         var toasterErrorHandler = function (data) {
-            toaster.pop('error', "Error", JSON.stringify(data));
+            toaster.error(JSON.stringify(data), 'Error');
         };
 
         $scope.sendReply = function (message) {
