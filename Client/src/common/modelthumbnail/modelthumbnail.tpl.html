@@ -1,8 +1,8 @@
 <div class="col-md-4">
-<div class="thumbnail" style="max-width:300px;">
+<div class="thumbnail">
     <a ui-sref="home.model({id: modelId})" >
-        <img class="modelthumb" ng-if="imageUrl" ng-src="{{imageUrl}}" alt="{{title}}" onError="this.src='http://placehold.it/290x193&amp;text=Model';">
-        <img class="modelthumb" ng-if="!imageUrl" src="http://placehold.it/676x500" alt="{{title}}" onError="this.src='http://placehold.it/290x193&amp;text=Model';">
+        <img class="modelthumb" ng-if="imageUrl" ng-src="{{imageUrl}}" alt="{{title}}" onError="this.src='http://placehold.it/290x163&amp;text=Model';">
+        <img class="modelthumb" ng-if="!imageUrl" src="http://placehold.it/290x163" alt="{{title}}" onError="this.src='http://placehold.it/290x163&amp;text=Model';">
     </a>
     <div class="caption center-block">
         <a ui-sref="home.model({id: modelId})"><h4 style="display:inline">{{title}}</h4></a>

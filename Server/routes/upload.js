@@ -79,7 +79,7 @@ module.exports = function (server) {
 
                                 var mainfilePath = res.files[0].fullPath;
                                 var mainFilename = res.files[0].name;
-                                var thumbnail = 'http://placehold.it/500&text=' + data.name;
+                                var thumbnail = 'http://placehold.it/290x163&text=' + data.name;
                                 Model.create(data.name, data.description, mainFilename, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, thumbnail)
                                     .then(function (model) {
 
