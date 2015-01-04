@@ -3,7 +3,7 @@
 var User = require('../models/user'),
     Boom = require('boom'),
     jwt = require('jsonwebtoken'),
-    client = require('../common/redisClient'),
+    db = require('../common/db'),
     schema = require('../schema'),
     uid = require('rand-token').uid,
     sendMail = require('../common/sendMail');
@@ -18,14 +18,14 @@ module.exports = function (server) {
         if (decodedToken) {
         }
 
-        client.get(decodedToken.username, function (err, tok) {
+        db.redis.get(decodedToken.username, function (err, tok) {
             if (err) return callback(null, false);
             if (!tok) {
                 return callback(null, false);
             } else if (tok == rToken) {
-                client.ttl(decodedToken.username, function (err, data) {
+                db.redis.ttl(decodedToken.username, function (err, data) {
                     if (!err && data != -1) {
-                        client.expire(decodedToken.username, tokenTTL);
+                        db.redis.expire(decodedToken.username, tokenTTL);
                     }
                 });
                 return callback(null, true, decodedToken);
@@ -62,21 +62,21 @@ module.exports = function (server) {
                 }
                 var insertedPasswordHash = User.generatePasswordHash(user, password);
                 if (userData.passwordHash && insertedPasswordHash.toLowerCase() == userData.passwordHash.toLowerCase()) {
-                    client.get(user, function (err, tok) {
+                    db.redis.get(user, function (err, tok) {
                         if (err) return reply(Boom.badImplementation(err));
 
                         if (tok) {
-                            client.ttl(user, function (err, data) {
+                            db.redis.ttl(user, function (err, data) {
                                 if (!err && data != -1) {
-                                    client.expire(user, tokenTTL);
+                                    db.redis.expire(user, tokenTTL);
                                 }
                             });
                             return reply({username: user, token: tok, avatar: userData.avatar });
                         } else {
                             var token = jwt.sign({username: user}, privateKey);
-                            client.set(user, token);
+                            db.redis.set(user, token);
                             if (!rememberMe)
-                                client.expire(user, tokenTTL);
+                                db.redis.expire(user, tokenTTL);
                             return reply({username: user, token: token, avatar: userData.avatar });
                         }
                     });
@@ -111,7 +111,7 @@ module.exports = function (server) {
                     var username = userData[0].user.username;
 
                     var tokenUser = token + '-' + username;
-                    client.hset("forgotpw_tokens", email, tokenUser);
+                    db.redis.hset("forgotpw_tokens", email, tokenUser);
 
                     var url = 'http://meshdev.ddns.net/dev/#/login?state=forgotPassword&token=' + tokenUser + '&email=' + email;
                     var html = "<b>Change your password at:</b><br><a href=\"" + url + '">' + url + '</a>';
@@ -150,7 +150,7 @@ module.exports = function (server) {
             var pl_token = request.payload.token;
             var newPass = request.payload.password;
 
-            client.hget("forgotpw_tokens", email, function (err, tokenUser) {
+            db.redis.hget("forgotpw_tokens", email, function (err, tokenUser) {
                 var split = tokenUser.split('-');
                 var token = split[0];
                 var username = split[1];
@@ -160,7 +160,7 @@ module.exports = function (server) {
                     return;
                 }
 
-                client.del('forgotpw_tokens', email);
+                db.redis.del('forgotpw_tokens', email);
 
                 User.changePassword(username, newPass).then(function (user) {
                     reply().code(200);

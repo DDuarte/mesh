@@ -3,12 +3,10 @@
 var Catalog = require('../models/catalog.js'),
     Promise = require('bluebird'),
     Boom = require('boom'),
-    redis = require('redis'),
-    client = redis.createClient(),
+    db = require('../common/db'),
     CronJob = require('cron').CronJob,
-    moment = require('moment');
-
-var schema = require('../schema');
+    moment = require('moment'),
+    schema = require('../schema');
 
 module.exports = function (server) {
 
@@ -52,9 +50,9 @@ module.exports = function (server) {
 
             result.unshift('topRated');
 
-            client.del('topRated');
-            client.send_command('rpush', result);
-            client.set('topRatedTime', moment().utc().format("YYYY-MM-DD HH:mm").toString());
+            db.redis.del('topRated');
+            db.redis.send_command('rpush', result);
+            db.redis.set('topRatedTime', moment().utc().format("YYYY-MM-DD HH:mm").toString());
         }, function (error) {
             if (error) {
                 console.log('generateCatalogLists-2: ' + JSON.stringify(error));

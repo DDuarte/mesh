@@ -2,13 +2,14 @@
 
 var User = require('../models/user'),
     Promise = require('bluebird'),
-    client = require('../common/redisClient'),
+    db = require('../common/db'),
     schema = require('../schema'),
     Boom = require('boom'),
     _ = require('lodash'),
     Message = require('../models/message'),
     Model = require('../models/model'),
     Notifications = require('../models/notifications');
+
 module.exports = function (server) {
 
 
@@ -18,7 +19,7 @@ module.exports = function (server) {
      handler: function (request, reply) {
      var id = request.params.id;
 
-     client.incr(id + '_counter', function (err, counter) {
+     db.redis.incr(id + '_counter', function (err, counter) {
      reply({
      'id': id,
      'counter': counter
@@ -44,7 +45,7 @@ module.exports = function (server) {
         handler: function (request, reply) {
             var username = request.params.username;
 
-            client.incr(username + '_counter', function (err, counter) {
+            db.redis.incr(username + '_counter', function (err, counter) {
                 User.getByUsername(username, request.auth.credentials ? request.auth.credentials.username : '')
                     .then(function (user) {
                         reply(user);

@@ -2,7 +2,7 @@
 
 var User = require('../models/user'),
     Promise = require('bluebird'),
-    client = require('../common/redisClient'),
+    db = require('../common/db'),
     schema = require('../schema'),
     Boom = require('boom'),
     _ = require('lodash'),

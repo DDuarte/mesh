@@ -1,8 +1,9 @@
-var Promise = require('bluebird'),
-    db = require('../common/neo4jDatabase'),
-    crypto = require('crypto');
+'use strict';
 
-var user = {};
+var Promise = require('bluebird'),
+    db = require('../common/db'),
+    crypto = require('crypto'),
+    user = {};
 
 /**
  *
@@ -29,7 +30,7 @@ user.getByUsername = function (username, loggedUsername) {
             loggedUsername: loggedUsername
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
 
             if (results.length > 0)
@@ -59,7 +60,7 @@ user.searchByUsername = function (username) {
             username: username
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
             return resolve(results[0]['users']);
         });
@@ -84,7 +85,7 @@ user.getByEmail = function (email) {
             email: email
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
 
             if (results.length > 0)
@@ -106,7 +107,7 @@ user.getFollowers = function (username) {
             username: username
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
 
             if (results.length > 0)
@@ -128,7 +129,7 @@ user.getFollowing = function (username) {
             username: username
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
 
             if (results.length > 0)
@@ -150,7 +151,7 @@ user.getGroups = function (username, isOwnUser) {
             username: username
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
 
             if (results.length > 0)
@@ -186,7 +187,7 @@ user.create = function (registerInfo) {
             avatarUrl: user.generateGravatarUrl(registerInfo.email)
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
 
             return resolve(results);
@@ -215,7 +216,7 @@ user.addFavouriteModel = function (username, modelId) {
             id: modelId
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(results[0]);
         });
@@ -242,7 +243,7 @@ user.removeFavouriteModel = function (username, modelId) {
             id: modelId
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(true); //todo (possibly) return something based on whether the match worked or not
         });
@@ -270,7 +271,7 @@ user.followUser = function (follower, followed) {
             followed: followed
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(results[0]);
         });
@@ -297,7 +298,7 @@ user.unfollowUser = function (follower, followed) {
             followed: followed
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(true); //todo (possibly) return something based on whether the match worked or not
         });
@@ -322,7 +323,7 @@ user.activate = function (username) {
             username: username
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(true);
         });
@@ -349,7 +350,7 @@ user.changePassword = function (username, newPassword) {
             passwordHash: user.generatePasswordHash(username, newPassword)
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(true);
         });
@@ -408,7 +409,7 @@ user.update = function (username, fields) {
 
         fields.username = username;
 
-        db.query(query, fields, function (err, results) {
+        db.neo4j.query(query, fields, function (err, results) {
             if (err) return reject(err);
             return resolve(results);
         });
@@ -438,7 +439,7 @@ user.getAllModels = function (username) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(results[0] ? results[0].models : results);
         });
@@ -464,7 +465,7 @@ user.addInterest = function (username, interest) {
             tagName: interest
         };
 
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -502,7 +503,7 @@ user.replaceInterests = function (username, interests) {
             username: username
         };
 
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -527,7 +528,7 @@ user.removeInterest = function (username, interest) {
             tagName: interest
         };
 
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -550,7 +551,7 @@ user.removeAllInterests = function (username) {
             userName: username
         };
 
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -575,7 +576,7 @@ user.getAllGalleries = function (username, isOwner) {
             username: username
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
             return resolve(results[0] ? results[0].galleries : results);
         });
@@ -601,7 +602,7 @@ user.galleryExists = function (username, galleryName) {
             galleryName: galleryName
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
 
             if (results.length > 0)
@@ -632,7 +633,7 @@ user.getGalleryModels = function (username, galleryName) {
             galleryName: galleryName
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
             return resolve(results);
         });
@@ -659,7 +660,7 @@ user.createGallery = function (username, galleryName) {
             galleryName: galleryName
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
             return resolve(results[0]['galleryInfo']);
         });
@@ -687,7 +688,7 @@ user.updateGallery = function (username, galleryName, isPublic) {
             isPublic: isPublic
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
             return resolve(results[0]['galleryInfo']);
         });
@@ -715,7 +716,7 @@ user.removeGallery = function (username, galleryName) {
             galleryName: galleryName
         };
 
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -745,7 +746,7 @@ user.addModelToGallery = function (username, galleryName, modelId) {
             modelId: Number(modelId)
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
             resolve(results);
         });

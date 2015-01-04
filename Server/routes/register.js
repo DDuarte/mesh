@@ -3,8 +3,7 @@
 var User = require('../models/user'),
     Boom = require('boom'),
     uid = require('rand-token').uid,
-    redis = require('redis'),
-    client = redis.createClient(),
+    db = require('../common/db'),
     sendMail = require('../common/sendMail'),
     schema = require('../schema');
 
@@ -36,7 +35,7 @@ module.exports = function (server) {
                 var token = uid(16);
 
                 // associated the generated token with the user
-                client.hset("account_tokens", username, token);
+                db.redis.hset("account_tokens", username, token);
 
                 var url = 'http://meshdev.ddns.net/dev/#/activate?token=' + token + '&username=' + username; // TODO: change server base url
                 var html = "<b>Greetings from the Mesh team! You can activate your account here:</b><br><a href=\"" + url + '">' + url + '</a>';
@@ -70,13 +69,13 @@ module.exports = function (server) {
             auth: false
         },
         handler: function (request, reply) {
-            client.hget("account_tokens", request.payload.username, function (err, token) {
+            db.redis.hget("account_tokens", request.payload.username, function (err, token) {
                 if (err || !token || token !== request.payload.token) {
                     reply(Boom.badRequest('The provided token is not valid'));
                     return;
                 }
 
-                client.del('account_tokens', request.payload.username);
+                db.redis.del('account_tokens', request.payload.username);
 
                 User.activate(request.payload.username).then(function (user) {
                     reply().code(200);

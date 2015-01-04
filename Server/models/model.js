@@ -1,6 +1,8 @@
-var Promise = require('bluebird');
-var db = require('../common/neo4jDatabase');
-var model = {};
+'use strict';
+
+var Promise = require('bluebird'),
+    db = require('../common/db'),
+    model = {};
 
 /**
  * Creates a model
@@ -45,7 +47,7 @@ model.create = function (name, description, mainFilename, originalFilename, main
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (error, results) {
+        db.neo4j.query(query, params, function (error, results) {
             if (error) throw error;
             resolve(results[0]['model']['data']);
         });
@@ -94,7 +96,7 @@ model.getById = function (id, loggedUser) {
             username: loggedUser
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(results);
         });
@@ -128,7 +130,7 @@ model.getByGallery = function(username, galleryName) {
             galleryName: galleryName
         };
 
-        db.query(query, params, function(err, results) {
+        db.neo4j.query(query, params, function(err, results) {
             if (err) throw err;
             resolve(results[0] ? results[0].models : results);
         });
@@ -152,7 +154,7 @@ model.searchByName = function (name) {
             name: name
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
             console.log("modelResults", results);
             return resolve(results[0]['models']);
@@ -177,7 +179,7 @@ model.deleteById = function (id) {
             modelId: Number(id)
         };
 
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) return reject(err);
             return resolve(true);
         });
@@ -212,7 +214,7 @@ model.getByName = function (name) {
             modelName: name
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(results);
         });
@@ -245,7 +247,7 @@ model.addComment = function (modelId, username, content) {
             date: timeStamp.toISOString()
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(results[0] ? results[0].comment : results);
         });
@@ -274,7 +276,7 @@ model.removeComment = function (modelId, username, date) {
             date: date
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(true); //todo (possibly) return something based on whether the match worked or not
         });
@@ -302,7 +304,7 @@ model.getCommentsOlderThan = function (modelId, startdate) {
             date: startdate
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(results[0] ? results[0].comments : results);
         });
@@ -333,7 +335,7 @@ model.addVote = function (modelId, username, vote) {
             vote: vote
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(results[0]);
         });
@@ -360,7 +362,7 @@ model.deleteVote = function (modelId, username) {
             username: username
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(true); //todo (possibly) return something based on whether the match worked or not
         });
@@ -387,7 +389,7 @@ model.addTag = function (modelId, tag) {
             tagName: tag
         };
 
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -426,7 +428,7 @@ model.replaceTags = function (modelId, tags) {
             id: Number(modelId)
         };
 
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -452,7 +454,7 @@ model.removeTag = function (modelId, tag) {
             tagName: tag
         };
 
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -476,7 +478,7 @@ model.removeAllTags = function (modelId) {
             id: Number(modelId)
         };
 
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -510,7 +512,7 @@ model.updateById = function (modelId, description, isPublic, tags) {
 
         model.replaceTags(modelId, tags)
             .then(function () {
-                db.query(query, params, function (err, results) {
+                db.neo4j.query(query, params, function (err, results) {
                     if (err) throw err;
                     return resolve(results[0]['modelInfo']);
                 });
@@ -554,7 +556,7 @@ model.addGallery = function (modelId, galleryName) {
             galleryName: galleryName
         };
 
-        db.query(query, params, function(err, results) {
+        db.neo4j.query(query, params, function(err, results) {
             if (err) throw err;
             resolve(true);
         });
@@ -573,7 +575,7 @@ model.removeAllGalleries = function(modelId) {
             id: Number(modelId)
         };
 
-        db.query(query, params, function(err) {
+        db.neo4j.query(query, params, function(err) {
             if (err) throw err;
             resolve(true);
         });
