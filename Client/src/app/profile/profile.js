@@ -13,6 +13,7 @@ angular.module('meshApp.profile', [
     .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http, server, meshApi, $modal, _, ngDialog, toaster) {
         $scope.all = {};
         $scope.newUser = {};
+        $scope.isLoggedIn = meshApi.isLoggedIn();
         $scope.ownUsername = meshApi.getLoggedUsername();
 
         $scope.init = function () {
