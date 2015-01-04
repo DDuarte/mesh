@@ -6,11 +6,11 @@ angular.module('meshApp.profile', [
             url: '/profile/:username',
             controller: 'ProfileCtrl',
             templateUrl: 'profile/profile.tpl.html',
-            data: { pageTitle: 'Profile | Mesh' }
+            data: {pageTitle: 'Profile | Mesh'}
         });
     })
 
-    .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http, server, meshApi, $modal, _, ngDialog) {
+    .controller('ProfileCtrl', function ProfileController($scope, $stateParams, $http, server, meshApi, $modal, _, ngDialog, toaster) {
         $scope.all = {};
         $scope.newUser = {};
         $scope.ownUsername = meshApi.getLoggedUsername();
@@ -29,9 +29,27 @@ angular.module('meshApp.profile', [
             });
         };
 
-        $scope.getGroups = function() {
+        $scope.inviteToGroup = function () {
+            var modalInstance = $modal.open({
+                templateUrl: 'inviteToGroupId',
+                controller: 'InviteToGroupModalCtrl'
+            });
+
+            modalInstance.result.then(function (groupName) {
+                //console.log("scope.user.username", $scope.user.username);
+                meshApi.inviteToGroup(groupName, $scope.user.username)
+                    .success(function () {
+                        toaster.pop('success', "", "Invite successful");
+                    })
+                    .error(function () {
+                        toaster.pop('error', "", "Invite failed");
+                    });
+            });
+        };
+
+        $scope.getGroups = function () {
             meshApi.getUserGroups($scope.user.username)
-                .success(function(data) {
+                .success(function (data) {
                     $scope.user.groups = data;
                 });
         };
@@ -50,10 +68,12 @@ angular.module('meshApp.profile', [
             });
         };
 
+        //$scope.getAllModels();
+
         $scope.getAllGalleries = function () {
             meshApi.getAllGalleries($scope.user.username)
                 .then(function (response) {
-                    console.log("Galleries", response.data);
+                    //console.log("Galleries", response.data);
                     $scope.galleries = response.data;
                 });
         };
@@ -83,8 +103,7 @@ angular.module('meshApp.profile', [
 
         };
 
-        $scope.editGallery = function() {
-            console.log("edit:", $scope.selectedGallery);
+        $scope.editGallery = function () {
             var modalInstance = $modal.open({
                 templateUrl: 'editGalleryId',
                 controller: 'EditGalleryModalCtrl',
@@ -99,7 +118,7 @@ angular.module('meshApp.profile', [
                 console.log("gallery", galleryInformation);
                 meshApi.updateGallery(galleryInformation.name, galleryInformation.isPublic)
                     .success(function (response) {
-                        _.forEach($scope.galleries, function(gallery) {
+                        _.forEach($scope.galleries, function (gallery) {
                             if (gallery.name == galleryInformation.name) {
                                 gallery.isPublic = galleryInformation.isPublic;
                             }
@@ -201,10 +220,10 @@ angular.module('meshApp.profile', [
             meshApi.updateUser(updatedUser).success(function (data) {
                 angular.element('#form-message').remove();
                 angular.element('form[name=userInfo]').prepend(
-                        '<div id="form-message" class="alert alert-success">' +
-                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
-                        'Your profile has been updated successfully.' +
-                        '</div>');
+                    '<div id="form-message" class="alert alert-success">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
+                    'Your profile has been updated successfully.' +
+                    '</div>');
 
                 $scope.user.interests = data.interests;
                 $scope.newUser.interests = data.interests.slice(0);
@@ -215,10 +234,10 @@ angular.module('meshApp.profile', [
             }).error(function (data) {
                 angular.element('#form-message').remove();
                 angular.element('form[name=userInfo]').prepend(
-                        '<div id="form-message" class="alert alert-danger">' +
-                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
-                        'Oops, something went wrong. Try again later.' +
-                        '</div>');
+                    '<div id="form-message" class="alert alert-danger">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
+                    'Oops, something went wrong. Try again later.' +
+                    '</div>');
             });
         };
     })
@@ -255,4 +274,18 @@ angular.module('meshApp.profile', [
             $modalInstance.dismiss('cancel');
         };
 
+    })
+    .controller('InviteToGroupModalCtrl', function ($scope, $modalInstance, meshApi) {
+        meshApi.getUserGroups(meshApi.getLoggedUsername())
+            .success(function (data) {
+                $scope.groups = data;
+            });
+
+        $scope.ok = function () {
+            $modalInstance.close($scope.name);
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
     });
