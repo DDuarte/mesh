@@ -53,6 +53,9 @@ angular.module('meshApp.notifications', [
             },
             GroupInviteNotification: function(notification) {
                 return { state: 'home.group', params: {name: notification.groupName} };
+            },
+            GroupApplicationNotification: function(notification) {
+                return { state: 'home.group', params: {name: notification.groupName} };
             }
         };
 
