@@ -222,12 +222,12 @@ module.exports = function (server) {
         handler: function (request, reply) {
             GroupInviteNotification.findOne({ _id: request.params.inviteid }, function(err, notification) {
                 if (err)
-                    return reply(Boom.badImplementation('Internal server error'));
+                    return reply(Boom.badRequest('Notification _id does not exist'));
 
                 if (notification.userTo != request.auth.credentials.username)
                     return reply(Boom.forbidden('User is not the target of the invite'));
 
-                GroupInviteNotification.update({_id: request.params.inviteid }, { accepted: request.payload.accepted }, null, function(err) {
+                GroupInviteNotification.update({_id: request.params.inviteid }, { accepted: request.payload.accepted, seen: true }, null, function(err) {
                     if (err)
                         return reply(Boom.badImplementation('Internal server error'));
 
