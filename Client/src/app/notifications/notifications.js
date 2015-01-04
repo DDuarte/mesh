@@ -101,7 +101,7 @@ angular.module('meshApp.notifications', [
         $scope.replyToInvite = function(reply, notification) {
             notification.seen = true;
             notification.accepted = reply;
-            meshApi.replyToGroupInvite(reply, notification).success(function() {
+            meshApi.replyToGroupInvite(reply, notification._id, notification.groupName).success(function() {
 
                 meshApi.updateNotification(notification)
                     .success(updateNotificationSuccessHandler)
