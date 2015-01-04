@@ -19,16 +19,38 @@ angular.module('meshApp.group', [
             $scope.loggedAvatar = meshApi.getLoggedAvatar();
         }
 
+        $scope.loadMembers = function() {
+            meshApi.getGroupMembers($stateParams.name).
+                success(function (data, status, headers, config) {
+                    for (var i = 0; i < data.length; ++i) {
+                        if (data[i].role === 'IS_ADMIN') {
+                            data[i].role = "Administrator";
+                        }
+                        else {
+                            data[i].role = "Member";
+                        }
+                    }
+                    $scope.group.groupMembers = data;
+                }).
+                error(function (err) {
+                    alert("The group members could not be retrieved: " + err.message); //TODO prettify error display
+                });
+        };
+
         $scope.init = function() {
             $scope.group = {};
             meshApi.getGroup($stateParams.name).
                 success(function (data, status, headers, config) {
                     $scope.group = data.group;
+                    $scope.loadMembers(); //TODO remove this when group template is altered so that the member list isn't loaded right away
                 }).
                 error(function (err) {
                     alert("The group could not be retrieved: " + err.message); //TODO redirect to error page
                 });
+
         };
+
+
 
         $scope.applied = false;
         $scope.applyToGroup = function() {
@@ -64,6 +86,7 @@ angular.module('meshApp.group', [
             $scope.galleriesPaginatorCurrentPage = 1;
         };
 
+        /*
         $scope.groupMembers = [
             {
                 "avatarLink": "user1.png",
@@ -108,4 +131,5 @@ angular.module('meshApp.group', [
                 "role": "Administrator"
             }
         ];
+        */
 });
