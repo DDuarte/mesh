@@ -267,7 +267,7 @@ module.exports = function (server) {
                     if (!isAdmin)
                         return reply(Boom.badRequest('User is not administrator of the group'));
 
-                    GroupApplicationNotification.findOneAndUpdate({ _id: request.params.notificationid }, { accepted: request.payload.accepted }, null, function(err, notification) {
+                    GroupApplicationNotification.findOneAndUpdate({ _id: request.params.notificationid }, { accepted: request.payload.accepted, seen: true}, null, function(err, notification) {
                         if (err)
                             throw err;
 
@@ -304,6 +304,9 @@ module.exports = function (server) {
             validate: {
                 params: {
                     id: schema.group.name.required()
+                },
+                payload: {
+                    avatar: schema.user.avatar.required()
                 }
             }
         },
@@ -322,6 +325,7 @@ module.exports = function (server) {
                                         seen: false,
                                         date: new Date(),
                                         applicantName: request.auth.credentials.username,
+                                        applicantAvatar:  request.payload.avatar,
                                         groupName: request.params.id
                                     });
 

@@ -178,7 +178,7 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             });
         },
         applyToGroup: function (groupName) {
-            return $http.post(server.url + '/groups/' + groupName + '/apply', {}, { headers: getHeaders() });
+            return $http.post(server.url + '/groups/' + groupName + '/apply', {avatar: getLoggedToken().avatar }, { headers: getHeaders() });
         },
         updateModelGalleries: function(modelId, galleries) {
             return $http.post(server.url + '/models/' + modelId + '/galleries', { galleries: galleries }, { headers: getHeaders() });
