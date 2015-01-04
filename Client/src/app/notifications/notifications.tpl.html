@@ -79,7 +79,7 @@
                                     </span>
                                 </strong>
 
-                                <strong ng-switch-when="GroupApplicationNotification">
+                                <strong ng-switch-when="GroupApplicationNotification" class="subject">
                                     <span ng-show="notification.accepted == null">
                                         <a ui-sref="home.profile({username: notification.inviterName})">{{notification.applicantName}}</a> has applied
                                         to the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
@@ -95,11 +95,11 @@
 
                                     <span ng-show="notification.accepted == true">
                                         <a ui-sref="home.profile({username: notification.inviterName})">{{notification.applicantName}}</a>'s application
-                                        to join the group has been accepted<a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
+                                        to join <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a> has been accepted
                                     </span>
                                     <span ng-show="notification.accepted == false">
                                         <a ui-sref="home.profile({username: notification.inviterName})">{{notification.applicantName}}</a>'s application
-                                        to join the group has been declined <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
+                                        to join <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a> has been declined
                                     </span>
                                 </strong>
 
