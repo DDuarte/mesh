@@ -83,9 +83,12 @@
                         <div class="col-sm-6">
                             <div class="input-group mb15">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                <input type="date" style="padding-top: 0; padding-bottom: 0"
+                                <input readonly="true" style="cursor:default;background-color:white"
                                        ng-model="tempDate" class="form-control"
-                                       placeholder="yyyy-MM-dd"
+                                       datepicker-popup="dd-MMMM-yyyy" datepicker-mode="'year'"
+                                       show-button-bar="false" datepicker-append-to-body="true"
+                                       max-date="curDate" placeholder="Birthdate"
+                                       is-open="isOpen" ng-focus="isOpen = true;"
                                        required>
                             </div>
                             <!-- input-group -->
