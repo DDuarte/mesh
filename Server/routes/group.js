@@ -66,7 +66,21 @@ module.exports = function (server) {
         handler: function (request, reply) {
             Group.getByName(request.params.id)
                 .then(function (group) {
-                    reply(group);
+                    if (group.group.visibility === 'public')
+                        reply(group);
+                    else if (!request.auth.credentials)
+                        reply(Boom.notFound('Group not found'));
+
+                    Group.isMember(request.params.id, request.auth.credentials.username)
+                        .then(function (isMember) {
+                            if (isMember)
+                                reply(group);
+                            else
+                                reply(Boom.notFound('Group not found'));
+                        })
+                        .catch(function () {
+                            reply(Boom.badImplementation('Internal server error'));
+                        });
                 })
                 .catch(Error, function (error) {
                     return reply(Boom.badImplementation(error.message));
