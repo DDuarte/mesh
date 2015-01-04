@@ -111,6 +111,18 @@ angular.module('meshApp.notifications', [
             });
         };
 
+        $scope.replyToApplication = function(reply, notification) {
+            notification.seen = true;
+            notification.accepted = reply;
+            meshApi.replyToGroupApplication(reply, notification._id, notification.groupName)
+                .success(function() {
+                    alert("Success");
+                })
+                .error(function(data) {
+                    alert("Error" + JSON.stringify(data));
+                });
+        };
+
         $scope.loadMoreNotifications = function(more) {
             NotificationsFactory.limit += more;
             NotificationsFactory.refreshNotifications();
