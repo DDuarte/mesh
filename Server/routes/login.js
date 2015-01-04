@@ -14,11 +14,8 @@ var tokenTTL = 7200;
 module.exports = function (server) {
 
     var validate = function (rToken, decodedToken, callback) {
-        console.log(rToken);
-        console.log(decodedToken);
 
         if (decodedToken) {
-            console.log(decodedToken.username.toString());
         }
 
         client.get(decodedToken.username, function (err, tok) {
@@ -64,7 +61,6 @@ module.exports = function (server) {
                     return reply(Boom.forbidden('Account is not activated'));
                 }
                 var insertedPasswordHash = User.generatePasswordHash(user, password);
-                console.log(insertedPasswordHash);
                 if (userData.passwordHash && insertedPasswordHash.toLowerCase() == userData.passwordHash.toLowerCase()) {
                     client.get(user, function (err, tok) {
                         if (err) return reply(Boom.badImplementation(err));
