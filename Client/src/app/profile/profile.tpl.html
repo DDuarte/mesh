@@ -276,102 +276,26 @@
     </div>
     <!--follower-list -->
 </tab>
-<tab>
+<tab select="getGroups()">
     <tab-heading><strong>Groups</strong></tab-heading>
     <div class="follower-list">
         <div class="row">
 
-            <div class="card people">
+            <div class="card people" ng-repeat="group in user.groups">
                 <div class="card-top green">
-                    <a href="">
+                    <a ui-sref="home.group({name: group.name})">
                         <img src="http://placehold.it/200x200" class="img-responsive" alt=""/>
                     </a>
                 </div>
                 <div class="card-info">
-                    <a class="title" href="">3D home printing</a>
+                    <a class="title" ui-sref="home.group({name: group.name})">{{group.name}}</a>
 
-                    <div class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua.
-                    </div>
+                    <div class="desc">{{group.description}}</div>
                 </div>
-                <div class="card-bottom">
+                <!--<div class="card-bottom">
                     <button class="btn btn-block">Join</button>
-                </div>
+                </div>-->
             </div>
-
-            <div class="card people">
-                <div class="card-top green">
-                    <a href="">
-                        <img src="http://placehold.it/200x200" class="img-responsive" alt=""/>
-                    </a>
-                </div>
-                <div class="card-info">
-                    <a class="title" href="">Game assets</a>
-
-                    <div class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua.
-                    </div>
-                </div>
-                <div class="card-bottom">
-                    <button class="btn btn-block">Join</button>
-                </div>
-            </div>
-
-            <div class="card people">
-                <div class="card-top green">
-                    <a href="">
-                        <img src="http://placehold.it/200x200" class="img-responsive" alt=""/>
-                    </a>
-                </div>
-                <div class="card-info">
-                    <a class="title" href="">Nature</a>
-
-                    <div class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua.
-                    </div>
-                </div>
-                <div class="card-bottom">
-                    <button class="btn btn-block">Join</button>
-                </div>
-            </div>
-
-            <div class="card people">
-                <div class="card-top green">
-                    <a href="">
-                        <img src="http://placehold.it/200x200" class="img-responsive" alt=""/>
-                    </a>
-                </div>
-                <div class="card-info">
-                    <a class="title" href="">Fictional Characters</a>
-
-                    <div class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua.
-                    </div>
-                </div>
-                <div class="card-bottom">
-                    <button class="btn btn-block">Join</button>
-                </div>
-            </div>
-
-            <div class="card people">
-                <div class="card-top green">
-                    <a href="">
-                        <img src="http://placehold.it/200x200" class="img-responsive" alt=""/>
-                    </a>
-                </div>
-                <div class="card-info">
-                    <a class="title" href="">Unity</a>
-
-                    <div class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua.
-                    </div>
-                </div>
-                <div class="card-bottom">
-                    <button class="btn btn-block">Join</button>
-                </div>
-            </div>
-
-
         </div>
 
     </div>

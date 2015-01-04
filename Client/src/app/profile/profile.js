@@ -29,6 +29,13 @@ angular.module('meshApp.profile', [
             });
         };
 
+        $scope.getGroups = function() {
+            meshApi.getUserGroups($scope.user.username)
+                .success(function(data) {
+                    $scope.user.groups = data;
+                });
+        };
+
         $scope.getFollowing = function () {
             meshApi.getFollowing($scope.user.username).success(function (data) {
                 $scope.user.following = data;
