@@ -67,10 +67,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="member in groupMembers|orderBy:orderByField:reverseSort">
+                        <tr ng-repeat="member in group.groupMembers|orderBy:orderByField:reverseSort">
                             <td>
                                 <a ui-sref="home.profile({id: member.username})">
-                                    <img class="media-object img-circle" alt="..." src="images/photos/{{member.avatarLink}}" style="width:100%;">
+                                    <img class="media-object img-circle" alt="..." src="{{member.avatar}}" style="width:100%;">
                                 </a>
                             </td>
                             <td>{{member.username}}</td>
