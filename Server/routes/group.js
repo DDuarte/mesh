@@ -187,6 +187,7 @@ module.exports = function (server) {
                         userTo: request.payload.inviteeName,
                         seen: false,
                         date: new Date(),
+                        groupName: request.params.id,
                         inviterName: request.auth.credentials.username
                     });
 
@@ -199,7 +200,7 @@ module.exports = function (server) {
                 })
                 .catch(function () {
                     reply(Boom.badImplementation('Internal server error'));
-                })
+                });
         }
     });
 
