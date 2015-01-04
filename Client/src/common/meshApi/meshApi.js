@@ -169,6 +169,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 file: file // single file or a list of files. list is only for html5
             });
         },
+        getUser: function (name) {
+            return $http.get(server.url + '/users/' + name, {headers: getHeaders()});
+        },
         updateUser: function (user) {
             return $http({
                 url: server.url + '/users/' + getLoggedToken().username,

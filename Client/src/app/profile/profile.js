@@ -17,10 +17,13 @@ angular.module('meshApp.profile', [
         $scope.ownUsername = meshApi.getLoggedUsername();
 
         $scope.init = function () {
-            $http.get(server.url + '/users/' + $stateParams.username). // TODO: make url configurable?
+            meshApi.getUser($stateParams.username). // TODO: make url configurable?
                 success(function (data) {
                     $scope.user = data;
                     $scope.newUser.interests = data.interests.slice(0); // clone the interests array
+                }).
+                error(function (err) {
+                    console.log("The user could not be retrieved: " + err.message); //TODO redirect to error page
                 });
         };
 
