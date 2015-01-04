@@ -169,7 +169,7 @@ group.isMember = function (groupName, userName) {
 group.addMember = function (groupName, memberName) {
     var query = [
         'MATCH (group:Group {name: {groupName}})',
-        'MATCH (user:User {name: {memberName})',
+        'MATCH (user:User {name: {memberName}})',
         'CREATE group<-[:IS_MEMBER]-user'
     ];
 
@@ -178,9 +178,9 @@ group.addMember = function (groupName, memberName) {
         memberName: memberName
     };
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         db.query(query, params, function (err) {
-            if (err) throw new Error('Internal Database error');
+            if (err) throw err;
             return resolve(true);
         });
     });
