@@ -22,7 +22,7 @@ user.getByUsername = function (username, loggedUsername) {
             'with u, userInterest',
             'OPTIONAL MATCH (u)<-[fol:FOLLOWING]-(:User {username: {loggedUsername}})',
             'WITH u, userInterest, (fol IS NOT NULL) as followingUser',
-            'RETURN { firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active, about: u.about, interests: collect(userInterest.name), followingUser: followingUser } as user'
+            'RETURN { firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active, country: u.country, about: u.about, interests: collect(userInterest.name), followingUser: followingUser } as user'
         ].join('\n');
 
         var params = {
