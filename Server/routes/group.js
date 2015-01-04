@@ -180,7 +180,7 @@ module.exports = function (server) {
         handler: function (request, reply) {
             Group.isAdmin(request.params.id, request.auth.credentials.username)
                 .then(function (isAdmin) {
-                    if (isAdmin)
+                    if (!isAdmin)
                         return reply(Boom.unauthorized('User is not an administrator'));
 
                     var notification = new GroupInviteNotification({
