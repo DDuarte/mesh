@@ -81,11 +81,11 @@
                                         <a ui-sref="home.profile({username: notification.inviterName})">{{notification.applicantName}}</a> has applied
                                         to the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
                                         <button class="btn btn-xs btn-rounded btn-success"
-                                                ng-click="replyToInvite(true, notification); $event.stopPropagation();">
+                                                ng-click="replyToApplication(true, notification); $event.stopPropagation();">
                                             Accept
                                         </button>
                                         <button class="btn btn-xs btn-rounded btn-danger"
-                                                ng-click="replyToInvite(false, notification); $event.stopPropagation();">
+                                                ng-click="replyToApplication(false, notification); $event.stopPropagation();">
                                             Decline
                                         </button>
                                     </span>

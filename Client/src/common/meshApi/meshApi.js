@@ -258,6 +258,10 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 data: { seen: notification.seen },
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token, 'Content-Type': 'application/json'}
             });
+        },
+        replyToGroupApplication: function(reply, notificationId, groupId) {
+            // TODO implement api request
+            return $http.patch(server.url + '/groups/' + groupId + '/apply/' + notificationId, { accepted: reply }, { headers: getHeaders() });
         }
     };
 
