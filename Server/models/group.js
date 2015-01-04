@@ -33,7 +33,7 @@ group.create = function (groupInfo) {
 group.getByName = function (name) {
     var query = [
         'MATCH (g:Group {lowerName: lower({ name })})',
-        'RETURN {name: g.name, description: g.description} as group'
+        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate} as group'
     ].join('\n');
 
     var params = {
