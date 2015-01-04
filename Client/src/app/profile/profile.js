@@ -29,9 +29,11 @@ angular.module('meshApp.profile', [
         };
 
         $scope.getFollowers = function () {
-            meshApi.getFollowers($scope.user.username).success(function (data) {
-                $scope.user.followers = data;
-            });
+            if (!$scope.user.followers) {
+                meshApi.getFollowers($scope.user.username).success(function (data) {
+                    $scope.user.followers = data;
+                });
+            }
         };
 
         $scope.inviteToGroup = function () {
@@ -53,40 +55,48 @@ angular.module('meshApp.profile', [
         };
 
         $scope.getGroups = function () {
-            meshApi.getUserGroups($scope.user.username)
-                .success(function (data) {
-                    $scope.user.groups = data;
-                });
+            if (!$scope.user.groups) {
+                meshApi.getUserGroups($scope.user.username)
+                    .success(function (data) {
+                        $scope.user.groups = data;
+                    });
+            }
         };
 
         $scope.getFollowing = function () {
-            meshApi.getFollowing($scope.user.username).success(function (data) {
-                $scope.user.following = data;
-            });
+            if (!$scope.user.following) {
+                meshApi.getFollowing($scope.user.username).success(function (data) {
+                    $scope.user.following = data;
+                });
+            }
         };
 
         $scope.getAllModels = function () {
             $scope.isAllModelsSelected = true;
             $scope.selectedGallery = null;
-            meshApi.getAllModels($scope.user.username).success(function (data) {
-                $scope.models = data;
-            });
+            if (!$scope.allModels) {
+                meshApi.getAllModels($scope.user.username).success(function (data) {
+                    $scope.allModels = data;
+                    $scope.models = $scope.allModels;
+                });
+            }
+            else {
+                $scope.models = $scope.allModels;
+            }
         };
 
         //$scope.getAllModels();
 
-        var firstRun = true;
         $scope.getAllGalleries = function () {
 
-            meshApi.getAllGalleries($scope.user.username)
-                .then(function (response) {
-                    //console.log("Galleries", response.data);
-                    $scope.galleries = response.data;
-                });
-            if (firstRun) {
+            if (!$scope.galleries) {
+                meshApi.getAllGalleries($scope.user.username)
+                    .then(function (response) {
+                        //console.log("Galleries", response.data);
+                        $scope.galleries = response.data;
+                    });
                 $scope.isAllModelsSelected = true;
                 $scope.getAllModels();
-                firstRun = false;
             }
         };
 
@@ -166,14 +176,21 @@ angular.module('meshApp.profile', [
         $scope.selectGallery = function (gallery) {
             $scope.isAllModelsSelected = false;
             $scope.selectedGallery = gallery;
-            meshApi.getModelsFromGallery($scope.user.username, gallery.name)
-                .success(function (response) {
-                    console.log("response", response);
-                    $scope.models = response;
-                })
-                .error(function (response) {
-                    console.log("response", response);
-                });
+
+            if (!gallery.models) {
+                meshApi.getModelsFromGallery($scope.user.username, gallery.name)
+                    .success(function (response) {
+                        console.log("response", response);
+                        gallery.models = response;
+                        $scope.models = gallery.models;
+                    })
+                    .error(function (response) {
+                        console.log("response", response);
+                    });
+            }
+            else {
+                $scope.models = gallery.models;
+            }
         };
 
         $scope.isGallerySelected = function (gallery) {
