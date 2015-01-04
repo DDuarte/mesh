@@ -169,7 +169,7 @@ group.isMember = function (groupName, userName) {
 group.addMember = function (groupName, memberName) {
     var query = [
         'MATCH (group:Group {name: {groupName}})',
-        'MATCH (user:User {name: {memberName}})',
+        'MATCH (user:User {username: {memberName}})',
         'CREATE group<-[:IS_MEMBER]-user'
     ].join('\n');
 
