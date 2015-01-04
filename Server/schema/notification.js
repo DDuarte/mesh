@@ -1,3 +1,5 @@
+'use strict';
+
 var Joi = require('joi');
 
 // see https://github.com/hapijs/joi/issues/162

@@ -1,3 +1,5 @@
+'use strict';
+
 var Joi = require('joi');
 
 var countries = [ // copied from Client/src/app/register/register.js
