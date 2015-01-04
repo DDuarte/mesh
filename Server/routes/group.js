@@ -143,7 +143,7 @@ module.exports = function (server) {
         },
         handler: function (request, reply) {
             var groupId = request.params.id;
-            Group.getById(groupId)
+            Group.getByName(groupId)
                 .then(function () {
                     Group.getMembers(groupId)
                         .then(function (members) {

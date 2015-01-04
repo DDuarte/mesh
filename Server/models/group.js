@@ -236,15 +236,14 @@ group.getAdministrators = function (groupName) {
 };
 
 /**
- * Returns the group members
- * @param {String} groupId Id of the group
+ * Returns the group members (admins and regular members) with the required information for displaying in the group page
+ * @param {String} groupId name of the group
  * @returns {Promise} Resolves to the group members if successful, rejects otherwise
  */
 group.getMembers = function (groupId) {
     var query = [
-        'MATCH (group:Group)<-[:IS_MEMBER]-(members:User)',
-        'WHERE id(group) = {id}',
-        'RETURN members'
+        'MATCH (group:Group {name: {id}})<-[r]-(u:User)',
+        'RETURN collect({ username: u.username, avatar: u.avatar, joinDate: r.joinDate, role: type(r) }) as members'
     ].join('\n');
 
     var params = {
@@ -254,7 +253,7 @@ group.getMembers = function (groupId) {
     return new Promise(function (resolve, reject) {
         db.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
-            return resolve(results);
+            return resolve(results[0].members);
         });
     });
 };
