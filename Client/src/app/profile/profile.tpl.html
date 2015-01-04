@@ -12,8 +12,10 @@
         <div><i class="fa fa-certificate"></i> Page views: <b>{{user.counter}}</b></div>
         <div><i class="fa fa-map-marker"></i> San Francisco, California, USA</div>
         <div><i class="fa fa-envelope-o"></i> <a href=""> {{user.email}} </a></div>
-
-        <a ng-if="user.username != ownUsername" ui-sref="home.createMessage({toUsername: user.username})" class="btn btn-primary">Send message to user</a>
+        <div class="mb10"></div>
+        <a ng-if="user.username != ownUsername" ui-sref="home.createMessage({toUsername: user.username})" class="btn btn-primary">Send message to user</a> <br>
+        <div class="mb10"></div>
+        <a ng-if="user.username != ownUsername" ng-click="inviteToGroup()" class="btn btn-primary">Invite to group</a>
         <div class="mb20"></div>
     </div>
     <!-- text-center -->
@@ -325,8 +327,7 @@
                     + Add New Gallery
                 </button>
                 <ul class="folder-list">
-                    <li style="padding-left: 10px" ng-class="{selected: isAllModelsSelected}">
-                        <a href="" ng-init="getAllModels()" ng-click="getAllModels()"> All Models</a>
+                    <li ng-class="{selected: isAllModelsSelected}"><a href="" ng-click="getAllModels()"> All Models</a></li>
                     </li>
                     <li style="padding-left: 10px" ng-repeat="gallery in galleries" ng-class="{selected : isGallerySelected(gallery)}">
                         <a href="" ng-click="selectGallery(gallery)"><i class="fa fa-folder-o"></i>{{gallery.name}}</a>
@@ -512,6 +513,27 @@
         <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
     </div>
 </script>
+
+<script type="text/ng-template" id="inviteToGroupId">
+    <div class="modal-header">
+        <h3 class="modal-title">Invite to group</h3>
+    </div>
+    <div class="modal-body">
+        <form name="inviteToGroupForm">
+            <div class="rdio rdio-primary" ng-repeat="group in groups">
+                <input type="radio" name="name" value="{{group.name}}" ng-model="$parent.name" id="{{group.name}}">
+                <label for="{{group.name}}">{{group.name}}</label>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="!name || inviteToGroupForm.$invalid" ng-click="ok()">
+            Invite
+        </button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
 
 <script type="text/ng-template" id="deleteGallerySuccessId">
     <div class="ngdialog-message">
