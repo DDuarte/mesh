@@ -319,12 +319,16 @@
         <hr>
         <div class="col-md-12">
             <div class="col-sm-3">
-                <h5 class="lg-title">Galleries <a ng-if="user.username == ownUsername" ng-click="addNewGallery()" href="" class="pull-right">+ Add New
-                    Gallery</a></h5>
+                <h5 class="lg-title tab-pane">Galleries
+                </h5>
+                <button style="margin-bottom: 5px" class="btn btn-success btn-xs" ng-if="user.username == ownUsername" ng-click="addNewGallery()" href="" class="pull-right">
+                    + Add New Gallery
+                </button>
                 <ul class="folder-list">
-                    <li ng-class="{selected: isAllModelsSelected}"><a href="" ng-init="getAllModels()"
-                                                                      ng-click="getAllModels()"> All Models</a></li>
-                    <li ng-repeat="gallery in galleries" ng-class="{selected : isGallerySelected(gallery)}">
+                    <li style="padding-left: 10px" ng-class="{selected: isAllModelsSelected}">
+                        <a href="" ng-init="getAllModels()" ng-click="getAllModels()"> All Models</a>
+                    </li>
+                    <li style="padding-left: 10px" ng-repeat="gallery in galleries" ng-class="{selected : isGallerySelected(gallery)}">
                         <a href="" ng-click="selectGallery(gallery)"><i class="fa fa-folder-o"></i>{{gallery.name}}</a>
                     </li>
                 </ul>
