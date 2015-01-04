@@ -260,13 +260,15 @@ module.exports = function (server) {
                                 .then(function() {
                                     reply().code(200);
                                 })
-                                .catch(function() {
+                                .catch(function(error) {
+                                    console.log(error);
                                     reply(Boom.badImplementation('Internal server error'));
                                 });
                         });
                     });
                 })
-                .catch(function () {
+                .catch(function (error) {
+                    console.log(error);
                     return reply(Boom.badImplementation('Internal server error'));
                 })
         }
