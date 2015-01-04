@@ -143,7 +143,7 @@ user.getGroups = function (username, isOwnUser) {
     return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (user:User {username: { username }})-[r]->(group:Group' /*+ isOwnUser ? '' : '{isPublic: true}'*/ + ')',
-            'RETURN collect({name: group.name, about: group.about, avatar: group.avatar}) as groups'
+            'RETURN collect({name: group.name, description: group.description, creationDate: group.creationDate}) as groups'
         ].join('\n');
 
         var params = {
