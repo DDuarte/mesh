@@ -22,6 +22,7 @@ angular.module('meshApp.profile', [
                 success(function (data) {
                     $scope.user = data;
                     $scope.newUser.interests = data.interests.slice(0); // clone the interests array
+                    $scope.getAllGalleries();
                 }).
                 error(function (err) {
                     console.log("The user could not be retrieved: " + err.message); //TODO redirect to error page
