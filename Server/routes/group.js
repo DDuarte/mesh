@@ -205,7 +205,7 @@ module.exports = function (server) {
     });
 
     server.route({
-        path: '/groups/{id}/invite/inviteid',
+        path: '/groups/{id}/invite/{inviteid}',
         method: 'PATCH',
         config: {
             auth: 'token',
