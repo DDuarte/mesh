@@ -110,7 +110,7 @@ group.getById = function (id) {
  */
 group.isAdmin = function (groupName, userName) {
     var query = [
-        'MATCH (group:Group {name: {groupName})<-[:IS_ADMIN]-(user:User {username: {userName}})',
+        'MATCH (group:Group {name: {groupName}})<-[:IS_ADMIN]-(user:User {username: {userName}})',
         'RETURN user'
     ].join('\n');
 
