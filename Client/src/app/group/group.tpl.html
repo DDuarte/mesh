@@ -82,7 +82,8 @@
                 </div><!-- table-responsive -->
             </div>
         </tab>
-        <tab heading="Galleries">
+        <tab heading="Models">
+            <!--
             <div class="row">
                 <div class="col-md-12">
                     <pagination total-items="galleriesPaginatorTotalItems" ng-model="galleriesPaginatorCurrentPage" max-size="galleriesPaginatorMaxSize" items-per-page="galleriesPaginatorItemsPerPage" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
@@ -112,6 +113,26 @@
                 <div class="col-md-12">
                     <pagination total-items="galleriesPaginatorTotalItems" ng-model="galleriesPaginatorCurrentPage" max-size="galleriesPaginatorMaxSize" items-per-page="galleriesPaginatorItemsPerPage" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
                 </div>
+            </div>
+            -->
+            <div class="col-md-12">
+                    <modelthumbnail ng-repeat="model in models"
+                                    model-id={{model.modelId}}
+                                    image-url={{model.thumbnail}}
+                                    title={{model.title}}
+                                    author={{model.author}}
+                                    author-avatar={{model.authorAvatar}}
+                                    date={{model.date}}
+                                    num-comments={{model.numComments}}
+                                    upvotes={{model.upvotes}}
+                                    downvotes={{model.downvotes}}>
+                    </modelthumbnail>
+            </div>
+            <div class="btn-list pull-left">
+
+                <button class="btn btn-primary" ng-click="loadMoreMessages( 5)">
+                    Load more messages
+                </button>
             </div>
         </tab>
     </tabset>
