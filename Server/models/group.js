@@ -1,7 +1,8 @@
-var Promise = require('bluebird');
-var db = require('../common/neo4jDatabase');
+'use strict';
 
-var group = {};
+var Promise = require('bluebird'),
+    db = require('../common/db'),
+    group = {};
 
 /**
  * Creates a new group
@@ -17,12 +18,12 @@ group.create = function (groupInfo) {
         'RETURN group.name as name'
     ].join('\n');
 
-    return new Promise(function (resolve) {
-        db.query(query, groupInfo, function (err, results) {
+    return new Promise(function(resolve) {
+        db.neo4j.query(query, groupInfo, function(err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results[0]);
         });
-    })
+    });
 };
 
 /**
@@ -41,7 +42,7 @@ group.getByName = function (name) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             if (results.length > 0)
                 return resolve(results[0]);
@@ -67,7 +68,7 @@ group.searchByName = function (name) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results[0]['groups']);
         });
@@ -91,7 +92,7 @@ group.getById = function (id) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
 
             if (results.length > 0)
@@ -120,7 +121,7 @@ group.isAdmin = function (groupName, userName) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
 
             if (results.length > 0)
@@ -149,7 +150,7 @@ group.isMember = function (groupName, userName) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
             console.log("isMemberResults", results);
             if (results.length > 0)
@@ -180,7 +181,7 @@ group.addMember = function (groupName, memberName) {
     };
 
     return new Promise(function (resolve) {
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw err;
             return resolve(true);
         });
@@ -206,7 +207,7 @@ group.addAdmin = function (groupName, adminName) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err) {
+        db.neo4j.query(query, params, function (err) {
             if (err) throw new Error('Internal database error');
             return resolve(true);
         });
@@ -229,7 +230,7 @@ group.getAdministrators = function (groupName) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw err;
             return resolve(results[0].admins);
         });
@@ -252,7 +253,7 @@ group.getMembers = function (groupId) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results[0].members);
         });
@@ -276,7 +277,7 @@ group.getAllGalleries = function (groupId) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -300,7 +301,7 @@ group.getPublicGalleries = function (groupId) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -324,7 +325,7 @@ group.getPrivateGalleries = function (groupId) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -348,7 +349,7 @@ group.getAllModels = function (groupId) {
     };
 
     return new Promise(function (resolve) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -372,7 +373,7 @@ group.getPublicModels = function (groupId) {
     };
 
     return new Promise(function (resolve) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -396,7 +397,7 @@ group.getPrivateModels = function (groupId) {
     };
 
     return new Promise(function (resolve) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });
@@ -422,7 +423,7 @@ group.getGallery = function (groupId, galleryName) {
     };
 
     return new Promise(function (resolve, reject) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal Server Error');
 
             if (results.length > 0)
@@ -452,7 +453,7 @@ group.getModels = function (groupId, galleryName) {
     };
 
     return new Promise(function (resolve) {
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results);
         });

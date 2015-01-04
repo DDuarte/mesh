@@ -1,7 +1,9 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+'use strict';
 
-var messageSchema = new mongoose.Schema({
+var db = require('../common/db'),
+    Schema = db.mongo.Schema;
+
+var messageSchema = new db.mongo.Schema({
     userFrom: String,
     userFromAvatar: String,
     userTo: String,
@@ -14,4 +16,4 @@ var messageSchema = new mongoose.Schema({
     userFromDeleted: Boolean
 });
 
-module.exports = mongoose.model('Message', messageSchema);
+module.exports = db.mongo.model('Message', messageSchema);

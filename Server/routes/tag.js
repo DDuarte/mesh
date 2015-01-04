@@ -1,5 +1,5 @@
 
-var client = require('../common/redisClient'),
+var db = require('../common/db'),
     fuzzy = require('fuzzy'),
     Boom = require('boom'),
     schema = require('../schema');
@@ -11,10 +11,10 @@ var default_tags = ['abstract', 'art', 'black', 'blue', 'dark', 'drawing', 'girl
 module.exports  = function (server) {
 
     function getTags(request, reply) {
-        client.sadd('tags', default_tags); // ignores if tags already exist
+        db.redis.sadd('tags', default_tags); // ignores if tags already exist
         // TODO: Call sadd on redis when models are created
 
-        client.smembers('tags', function (err, tags) {
+        db.redis.smembers('tags', function (err, tags) {
             if (err) throw err;
 
             var matches = [];

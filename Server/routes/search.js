@@ -1,10 +1,10 @@
 'use strict';
 
-var Promise = require('bluebird');
-var Group = require('../models/group');
-var Model = require('../models/model');
-var User = require('../models/user');
-var Boom = require('boom');
+var Promise = require('bluebird'),
+    Group = require('../models/group'),
+    Model = require('../models/model'),
+    User = require('../models/user'),
+    Boom = require('boom');
 
 module.exports = function (server) {
     server.route({

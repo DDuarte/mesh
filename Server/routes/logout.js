@@ -1,6 +1,6 @@
 'use strict';
 
-var client = require('../common/redisClient');
+var db = require('../common/db');
 
 module.exports = function (server) {
 
@@ -9,7 +9,7 @@ module.exports = function (server) {
         path: '/logout',
         config: {auth: 'token'},
         handler: function (request, reply) {
-            client.del(request.auth.credentials.username);
+            db.redis.del(request.auth.credentials.username);
             return reply({});
         }
     });

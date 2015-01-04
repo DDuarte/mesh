@@ -1,7 +1,7 @@
+'use strict';
+
 var Promise = require('bluebird'),
-    db = require('../common/neo4jDatabase'),
-    redis = require('redis'),
-    client = redis.createClient(),
+    db = require('../common/db'),
     catalog = {};
 
 /**
@@ -30,7 +30,7 @@ catalog.getModelsOlderThan = function (startdate) {
             date: startdate
         };
 
-        db.query(query, params, function (err, results) {
+        db.neo4j.query(query, params, function (err, results) {
             if (err) return reject(err);
             return resolve(results[0] ? results[0].models : results);
         });
@@ -54,7 +54,7 @@ catalog.getTopRatedModelIds = function () {
             'RETURN collect(m.id) as models'
         ].join('\n');
 
-        db.query(query, {}, function (err, results) {
+        db.neo4j.query(query, {}, function (err, results) {
             if (err) return reject(err);
             return resolve(results[0] ? results[0].models : results);
         });
@@ -68,7 +68,7 @@ catalog.getTopRatedModelIds = function () {
  */
 catalog.getTopRatedModelIdsRedis = function () {
     return new Promise(function (resolve, reject) {
-        client.lrange('topRated', 0, 100, function (err, reply) {
+        db.redis.lrange('topRated', 0, 100, function (err, reply) {
             if (err) return  reject(err);
             return resolve(reply.map(function (e) { return parseInt(e); }));
         });

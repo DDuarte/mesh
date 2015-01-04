@@ -1,13 +1,12 @@
 'use strict';
 
-var Fs = require('fs');
-var Model = require('../models/model.js');
-var Promise = require('bluebird');
-var Boom = require('boom');
-var Path = require('path');
-var Joi = require('joi');
-
-var schema = require('../schema');
+var Fs = require('fs'),
+    Model = require('../models/model.js'),
+    Promise = require('bluebird'),
+    Boom = require('boom'),
+    Path = require('path'),
+    Joi = require('joi'),
+    schema = require('../schema');
 
 module.exports = function (server) {
     function getModel(request, reply) {

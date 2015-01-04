@@ -1,10 +1,11 @@
-var mongoose = require('mongoose'),
+'use strict';
+
+var db = require('../common/db'),
     extend = require('mongoose-schema-extend'),
-    Schema = mongoose.Schema;
+    Promise = require('bluebird'),
+    Schema = db.Schema;
 
-var Promise = require('bluebird');
-
-var notificationsSchema = new mongoose.Schema({
+var notificationsSchema = new db.mongo.Schema({
     userTo: String,
     seen: Boolean,
     date: Date
@@ -55,9 +56,9 @@ notificationsSchema.statics.notifyGroup = function(group, userFrom, message, url
     
 };
 
-module.exports.Notification = mongoose.model('Notification', notificationsSchema);
-module.exports.UploadNotification = mongoose.model('UploadNotification', uploadNotificationSchema);
-module.exports.NewFollowerNotification = mongoose.model('NewFollowerNotification', newFollowerNotificationSchema);
-module.exports.NewGroupPublicationNotification = mongoose.model('NewGroupPublicationNotification', newGroupPublicationSchema);
-module.exports.GroupInviteNotification = mongoose.model('GroupInviteNotification', groupInviteSchema);
-module.exports.GroupApplicationNotification = mongoose.model('GroupApplicationNotification', groupApplicationSchema);
+module.exports.Notification = db.mongo.model('Notification', notificationsSchema);
+module.exports.UploadNotification = db.mongo.model('UploadNotification', uploadNotificationSchema);
+module.exports.NewFollowerNotification = db.mongo.model('NewFollowerNotification', newFollowerNotificationSchema);
+module.exports.NewGroupPublicationNotification = db.mongo.model('NewGroupPublicationNotification', newGroupPublicationSchema);
+module.exports.GroupInviteNotification = db.mongo.model('GroupInviteNotification', groupInviteSchema);
+module.exports.GroupApplicationNotification = db.mongo.model('GroupApplicationNotification', groupApplicationSchema);

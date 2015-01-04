@@ -1,16 +1,15 @@
-var Boom = require('boom');
-var Fs = require('fs');
-var Path = require('path');
-var Promise = require('bluebird');
-var Model = require('../models/model');
-var User = require('../models/user');
-var Schema = require('../schema');
-var Joi = require('joi');
-var Uid = require('rand-token').uid;
-var unzip = require('unzip');
-var readdirp = require('readdirp');
-var UploadNotification = require('../models/notifications').UploadNotification;
-
+var Boom = require('boom'),
+    Fs = require('fs'),
+    Path = require('path'),
+    Promise = require('bluebird'),
+    Model = require('../models/model'),
+    User = require('../models/user'),
+    Schema = require('../schema'),
+    Joi = require('joi'),
+    Uid = require('rand-token').uid,
+    unzip = require('unzip'),
+    readdirp = require('readdirp'),
+    UploadNotification = require('../models/notifications').UploadNotification;
 
 module.exports = function (server) {
 
