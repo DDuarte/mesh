@@ -40,7 +40,7 @@ angular.module('meshApp', [
 )
     .config(function myAppConfig($stateProvider, $urlRouterProvider, ngDialogProvider) {
         // $httpProvider.responseInterceptors.push('httpInterceptor');
-        $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('/catalog');
 
         // Force reload on DOM changes
         ngDialogProvider.setForceBodyReload(true);
