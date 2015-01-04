@@ -327,7 +327,7 @@
                     + Add New Gallery
                 </button>
                 <ul class="folder-list">
-                    <li ng-class="{selected: isAllModelsSelected}"><a href="" ng-click="getAllModels()"> All Models</a></li>
+                    <li style="padding-left: 10px" ng-class="{selected: isAllModelsSelected}"><a href="" ng-click="getAllModels()"> All Models</a></li>
                     </li>
                     <li style="padding-left: 10px" ng-repeat="gallery in galleries" ng-class="{selected : isGallerySelected(gallery)}">
                         <a href="" ng-click="selectGallery(gallery)"><i class="fa fa-folder-o"></i>{{gallery.name}}</a>
