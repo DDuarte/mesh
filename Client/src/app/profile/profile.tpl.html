@@ -10,7 +10,7 @@
         <h4 class="profile-name mb5">{{user.username}}</h4>
 
         <div><i class="fa fa-certificate"></i> Page views: <b>{{user.counter}}</b></div>
-        <div><i class="fa fa-map-marker"></i> San Francisco, California, USA</div>
+        <div><i class="fa fa-flag"></i> {{user.country}}</div>
         <div><i class="fa fa-envelope-o"></i> <a href=""> {{user.email}} </a></div>
         <span ng-if="isLoggedIn && user.username != ownUsername">
             <div class="mb10"></div>
