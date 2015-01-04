@@ -1,5 +1,6 @@
 
 var db = require('../common/db'),
+    Tag = require('../models/tags.js'),
     fuzzy = require('fuzzy'),
     Boom = require('boom'),
     schema = require('../schema');
@@ -8,9 +9,16 @@ var default_tags = ['abstract', 'art', 'black', 'blue', 'dark', 'drawing', 'girl
     'illustration', 'light', 'model', 'photo', 'photography', 'street', 'woman', 'pokemon',
     'polygon', 'animal', 'human body'];
 
+
 module.exports  = function (server) {
 
     function getTags(request, reply) {
+        /*
+        Tag.getMostUsed().then(function(res) {
+                reply(res);
+            }
+        );*/
+
         db.redis.sadd('tags', default_tags); // ignores if tags already exist
         // TODO: Call sadd on redis when models are created
 
@@ -30,6 +38,7 @@ module.exports  = function (server) {
 
             reply(matches);
         });
+
     }
 
     server.route({
