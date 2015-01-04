@@ -210,7 +210,8 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.name.required()
+                    id: schema.group.name.required(),
+                    inviteid: Joi.string().required()
                 },
                 payload: {
                     accepted: Joi.boolean()
