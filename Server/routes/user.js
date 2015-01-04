@@ -118,6 +118,35 @@ module.exports = function (server) {
 
     server.route({
         method: 'GET',
+        path: '/users/{username}/groups',
+        config: {
+            auth: {
+                mode: 'optional',
+                strategy: 'token'
+            },
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            var isOwnUser = false;
+            if (request.auth.credentials) {
+                if (request.auth.credentials.username == request.params.username)
+                    isOwnUser = true;
+            }
+
+            User.getGroups(request.params.username, isOwnUser).then(function (result) {
+                reply(result);
+            }, function () {
+                reply(Boom.badImplementation('Internal server error'));
+            });
+        }
+    });
+
+    server.route({
+        method: 'GET',
         path: '/users/{username}/followers',
         config: {
             auth: false,
