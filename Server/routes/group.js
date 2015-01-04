@@ -231,7 +231,8 @@ module.exports = function (server) {
             auth: 'token',
             validate: {
                 params: {
-                    id: schema.group.name.required()
+                    id: schema.group.name.required(),
+                    notificationid: Joi.string().required()
                 },
                 payload: {
                     accepted: Joi.boolean().required()
@@ -287,7 +288,7 @@ module.exports = function (server) {
                 .then(function (isMember) {
                     if (isMember)
                         return reply(Boom.badRequest('User is already a member'));
-
+                    
                     Group.getAdministrators(request.params.id)
                         .then(function (administrators) {
                             Promise.map(administrators, function (administrator) {
