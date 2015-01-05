@@ -5,16 +5,19 @@
         <v-tabset>
             <v-tab>
                 <tab-heading>Most Relevant</tab-heading>
-                <modelthumbnail model-id="1"
-                                image-url="http://i.imgur.com/zL9XlUY.jpg"
-                                title="My horse"
-                                author="Donatello"
-                                author-avatar="http://i.imgur.com/KgKyXqN.jpg"
-                                date="2010-04-05T12:38:20.000Z"
-                                num-comments="2"
-                                upvotes="20"
-                                downvotes="2">
-                </modelthumbnail>
+                <div id="mostRelevantModelList" class="row" infinite-scroll="loadMostRelevantModels()" infinite-scroll-disabled="!hasMoreMostRelevantModels" infinite-scroll-distance="1">
+                    <modelthumbnail ng-repeat="model in mostRelevant"
+                                    model-id={{model.id}}
+                                    image-url={{model.thumbnail}}
+                                    title={{model.name}}
+                                    author={{model.author.name}}
+                                    author-avatar={{model.author.avatar}}
+                                    date={{model.publicationDate}}
+                                    num-comments={{model.comments.length}}
+                                    upvotes={{model.upvotes}}
+                                    downvotes={{model.downvotes}}>
+                    </modelthumbnail>
+                </div>
             </v-tab>
             <v-tab>
                 <tab-heading>Newest</tab-heading>
