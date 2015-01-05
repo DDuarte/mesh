@@ -29,7 +29,7 @@ module.exports = function (server) {
             groupInfo.adminName = request.auth.credentials.username;
             groupInfo.creationDate = (new Date()).toISOString();
             // check if group already exists
-            Group.getByName(groupInfo.name)
+            Group.getByName(groupInfo.name, request.auth.credentials.username)
                 .then(function () {
                     return reply(Boom.badRequest('Group already exists'));
                 })
