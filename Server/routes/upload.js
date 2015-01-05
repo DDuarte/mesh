@@ -23,7 +23,8 @@ module.exports = function (server) {
                     name: Schema.model.name.required(),
                     description: Schema.model.description.required(),
                     tags: Schema.model.tags.required(),
-                    file: Schema.model.file.required()
+                    file: Schema.model.file.required(),
+                    isPublic: Schema.model.isPublic.required()
                 }
             },
             payload: {
@@ -80,7 +81,7 @@ module.exports = function (server) {
                                 var mainfilePath = res.files[0].fullPath;
                                 var mainFilename = res.files[0].name;
                                 var thumbnail = 'http://placehold.it/290x163&text=' + data.name;
-                                Model.create(data.name, data.description, mainFilename, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, thumbnail)
+                                Model.create(data.name, data.description, mainFilename, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, thumbnail, data.isPublic)
                                     .then(function (model) {
 
                                         Promise.map(data.tags, function (tag) {

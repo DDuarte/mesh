@@ -109,7 +109,7 @@ angular.module('meshApp.modelUpload', [
                 $state.go('home.model', { id: $scope.modelId });
             });
 
-            meshApi.uploadModel($scope.model.name, $scope.model.description, tagsText, $scope.modelData)
+            meshApi.uploadModel($scope.model.name, $scope.model.description, tagsText, $scope.modelData, $scope.model.privacy === 'private' ? false : true)
                 .progress(function(evt) {
                     if (evt && evt.loaded && evt.total) {
                         $scope.uploadProgress = 100.0 * (evt.loaded / evt.total);

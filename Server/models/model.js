@@ -15,15 +15,16 @@ var Promise = require('bluebird'),
  * @param {String} uncompressedFolderPath Path of the uncompressed folder
  * @param {String} ownerName Name of the owner of the model
  * @param {String} thumbnail Url to thumbnail image
+ * @param {Boolean} isPublic privacy of the model
  */
-model.create = function (name, description, mainFilename, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, thumbnail) {
+model.create = function (name, description, mainFilename, originalFilename, mainfilePath, compressedFolderPath, uncompressedFolderPath, ownerName, thumbnail, isPublic) {
     var query = [
         // get unique id
         'MERGE (id:UniqueId{name:\'Model\'})',
         'ON CREATE SET id.count = 1',
         'ON MATCH SET id.count = id.count + 1',
         'WITH id.count AS uid',
-            'CREATE (m:Model{id:uid,name:{name}, thumbnail: {thumbnail}, originalFilename: {originalFilename}, description: {description}, ' +
+            'CREATE (m:Model{id:uid,name:{name}, thumbnail: {thumbnail}, originalFilename: {originalFilename}, description: {description}, isPublic: {isPublic}' +
             'mainFilename: {mainFilename}, filePath: {filePath}, compressedFolderPath: {compressedFolderPath}, uncompressedFolderPath: {uncompressedFolderPath}, publicationDate: {currentDate}})',
         'WITH m',
         'MATCH (user:User {username: {ownerName}})',
@@ -43,7 +44,8 @@ model.create = function (name, description, mainFilename, originalFilename, main
         uncompressedFolderPath: uncompressedFolderPath,
         ownerName: ownerName,
         currentDate: timestamp.toISOString(),
-        originalFilename: originalFilename
+        originalFilename: originalFilename,
+        isPublic: isPublic
     };
 
     return new Promise(function (resolve, reject) {
