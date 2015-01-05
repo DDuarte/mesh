@@ -339,7 +339,7 @@ group.getPrivateGalleries = function (groupId) {
  */
 group.getAllModels = function (groupId) {
     var query = [
-        'MATCH (group:Group {name: {groupName}})<-[:PUBLISHED]-(m:Model)<-[:OWNS]-(user:User)',
+        'MATCH (group:Group {name: {groupName}})<-[:PUBLISHED_IN]-(m:Model)<-[:OWNS]-(user:User)',
         'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
         'WITH m, user, count(ru) as upvotes',
         'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
