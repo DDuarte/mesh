@@ -14,7 +14,7 @@ module.exports = function (server) {
             auth: 'token'
         },
         handler: function (request, reply) {
-            var term = request.params.term;
+            var term = ".*" + request.params.term.trim().replace(' ', '.*') + ".*";
             Promise.join(Model.searchByName(term), Group.searchByName(term), User.searchByUsername(term),
                 function (models, groups, users) {
                     console.log("here");

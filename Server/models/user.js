@@ -51,7 +51,8 @@ user.getByUsername = function (username, loggedUsername) {
 user.searchByUsername = function (username) {
     return new Promise(function (resolve, reject) {
         var query = [
-            'MATCH (u: User{username: { username }})',
+            'MATCH (u: User)',
+            'WHERE u.lowerUsername ~= lower({name})',
             'RETURN collect({ firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active, ' +
             'about: u.about}) as users'
         ].join('\n');
