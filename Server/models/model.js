@@ -659,6 +659,25 @@ model.removeAllGroups = function(modelId) {
     });
 };
 
+model.replaceThumbnail = function(modelId, thumbnail) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (model:Model {id: {id}})',
+            'SET model.thumbnail = {thumbnail}'
+        ].join('\n');
+
+        var params = {
+            id: Number(modelId),
+            thumbnail: thumbnail
+        };
+
+        db.neo4j.query(query, params, function(err) {
+            if (err) throw err;
+            resolve(true);
+        });
+    });
+};
+
 /**
  * Replace the galleries of a model by the ones given as a parameter
  *
