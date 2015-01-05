@@ -33,6 +33,7 @@ group.create = function (groupInfo) {
  * @returns {Promise} Resolves to the group if successful, rejects otherwise
  */
 group.getByName = function (name, username) {
+    username = username || '';
     var query = [
         'MATCH (g:Group {lowerName: lower({name})})',
         'OPTIONAL MATCH (user:User {username: {username}})-[personalR]->(g)',
