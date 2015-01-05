@@ -88,21 +88,21 @@
   // Video Background
   // ----------------------------------- 
 
-  $(function() {
-
-    if (matchMedia('(min-width: 640px)').matches) {
-     
-      var videobackground = new $.backgroundVideo( $body, {
-        'align':    'centerXY',
-        'width':    1280,
-        'height':   720,
-        'path':     'video/',
-        'filename': 'video',
-        'types':    ['mp4', 'webm']
-      });
-    }
-
-  });
+  // $(function() {
+  // 
+  //   if (matchMedia('(min-width: 640px)').matches) {
+  //    
+  //     var videobackground = new $.backgroundVideo( $body, {
+  //       'align':    'centerXY',
+  //       'width':    1280,
+  //       'height':   720,
+  //       'path':     'video/',
+  //       'filename': 'video',
+  //       'types':    ['mp4', 'webm']
+  //     });
+  //   }
+  // 
+  // });
 
 
   // Smooth Scroll
@@ -276,6 +276,53 @@
     // reload is required to initialize plugins in RTL mode
     window.location.reload();
 
+  });
+
+  particlesJS('particles-js', {
+    particles: {
+      color: '#fff',
+      shape: 'circle', // "circle", "edge" or "triangle"
+      opacity: 1,
+      size: 4,
+      size_random: true,
+      nb: 150,
+      line_linked: {
+        enable_auto: true,
+        distance: 100,
+        color: '#fff',
+        opacity: 1,
+        width: 1,
+        condensed_mode: {
+          enable: false,
+          rotateX: 600,
+          rotateY: 600
+        }
+      },
+      anim: {
+        enable: true,
+        speed: 1
+      }
+    },
+    interactivity: {
+      enable: true,
+      mouse: {
+        distance: 250
+      },
+      detect_on: 'canvas', // "canvas" or "window"
+      mode: 'grab',
+      line_linked: {
+        opacity: .5
+      },
+      events: {
+        onclick: {
+          enable: true,
+          mode: 'push', // "push" or "remove" (particles)
+          nb: 4
+        }
+      }
+    },
+    /* Retina Display Support */
+    retina_detect: true
   });
 
 
