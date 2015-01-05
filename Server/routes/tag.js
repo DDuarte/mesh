@@ -3,6 +3,8 @@ var db = require('../common/db'),
     Tag = require('../models/tags.js'),
     fuzzy = require('fuzzy'),
     Boom = require('boom'),
+    CronJob = require('cron').CronJob,
+    moment = require('moment'),
     schema = require('../schema');
 
 var default_tags = ['abstract', 'art', 'black', 'blue', 'dark', 'drawing', 'girl', 'green',
@@ -13,18 +15,12 @@ var default_tags = ['abstract', 'art', 'black', 'blue', 'dark', 'drawing', 'girl
 module.exports  = function (server) {
 
     function getTags(request, reply) {
-        /*
-        Tag.getMostUsed().then(function(res) {
-                reply(res);
-            }
-        );*/
 
-        db.redis.sadd('tags', default_tags); // ignores if tags already exist
-        // TODO: Call sadd on redis when models are created
-
-        db.redis.smembers('tags', function (err, tags) {
+        db.redis.lrange('tagList', 0, -1, function (err, tags) {
             if (err) throw err;
 
+            //tags = tags[0].split(',');
+            console.log(tags);
             var matches = [];
             var filter = request.query.filter;
             if (filter) {
@@ -53,4 +49,26 @@ module.exports  = function (server) {
             }
         }
     });
+
+    var generateTagList = function () {
+        Tag.getMostUsed().then(function (result) {
+            if (result.length == 0) {
+                console.log('generateCatalogLists: empty result from getTopRatedModelIds');
+                return;
+            }
+
+            result.unshift('tagList');
+
+            db.redis.del('tagList');
+            db.redis.send_command('rpush', result);
+            db.redis.set('tagListTime', moment().utc().format("YYYY-MM-DD HH:mm").toString());
+        }, function (error) {
+            if (error) {
+                console.log('generateTagLists-2: ' + JSON.stringify(error));
+            }
+        });
+    };
+
+    new CronJob('*/30 * * * * *', generateTagList, null, true);
+    generateTagList();
 };
