@@ -72,7 +72,7 @@ angular.module('meshApp.model', [
                     light.position.set(-100, 200, 100);
                     $scope.scene.add(light);
 
-                    var ambientLight = new THREE.AmbientLight(0x7f7f7f);
+                    var ambientLight = new THREE.AmbientLight(0x4d4d4d);
                     console.log(ambientLight);
                     $scope.scene.add(ambientLight);
 
