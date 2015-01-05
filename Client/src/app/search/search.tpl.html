@@ -72,46 +72,12 @@
 </div><!-- col-sm-8 -->
 
         <div class="col-sm-4 col-md-3">
-            <h4 class="md-title mb5">Refine Results</h4>
-            <div class="input-group mb15">
-                <div class="input-group-btn">
-                    <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button">All <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a>User Name</a></li>
-                        <li><a>User Full Name</a></li>
-                        <li><a>User Email</a></li>
-                        <li class="divider"></li>
-                        <li><a>Model Name</a></li>
-                        <li><a>Model Tags</a></li>
-                        <li class="divider"></li>
-                        <li><a>Gallery Name</a></li>
-                        <li class="divider"></li>
-                        <li><a>Group Name</a></li>
-                        <li><a>Group Description</a></li>
-                        <li><a>Group Tag</a></li>
-                    </ul>
-                </div><!-- input-group-btn -->
-                <input type="text" class="form-control">
-            </div>
-
-            <div class="mb20"></div>
             <h4 class="md-title mb5">Filter by</h4>
             <ul class="nav nav-pills nav-stacked nav-file-type">
                 <li id="model" ng-class="{active: searchType == 'model'}"><a ng-click="changeSearchType('model')"><i class="fa fa-file"></i> Models</a></li>
                 <li id="group" ng-class="{active: searchType == 'group'}"><a ng-click="changeSearchType('group')"><i class="fa fa-group"></i> Groups</a></li>
                 <li id="user" ng-class="{active: searchType == 'user'}"><a ng-click="changeSearchType('user')"><i class="fa fa-user"></i> Users</a></li>
             </ul>
-
-            <div class="mb20"></div>
-
-            <h4 class="md-title mb5">Date Created</h4>
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="datepicker">
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-            </div>
-
-            <br />
-
         </div><!-- col-sm-4 -->
     </div><!-- row -->
 
