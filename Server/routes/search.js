@@ -10,15 +10,10 @@ module.exports = function (server) {
     server.route({
         method: 'GET',
         path: '/search/{term}',
-        config: {
-            auth: 'token'
-        },
         handler: function (request, reply) {
             var term = ".*" + request.params.term.trim().replace(' ', '.*') + ".*";
             Promise.join(Model.searchByName(term), Group.searchByName(term), User.searchByUsername(term),
                 function (models, groups, users) {
-                    console.log("here");
-                    console.log("models", models);
                     return reply({
                         models: models,
                         groups: groups,
