@@ -3,6 +3,22 @@
 
     <div class="contentpanel">
         <v-tabset>
+            <v-tab ng-if="isLoggedIn" active="true">
+                <tab-heading>Recommended</tab-heading>
+                <div id="recommendedModelList" class="row" infinite-scroll="loadRecommendedModels()" infinite-scroll-disabled="!hasMoreRecommendedModels" infinite-scroll-distance="1">
+                    <modelthumbnail ng-repeat="model in recommended"
+                                    model-id={{model.modelId}}
+                                    image-url={{model.thumbnail}}
+                                    title={{model.title}}
+                                    author={{model.author}}
+                                    author-avatar={{model.authorAvatar}}
+                                    date={{model.date}}
+                                    num-comments={{model.numComments}}
+                                    upvotes={{model.upvotes}}
+                                    downvotes={{model.downvotes}}>
+                    </modelthumbnail>
+                </div>
+            </v-tab>
             <v-tab>
                 <tab-heading>Most Relevant</tab-heading>
                 <div id="mostRelevantModelList" class="row" infinite-scroll="loadMostRelevantModels()" infinite-scroll-disabled="!hasMoreMostRelevantModels" infinite-scroll-distance="1">

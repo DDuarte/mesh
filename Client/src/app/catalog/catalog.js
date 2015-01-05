@@ -19,10 +19,12 @@ angular.module('meshApp.catalog', [
         }
 
         $scope.newest = {};
+        $scope.recommended = {};
         $scope.topRated = {};
         $scope.mostRelevant = {};
 
         $scope.hasMoreNewModels = false;
+        $scope.hasMoreRecommendedModels = false;
         $scope.hasMoreTopRatedModels = false;
         $scope.hasMoreMostRelevantModels = false;
 
@@ -101,6 +103,30 @@ angular.module('meshApp.catalog', [
                     $scope.hasMoreNewModels = true;
                 });
         };
+
+        $scope.loadRecommendedModels = function () {
+            if (!$scope.hasMoreRecommendedModels || !$scope.isLoggedIn) {
+                return;
+            }
+
+            $scope.hasMoreRecommendedModels = false;
+
+            meshApi.getRecommendedOlderThan( $scope.recommended.length > 0 ? ($scope.recommended[$scope.recommended.length-1].date) : null).
+                success( function (data, status, headers, config) {
+                    for (var i = 0; i < data.length; ++i) {
+                        $scope.recommended.push(data[i]);
+                    }
+
+                    if (data.length >= 10) {
+                        $scope.hasMoreRecommendedModels = true;
+                    }
+                }).
+                error( function (data, status, headers, config) {
+                    alert('Error ' + status + ' occurred: ' + data.message);
+                    $scope.hasMoreRecommendedModels = true;
+                });
+        };
+
         $scope.init = function () {
             meshApi.getMostRelevantModelIds().then(function (data) {
 
@@ -123,6 +149,22 @@ angular.module('meshApp.catalog', [
                 alert('Error ' + status + ' occurred: ' + data.message);
                 $scope.hasMoreMostRelevantModels = true;
             });
+
+            if ($scope.isLoggedIn) {
+                meshApi.getRecommendedOlderThan($scope.recommended[0] ? $scope.recommended[$scope.recommended.length-1].date : null).
+                    success( function (data, status, headers, config) {
+                        $scope.recommended = data;
+
+                        if (data.length >= 10) {
+                            $scope.hasMoreRecommendedModels = true;
+                        }
+                        console.log($scope.recommended);
+                    }).
+                    error( function (data, status, headers, config) {
+                        alert('Error ' + status + ' occurred: ' + data.message);
+                        $scope.hasMoreRecommendedModels = true;
+                    });
+            }
 
             meshApi.getModelsOlderThan( $scope.newest[0] ? $scope.newest[$scope.newest.length-1].date : null).
                 success( function (data, status, headers, config) {

@@ -36,6 +36,12 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: getHeaders()
             });
         },
+        getRecommendedOlderThan: function (date) {
+            return $http.get(server.url + '/catalog/recommended', {
+                params: {startDate: date},
+                headers: getHeaders()
+            });
+        },
         getMostRelevantModelIds: function () {
             return $http.get(server.url + '/catalog/mostRelevant', {
                 headers: getHeaders()
