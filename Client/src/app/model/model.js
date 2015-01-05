@@ -68,15 +68,12 @@ angular.module('meshApp.model', [
                     window.addEventListener("orientationchange", $scope.onOrientationChange, false);
                     angular.element(document).bind('fullscreenchange', $scope.onFullScreenChange);
 
-                    /*var jsonLoader = new THREE.JSONLoader();
-                     jsonLoader.load("assets/android.json", $scope.addModelToScene);
-                     */
-
                     var light = new THREE.PointLight(0xffffff);
                     light.position.set(-100, 200, 100);
                     $scope.scene.add(light);
 
-                    var ambientLight = new THREE.AmbientLight(0x111111);
+                    var ambientLight = new THREE.AmbientLight(0x7f7f7f);
+                    console.log(ambientLight);
                     $scope.scene.add(ambientLight);
 
                     var loader;
@@ -93,17 +90,29 @@ angular.module('meshApp.model', [
                             $scope.modelLoaded = true;
                             usSpinnerService.stop('spinner-1');
                             var geometry = event.content;
-                            $scope.camera.position.x = 200 / 2;
-                            $scope.camera.position.y = 200 / 4;
-                            $scope.camera.position.z = 200;
+                            var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial());
 
-                            $scope.scene.add(new THREE.Mesh(geometry, new THREE.MeshPhongMaterial()));
+                            geometry.computeBoundingSphere();
+
+                            var radius = geometry.boundingSphere.radius;
+
+                            console.log(radius);
+
+                            $scope.camera.position.x = radius;
+                            $scope.camera.position.y = radius;
+                            $scope.camera.position.z = radius;
+
+                            console.log($scope.camera.position);
+
+                            $scope.scene.add(mesh);
                         });
                         loader.load(meshApi.getMainFileUrl($attrs.modelid));
                     }
 
                     // var axes = buildAxes(1000);
                     // $scope.scene.add(axes);
+
+                    $scope.updateSizeAndCamera();
                 };
 
                 function buildAxes(length) {
@@ -171,13 +180,16 @@ angular.module('meshApp.model', [
 
                     $scope.modelLoaded = true;
                     usSpinnerService.stop('spinner-1');
-                    var boundingBox = new THREE.Box3().setFromObject(object);
-                    console.log(boundingBox);
-                    var size = boundingBox.size();
 
-                    $scope.camera.position.x = 200 / 2;
-                    $scope.camera.position.y = 200 / 4;
-                    $scope.camera.position.z = 200;
+                    object.children[0].geometry.computeBoundingSphere();
+
+                    var radius = object.children[0].geometry.boundingSphere.radius;
+
+                    console.log(radius);
+
+                    $scope.camera.position.x = radius;
+                    $scope.camera.position.y = radius;
+                    $scope.camera.position.z = radius;
 
                     $scope.scene.add(object);
 
