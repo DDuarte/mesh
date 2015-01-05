@@ -40,12 +40,15 @@ angular.module('meshApp.model', [
                         console.log("Error");
                     };
 
-                    var args = { antialias: true };
+                    var args = {antialias: true};
 
                     $scope.renderer = Detector.webgl ? new THREE.WebGLRenderer(args) : new THREE.CanvasRenderer(args);
                     $scope.renderer.setClearColor(0xf8f8f8 /* light gray */, 1);
 
-                    $scope.size = { width: angular.element('#rendererContainer').innerWidth(), height: angular.element('#rendererContainer').innerWidth() * 9 / 16 };
+                    $scope.size = {
+                        width: angular.element('#rendererContainer').innerWidth(),
+                        height: angular.element('#rendererContainer').innerWidth() * 9 / 16
+                    };
 
                     $scope.renderer.setSize($scope.size.width, $scope.size.height);
 
@@ -122,9 +125,9 @@ angular.module('meshApp.model', [
                         mat;
 
                     if (dashed) {
-                        mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
+                        mat = new THREE.LineDashedMaterial({linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3});
                     } else {
-                        mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
+                        mat = new THREE.LineBasicMaterial({linewidth: 3, color: colorHex});
                     }
 
                     geom.vertices.push(src.clone());
@@ -289,7 +292,7 @@ angular.module('meshApp.model', [
             url: '/model/:id',
             controller: 'ModelCtrl',
             templateUrl: 'model/model.tpl.html',
-            data: { pageTitle: 'Model | Mesh' }
+            data: {pageTitle: 'Model | Mesh'}
         });
     })
 
@@ -304,7 +307,6 @@ angular.module('meshApp.model', [
 
         $scope.init = function () {
             $scope.newModel = {};
-
             meshApi.getModel($stateParams.id). // TODO: make url configurable?
                 success(function (data, status, headers, config) {
                     $scope.model = data.model;
@@ -543,12 +545,37 @@ angular.module('meshApp.model', [
             modalInstance.result.then(function (selectedGalleries) {
                 console.log(selectedGalleries);
                 meshApi.updateModelGalleries($scope.model.id, selectedGalleries)
-                    .success(function() {
+                    .success(function () {
                         //alert("Success");
                         toastr.success('The model was successfully published', 'Model Publishing');
                     })
-                    .error(function(response) {
+                    .error(function (response) {
                         toastr.error('Error publishing model ' + JSON.stringify(response), 'Model Publishing');
+                    });
+            }, function () {
+                // do nothing, cancelled
+            });
+        };
+
+        $scope.publishToGroups = function () {
+            var modalInstance = $modal.open({
+                templateUrl: 'groupsSelectionId',
+                controller: 'GroupPublishModalInstanceCtrl',
+                size: 'lg',
+                resolve: {
+                    authorName: function () {
+                        return $scope.model.author.name;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedGroups) {
+                meshApi.updateModelPublishedGroups($scope.model.id, selectedGroups)
+                    .success(function () {
+                        toastr.success("", "The model was successfully published");
+                    })
+                    .error(function (response) {
+                        toastr.error("Error publishing model", JSON.stringify(response));
                     });
             }, function () {
                 // do nothing, cancelled
@@ -586,11 +613,9 @@ angular.module('meshApp.model', [
     .controller('GalleryPublishModalInstanceCtrl', function ($scope, $modalInstance, authorName, _, meshApi) {
 
         meshApi.getAllGalleries(authorName)
-            .success(function(response) {
+            .success(function (response) {
                 $scope.galleries = _.pluck(response, 'name');
             });
-        //$scope.galleries = galleries;
-        console.log("galleriesModal", authorName);
         $scope.selection = {
             galleries: {}
         };
@@ -602,6 +627,29 @@ angular.module('meshApp.model', [
             }));
 
             $modalInstance.close(selectedGalleries);
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    })
+    .controller('GroupPublishModalInstanceCtrl', function ($scope, $modalInstance, authorName, _, meshApi) {
+        meshApi.getUserGroups(authorName)
+            .success(function (data) {
+                $scope.groups = data;
+            });
+
+        $scope.selection = {
+            groups: {}
+        };
+
+        $scope.ok = function () {
+
+            var selectedGroups = Object.keys(_.pick($scope.selection.groups, function (value, key) {
+                return value;
+            }));
+
+            $modalInstance.close(selectedGroups);
         };
 
         $scope.cancel = function () {
