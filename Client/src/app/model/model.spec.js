@@ -59,6 +59,7 @@ describe("Model controller functionality", function () {
 
         $httpBackend.whenGET(serverUrl + '/models/' + stateParams.id).respond(placeholderModel);
         scope.init();
+        scope.isLoggedIn = true;
         $httpBackend.flush();
 
     }));
