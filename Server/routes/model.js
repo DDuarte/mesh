@@ -1,12 +1,15 @@
 'use strict';
 
 var Fs = require('fs'),
-    Model = require('../models/model.js'),
+    Model = require('../models/model'),
+    Group = require('../models/group'),
     Promise = require('bluebird'),
     Boom = require('boom'),
     Path = require('path'),
     Joi = require('joi'),
-    schema = require('../schema');
+    schema = require('../schema'),
+    _ = require('lodash'),
+    NewGroupPublicationNotification = require('../models/notifications').NewGroupPublicationNotification;
 
 module.exports = function (server) {
     function getModel(request, reply) {
@@ -182,12 +185,44 @@ module.exports = function (server) {
             }
         },
         handler: function (request, reply) {
-            Model.replaceGroups(request.params.id, request.payload.groups)
-                .then(function () {
-                    reply().code(200);
+
+            Model.getById(request.params.id)
+                .then(function (model) {
+                    Model.replaceGroups(request.params.id, request.payload.groups)
+                        .then(function () {
+                            Promise.map(request.payload.groups, function (group) {
+                                return new Promise(function (resolve) {
+                                    Group.getMembers(group)
+                                        .then(function (members) {
+                                            _.forEach(members, function (member) {
+                                                var notification = new NewGroupPublicationNotification({
+                                                    userTo: member.username,
+                                                    date: new Date(),
+                                                    seen: false,
+                                                    publisher: request.auth.credentials.username,
+                                                    groupName: group,
+                                                    publishedModelId: request.params.id,
+                                                    publishedModelTitle: model.name,
+                                                    publishedModelThumbnail: model.thumbnail
+                                                });
+
+                                                notification.save(function(err) {
+                                                    if (err)
+                                                        throw err;
+                                                });
+                                            });
+                                            resolve(true);
+                                        });
+                                });
+                            });
+                            reply().code(200);
+                        })
+                        .catch(function (error) {
+                            reply(Boom.badImplementation('Internal error: ' + error));
+                        });
                 })
-                .catch(function (error) {
-                    reply(Boom.badImplementation('Internal error: ' + error));
+                .catch(function () {
+                    reply(Boom.badImplementation('Internal server error'));
                 });
         }
     });
