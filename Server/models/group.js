@@ -31,13 +31,15 @@ group.create = function (groupInfo) {
  * @param {String} name Name of the group
  * @returns {Promise} Resolves to the group if successful, rejects otherwise
  */
-group.getByName = function (name) {
+group.getByName = function (name, username) {
     var query = [
         'MATCH (g:Group {lowerName: lower({ name })})',
+        'OPTIONAL MATCH (user:User {username: {username}})-[personalR]->(g)',
+        'WITH g, (personalR IS NOT NULL) as isMember',
         'OPTIONAL MATCH (:Model)-[publish:PUBLISHED_IN]->(g)',
-        'WITH g, count(publish) as numModels',
+        'WITH g, count(publish) as numModels, isMember',
         'MATCH (:User)-[r]->(g)',
-        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate, numModels: numModels, numMembers: count(r)} as group'
+        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate, numModels: numModels, numMembers: count(r), isMember: isMember} as group'
     ].join('\n');
 
     var params = {
