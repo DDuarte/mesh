@@ -618,9 +618,6 @@ angular.module('meshApp.model', [
 
         $scope.takeScreenshot = function () {
             var screenshotUrl = $scope.getScreenshotDataUrl();
-            console.log(screenshotUrl);
-
-
             var $textAndPic = $('<div></div>');
             resizeImage(screenshotUrl, 290, 163, function (resizedUrl) {
                 $textAndPic.append('<img class="center-block" src="' + resizedUrl + '" />');
@@ -630,6 +627,13 @@ angular.module('meshApp.model', [
                     className: 'ngdialog-theme-default',
                     data: screenshotUrl
                 }).then(function (data) {
+                        meshApi.replaceModelThumbnail($scope.model.id, screenshotUrl)
+                            .success(function() {
+                                toastr.success("", "Thumbnail successfully updated");
+                            })
+                            .error(function(data) {
+                                toastr.error("", "Error updating thumbnail:" + JSON.stringify(data));
+                            });
                         console.log("Ok clicked");
                     });
             });
