@@ -461,38 +461,21 @@ module.exports = function (server) {
     });
 
     server.route({
-        path: '/groups/{id}/galleries/{galleryName}',
+        path: '/groups/{id}/models',
         method: 'GET',
         config: {
             auth: 'token',
             validate: {
                 params: {
                     id: schema.group.name.required(),
-                    galleryName: schema.group.galleryName.required()
                 }
             }
         },
         handler: function (request, reply) {
             var groupId = request.params.id;
-            var galleryName = request.params.galleryName;
-            Group.getById(groupId)
-                .then(function () {
-                    Group.getGallery(groupId, galleryName)
-                        .then(function (gallery) {
-                            Group.getModels(groupId, galleryName)
-                                .then(function (models) {
-                                    reply(models);
-                                })
-                                .catch(Error, function (error) {
-                                    reply(Boom.badImplementation(error.message));
-                                });
-                        })
-                        .catch(Error, function (error) {
-                            return reply(error.message);
-                        })
-                        .catch(function (reason) {
-                            return reply(Boom.badRequest(reason));
-                        });
+            Group.getAllModels(groupId)
+                .then(function (models) {
+                    reply(models);
                 })
                 .catch(Error, function () {
                     reply(Boom.badImplementation(error.message));
