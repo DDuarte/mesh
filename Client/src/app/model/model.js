@@ -243,7 +243,7 @@ angular.module('meshApp.model', [
                     return !!angular.element($scope.renderer.domElement).fullScreen();
                 };
 
-                $scope.toggleFullScreen = function () {
+                $rootScope.toggleFullScreen = function () {
                     angular.element($scope.renderer.domElement).toggleFullScreen();
                     console.log("toggleFullScreen: " + JSON.stringify($scope.size));
                 };
