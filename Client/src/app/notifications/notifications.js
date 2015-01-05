@@ -21,12 +21,14 @@ angular.module('meshApp.notifications', [
                 refreshNotificationPromise = undefined;
             },
             refreshNotifications: function() {
-                meshApi.getNotifications({limit: factory.limit})
-                    .success(function(response) {
-                        factory.notifications = response.notifications;
-                        factory.numberOfPendingNotifications = response.pendingNotificationsCount;
-                        factory.pendingMessagesCount = response.pendingMessagesCount;
-                    });
+                if (meshApi.isLoggedIn()) {
+                    meshApi.getNotifications({limit: factory.limit})
+                        .success(function (response) {
+                            factory.notifications = response.notifications;
+                            factory.numberOfPendingNotifications = response.pendingNotificationsCount;
+                            factory.pendingMessagesCount = response.pendingMessagesCount;
+                        });
+                }
             }
         };
 
