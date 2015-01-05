@@ -41,6 +41,18 @@ module.exports = function (server) {
         }
     });
 
+    server.route({
+        method: 'GET',
+        path: '/catalog/mostRelevant',
+        handler: function (request, reply) {
+            Catalog.getMostRelevantModelIdsRedis().then(function (result) {
+                reply(result);
+            }, function (error) {
+                reply(Boom.badImplementation('Internal error: ' + error));
+            });
+        }
+    });
+
     var generateCatalogLists = function () {
         Catalog.getTopRatedModelIds().then(function (result) {
             if (result.length == 0) {
@@ -53,6 +65,23 @@ module.exports = function (server) {
             db.redis.del('topRated');
             db.redis.send_command('rpush', result);
             db.redis.set('topRatedTime', moment().utc().format("YYYY-MM-DD HH:mm").toString());
+        }, function (error) {
+            if (error) {
+                console.log('generateCatalogLists-2: ' + JSON.stringify(error));
+            }
+        });
+
+        Catalog.getMostRelevantModelIds().then(function (result) {
+            if (result.length == 0) {
+                console.log('generateCatalogLists: empty result from getMostRelevantModelIds');
+                return;
+            }
+
+            result.unshift('mostRelevant');
+
+            db.redis.del('mostRelevant');
+            db.redis.send_command('rpush', result);
+            db.redis.set('mostRelevantTime', moment().utc().format("YYYY-MM-DD HH:mm").toString());
         }, function (error) {
             if (error) {
                 console.log('generateCatalogLists-2: ' + JSON.stringify(error));
