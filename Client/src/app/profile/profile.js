@@ -17,18 +17,6 @@ angular.module('meshApp.profile', [
         $scope.isLoggedIn = meshApi.isLoggedIn();
         $scope.ownUsername = meshApi.getLoggedUsername();
 
-        $scope.init = function () {
-            meshApi.getUser($stateParams.username). // TODO: make url configurable?
-                success(function (data) {
-                    $scope.user = data;
-                    $scope.newUser.interests = data.interests.slice(0); // clone the interests array
-                    $scope.getAllGalleries();
-                }).
-                error(function (err) {
-                    console.log("The user could not be retrieved: " + err.message); //TODO redirect to error page
-                });
-        };
-
         $scope.getFollowers = function () {
             if (!$scope.user.followers) {
                 meshApi.getFollowers($scope.user.username).success(function (data) {
@@ -269,6 +257,18 @@ angular.module('meshApp.profile', [
                     'Oops, something went wrong. Try again later.' +
                     '</div>');
             });
+        };
+
+        $scope.init = function () {
+            meshApi.getUser($stateParams.username). // TODO: make url configurable?
+                success(function (data) {
+                    $scope.user = data;
+                    $scope.newUser.interests = data.interests.slice(0); // clone the interests array
+                    $scope.getAllGalleries();
+                }).
+                error(function (err) {
+                    console.log("The user could not be retrieved: " + err.message); //TODO redirect to error page
+                });
         };
     })
     .controller('CreateNewGalleryModalCtrl', function ($scope, $modalInstance, galleries, _) {
