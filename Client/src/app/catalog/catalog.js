@@ -20,11 +20,35 @@ angular.module('meshApp.catalog', [
 
         $scope.newest = {};
         $scope.topRated = {};
+        $scope.mostRelevant = {};
 
         $scope.hasMoreNewModels = false;
         $scope.hasMoreTopRatedModels = false;
+        $scope.hasMoreMostRelevantModels = false;
 
         $scope.init = function () {
+            meshApi.getMostRelevantModelIds().then(function (data) {
+
+                var modelPromises = data.data.map(function (id) {
+                    return meshApi.getModel(id);
+                });
+
+                Promise.all(modelPromises).then(function (models) {
+                    $scope.mostRelevant = models.map(function (m) {
+                        return m.data.model;
+                    });
+                }, function (err) {
+                    alert(err);
+                });
+
+                if (data.length >= 10) {
+                    $scope.hasMoreMostRelevantModels = true;
+                }
+            }, function (data, status) {
+                alert('Error ' + status + ' occurred: ' + data.message);
+                $scope.hasMoreMostRelevantModels = true;
+            });
+
             meshApi.getModelsOlderThan( $scope.newest[0] ? $scope.newest[$scope.newest.length-1].date : null).
             success( function (data, status, headers, config) {
                 $scope.newest = data;
@@ -56,6 +80,33 @@ angular.module('meshApp.catalog', [
             }, function (data, status) {
                 alert('Error ' + status + ' occurred: ' + data.message);
                 $scope.hasMoreTopRatedModels = true;
+            });
+
+        };
+
+        $scope.loadMostRelevantModels = function () {
+            if (!$scope.hasMoreMostRelevantModels) {
+                return;
+            }
+
+            $scope.hasMoreMostRelevantModels = false;
+
+            meshApi.getMostRelevantModelIds().success(function (data) {
+
+                function getModelSuccess(m) {
+                    $scope.mostRelevant.push(m.data.model);
+                }
+
+                for (var i = 0; i < data.length; ++i) {
+                    meshApi.getModel(data[i]).then(getModelSuccess);
+                }
+
+                if (data.length >= 10) {
+                    $scope.hasMoreMostRelevantModels = true;
+                }
+            }).error(function (data, status) {
+                alert('Error ' + status + ' occurred: ' + data.message);
+                $scope.hasMoreMostRelevantModels = true;
             });
         };
 
