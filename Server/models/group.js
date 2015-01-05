@@ -339,7 +339,7 @@ group.getPrivateGalleries = function (groupId) {
  */
 group.getAllModels = function (groupId) {
     var query = [
-        'MATCH (group:Group {id: {id}})<-[:PUBLISHED]-(m:Model)<-[:OWNS]-(user:User)',
+        'MATCH (group:Group {name: {groupName}})<-[:PUBLISHED]-(m:Model)<-[:OWNS]-(user:User)',
         'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
         'WITH m, user, count(ru) as upvotes',
         'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
@@ -350,7 +350,7 @@ group.getAllModels = function (groupId) {
     ].join('\n');
 
     var params = {
-        id: Number(groupId)
+        groupName: groupId
     };
 
     return new Promise(function (resolve) {
