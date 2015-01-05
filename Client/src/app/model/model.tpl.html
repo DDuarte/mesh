@@ -14,6 +14,9 @@
                 <div class="row">
                     <div class="col-md-12">
                     <span class="btn-toolbar pull-right">
+                            <button class="btn btn-primary" ng-click="publishToGroups()">
+                                Publish to groups
+                            </button>
                             <button class="btn btn-primary" ng-click="publishToGalleries()">
                                 Publish to galleries
                             </button>
@@ -258,6 +261,22 @@
         <div ng-repeat="gallery in galleries" class="ckbox ckbox-primary">
             <input type="checkbox" value="1" id="{{gallery}}" ng-model="selection.galleries[gallery]" checked="checked">
             <label for="{{gallery}}">{{gallery}}</label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="groupsSelectionId">
+    <div class="modal-header">
+        <h3 class="modal-title">Publish to groups</h3>
+    </div>
+    <div class="modal-body">
+        <div ng-repeat="group in groups" class="ckbox ckbox-primary">
+            <input type="checkbox" value="1" id="{{group.name}}" ng-model="selection.groups[group.name]" checked="checked">
+            <label for="{{group.name}}">{{group.name}}</label>
         </div>
     </div>
     <div class="modal-footer">

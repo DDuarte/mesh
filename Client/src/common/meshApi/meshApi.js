@@ -189,6 +189,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         updateModelGalleries: function(modelId, galleries) {
             return $http.post(server.url + '/models/' + modelId + '/galleries', { galleries: galleries }, { headers: getHeaders() });
         },
+        updateModelPublishedGroups: function(modelId, groups) {
+            return $http.post(server.url + '/models/' + modelId + '/groups', { groups: groups }, { headers: getHeaders() });
+        },
         getMainFileUrl: function (modelId) {
             return server.url + '/models/' + modelId + '/files';
         },
