@@ -52,7 +52,7 @@ user.searchByUsername = function (username) {
     return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (u: User)',
-            'WHERE u.lowerUsername ~= lower({name})',
+            'WHERE u.lowerUsername ~= lower({username})',
             'RETURN collect({ firstName: u.firstName, passwordHash: u.passwordHash, lastName: u.lastName, username: u.username, avatar: u.avatar, email: u.email, active: u.active, ' +
             'about: u.about}) as users'
         ].join('\n');
