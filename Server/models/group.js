@@ -18,8 +18,8 @@ group.create = function (groupInfo) {
         'RETURN group.name as name'
     ].join('\n');
 
-    return new Promise(function(resolve) {
-        db.neo4j.query(query, groupInfo, function(err, results) {
+    return new Promise(function (resolve) {
+        db.neo4j.query(query, groupInfo, function (err, results) {
             if (err) throw new Error('Internal database error');
             return resolve(results[0]);
         });
@@ -29,13 +29,14 @@ group.create = function (groupInfo) {
 /**
  * Returns a group identified by it's name
  * @param {String} name Name of the group
+ * @param {String} username Name of the requesting user
  * @returns {Promise} Resolves to the group if successful, rejects otherwise
  */
 group.getByName = function (name, username) {
     var query = [
-        'MATCH (g:Group {lowerName: lower({ name })})',
-        'OPTIONAL MATCH (user:User {username: {username}})-[personalR]->(group)',
-        'WITH (personalR IS NOT NULL) as isMember',
+        'MATCH (g:Group {lowerName: lower({name})})',
+        'OPTIONAL MATCH (user:User {username: {username}})-[personalR]->(g)',
+        'WITH (personalR IS NOT NULL) as isMember, g',
         'OPTIONAL MATCH (:Model)-[publish:PUBLISHED_IN]->(g)',
         'WITH g, count(publish) as numModels, isMember',
         'MATCH (:User)-[r]->(g)',
@@ -43,7 +44,8 @@ group.getByName = function (name, username) {
     ].join('\n');
 
     var params = {
-        name: name
+        name: name,
+        username: username
     };
 
     return new Promise(function (resolve, reject) {
