@@ -1,7 +1,7 @@
 angular.module('meshApp.model', [
     'ui.router', 'ui.bootstrap'
 ])
-    .directive('visualizer', function (meshApi, usSpinnerService) {
+    .directive('visualizer', function (meshApi, usSpinnerService, $rootScope) {
         return {
             restrict: 'AE',
             scope: {
@@ -9,7 +9,6 @@ angular.module('meshApp.model', [
                 filename: '@filename',
                 modelLoaded: '=modelLoaded'
             },
-            // replace: 'true',
             link: function postLink($scope, $element, $attrs) {
                 var done = false;
 
@@ -40,7 +39,7 @@ angular.module('meshApp.model', [
                         console.log("Error");
                     };
 
-                    var args = {antialias: true};
+                    var args = {antialias: true, preserveDrawingBuffer: true };
 
                     $scope.renderer = Detector.webgl ? new THREE.WebGLRenderer(args) : new THREE.CanvasRenderer(args);
                     $scope.renderer.setClearColor(0xf8f8f8 /* light gray */, 1);
@@ -276,6 +275,10 @@ angular.module('meshApp.model', [
                     $scope.controls = null;
                     $scope.renderer = null;
                 });
+
+                $rootScope.getScreenshotDataUrl = function () {
+                    return THREEx.Screenshot.toDataURL($scope.renderer, "img/png");
+                };
 
                 $scope.init();
                 $scope.animate();
@@ -591,6 +594,44 @@ angular.module('meshApp.model', [
                     });
             }, function () {
                 // do nothing, cancelled
+            });
+        };
+
+        var resizeImage = function (url, width, height, callback) {
+            var sourceImage = new Image();
+
+            sourceImage.onload = function () {
+                // Create a canvas with the desired dimensions
+                var canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+
+                // Scale and draw the source image to the canvas
+                canvas.getContext("2d").drawImage(sourceImage, 0, 0, width, height);
+
+                // Convert the canvas to a data URL in PNG format
+                callback(canvas.toDataURL());
+            };
+
+            sourceImage.src = url;
+        };
+
+        $scope.takeScreenshot = function () {
+            var screenshotUrl = $scope.getScreenshotDataUrl();
+            console.log(screenshotUrl);
+
+
+            var $textAndPic = $('<div></div>');
+            resizeImage(screenshotUrl, 290, 163, function (resizedUrl) {
+                $textAndPic.append('<img class="center-block" src="' + resizedUrl + '" />');
+
+                ngDialog.openConfirm({
+                    template: 'changeScreenShotDialogId',
+                    className: 'ngdialog-theme-default',
+                    data: screenshotUrl
+                }).then(function (data) {
+                        console.log("Ok clicked");
+                    });
             });
         };
 

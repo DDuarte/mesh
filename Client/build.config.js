@@ -81,6 +81,7 @@ module.exports = {
             'vendor/angular-toastr/dist/angular-toastr.min.js',
             'vendor/angular-animate/angular-animate.min.js',
             'lib/three.js',
+            'lib/THREEx.screenshot.js',
             'lib/Detector.js',
             'lib/jquery.fullscreen.js',
             'lib/OrbitControls.js',
