@@ -34,10 +34,10 @@ group.create = function (groupInfo) {
 group.getByName = function (name) {
     var query = [
         'MATCH (g:Group {lowerName: lower({ name })})',
-        'OPTIONAL MATCH (model:Model)-[publish:PUBLISHED_IN]->(g)',
-        'WITH g, model, publish',
+        'OPTIONAL MATCH (:Model)-[publish:PUBLISHED_IN]->(g)',
+        'WITH g, count(publish) as numModels',
         'MATCH (:User)-[r]->(g)',
-        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate, numModels: count(publish), numMembers: count(r)} as group'
+        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate, numModels: numModels, numMembers: count(r)} as group'
     ].join('\n');
 
     var params = {
