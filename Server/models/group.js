@@ -34,7 +34,9 @@ group.create = function (groupInfo) {
 group.getByName = function (name) {
     var query = [
         'MATCH (g:Group {lowerName: lower({ name })})',
-        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate} as group'
+        'MATCH (model)-[:PUBLISHED_IN]->(g)',
+        'MATCH (:User)-[r]->(g)',
+        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate, count(model) as numModels, count(r) as numMembers} as group'
     ].join('\n');
 
     var params = {
