@@ -168,6 +168,31 @@ module.exports = function (server) {
     });
 
     server.route({
+        method: 'POST',
+        path: '/models/{id}/groups',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.model.id.required()
+                },
+                payload: {
+                    groups: Joi.array().includes(Joi.string()).required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Model.replaceGroups(request.params.id, request.payload.groups)
+                .then(function () {
+                    reply().code(200);
+                })
+                .catch(function (error) {
+                    reply(Boom.badImplementation('Internal error: ' + error));
+                });
+        }
+    });
+
+    server.route({
         method: 'DELETE',
         path: '/models/{id}/votes',
         config: {
