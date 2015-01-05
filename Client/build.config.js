@@ -87,9 +87,11 @@ module.exports = {
             'lib/OrbitControls.js',
             'lib/Loader.js',
             'lib/LoadingManager.js',
+            'lib/CompressedTextureLoader.js',
             'lib/OBJLoader.js',
             'lib/MTLLoader.js',
             'lib/STLLoader.js',
+            'lib/DDSLoader.js',
             'vendor/ngDialog/js/ngDialog.js',
             'vendor/socket.io-client/socket.io.js'
         ],
