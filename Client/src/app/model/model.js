@@ -405,6 +405,16 @@ angular.module('meshApp.model', [
         };
         var processingVote = false;
         $scope.upvote = function () {
+            if (!$scope.isLoggedIn) {
+                ngDialog.openConfirm({
+                    template: 'logInToVoteDialogId',
+                    className: 'ngdialog-theme-default',
+                    scope: $scope
+                }).then(function () {
+                    // do nothing
+                });
+                return;
+            }
             if (processingVote) {
                 return;
             }
@@ -441,6 +451,16 @@ angular.module('meshApp.model', [
         };
 
         $scope.downvote = function () {
+            if (!$scope.isLoggedIn) {
+                ngDialog.openConfirm({
+                    template: 'logInToVoteDialogId',
+                    className: 'ngdialog-theme-default',
+                    scope: $scope
+                }).then(function () {
+                    // do nothing
+                });
+                return;
+            }
             if (processingVote) {
                 return;
             }
