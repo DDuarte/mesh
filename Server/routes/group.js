@@ -64,7 +64,7 @@ module.exports = function (server) {
             }
         },
         handler: function (request, reply) {
-            Group.getByName(request.params.id)
+            Group.getByName(request.params.id, request.auth.credentials ? request.auth.credentials.username : null)
                 .then(function (group) {
                     if (group.group.visibility === 'public')
                         reply(group);
