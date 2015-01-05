@@ -193,6 +193,31 @@ module.exports = function (server) {
     });
 
     server.route({
+        method: 'PATCH',
+        path: '/models/{id}/thumbnail',
+        config: {
+            auth: 'token',
+            validate: {
+                params: {
+                    id: schema.model.id.required()
+                },
+                payload: {
+                    thumbnail: Joi.string().required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Model.replaceThumbnail(request.params.id, request.payload.thumbnail)
+                .then(function () {
+                    reply().code(200);
+                })
+                .catch(function (error) {
+                    reply(Boom.badImplementation('Internal error: ' + error));
+                });
+        }
+    });
+
+    server.route({
         method: 'DELETE',
         path: '/models/{id}/votes',
         config: {
