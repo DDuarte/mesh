@@ -163,12 +163,12 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         getGroupModels: function (id) {
             return $http.get(server.url + '/groups/' + id + '/models', { headers: getHeaders() });
         },
-        uploadModel: function (modelName, modelDescription, tags, file) {
+        uploadModel: function (modelName, modelDescription, tags, file, isPublic) {
             return $upload.upload({
                 url: server.url + '/upload', // upload.php script, node.js route, or servlet url
                 method: 'POST',
                 headers: {'Authorization': 'Bearer ' + getLoggedToken().token}, // only for html5
-                data: {name: modelName, description: modelDescription, tags: tags},
+                data: {name: modelName, description: modelDescription, tags: tags, isPublic: isPublic},
                 file: file // single file or a list of files. list is only for html5
             });
         },
