@@ -214,8 +214,13 @@ module.exports = function (server) {
                                             resolve(true);
                                         });
                                 });
-                            });
-                            reply().code(200);
+                            })
+                                .then(function() {
+                                    reply().code(200);
+                                })
+                                .catch(function() {
+                                    reply(Boom.badImplementation('Internal server error'));
+                                });
                         })
                         .catch(function (error) {
                             reply(Boom.badImplementation('Internal error: ' + error));

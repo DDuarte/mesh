@@ -65,6 +65,7 @@ model.create = function (name, description, mainFilename, originalFilename, main
  * @returns {Promise} Returns a promise with the resolved model, rejects to error otherwise
  */
 model.getById = function (id, loggedUser) {
+    loggedUser = loggedUser || '';
     return new Promise(function (resolve, reject) {
         var query = [
             'MATCH (m:Model{id : {modelId}})<-[:OWNS]-(author)',
