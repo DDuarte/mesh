@@ -12,6 +12,26 @@ module.exports = function (server) {
 
     server.route({
         method: 'GET',
+        path: '/catalog/recommended',
+        config: {
+            auth: 'token',
+            validate: {
+                query: {
+                    startDate: schema.model.date.optional()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Catalog.getRelevantModelsOlderThan(request.query.startDate, request.auth.credentials.username).then(function (result) {
+                reply(result);
+            }, function (error) {
+                reply(Boom.badImplementation('Internal error: ' + error));
+            });
+        }
+    });
+
+    server.route({
+        method: 'GET',
         path: '/catalog/newest',
         config: {
             validate: {
