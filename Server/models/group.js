@@ -68,7 +68,7 @@ group.getByName = function (name, username) {
 group.searchByName = function (name) {
     var query = [
         'MATCH (g:Group)',
-        'WHERE lower(g.name) ~= lower({name})',
+        'WHERE lower(g.name) =~ lower({name})',
         'RETURN collect({name: g.name, description: g.description}) as groups'
     ].join('\n');
 

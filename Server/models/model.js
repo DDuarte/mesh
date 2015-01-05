@@ -150,7 +150,7 @@ model.searchByName = function (name) {
     return new Promise(function (resolve) {
         var query = [
             'MATCH (m:Model {isPublic: true})',
-            'WHERE lower(m.name) ~= lower({name})',
+            'WHERE lower(m.name) =~ lower({name})',
             'RETURN collect({id: m.id, name: m.name, thumbnail: m.thumbnail, description: m.description, publicationDate: m.publicationDate}) as models'
         ].join('\n');
 
