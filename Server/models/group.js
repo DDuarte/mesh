@@ -339,19 +339,24 @@ group.getPrivateGalleries = function (groupId) {
  */
 group.getAllModels = function (groupId) {
     var query = [
-        'MATCH (group:Group)-[:OWNS]->(galleries:Gallery)<-[:PUBLISHED]-(models:Model)',
-        'WHERE id(group) = {id}',
-        'RETURN models'
+        'MATCH (group:Group {id: {id}})<-[:PUBLISHED]-(m:Model)<-[:OWNS]-(user:User)',
+        'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
+        'WITH m, user, count(ru) as upvotes',
+        'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
+        'WITH m, user, upvotes, count(rd) as downvotes',
+        'OPTIONAL MATCH (User)-[cm:COMMENTED]->m',
+        'WITH m, user, upvotes, downvotes, count(cm) as comments ORDER BY m.publicationDate DESC',
+        'RETURN collect({ modelId: m.id, title: m.name, thumbnail: m.thumbnail, author: user.username, authorAvatar: user.avatar, date: m.publicationDate}) as models'
     ].join('\n');
 
     var params = {
-        id: groupId
+        id: Number(groupId)
     };
 
     return new Promise(function (resolve) {
         db.neo4j.query(query, params, function (err, results) {
-            if (err) throw new Error('Internal database error');
-            return resolve(results);
+            if (err) throw err;
+            return resolve(results[0] ? results[0].models : results);
         });
     });
 };
