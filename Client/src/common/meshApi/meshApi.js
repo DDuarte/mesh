@@ -172,6 +172,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 file: file // single file or a list of files. list is only for html5
             });
         },
+        replaceModelThumbnail: function (modelId, thumbnail) {
+            return $http.patch(server.url + '/models/' + modelId + '/thumbnail', { thumbnail: thumbnail }, { headers: getHeaders() });
+        },
         getUser: function (name) {
             return $http.get(server.url + '/users/' + name, {headers: getHeaders()});
         },
