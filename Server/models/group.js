@@ -36,7 +36,7 @@ group.getByName = function (name) {
         'MATCH (g:Group {lowerName: lower({ name })})',
         'MATCH (model)-[:PUBLISHED_IN]->(g)',
         'MATCH (:User)-[r]->(g)',
-        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate, count(model) as numModels, count(r) as numMembers} as group'
+        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate, numModels: count(model), numMembers: count(r)} as group'
     ].join('\n');
 
     var params = {
@@ -45,7 +45,7 @@ group.getByName = function (name) {
 
     return new Promise(function (resolve, reject) {
         db.neo4j.query(query, params, function (err, results) {
-            if (err) throw new Error('Internal database error');
+            if (err) throw err;
             if (results.length > 0)
                 return resolve(results[0]);
             else
