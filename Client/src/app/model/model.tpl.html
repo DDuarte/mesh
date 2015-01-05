@@ -22,11 +22,12 @@
                             </button>
 
 
-                        <button ng-hide="favourited" ng-click="favouriteModel();" class="btn btn-bordered"
+                        <button ng-hide="favourited || !isLoggedIn" ng-click="favouriteModel();" class="btn btn-bordered"
                                 tooltip-append-to-body="true" tooltip="Add to favourites">
                             <i class="glyphicon glyphicon-heart-empty"></i>
                         </button>
-                        <button ng-show="favourited" ng-click="favouriteModel();" class="btn btn-bordered"
+
+                        <button ng-show="favourited && isLoggedIn" ng-click="favouriteModel();" class="btn btn-bordered"
                                 tooltip-append-to-body="true" tooltip="Remove from favourites">
                             <i class="glyphicon glyphicon-heart"></i>
                         </button>
@@ -256,6 +257,16 @@
     </div>
     <div class="ngdialog-buttons">
         <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Confirm</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="logInToVoteDialogId">
+    <div class="ngdialog-message">
+        <h3>Want to give us your feedback?</h3>
+        <p>Please <a ui-sref="login">log in</a> to vote.</p>
+    </div>
+    <div class="ngdialog-buttons">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Ok</button>
     </div>
 </script>
 
