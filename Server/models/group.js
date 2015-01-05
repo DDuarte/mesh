@@ -34,8 +34,8 @@ group.create = function (groupInfo) {
 group.getByName = function (name, username) {
     var query = [
         'MATCH (g:Group {lowerName: lower({ name })})',
-        'OPTIONAL MATCH (user:User {username: {username}})-[personalR]->(g)',
-        'WITH g, (personalR IS NOT NULL) as isMember',
+        'OPTIONAL MATCH (user:User {username: {username}})-[personalR]->(group)',
+        'WITH (personalR IS NOT NULL) as isMember',
         'OPTIONAL MATCH (:Model)-[publish:PUBLISHED_IN]->(g)',
         'WITH g, count(publish) as numModels, isMember',
         'MATCH (:User)-[r]->(g)',
