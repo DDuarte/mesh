@@ -149,7 +149,8 @@ model.getByGallery = function(username, galleryName) {
 model.searchByName = function (name) {
     return new Promise(function (resolve) {
         var query = [
-            'MATCH (m:Model {name: {name}, isPublic: true})',
+            'MATCH (m:Model {isPublic: true})',
+            'WHERE lower(m.name) ~= lower({name})',
             'RETURN collect({id: m.id, name: m.name, thumbnail: m.thumbnail, description: m.description, publicationDate: m.publicationDate}) as models'
         ].join('\n');
 
