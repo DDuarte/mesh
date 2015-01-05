@@ -612,4 +612,79 @@ model.replaceGalleries = function (modelId, galleries) {
     });
 };
 
+/**
+ * Publish a model to a given group
+ * @param {Number} modelId Id of the model to publish
+ * @param {String} groupName Name of the group where the model will be published
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+model.addGroup = function (modelId, groupName) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (model:Model {id: {id}})',
+            'MATCH (group:Group {name: {groupName}})',
+            'CREATE (model)-[:PUBLISHED_IN]->(group)'
+        ].join('\n');
+
+        var params = {
+            id: Number(modelId),
+            groupName: groupName
+        };
+
+        db.neo4j.query(query, params, function(err, results) {
+            if (err) throw err;
+            resolve(true);
+        });
+    });
+};
+
+model.removeAllGroups = function(modelId) {
+    return new Promise(function(resolve) {
+        var query = [
+            'MATCH (model:Model {id: {id}})',
+            'MATCH (model)-[publish:PUBLISHED_IN]->(gr:Group)',
+            'DELETE publish'
+        ].join('\n');
+
+        var params = {
+            id: Number(modelId)
+        };
+
+        db.neo4j.query(query, params, function(err) {
+            if (err) throw err;
+            resolve(true);
+        });
+    });
+};
+
+/**
+ * Replace the galleries of a model by the ones given as a parameter
+ *
+ * @param {Number} modelId Id of the target model
+ * @param {Array<String>} groups Group names
+ * @returns {Promise} Resolves to true if successful, rejects otherwise
+ */
+model.replaceGroups = function (modelId, groups) {
+    return new Promise(function (resolve) {
+        model.removeAllGroups(modelId)
+            .then(function() {
+                var groupsAdditions = [];
+                groups.forEach(function(group) {
+                    groupsAdditions.push(model.addGroup(modelId, group));
+                });
+
+                Promise.all(groupsAdditions)
+                    .then(function() {
+                        resolve(true);
+                    })
+                    .catch(function() {
+                        throw new Error('Internal server error');
+                    });
+            })
+            .catch(function() {
+                throw new Error('Internal server error');
+            });
+    });
+};
+
 module.exports = model;
