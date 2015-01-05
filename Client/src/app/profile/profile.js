@@ -19,7 +19,7 @@ angular.module('meshApp.profile', [
 
         $scope.getFollowers = function () {
             if (!$scope.user.followers) {
-                meshApi.getFollowers($scope.user.username).success(function (data) {
+                meshApi.getFollowers($stateParams.username).success(function (data) {
                     $scope.user.followers = data;
                 });
             }
@@ -33,7 +33,7 @@ angular.module('meshApp.profile', [
 
             modalInstance.result.then(function (groupName) {
                 //console.log("scope.user.username", $scope.user.username);
-                meshApi.inviteToGroup(groupName, $scope.user.username)
+                meshApi.inviteToGroup(groupName, $stateParams.username)
                     .success(function () {
                         toastr.success('Invite successful', 'Invite to Group');
                     })
@@ -45,7 +45,7 @@ angular.module('meshApp.profile', [
 
         $scope.getGroups = function () {
             if (!$scope.user.groups) {
-                meshApi.getUserGroups($scope.user.username)
+                meshApi.getUserGroups($stateParams.username)
                     .success(function (data) {
                         $scope.user.groups = data;
                     });
@@ -54,7 +54,7 @@ angular.module('meshApp.profile', [
 
         $scope.getFollowing = function () {
             if (!$scope.user.following) {
-                meshApi.getFollowing($scope.user.username).success(function (data) {
+                meshApi.getFollowing($stateParams.username).success(function (data) {
                     $scope.user.following = data;
                 });
             }
@@ -64,7 +64,7 @@ angular.module('meshApp.profile', [
             $scope.isAllModelsSelected = true;
             $scope.selectedGallery = null;
             if (!$scope.allModels) {
-                meshApi.getAllModels($scope.user.username).success(function (data) {
+                meshApi.getAllModels($stateParams.username).success(function (data) {
                     $scope.allModels = data;
                     $scope.models = $scope.allModels;
                 });
@@ -79,7 +79,7 @@ angular.module('meshApp.profile', [
         $scope.getAllGalleries = function () {
 
             if (!$scope.galleries) {
-                meshApi.getAllGalleries($scope.user.username)
+                meshApi.getAllGalleries($stateParams.username)
                     .then(function (response) {
                         //console.log("Galleries", response.data);
                         $scope.galleries = response.data;
@@ -167,7 +167,7 @@ angular.module('meshApp.profile', [
             $scope.selectedGallery = gallery;
 
             if (!gallery.models) {
-                meshApi.getModelsFromGallery($scope.user.username, gallery.name)
+                meshApi.getModelsFromGallery($stateParams.username, gallery.name)
                     .success(function (response) {
                         console.log("response", response);
                         gallery.models = response;
