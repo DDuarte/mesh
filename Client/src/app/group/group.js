@@ -88,7 +88,6 @@ angular.module('meshApp.group', [
 
 
          $scope.getModels = function() {
-             console.log("getModels", $scope.group.name);
              meshApi.getGroupModels($scope.group.name)
                 .success(function(data) {
                      console.log(data);
