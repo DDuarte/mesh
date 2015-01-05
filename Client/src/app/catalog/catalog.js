@@ -26,63 +26,6 @@ angular.module('meshApp.catalog', [
         $scope.hasMoreTopRatedModels = false;
         $scope.hasMoreMostRelevantModels = false;
 
-        $scope.init = function () {
-            meshApi.getMostRelevantModelIds().then(function (data) {
-
-                var modelPromises = data.data.map(function (id) {
-                    return meshApi.getModel(id);
-                });
-
-                Promise.all(modelPromises).then(function (models) {
-                    $scope.mostRelevant = models.map(function (m) {
-                        return m.data.model;
-                    });
-                }, function (err) {
-                    alert(err);
-                });
-
-                if (data.length >= 10) {
-                    $scope.hasMoreMostRelevantModels = true;
-                }
-            }, function (data, status) {
-                alert('Error ' + status + ' occurred: ' + data.message);
-                $scope.hasMoreMostRelevantModels = true;
-            });
-
-            meshApi.getModelsOlderThan( $scope.newest[0] ? $scope.newest[$scope.newest.length-1].date : null).
-            success( function (data, status, headers, config) {
-                $scope.newest = data;
-
-                if (data.length >= 10) {
-                    $scope.hasMoreNewModels = true;
-                }
-            }).
-            error( function (data, status, headers, config) {
-                alert('Error ' + status + ' occurred: ' + data.message);
-                $scope.hasMoreNewModels = true;
-            });
-
-            meshApi.getTopRatedModelIds().then(function (data) {
-
-                var modelPromises = data.data.map(function (id) {
-                    return meshApi.getModel(id);
-                });
-
-                Promise.all(modelPromises).then(function (models) {
-                    $scope.topRated = models.map(function (m) { return m.data.model; });
-                }, function (err) {
-                    alert(err);
-                });
-
-                if (data.length >= 10) {
-                    $scope.hasMoreTopRatedModels = true;
-                }
-            }, function (data, status) {
-                alert('Error ' + status + ' occurred: ' + data.message);
-                $scope.hasMoreTopRatedModels = true;
-            });
-
-        };
 
         $scope.loadMostRelevantModels = function () {
             if (!$scope.hasMoreMostRelevantModels) {
@@ -157,5 +100,62 @@ angular.module('meshApp.catalog', [
                     alert('Error ' + status + ' occurred: ' + data.message);
                     $scope.hasMoreNewModels = true;
                 });
+        };
+        $scope.init = function () {
+            meshApi.getMostRelevantModelIds().then(function (data) {
+
+                var modelPromises = data.data.map(function (id) {
+                    return meshApi.getModel(id);
+                });
+
+                Promise.all(modelPromises).then(function (models) {
+                    $scope.mostRelevant = models.map(function (m) {
+                        return m.data.model;
+                    });
+                }, function (err) {
+                    alert(err);
+                });
+
+                if (data.length >= 10) {
+                    $scope.hasMoreMostRelevantModels = true;
+                }
+            }, function (data, status) {
+                alert('Error ' + status + ' occurred: ' + data.message);
+                $scope.hasMoreMostRelevantModels = true;
+            });
+
+            meshApi.getModelsOlderThan( $scope.newest[0] ? $scope.newest[$scope.newest.length-1].date : null).
+                success( function (data, status, headers, config) {
+                    $scope.newest = data;
+
+                    if (data.length >= 10) {
+                        $scope.hasMoreNewModels = true;
+                    }
+                }).
+                error( function (data, status, headers, config) {
+                    alert('Error ' + status + ' occurred: ' + data.message);
+                    $scope.hasMoreNewModels = true;
+                });
+
+            meshApi.getTopRatedModelIds().then(function (data) {
+
+                var modelPromises = data.data.map(function (id) {
+                    return meshApi.getModel(id);
+                });
+
+                Promise.all(modelPromises).then(function (models) {
+                    $scope.topRated = models.map(function (m) { return m.data.model; });
+                }, function (err) {
+                    alert(err);
+                });
+
+                if (data.length >= 10) {
+                    $scope.hasMoreTopRatedModels = true;
+                }
+            }, function (data, status) {
+                alert('Error ' + status + ' occurred: ' + data.message);
+                $scope.hasMoreTopRatedModels = true;
+            });
+
         };
     });
