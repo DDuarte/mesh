@@ -20,6 +20,11 @@
                             <button class="btn btn-primary" ng-click="publishToGalleries()">
                                 Publish to galleries
                             </button>
+
+                        <button class="btn btn-primary" ng-click="takeScreenshot()">
+                            Set as thumbnail
+                        </button>
+
                         <button ng-hide="favourited" ng-click="favouriteModel();" class="btn btn-bordered"
                                 tooltip-append-to-body="true" tooltip="Add to favourites">
                             <i class="glyphicon glyphicon-heart-empty"></i>
@@ -282,5 +287,16 @@
     <div class="modal-footer">
         <button class="btn btn-primary" ng-click="ok()">OK</button>
         <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="changeScreenShotDialogId">
+    <div class="ngdialog-message">
+        <p>Do you want to set this image as your screenshot?</p>
+    </div>
+    <img src={{ngDialogData}} width="290px" height="163px"/>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="confirm()">Yes</button>
+        <button class="btn btn-warning" ng-click="closeThisDialog()">No</button>
     </div>
 </script>
