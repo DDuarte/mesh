@@ -74,7 +74,7 @@ model.getById = function (id, loggedUser) {
             'OPTIONAL MATCH m-[:TAGGED]->(modelTag:Tag)',
             'WITH m, author, modelComments, collect(modelTag.name) AS modelTags',
             'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
-            'WITH m, author, modelComments, modelTags, count(ru) as modelUpvotes',
+                'WITH m, author, modelComments, modelTags, count(ru) as modelUpvotes',
             'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
                 'WITH m, author, { id: m.id, name: m.name, thumbnail: m.thumbnail, description: m.description, ' +
                 'mainFilename: m.mainFilename, filePath: m.filePath, uncompressedFolderPath: m.uncompressedFolderPath, compressedFolderPath: m.compressedFolderPath, ' +
