@@ -14,16 +14,13 @@
                 <div class="row">
                     <div class="col-md-12">
                     <span class="btn-toolbar pull-right">
-                            <button class="btn btn-primary" ng-click="publishToGroups()">
+                            <button ng-if="ownsModel" class="btn btn-primary" ng-click="publishToGroups()">
                                 Publish to groups
                             </button>
-                            <button class="btn btn-primary" ng-click="publishToGalleries()">
+                            <button ng-if="ownsModel" class="btn btn-primary" ng-click="publishToGalleries()">
                                 Publish to galleries
                             </button>
 
-                        <button class="btn btn-primary" ng-click="takeScreenshot()">
-                            Set as thumbnail
-                        </button>
 
                         <button ng-hide="favourited" ng-click="favouriteModel();" class="btn btn-bordered"
                                 tooltip-append-to-body="true" tooltip="Add to favourites">
@@ -43,6 +40,10 @@
                                 tooltip-append-to-body="true" tooltip="I don't like this">
                             <i class="fa fa-thumbs-down"></i>
                             <span>{{model.downvotes}}</span>
+                        </button>
+                        <button ng-if="ownsModel"  class="btn btn-bordered" ng-click="takeScreenshot()"
+                                tooltip-append-to-body="true" tooltip="Take thumbnail screenshot">
+                            <i class="glyphicon glyphicon-camera"></i>
                         </button>
                         <button ng-click="toggleFullScreen()" class="btn btn-bordered"
                                 tooltip-append-to-body="true" tooltip="Toggle FullScreen">
