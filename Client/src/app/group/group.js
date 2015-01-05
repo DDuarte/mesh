@@ -86,6 +86,16 @@ angular.module('meshApp.group', [
             $scope.galleriesPaginatorCurrentPage = 1;
         };
 
+
+         $scope.getModels = function() {
+             console.log("getModels", $scope.group.name);
+             meshApi.getGroupModels($scope.group.name)
+                .success(function(data) {
+                     console.log(data);
+                    $scope.models = data;
+                });
+         };
+
         /*
         $scope.groupMembers = [
             {

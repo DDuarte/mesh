@@ -8,8 +8,9 @@
                 <!-- <a href="#" class="follow_btn hidden-xs">Follow</a> -->
             </div>
             <div class="col-md-8  col-xs-12">
-                <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture" />
-                <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture_mob" />
+                <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture"/>
+                <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture_mob"/>
+
                 <div class="header">
                     <h1>{{group.name}}</h1>
                     <span>{{group.description}}</span>
@@ -20,7 +21,9 @@
         <div class="row nav">
             <div class="col-md-4"></div>
             <div class="col-md-8 col-xs-12" style="margin: 0px;padding: 0px;">
-                <div class="col-md-4 col-xs-4 well" ng-if="!applied" ng-click="applyToGroup()"><i class="fa fa-plus-square fa-lg"></i> Join</div>
+                <div class="col-md-4 col-xs-4 well" ng-if="!applied" ng-click="applyToGroup()"><i
+                        class="fa fa-plus-square fa-lg"></i> Join
+                </div>
                 <div class="col-md-4 col-xs-4 well"><i class="fa fa-users fa-lg"></i> 14 users</div>
                 <div class="col-md-4 col-xs-4 well"><i class="fa fa-cubes fa-lg"></i> 26 models</div>
             </div>
@@ -38,7 +41,8 @@
 
                             </th>
                             <th>
-                                <a href="" ng-click="orderByField='username'; reverseSort = !reverseSort" style="color: inherit">
+                                <a href="" ng-click="orderByField='username'; reverseSort = !reverseSort"
+                                   style="color: inherit">
                                     Username
                                     <span ng-show="orderByField == 'username'" style="color: inherit">
                                         <span ng-show="!reverseSort" style="color: inherit">^</span>
@@ -47,7 +51,8 @@
                                 </a>
                             </th>
                             <th>
-                                <a href="" ng-click="orderByField='joinDate'; reverseSort = !reverseSort" style="color: inherit">
+                                <a href="" ng-click="orderByField='joinDate'; reverseSort = !reverseSort"
+                                   style="color: inherit">
                                     Join date
                                     <span ng-show="orderByField == 'joinDate'" style="color: inherit">
                                         <span ng-show="!reverseSort" style="color: inherit">^</span>
@@ -56,7 +61,8 @@
                                 </a>
                             </th>
                             <th>
-                                <a href="" ng-click="orderByField='role'; reverseSort = !reverseSort" style="color: inherit">
+                                <a href="" ng-click="orderByField='role'; reverseSort = !reverseSort"
+                                   style="color: inherit">
                                     Role
                                     <span ng-show="orderByField == 'role'" style="color: inherit">
                                         <span ng-show="!reverseSort" style="color: inherit">^</span>
@@ -70,7 +76,8 @@
                         <tr ng-repeat="member in group.groupMembers|orderBy:orderByField:reverseSort">
                             <td>
                                 <a ui-sref="home.profile({id: member.username})">
-                                    <img class="media-object img-circle" alt="..." src="{{member.avatar}}" style="width:100%;">
+                                    <img class="media-object img-circle" alt="..." src="{{member.avatar}}"
+                                         style="width:100%;">
                                 </a>
                             </td>
                             <td>{{member.username}}</td>
@@ -79,59 +86,29 @@
                         </tr>
                         </tbody>
                     </table>
-                </div><!-- table-responsive -->
+                </div>
+                <!-- table-responsive -->
             </div>
         </tab>
-        <tab heading="Models">
-            <!--
+        <tab heading="Models" select="getModels()">
             <div class="row">
                 <div class="col-md-12">
-                    <pagination total-items="galleriesPaginatorTotalItems" ng-model="galleriesPaginatorCurrentPage" max-size="galleriesPaginatorMaxSize" items-per-page="galleriesPaginatorItemsPerPage" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <v-tabset>
-                        <v-tab ng-repeat="gallery in galleries" select="changeSelectedGallery($index)">
-                            <tab-heading>{{gallery.name}}</tab-heading>
-                            <modelthumbnail ng-repeat="model in gallery.models | startFrom: (galleriesPaginatorCurrentPage-1)*galleriesPaginatorItemsPerPage | limitTo: galleriesPaginatorItemsPerPage"
-                                            model-id="1"
-                                            image-url="http://i.imgur.com/zL9XlUY.jpg"
-                                            title="{{model.name}}"
-                                            author="Donatello"
-                                            author-avatar="http://i.imgur.com/KgKyXqN.jpg"
-                                            date="2010-04-05T12:38:20.000Z"
-                                            num-comments="2"
-                                            upvotes="20"
-                                            downvotes="2">
-                            </modelthumbnail>
-                        </v-tab>
-                    </v-tabset>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <pagination total-items="galleriesPaginatorTotalItems" ng-model="galleriesPaginatorCurrentPage" max-size="galleriesPaginatorMaxSize" items-per-page="galleriesPaginatorItemsPerPage" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
-                </div>
-            </div>
-            -->
-            <div class="col-md-12">
                     <modelthumbnail ng-repeat="model in models"
-                                    model-id={{model.modelId}}
-                                    image-url={{model.thumbnail}}
-                                    title={{model.title}}
-                                    author={{model.author}}
-                                    author-avatar={{model.authorAvatar}}
-                                    date={{model.date}}
-                                    num-comments={{model.numComments}}
-                                    upvotes={{model.upvotes}}
-                                    downvotes={{model.downvotes}}>
+                            model-id="{{model.id}}"
+                            image-url="{{model.thumbnail}}"
+                            title="{{model.title}}"
+                            author="{{model.author}}"
+                            author-avatar="{{model.authorAvatar}}"
+                            date="{{model.date}}"
+                            num-comments="{{model.comments}}"
+                            upvotes="{{model.upvotes}}"
+                            downvotes="{{model.downvotes}}">
                     </modelthumbnail>
+                </div>
             </div>
-            <div class="btn-list pull-left">
-
+            <div class="col-md-4 btn-list center-block">
                 <button class="btn btn-primary" ng-click="loadMoreMessages( 5)">
-                    Load more messages
+                    Load more models
                 </button>
             </div>
         </tab>

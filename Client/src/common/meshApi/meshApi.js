@@ -158,7 +158,10 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
             });
         },
         getGroupMembers: function (id) {
-            return $http.get(server.url + '/groups/' + id + '/members', {headers: getHeaders()});
+            return $http.get(server.url + '/groups/' + id + '/members', { headers: getHeaders() });
+        },
+        getGroupModels: function (id) {
+            return $http.get(server.url + '/groups/' + id + '/models', { headers: getHeaders() });
         },
         uploadModel: function (modelName, modelDescription, tags, file) {
             return $upload.upload({
