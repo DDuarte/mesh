@@ -24,7 +24,7 @@ model.create = function (name, description, mainFilename, originalFilename, main
         'ON CREATE SET id.count = 1',
         'ON MATCH SET id.count = id.count + 1',
         'WITH id.count AS uid',
-            'CREATE (m:Model{id:uid,name:{name}, thumbnail: {thumbnail}, originalFilename: {originalFilename}, description: {description}, isPublic: {isPublic}' +
+            'CREATE (m:Model{id:uid,name:{name}, thumbnail: {thumbnail}, originalFilename: {originalFilename}, description: {description}, isPublic: {isPublic},' +
             'mainFilename: {mainFilename}, filePath: {filePath}, compressedFolderPath: {compressedFolderPath}, uncompressedFolderPath: {uncompressedFolderPath}, publicationDate: {currentDate}})',
         'WITH m',
         'MATCH (user:User {username: {ownerName}})',
