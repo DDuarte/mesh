@@ -58,6 +58,33 @@ module.exports = function (server) {
     });
 
     server.route({
+        method: 'GET',
+        path: '/users/{username}/favourites',
+        config: {
+            auth: {
+                mode: 'optional',
+                strategy: 'token'
+            },
+            validate: {
+                params: {
+                    username: schema.user.username.required()
+                },
+                payload: {
+                    modelid: schema.model.id.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+
+            User.getFavoriteModels(request.auth.credentials.username).then(function (result) {
+                reply(result);
+            }, function (error) {
+                reply('Internal error').code(500);
+            });
+        }
+    });
+
+    server.route({
         method: 'POST',
         path: '/users/{username}/favourites',
         config: {
@@ -200,7 +227,7 @@ module.exports = function (server) {
                         followerAvatar: request.payload.avatar
                     });
 
-                    newFollowerNotification.save(function(err) {
+                    newFollowerNotification.save(function (err) {
                         if (err)
                             return reply(Boom.badImplementation("Error generating notifications"));
 
@@ -364,10 +391,10 @@ module.exports = function (server) {
         },
         handler: function (request, reply) {
             Model.getByGallery(request.params.username, request.params.galleryName)
-                .then(function(models) {
+                .then(function (models) {
                     return reply(models);
                 })
-                .catch(function(){
+                .catch(function () {
                     return reply(Boom.badImplementation('Internal server error'));
                 });
         }
@@ -393,11 +420,11 @@ module.exports = function (server) {
                 return reply(Boom.forbidden('No permissions'));
 
             User.updateGallery(request.params.username, request.params.galleryName, request.payload.isPublic)
-                .then(function() {
+                .then(function () {
                     console.log("Success");
                     return reply().code(200);
                 })
-                .catch(function(){
+                .catch(function () {
                     return reply(Boom.badImplementation('Internal server error'));
                 });
         }
@@ -420,11 +447,11 @@ module.exports = function (server) {
                 return reply(Boom.forbidden('No permissions'));
 
             User.removeGallery(request.params.username, request.params.galleryName)
-                .then(function() {
+                .then(function () {
                     console.log("Success");
                     return reply().code(200);
                 })
-                .catch(function(){
+                .catch(function () {
                     return reply(Boom.badImplementation('Internal server error'));
                 });
         }

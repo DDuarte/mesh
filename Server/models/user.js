@@ -422,6 +422,36 @@ user.update = function (username, fields) {
  * @param {String} username Username of the target user
  * @returns {Promise} Resolves to the owned models if successful, rejects otherwise
  */
+user.getFavoriteModels = function (username) {
+    var query = [
+        'MATCH (user:User {username: {name}})-[:FAVOURITED]->(m:Model)',
+        'WITH * ORDER BY m.publicationDate DESC',
+        'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
+        'WITH m, user, count(ru) as upvotes',
+        'OPTIONAL MATCH (User)-[rd:VOTED {type: "DOWN"}]->m',
+        'WITH m, user, upvotes, count(rd) as downvotes',
+        'OPTIONAL MATCH (User)-[cm:COMMENTED]->m',
+        'WITH m, user, upvotes, downvotes, count(cm) as comments ORDER BY m.publicationDate DESC',
+        'RETURN collect({ modelId: m.id, title: m.name, thumbnail: m.thumbnail, author: user.username, authorAvatar: user.avatar, date: m.publicationDate, numComments: comments, upvotes: upvotes, downvotes: downvotes}) as models'
+    ].join('\n');
+
+    var params = {
+        name: username
+    };
+
+    return new Promise(function (resolve, reject) {
+        db.neo4j.query(query, params, function (err, results) {
+            if (err) return reject(err);
+            return resolve(results[0] ? results[0].models : results);
+        });
+    });
+};
+
+/**
+ * Returns all the owned models of a user
+ * @param {String} username Username of the target user
+ * @returns {Promise} Resolves to the owned models if successful, rejects otherwise
+ */
 user.getAllModels = function (username) {
     var query = [
         'MATCH (user:User {username: {name}})-[:OWNS]->(m:Model)',
