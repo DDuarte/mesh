@@ -667,10 +667,10 @@ angular.module('meshApp.model', [
             }).then(function () {
                 meshApi.deleteModel($scope.model.id)
                     .success(function () {
-                        ngDialog.openConfirm({
+                        ngDialog.open({
                             template: 'deleteSuccessModelDialogId',
                             className: 'ngdialog-theme-default'
-                        }).then(function () {
+                        }).closePromise.then(function () {
                             $state.go('home.catalog');
                         });
                     })
