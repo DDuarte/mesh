@@ -43,6 +43,7 @@ angular.module('meshApp.group', [
                 success(function (data, status, headers, config) {
                     $scope.group = data.group;
 
+                    $scope.newGroup = { };
                     $scope.newGroup.name = $scope.group.name;
                     $scope.newGroup.description = $scope.group.description;
                     $scope.newGroup.visibility = $scope.group.visibility;
