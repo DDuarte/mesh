@@ -424,7 +424,7 @@ user.update = function (username, fields) {
  */
 user.getFavoriteModels = function (username) {
     var query = [
-        'MATCH (user:User {username: {name}})-[:FAVOURITED]->(m:Model)',
+        'MATCH (:User {username: {name}})-[:FAVOURITED]->(m:Model)<-[:OWNS]-(user:User)',
         'WITH * ORDER BY m.publicationDate DESC',
         'OPTIONAL MATCH (User)-[ru:VOTED {type: "UP"}]->m',
         'WITH m, user, count(ru) as upvotes',
