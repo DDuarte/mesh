@@ -99,12 +99,12 @@ angular.module('meshApp.group', [
          };
 
         $scope.updateGroup = function () {
-            var isPublic = $scope.newGroup.visibility == 'public';
-            meshApi.updateGroup($scope.group.name, $scope.newGroup.description, isPublic)
+            meshApi.updateGroup($scope.group.name, $scope.newGroup.description, $scope.newGroup.visibility)
                 .success(function (group) {
                     $scope.group.description = group.description;
+                    $scope.group.visibility = group.visibility;
                     $scope.newGroup.description = group.description;
-                    $scope.newGroup.visibility = group.isPublic ? 'public' : 'private';
+                    $scope.newGroup.visibility = group.visibility;
 
                     ngDialog.openConfirm({
                         template: 'updateSuccessModelDialogId',
