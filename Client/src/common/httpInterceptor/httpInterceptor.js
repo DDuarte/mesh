@@ -1,17 +1,17 @@
 angular.module('meshApp').factory('httpInterceptor', function httpInterceptor ($q, $window, $location) {
-    return function (promise) {
-        var success = function (response) {
-            return response;
-        };
+    return {
+        'responseError': function(rejection) {
+            console.log("foda-se", rejection);
 
-        var error = function (response) {
-            if (response.status === 401) {
+            if (rejection.status === 401) {
                 $location.url('/login');
             }
 
-            return $q.reject(response);
-        };
+            if (rejection.status === 404) {
+                $location.url('/404');
+            }
 
-        return promise.then(success, error);
+            return $q.reject(rejection);
+        }
     };
 });

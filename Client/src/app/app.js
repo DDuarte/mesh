@@ -16,6 +16,7 @@ angular.module('meshApp', [
     'meshApp.notifications',
     'meshApp.groupCreate',
     'meshApp.createMessage',
+    'meshApp.notFound',
     'ui.router',
     'ui.bootstrap',
     'ui.mesh.verticalTabs',
@@ -37,8 +38,8 @@ angular.module('meshApp', [
          timezone: 'Europe/London'*/
     }
 )
-    .config(function myAppConfig($stateProvider, $urlRouterProvider, ngDialogProvider) {
-        // $httpProvider.responseInterceptors.push('httpInterceptor');
+    .config(function myAppConfig($stateProvider, $urlRouterProvider, ngDialogProvider, $httpProvider) {
+        $httpProvider.interceptors.push('httpInterceptor');
         $urlRouterProvider.otherwise('/catalog');
 
         // Force reload on DOM changes
