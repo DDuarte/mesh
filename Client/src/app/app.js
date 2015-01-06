@@ -49,6 +49,7 @@ angular.module('meshApp', [
         $rootScope._ = window._;
         meshApi.init();
         THREE.Loader.Handlers.add(/.*\.dds$/, new THREE.DDSLoader());
+        THREE.Loader.Handlers.add(/.*\.tga$/, new THREE.TGALoader());
     })
     .config(['$httpProvider', function ($httpProvider) {
         // Reset headers to avoid OPTIONS request (aka pre-flight)
