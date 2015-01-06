@@ -43,6 +43,13 @@ angular.module('meshApp.profile', [
             });
         };
 
+        $scope.getFavorites = function () {
+            meshApi.getFavorites($stateParams.username)
+                .success(function(data) {
+                    $scope.favorites = data;
+                });
+        };
+
         $scope.getGroups = function () {
             if (!$scope.user.groups) {
                 meshApi.getUserGroups($stateParams.username)
