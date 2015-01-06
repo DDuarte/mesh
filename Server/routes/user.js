@@ -68,9 +68,6 @@ module.exports = function (server) {
             validate: {
                 params: {
                     username: schema.user.username.required()
-                },
-                payload: {
-                    modelid: schema.model.id.required()
                 }
             }
         },
