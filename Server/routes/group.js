@@ -110,7 +110,7 @@ module.exports = function (server) {
         },
         handler: function (request, reply) {
             Group.update(request.params.id, request.auth.credentials.username, request.payload.description, request.payload.visibility)
-                .then(function (group) {
+                .then(function (results) {
                     if (results.length == 0) {
                         reply('No such group.').code(404);
                     } else {
