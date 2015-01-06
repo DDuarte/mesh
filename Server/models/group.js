@@ -39,7 +39,7 @@ group.getByName = function (name, username) {
         'OPTIONAL MATCH (user:User {username: {username}})-[personalR]->(g)',
         'WITH (personalR IS NOT NULL) as isMember, coalesce(type(personalR) = "IS_ADMIN", false) AS isAdmin, g',
         'OPTIONAL MATCH (:Model)-[publish:PUBLISHED_IN]->(g)',
-        'WITH g, count(publish) as numModels, isMember',
+        'WITH g, count(publish) as numModels, isMember, isAdmin',
         'MATCH (:User)-[r]->(g)',
         'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate, numModels: numModels, numMembers: count(r), isMember: isMember, isAdmin: isAdmin} as group'
     ].join('\n');
