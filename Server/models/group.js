@@ -479,7 +479,7 @@ group.update = function (group, adminUserName, description, visibility) {
         var query = [
             'MATCH (g:Group { name: {name}})<-[:IS_ADMIN]-(:User{username:{username}})',
             'SET g.description = { description }, g.visibility = { visibility }',
-            'RETURN {name: g.name, description: g.description, isPublic: g.visibility = "public" }as groupInfo'
+            'RETURN {name: g.name, description: g.description, visibility: g.visibility }as groupInfo'
         ].join('\n');
 
         db.neo4j.query(query, {username: adminUserName, name: group, description: description, visibility: visibility}, function (err, results) {
