@@ -6000,8 +6000,11 @@ header .top-logo > img {
 @media only screen and (min-width: 768px) {
   header .top-logo {
     height: auto;
-    padding: 60px;
-  }
+    padding-top: 60px;
+    padding-left: 60px;
+    padding-right: 60px;
+    padding-bottom: 0;
+}
 }
 @media (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
   header .top-logo {
