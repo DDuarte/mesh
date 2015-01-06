@@ -29,18 +29,16 @@
 
                     <div class="results-list">
 
-                        <!--<div class="media row" ng-repeat="result in results">
+                        <div ng-if="searchType == 'group'" class="media row" ng-repeat="group in groups">
                             <div class="col-xs-6">
-                                <a href="#/model" class="pull-left">
-                                    <img alt="" ng-src="{{result.image}}" class="img-responsive thumbnail">
+                                <a ui-sref="home.group({name: group.name})" class="pull-left">
+                                    <img alt="" ng-src="{{group.avatar}}" class="img-responsive thumbnail">
                                 </a>
                             </div>
                             <div class="media-body col-xs-6">
-                                <h4 class="filename text-primary"><a href="#/model">{{result.name}}</a></h4>
-                                <small class="text-muted">Created: January 10, 2014 at 7:30am</small><br />
-                                <small class="text-muted">Modified: January 13, 2014 at 11:30am</small>
+                                <h4 class="filename text-primary"><a ui-sref="home.group({name: group.name})">{{group.name}}</a></h4>
                             </div>
-                        </div>-->
+                        </div>
 
                         <div ng-if="searchType == 'model'" class="media row" ng-repeat="model in models">
                             <div class="col-xs-6">
