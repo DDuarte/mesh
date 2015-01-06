@@ -11,7 +11,7 @@
                 <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture"/>
                 <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture_mob"/>
 
-                <div class="header">
+                <div class="header" style="overflow-wrap: break-word">
                     <h1>{{group.name}}</h1>
                     <span>{{group.description}}</span>
                 </div>
@@ -29,7 +29,6 @@
             </div>
         </div>
     </div>
-
     <tabset>
         <tab heading="Members">
             <div class="col-md-12">
@@ -112,6 +111,66 @@
                 </button>
             </div>
         </tab>
-    </tabset>
 
+        <tab heading="Settings">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+
+                        <div class="panel-body ">
+
+                            <form name="groupInfo" class="form-horizontal form-bordered">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 pull-left">Name</label>
+
+                                    <div class="col-md-10">
+                                        <input type="text" ng-model=newGroup.name class="form-control col-md-10" disabled>
+                                    </div>
+                                </div>
+                                <!-- form-group -->
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 pull-left">Description</label>
+
+                                    <div class="col-md-10">
+                                <textarea ng-model="newGroup.description" id="autoResizeTA" name="about" ng-maxlength="1024"
+                                          class="form-control" rows="5" style="height: 90px;"></textarea>
+
+                                        <p class="text-danger" ng-show="groupInfo.about.$invalid && groupInfo.about.$dirty">
+                                            Description field must be at most 1024 characters long
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- form-group -->
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-2 pull-left">Visibility</label>
+
+                                    <div>
+                                        <span class="rdio rdio-primary">
+                                            <input type="radio" id="rdioPublic" ng-model="newGroup.visibility" value="public"/>
+                                            <label for="rdioPublic">Public</label>
+                                        </span>
+                                        <span class="rdio rdio-primary ml10">
+                                            <input type="radio" id="rdioPrivate" ng-model="newGroup.visibility" value="private"/>
+                                            <label for="rdioPrivate">Private</label>
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                            </form>
+                            <button type="submit" ng-click="updateGroup()" ng-disabled="groupInfo.$invalid"
+                                    class="btn btn-success pull-right">Save changes
+                            </button>
+                        </div>
+                        <!-- panel-body -->
+
+                    </div>
+
+                </div>
+            </div>
+        </tab>
+
+    </tabset>
 </div>
