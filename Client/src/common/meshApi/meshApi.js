@@ -117,6 +117,9 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
         getFollowers: function (username) {
             return $http.get(server.url + '/users/' + username + '/followers');
         },
+        getFavorites: function (username) {
+            return $http.get(server.url + '/users/' + username + '/favourites');
+        },
         getFollowing: function (username) {
             return $http.get(server.url + '/users/' + username + '/following');
         },

@@ -276,6 +276,26 @@
                         </div>
                     </div>
                 </tab>
+                <tab select="getFavorites()">
+                    <tab-heading><strong>Favorites</strong></tab-heading>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-sm-9">
+                                <modelthumbnail ng-repeat="model in favorites"
+                                                model-id={{model.modelId}}
+                                                image-url={{model.thumbnail}}
+                                                title={{model.title}}
+                                                author={{model.author}}
+                                                author-avatar={{model.authorAvatar}}
+                                                date={{model.date}}
+                                                num-comments={{model.numComments}}
+                                                upvotes={{model.upvotes}}
+                                                downvotes={{model.downvotes}}>
+                                </modelthumbnail>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
                 <tab select="getFollowers()">
                     <tab-heading><strong>Followers</strong></tab-heading>
                     <div class="follower-list">
