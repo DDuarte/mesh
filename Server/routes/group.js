@@ -92,6 +92,41 @@ module.exports = function (server) {
     });
 
     server.route({
+        method: 'PATCH',
+        path: '/groups/{id}',
+        config: {
+            auth: {
+                strategy: 'token'
+            },
+            validate: {
+                params: {
+                    id: schema.group.name.required()
+                },
+                payload: {
+                    description: schema.group.description.required(),
+                    visibility: schema.group.visibility.required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            Group.update(request.params.id, request.auth.credentials.username, request.payload.description, request.payload.visibility)
+                .then(function (group) {
+                    if (results.length == 0) {
+                        reply('No such group.').code(404);
+                    } else {
+                        return reply(results[0]['groupInfo']);
+                    }
+                })
+                .catch(Error, function (error) {
+                    return reply(Boom.badImplementation(error.message));
+                })
+                .catch(function () {
+                    return reply(Boom.notFound('Group not found'));
+                });
+        }
+    });
+
+    server.route({
         path: '/groups/{id}/admins',
         method: 'GET',
         config: {
