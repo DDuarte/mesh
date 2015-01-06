@@ -276,6 +276,12 @@
                                                 upvotes={{model.upvotes}}
                                                 downvotes={{model.downvotes}}>
                                 </modelthumbnail>
+                                <div class="col-md-12" ng-if="models.length == 0">
+                                    <div style="margin: 20px auto; width: 700px;">
+                                        <h3>There are no models here yet :(</h3>
+                                        <p>Give this user a little bit of time to create something</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
