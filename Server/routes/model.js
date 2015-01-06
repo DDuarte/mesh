@@ -186,7 +186,7 @@ module.exports = function (server) {
         },
         handler: function (request, reply) {
 
-            Model.getById(request.params.id)
+            Model.getById(request.params.id, request.auth.credentials.username)
                 .then(function (model) {
                     Model.replaceGroups(request.params.id, request.payload.groups)
                         .then(function () {
@@ -202,8 +202,8 @@ module.exports = function (server) {
                                                     publisher: request.auth.credentials.username,
                                                     groupName: group,
                                                     publishedModelId: request.params.id,
-                                                    publishedModelTitle: model.name,
-                                                    publishedModelThumbnail: model.author.avatar
+                                                    publishedModelTitle: model[0].model.name,
+                                                    publishedModelThumbnail: model[0].model.author.avatar
                                                 });
 
                                                 notification.save(function(err) {
