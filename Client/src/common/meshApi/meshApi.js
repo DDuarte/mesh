@@ -168,10 +168,10 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: getHeaders()
             });
         },
-        updateGroup: function (groupName, description, isPublic) {
+        updateGroup: function (groupName, description, visibilityStr) {
             return $http.patch(server.url + '/groups/' + groupName, {
                     description: description,
-                    isPublic: isPublic
+                    visibility: visibilityStr
                 },
                 {headers: getHeaders()});
         },
