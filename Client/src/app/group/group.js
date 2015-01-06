@@ -12,7 +12,7 @@ angular.module('meshApp.group', [
     });
 })
 
-.controller('GroupCtrl', function GroupController($scope, $stateParams, meshApi) {
+.controller('GroupCtrl', function GroupController($scope, $stateParams, meshApi, ngDialog) {
         $scope.isLoggedIn = meshApi.isLoggedIn();
         if ($scope.isLoggedIn) {
             $scope.loggedUsername = meshApi.getLoggedUsername();
