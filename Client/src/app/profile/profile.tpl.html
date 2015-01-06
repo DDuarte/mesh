@@ -8,8 +8,6 @@
             <div class="text-center">
                 <img src="{{user.avatar}}" class="img-circle img-offline img-responsive img-profile" alt=""/>
                 <h4 class="profile-name mb5">{{user.username}}</h4>
-
-                <div><i class="fa fa-certificate"></i> Page views: <b>{{user.counter}}</b></div>
                 <div><i class="fa fa-flag"></i> {{user.country}}</div>
                 <div><i class="fa fa-envelope-o"></i> <a href=""> {{user.email}} </a></div>
         <span ng-if="isLoggedIn && user.username != ownUsername">
@@ -33,17 +31,9 @@
             <div class="media-manager-sidebar">
                 <ul class="tag-list mb30">
                     <li ng-repeat="interest in user.interests"><a>{{interest}}</a></li>
-                    <!--<li><a ui-sref="home.search({q: 'Design' })">Design</a></li> -->
                 </ul>
             </div>
             <br>
-            <br>
-
-            <div class="mb30"></div>
-            <h5 class="md-title">Connect</h5>
-            <ul class="list-unstyled social-list">
-                <li><i class="fa fa-linkedin"></i> <a href="#">linkedin.com/4ever-eileen</a></li>
-            </ul>
 
             <div class="mb30"></div>
         </div>
@@ -291,7 +281,7 @@
                     <div class="follower-list">
                         <div class="media" ng-repeat="follower in user.followers">
                             <a class="pull-left" ui-sref="home.profile({username: follower.username})">
-                                <img class="media-object img-circle" src="{{follower.avatar}}" alt=""/>
+                                <img class="media-object img-circle" ng-src="{{follower.avatar}}" alt=""/>
                             </a>
 
                             <div class="media-body">
@@ -309,7 +299,7 @@
                     <div class="follower-list">
                         <div class="media" ng-repeat="followed in user.following">
                             <a class="pull-left" ui-sref="home.profile({username: followed.username})">
-                                <img class="media-object img-circle" src="{{followed.avatar}}" alt=""/>
+                                <img class="media-object img-circle" ng-src="{{followed.avatar}}" alt=""/>
                             </a>
 
                             <div class="media-body">

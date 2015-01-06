@@ -8,8 +8,8 @@
                 <!-- <a href="#" class="follow_btn hidden-xs">Follow</a> -->
             </div>
             <div class="col-md-8  col-xs-12">
-                <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture"/>
-                <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture_mob"/>
+                <img ng-src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture"/>
+                <img ng-src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture_mob"/>
 
                 <div class="header" style="overflow-wrap: break-word">
                     <h1>{{group.name}}</h1>
@@ -75,7 +75,7 @@
                         <tr ng-repeat="member in group.groupMembers|orderBy:orderByField:reverseSort">
                             <td>
                                 <a ui-sref="home.profile({id: member.username})">
-                                    <img class="media-object img-circle" alt="..." src="{{member.avatar}}"
+                                    <img class="media-object img-circle" alt="..." ng-src="{{member.avatar}}"
                                          style="width:100%;">
                                 </a>
                             </td>
@@ -124,7 +124,7 @@
                                     <label class="control-label col-md-2 pull-left">Name</label>
 
                                     <div class="col-md-10">
-                                        <input type="text" ng-model=newGroup.name class="form-control col-md-10" disabled>
+                                        <input type="text" ng-model=group.name class="form-control col-md-10" disabled>
                                     </div>
                                 </div>
                                 <!-- form-group -->
@@ -174,3 +174,12 @@
 
     </tabset>
 </div>
+
+<script type="text/ng-template" id="updateSuccessModelDialogId">
+    <div class="ngdialog-message">
+        <h3>Group updated with success</h3>
+    </div>
+    <div class="ngdialog-buttons">
+        <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="confirm()">Ok</button>
+    </div>
+</script>

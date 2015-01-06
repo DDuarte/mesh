@@ -42,7 +42,10 @@ angular.module('meshApp.group', [
             meshApi.getGroup($stateParams.name).
                 success(function (data, status, headers, config) {
                     $scope.group = data.group;
-                    $scope.newGroup = $scope.group;
+
+                    $scope.newGroup.name = $scope.group.name;
+                    $scope.newGroup.description = $scope.group.description;
+                    $scope.newGroup.visibility = $scope.group.visibility;
                     $scope.loadMembers(); //TODO remove this when group template is altered so that the member list isn't loaded right away
                 }).
                 error(function (err) {
@@ -97,12 +100,10 @@ angular.module('meshApp.group', [
         $scope.updateGroup = function () {
             var isPublic = $scope.newGroup.visibility == 'public';
             meshApi.updateGroup($scope.group.name, $scope.newGroup.description, isPublic)
-                .success(function (model) {
-                    $scope.model.description = model.description;
-                    $scope.newModel.description = model.description;
-                    $scope.newModel.visibility = model.isPublic ? 'public' : 'private';
-                    $scope.model.tags = model.tags.slice(0);
-                    $scope.newModel.tags = model.tags;
+                .success(function (group) {
+                    $scope.group.description = group.description;
+                    $scope.newGroup.description = group.description;
+                    $scope.newGroup.visibility = group.isPublic ? 'public' : 'private';
 
                     ngDialog.openConfirm({
                         template: 'updateSuccessModelDialogId',
