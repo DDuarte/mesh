@@ -92,6 +92,7 @@ module.exports = {
             'lib/MTLLoader.js',
             'lib/STLLoader.js',
             'lib/DDSLoader.js',
+            'lib/TGALoader.js',
             'vendor/ngDialog/js/ngDialog.js',
             'vendor/socket.io-client/socket.io.js'
         ],
