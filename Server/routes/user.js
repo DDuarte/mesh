@@ -286,7 +286,10 @@ module.exports = function (server) {
         method: 'GET',
         path: '/users/{username}/galleries',
         config: {
-            auth: 'token',
+            auth: {
+                mode: 'optional',
+                strategy: 'token'
+            },
             validate: {
                 params: {
                     username: schema.user.username.required()
@@ -295,7 +298,7 @@ module.exports = function (server) {
         },
         handler: function (request, reply) {
             var isOwner = false;
-            if (request.auth.credentials.username == request.params.username)
+            if (request.auth.credentials && request.auth.credentials.username == request.params.username)
                 isOwner = true;
 
             User.getAllGalleries(request.params.username, isOwner)
