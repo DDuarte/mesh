@@ -73,7 +73,7 @@ module.exports = function (server) {
         },
         handler: function (request, reply) {
 
-            User.getFavoriteModels(request.auth.credentials.username).then(function (result) {
+            User.getFavoriteModels(request.params.username).then(function (result) {
                 reply(result);
             }, function (error) {
                 reply('Internal error').code(500);
