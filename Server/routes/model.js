@@ -203,7 +203,7 @@ module.exports = function (server) {
                                                     groupName: group,
                                                     publishedModelId: request.params.id,
                                                     publishedModelTitle: model.name,
-                                                    publishedModelThumbnail: model.thumbnail
+                                                    publishedModelThumbnail: model.author.avatar
                                                 });
 
                                                 notification.save(function(err) {

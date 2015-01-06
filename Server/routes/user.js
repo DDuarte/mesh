@@ -176,7 +176,8 @@ module.exports = function (server) {
                     username: schema.user.username.required()
                 },
                 payload: {
-                    otheruser: schema.user.username.required()
+                    otheruser: schema.user.username.required(),
+                    avatar: schema.user.avatar.required()
                 }
             }
         },
@@ -195,7 +196,8 @@ module.exports = function (server) {
                         seen: false,
                         date: new Date(),
                         userTo: request.payload.otheruser,
-                        follower: request.auth.credentials.username
+                        follower: request.auth.credentials.username,
+                        followerAvatar: request.payload.avatar
                     });
 
                     newFollowerNotification.save(function(err) {
