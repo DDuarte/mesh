@@ -51,7 +51,7 @@
 
                                 <strong ng-switch-when="NewGroupPublicationNotification" class="subject">
                                     <a ui-sref="home.profile({username: notification.publisher})">{{notification.publisher}}</a>
-                                    has just uploaded a new model: <a
+                                    has just shared a new model: <a
                                         ui-sref="home.model({id: notification.publishedModelId})">{{notification.publishedModelTitle}}</a>
                                     to the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
                                 </strong>
@@ -168,7 +168,7 @@
 
                                 <strong ng-switch-when="NewGroupPublicationNotification" class="subject">
                                     <a ui-sref="home.profile({username: notification.publisher})">{{notification.publisher}}</a>
-                                    has just uploaded a new model: <a
+                                    has just shared a new model: <a
                                         ui-sref="home.model({id: notification.publishedModelId})">{{notification.publishedModelTitle}}</a>
                                     to the group <a ui-sref="home.group({name: notification.groupName})">{{notification.groupName}}</a>
                                 </strong>
