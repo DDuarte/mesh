@@ -32,7 +32,7 @@
                         <div ng-if="searchType == 'group'" class="media row" ng-repeat="group in groups">
                             <div class="col-xs-6">
                                 <a ui-sref="home.group({name: group.name})" class="pull-left">
-                                    <img alt="" ng-src="{{group.avatar}}" class="img-responsive thumbnail">
+                                    <img alt="" ng-src="{{group.avatar}}" style="width:200px;height:200px" class="img-responsive thumbnail">
                                 </a>
                             </div>
                             <div class="media-body col-xs-6">
@@ -43,7 +43,7 @@
                         <div ng-if="searchType == 'model'" class="media row" ng-repeat="model in models">
                             <div class="col-xs-6">
                                 <a ui-sref="home.model({id: model.id})" class="pull-left">
-                                    <img alt="" ng-src="{{model.thumbnail}}" class="img-responsive thumbnail">
+                                    <img alt="" ng-src="{{model.thumbnail}}" style="width:1252px;" class="img-responsive thumbnail">
                                 </a>
                             </div>
                             <div class="media-body col-xs-6">
@@ -55,7 +55,7 @@
                         <div ng-if="searchType == 'user'" class="media row" ng-repeat="user in users">
                             <div class="col-xs-6">
                                 <a ui-sref="home.profile({username: user.username})" class="pull-left">
-                                    <img alt="" ng-src="{{user.avatar}}" class="img-responsive thumbnail">
+                                    <img alt="" ng-src="{{user.avatar}}" style="width:92px;height:92px" class="img-responsive thumbnail">
                                 </a>
                             </div>
                             <div class="media-body col-xs-6">
