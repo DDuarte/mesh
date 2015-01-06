@@ -37,11 +37,11 @@ group.getByName = function (name, username) {
     var query = [
         'MATCH (g:Group {lowerName: lower({name})})',
         'OPTIONAL MATCH (user:User {username: {username}})-[personalR]->(g)',
-        'WITH (personalR IS NOT NULL) as isMember, g',
+        'WITH (personalR IS NOT NULL) as isMember, coalesce(type(personalR) = "IS_ADMIN", false) AS isAdmin, g',
         'OPTIONAL MATCH (:Model)-[publish:PUBLISHED_IN]->(g)',
         'WITH g, count(publish) as numModels, isMember',
         'MATCH (:User)-[r]->(g)',
-        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate, numModels: numModels, numMembers: count(r), isMember: isMember} as group'
+        'RETURN {name: g.name, description: g.description, visibility: g.visibility, creationDate: g.creationDate, numModels: numModels, numMembers: count(r), isMember: isMember, isAdmin: isAdmin} as group'
     ].join('\n');
 
     var params = {
@@ -469,6 +469,21 @@ group.getModels = function (groupId, galleryName) {
     return new Promise(function (resolve) {
         db.neo4j.query(query, params, function (err, results) {
             if (err) throw new Error('Internal database error');
+            return resolve(results);
+        });
+    });
+};
+
+group.update = function (group, adminUserName, description, visibility) {
+    return new Promise(function (resolve, reject) {
+        var query = [
+            'MATCH (g:Group { name: {name}})<-[:IS_ADMIN]-(:User{username:{username}})',
+            'SET g.description = { description }, g.visibility = { visibility }',
+            'RETURN {name: g.name, description: g.description, visibility: g.visibility }as groupInfo'
+        ].join('\n');
+
+        db.neo4j.query(query, {username: adminUserName, name: group, description: description, visibility: visibility}, function (err, results) {
+            if (err) return reject(err);
             return resolve(results);
         });
     });
