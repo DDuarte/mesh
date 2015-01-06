@@ -168,6 +168,13 @@ angular.module('meshApp').factory('meshApi', function ($http, server, ipCookie, 
                 headers: getHeaders()
             });
         },
+        updateGroup: function (groupName, description, isPublic) {
+            return $http.patch(server.url + '/groups/' + groupName, {
+                    description: description,
+                    isPublic: isPublic
+                },
+                {headers: getHeaders()});
+        },
         getGroupMembers: function (id) {
             return $http.get(server.url + '/groups/' + id + '/members', { headers: getHeaders() });
         },

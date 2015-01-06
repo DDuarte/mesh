@@ -42,6 +42,7 @@ angular.module('meshApp.group', [
             meshApi.getGroup($stateParams.name).
                 success(function (data, status, headers, config) {
                     $scope.group = data.group;
+                    $scope.newGroup = $scope.group;
                     $scope.loadMembers(); //TODO remove this when group template is altered so that the member list isn't loaded right away
                 }).
                 error(function (err) {
@@ -57,7 +58,6 @@ angular.module('meshApp.group', [
             meshApi.applyToGroup($scope.group.name)
                 .success(function() {
                     $scope.applied = true;
-                    alert("Success");
                 })
                 .error(function(data) {
                     alert("Error" + JSON.stringify(data));
@@ -86,7 +86,6 @@ angular.module('meshApp.group', [
             $scope.galleriesPaginatorCurrentPage = 1;
         };
 
-
          $scope.getModels = function() {
              meshApi.getGroupModels($scope.group.name)
                 .success(function(data) {
@@ -95,50 +94,27 @@ angular.module('meshApp.group', [
                 });
          };
 
-        /*
-        $scope.groupMembers = [
-            {
-                "avatarLink": "user1.png",
-                "username": "consecteturquis46",
-                "name": "Kelley Fox",
-                "joinDate": 1396666035868,
-                "role": "Member"
-            },
-            {
-                "avatarLink": "user2.png",
-                "username": "aliquapariatur69",
-                "name": "Lorena Juarez",
-                "joinDate": 1411038748154,
-                "role": "Member"
-            },
-            {
-                "avatarLink": "user3.png",
-                "username": "deseruntdeserunt27",
-                "name": "Berger Albert",
-                "joinDate": 1398239665180,
-                "role": "Administrator"
-            },
-            {
-                "avatarLink": "user4.png",
-                "username": "ipsumin51",
-                "name": "Maude Lott",
-                "joinDate": 1399148282005,
-                "role": "Administrator"
-            },
-            {
-                "avatarLink": "user5.png",
-                "username": "exincididunt89",
-                "name": "Felecia Page",
-                "joinDate": 1402557414493,
-                "role": "Member"
-            },
-            {
-                "avatarLink": "user4.png",
-                "username": "etveniam8",
-                "name": "Noelle Owens",
-                "joinDate": 1413749217116,
-                "role": "Administrator"
-            }
-        ];
-        */
+        $scope.updateGroup = function () {
+            var isPublic = $scope.newGroup.visibility == 'public';
+            meshApi.updateGroup($scope.group.name, $scope.newGroup.description, isPublic)
+                .success(function (model) {
+                    $scope.model.description = model.description;
+                    $scope.newModel.description = model.description;
+                    $scope.newModel.visibility = model.isPublic ? 'public' : 'private';
+                    $scope.model.tags = model.tags.slice(0);
+                    $scope.newModel.tags = model.tags;
+
+                    ngDialog.openConfirm({
+                        template: 'updateSuccessModelDialogId',
+                        className: 'ngdialog-theme-default'
+                    }).then(function () {
+                        // do nothing
+                    });
+                })
+                .error(function (error) {
+                    console.log("error:", error);
+                });
+            //console.log("update model", $scope.newModel);
+            //alert('Save model not yet implemented');
+        };
 });
