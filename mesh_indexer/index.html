@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="../../favicon.ico"> -->
+
+    <title>Mesh</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<style>
+		body {
+			padding-top: 50px;
+		}
+	</style>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Mesh</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="">
+        <p>
+			<h2>Development</h2>
+			<dl class="dl-horizontal">
+				<dt>Status</dt><dd><a href="http://meshdev.ddns.net:8001/status">http://meshdev.ddns.net:8001/status</a></dd>
+				<dt>API</dt><dd><a href="http://meshdev.ddns.net:8001/api">http://meshdev.ddns.net:8001/api</a></dd>
+				<dt>Site</dt><dd><a href="http://meshdev.ddns.net/dev">http://meshdev.ddns.net/dev</a></dd>
+				<dt>Site (prototype)</dt><dd><a href="http://meshdev.ddns.net/proto">http://meshdev.ddns.net/proto</a></dd>
+				<dt>Database</dt><dd><a href="http://meshdev.ddns.net:7474">http://meshdev.ddns.net:7474</a></dd>
+			</dl>
+
+			<hr>
+
+			<h2>Production</h2>
+			<dl class="dl-horizontal">
+				<dt>Status</dt><dd><a href="http://meshdev.ddns.net:8000/status">http://meshdev.ddns.net:8000/status</a></dd>
+				<dt>API</dt><dd><a href="http://meshdev.ddns.net:8000/api">http://meshdev.ddns.net:8000/api</a></dd>
+				<dt>Site</dt><dd><a href="http://meshdev.ddns.net/bin">http://meshdev.ddns.net/bin</a></dd>
+				<dt>Database</dt><dd><a href="http://meshdev.ddns.net:7474">http://meshdev.ddns.net:7474</a></dd>
+			</dl>
+
+			<hr>
+
+			<h2>Other Links</h2>
+			<dl class="dl-horizontal">
+				<dt>Wiki</dt><dd><a href="https://bitbucket.org/teammesh/mesh/wiki/Home">https://bitbucket.org/teammesh/mesh/wiki/Home</a></dd>
+				<dt>Scenarios</dt><dd><a href="https://bitbucket.org/teammesh/mesh/wiki/browse/US">https://bitbucket.org/teammesh/mesh/wiki/browse/US</a></dd>
+				<dt>Bitbucket</dt><dd><a href="https://bitbucket.org/teammesh">https://bitbucket.org/teammesh</a></dd>
+				<dt>Github</dt><dd><a href="https://github.com/DDuarte/mesh">https://github.com/DDuarte/mesh</a></dd>
+				<dt>Pivotal Tracker</dt><dd><a href="https://www.pivotaltracker.com/s/projects/1172790">https://www.pivotaltracker.com/s/projects/1172790</a></dd>
+			</dl>
+
+			<hr>
+
+			<h2>Info</h2>
+			<dl class="dl-horizontal">
+				<dt>SSH Server</dt><dd><kbd>ssh mesh@meshdev.ddns.net</kbd><br>Password: <kbd>*4****</kbd></dd>
+				<dt>After startup (server)</dt><dd><kbd>/home/mesh/mesh_dev/Server/index.js 8001</kbd><br><kbd>/home/mesh/mesh/Server/index.js 8000</kbd></dd>
+				<dt>Windows local</dt><dd><kbd>cd mesh/Server</kbd><br><kbd>redis-server</kbd><br><kbd>node index.js</kbd><br><kbd>cd ../Client</kbd><br><kbd>grunt local-build</kbd><br><kbd>http-server build</kbd></dd>
+			</dl>
+		</p>
+      </div>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>
