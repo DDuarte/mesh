@@ -1,0 +1,6 @@
+Company: Mesh
+Application Name: Mesh
+API Key: 77xhpx5nrj2r68
+Secret Key: VC7vdVwGBlRliPRg
+OAuth User Token: 416f12b7-849d-4a9e-9d54-6aef5a5d5bd4
+OAuth User Secret: ef229f30-832d-4799-bd80-598c02366bb0
